@@ -82,7 +82,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 }
                 catch
                 {
-                    resultOperation.AddError(LangUtility.Get("UserUsedError.Text",nameof(sysBpmsUser)));
+                    resultOperation.AddError(LangUtility.Get("UserUsedError.Text", nameof(sysBpmsUser)));
                     return base.ExceptionHandler(new Exception(LangUtility.Get("UserUsedError.Text", nameof(sysBpmsUser))));
                 }
             }
@@ -93,6 +93,13 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         public sysBpmsUser GetInfo(Guid ID)
         {
             return this.UnitOfWork.Repository<IUserRepository>().GetInfo(ID);
+        }
+
+        public sysBpmsUser GetInfoByEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return null;
+            return this.UnitOfWork.Repository<IUserRepository>().GetInfo(email);
         }
 
         public sysBpmsUser GetInfo(string Username)

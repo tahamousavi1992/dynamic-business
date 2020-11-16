@@ -100,6 +100,15 @@ namespace DynamicBusiness.BPMS.Controllers
                     else
                         resultOperation = settingValueService.Update(setValue);
 
+                    //AddUserAutomatically
+                    setDef = listDef.FirstOrDefault(c => c.Name == sysBpmsSettingDef.e_NameType.AddUserAutomatically.ToString());
+                    setValue = listValues.FirstOrDefault(c => c.SettingDefID == setDef.ID);
+                    setValue = this.FillObject(setValue, setDef.ID, settingDTO.AddUserAutomatically.ToStringObj());
+                    if (setValue.ID == Guid.Empty)
+                        resultOperation = settingValueService.Add(setValue);
+                    else
+                        resultOperation = settingValueService.Update(setValue);
+
                     UrlUtility.NoSkinPath = setValue.Value;
                 }
             }

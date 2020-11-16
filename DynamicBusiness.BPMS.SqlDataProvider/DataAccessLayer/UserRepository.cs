@@ -55,6 +55,14 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         }
 
+        public sysBpmsUser GetInfoByEmail(string email)
+        {
+            return (from P in this.Context.sysBpmsUsers
+                    where P.Email == email
+                    select P).AsNoTracking().FirstOrDefault();
+
+        }
+
         public List<sysBpmsUser> GetList(string name, PagingProperties currentPaging)
         {
             name = DomainUtility.toString(name);

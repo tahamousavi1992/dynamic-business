@@ -1,6 +1,13 @@
-﻿
-<div class="row">
-    <div class="col-xl-12">
-    </div>
-</div>
+﻿@{
+    ViewBag.Title = "داشبورد";
+    Layout = "../Shared/_Layout.cshtml";
+}
+
+<div id="root"></div><noscript>You need to enable JavaScript to run this app.</noscript>
+<script>
+    window.rootPage = '@Html.Raw((string)ViewBag.rootPage)'
+    window.CartableUrl = '@(Html.Raw((string)ViewBag.CartableUrl))';
+    window.EngineUrl = '@(Html.Raw((string)ViewBag.EngineUrl))';
+    window.moduleType = 2;
+</script>
 

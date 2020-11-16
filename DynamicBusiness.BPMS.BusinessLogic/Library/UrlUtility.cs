@@ -11,11 +11,16 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 {
     public static class UrlUtility
     {
-        public static string GetCartableApiUrl(HttpRequest request, string PortalAlias, string actionName, string controllerName, string formToken, params string[] parameters)
+        public static string GetApiBase(HttpRequestBase request, string PortalAlias, string apiName)
         {
             string defaultUrl = request.Url.Scheme + "://" + request.Url.Authority + request.ApplicationPath.TrimEnd('/');
             PortalAlias = PortalAlias.Replace("http://", "").Replace("https://", "");
-            string baseUrl = defaultUrl + (PortalAlias.Split('/').Length == 2 ? ("/" + PortalAlias.Split('/')[1]) : "") + "/API/BpmsCartableApi";
+            return defaultUrl + (PortalAlias.Split('/').Length == 2 ? ("/" + PortalAlias.Split('/')[1]) : "") + "/API/" + apiName;
+        }
+
+        public static string GetCartableApiUrl(HttpRequest request, string PortalAlias, string actionName, string controllerName, string formToken, params string[] parameters)
+        {
+            string baseUrl = UrlUtility.GetApiBase(new HttpRequestWrapper(request), PortalAlias, "BpmsCartableApi");
 
             baseUrl += "/" + controllerName.TrimStringEnd("Controller");
             baseUrl += string.IsNullOrWhiteSpace(formToken) ? $"/{actionName}" : $"/{actionName}?formToken={formToken}";
@@ -30,9 +35,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public static string GetSingleActionApiUrl(HttpRequest request, string PortalAlias, string actionName, string controllerName, string formToken, params string[] parameters)
         {
-            string defaultUrl = request.Url.Scheme + "://" + request.Url.Authority + request.ApplicationPath.TrimEnd('/');
-            PortalAlias = PortalAlias.Replace("http://", "").Replace("https://", "");
-            string baseUrl = defaultUrl + (PortalAlias.Split('/').Length == 2 ? ("/" + PortalAlias.Split('/')[1]) : "") + "/API/BpmsSingleActionApi";
+            string baseUrl = UrlUtility.GetApiBase(new HttpRequestWrapper(request), PortalAlias, "BpmsSingleActionApi");
 
             baseUrl += "/" + controllerName.TrimStringEnd("Controller");
             baseUrl += string.IsNullOrWhiteSpace(formToken) ? $"/{actionName}" : $"/{actionName}?formToken={formToken}";
@@ -66,7 +69,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             url = ((url.Contains("?") || parameters == null || !parameters.Any() || parameters.Any(c => c.Contains("/"))) ? url : (url + "?"));
             return url + (parameters == null || parameters.Count() == 0 ? "" : ((url.Contains("?") ? "" : "/") + string.Join((url.Contains("?") ? "&" : "/"), parameters.Select(c => (url.Contains("?") ? c : c.Replace("=", "/").Trim())))));
         }
-         
+
         /// <param name="formToken">when calling main api from client application, there  is no need to pass formToken to main bpms api.</param>
         public static string GetApiUrl(HttpRequestBase request, string PortalAlias, string actionName, string controllerName, string formToken, params string[] parameters)
         {

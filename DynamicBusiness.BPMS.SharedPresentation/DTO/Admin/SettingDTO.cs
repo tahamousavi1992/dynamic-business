@@ -21,30 +21,34 @@ namespace DynamicBusiness.BPMS.SharedPresentation
             this.ProcessFormatSerlialNumber = settingValueService.GetValue(sysBpmsSettingDef.e_NameType.ProcessFormatSerlialNumber.ToString());
             this.ThreadStartPointSerlialNumber = settingValueService.GetValue(sysBpmsSettingDef.e_NameType.ThreadStartPointSerlialNumber.ToString()).ToIntObj();
             this.ThreadFormatSerlialNumber = settingValueService.GetValue(sysBpmsSettingDef.e_NameType.ThreadFormatSerlialNumber.ToString());
-
             this.NoSkinPath = settingValueService.GetValue(sysBpmsSettingDef.e_NameType.NoSkinPath.ToString());
             this.NoContainerPath = settingValueService.GetValue(sysBpmsSettingDef.e_NameType.NoContainerPath.ToString());
+            this.AddUserAutomatically = settingValueService.GetValue(sysBpmsSettingDef.e_NameType.AddUserAutomatically.ToString()).ToLower() == "true";
         }
-         
+
         [DataMember]
         public string DefaultReportFontFamily { get; set; }
-         
+
         [DataMember]
         public int ProcessStartPointSerlialNumber { get; set; }
-         
+
         [DataMember]
         public string ProcessFormatSerlialNumber { get; set; }
-         
+
         [DataMember]
         public int ThreadStartPointSerlialNumber { get; set; }
-         
+
         [DataMember]
         public string ThreadFormatSerlialNumber { get; set; }
-         
+
         [DataMember]
         public string NoSkinPath { get; set; }
-         
+
         [DataMember]
         public string NoContainerPath { get; set; }
+
+        [DataMember]
+        public bool AddUserAutomatically { get; set; }
+
     }
 }

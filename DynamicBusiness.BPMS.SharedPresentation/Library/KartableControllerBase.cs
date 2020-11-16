@@ -27,6 +27,33 @@ namespace DynamicBusiness.BPMS.SharedPresentation
             Session["dt"] = DateTime.Now.Date;
             if (!this.Request.IsAjaxRequest() && !this.Request.Url.ToStringObj().Contains("SkinSrc"))
                 this.Response.Redirect(UrlUtility.MakeNoSkin(this.Request.Url.ToStringObj()));
-        } 
+        }
+
+        protected void AddUserIfNotExist()
+        {
+            using (SettingValueService settingValueService = new SettingValueService())
+            {
+                bool addUser = settingValueService.GetValue(sysBpmsSettingDef.e_NameType.AddUserAutomatically.ToString()).ToLower() == "true";
+                using (UserService userService = new UserService())
+                {
+                    sysBpmsUser sysBpmsUser = userService.GetInfo(base.User.Username);
+                    if (addUser && !string.IsNullOrWhiteSpace(base.User?.Username) && sysBpmsUser == null)
+                    {
+                        sysBpmsUser = userService.GetInfoByEmail(base.User.Email);
+                        if (sysBpmsUser != null)
+                        {
+                            sysBpmsUser.Username = base.User.Username;
+                            userService.Update(sysBpmsUser, null);
+                        }
+                        else
+                        {
+                            sysBpmsUser = new sysBpmsUser(Guid.Empty, base.User.Username, base.User.FirstName, base.User.LastName, base.User.Email, base.User.Profile.Telephone, base.User.Profile.Cell);
+                            userService.Add(sysBpmsUser, null);
+                        }
+                    }
+                }
+            }
+        }
+
     }
 }

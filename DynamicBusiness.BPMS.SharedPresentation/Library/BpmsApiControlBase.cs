@@ -66,15 +66,19 @@ namespace DynamicBusiness.BPMS.SharedPresentation
                 return HttpContext.Current.Request;
             }
         }
+        private sysBpmsUser myUser { get; set; }
         public sysBpmsUser MyUser
         {
             get
             {
-                using (UserService userService = new UserService())
+                if (this.myUser == null)
                 {
-                    return userService.GetInfo(this.ClientUserName ?? "") ?? new Domain.sysBpmsUser();
+                    using (UserService userService = new UserService())
+                    {
+                        this.myUser = userService.GetInfo(this.ClientUserName ?? "") ?? new Domain.sysBpmsUser();
+                    }
                 }
-
+                return this.myUser;
             }
         }
         /// <summary>
@@ -203,23 +207,7 @@ namespace DynamicBusiness.BPMS.SharedPresentation
                 }
             }
         }
-        protected string RenderViewToString<T>(string viewName, string controllerName, T model)
-        {
-            using (var writer = new StringWriter())
-            {
-                var routeData = new RouteData();
-                routeData.Values.Add("controller", controllerName);
-                var fakeControllerContext = new ControllerContext(new HttpContextWrapper(new HttpContext(new HttpRequest(null, "http://google.com", null), new HttpResponse(null))), routeData, new FakeController());
-                var razorViewEngine = new RazorViewEngine();
-                var razorViewResult = razorViewEngine.FindView(fakeControllerContext, viewName, "", false);
-                ViewDataDictionary viewData = new ViewDataDictionary(model);
-                var viewContext = new ViewContext(fakeControllerContext, razorViewResult.View, viewData, new TempDataDictionary(), writer);
-                razorViewResult.View.Render(viewContext, writer);
-                return writer.ToString();
-            }
-        }
-        public class FakeController : ControllerBase { protected override void ExecuteCore() { } }
-
+         
         protected string GetRedirectUrl(RedirectUrlModel redirectModel)
         {
             if (redirectModel != null)

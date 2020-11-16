@@ -25,6 +25,7 @@ namespace DynamicBusiness.BPMS.Domain
             NoSkinPath,
             NoContainerPath,
             WebServicePass,
+            AddUserAutomatically,
         }
         public sysBpmsSettingDef(string name, string title, int valueTypeLU, string defaultValue)
         {

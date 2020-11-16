@@ -15,6 +15,8 @@ namespace DynamicBusiness.BPMS.Controllers
         // GET: /BPMSHome/
         public ActionResult Index()
         {
+            ViewBag.AdminUrl = UrlUtility.GetApiBase(base.Request, base.PortalSettings.DefaultPortalAlias, "BpmsAdminApi").TrimEnd('/') + "/";
+            ViewBag.EngineUrl = UrlUtility.GetApiBase(base.Request, base.PortalSettings.DefaultPortalAlias, "BpmsApi").TrimEnd('/') + "/";
             ViewBag.rootPage = this.Request.RawUrl.Substring(0, this.Request.RawUrl.IndexOf("/" + this.ActivePage.TabName + "/") + this.ActivePage.TabName.Length + 1);
             return View();
         }  
