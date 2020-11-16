@@ -1,0 +1,24 @@
+﻿
+@{
+    List<MessageModel> MessageModel = ViewBag.MessageModel != null ? (List<MessageModel>)ViewBag.MessageModel : null;
+    if (MessageModel != null && MessageModel.Any())
+    {
+        foreach (var item in MessageModel)
+        {
+            <div data-message="messagemodel" class="@item.DisplayMessageType.ToString()">
+                <span class="dnnModMessageHeading"></span>
+                <span>@Html.Raw(item.Message)</span>
+            </div>
+        }
+    }
+    <div data-isSuccess="@(((bool)ViewBag.IsSuccess).ToString().ToLower())">
+    </div>
+}
+
+@if (!string.IsNullOrWhiteSpace(DomainUtility.toString(ViewBag.Data)))
+{
+    <div id="bpmsData">
+        @Html.Raw(ViewBag.Data)
+    </div>
+}
+

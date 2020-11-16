@@ -1,0 +1,362 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DF72D08B-BF32-4667-B2F2-51C827BF44E7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DynamicBusiness.BPMS.BusinessLogic</RootNamespace>
+    <AssemblyName>DynamicBusiness.BPMS.BusinessLogic</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\AllBins\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\AllBins\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DotNetNuke, Version=9.6.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Bin\DotNetNuke.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetNuke.Web.Mvc, Version=9.6.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Bin\DotNetNuke.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\tools\RoslynLatest\Microsoft.CodeAnalysis.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\tools\RoslynLatest\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp.Scripting, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\tools\RoslynLatest\Microsoft.CodeAnalysis.CSharp.Scripting.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.Scripting, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\tools\RoslynLatest\Microsoft.CodeAnalysis.Scripting.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.150.1404.0\lib\net40\Microsoft.ReportViewer.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.DataVisualization, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.150.1404.0\lib\net40\Microsoft.ReportViewer.DataVisualization.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Design, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.150.1404.0\lib\net40\Microsoft.ReportViewer.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.150.1404.0\lib\net40\Microsoft.ReportViewer.ProcessingObjectModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebDesign, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.150.1404.0\lib\net40\Microsoft.ReportViewer.WebDesign.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.150.1404.0\lib\net40\Microsoft.ReportViewer.WebForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.Types.14.0.314.76\lib\net40\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.CSharp, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\CS-Script.bin.3.24.2.0\lib\net46\Mono.CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections.Immutable, Version=1.2.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\tools\RoslynLatest\System.Collections.Immutable.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Console, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Console.4.3.0\lib\net46\System.Console.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Diagnostics.FileVersionInfo, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.FileVersionInfo.4.3.0\lib\net46\System.Diagnostics.FileVersionInfo.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Diagnostics.StackTrace, Version=4.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.StackTrace.4.3.0\lib\net46\System.Diagnostics.StackTrace.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.FileSystem, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\CS-Script.bin.3.24.2.0\lib\net46\System.IO.FileSystem.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\CS-Script.bin.3.24.2.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Linq.Dynamic, Version=1.0.6132.35681, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Linq.Dynamic.1.0.7\lib\net40\System.Linq.Dynamic.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Bin\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Reflection.Metadata, Version=1.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\tools\RoslynLatest\System.Reflection.Metadata.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net46\System.Security.Cryptography.Algorithms.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net46\System.Security.Cryptography.X509Certificates.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Encoding.CodePages, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encoding.CodePages.4.3.0\lib\net46\System.Text.Encoding.CodePages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Thread, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Thread.4.3.0\lib\net46\System.Threading.Thread.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.3.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Bin\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Portal\Dnn_8.0.4\bin\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.ReaderWriter, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Xml.ReaderWriter.4.3.0\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.XmlDocument, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Xml.XmlDocument.4.3.0\lib\net46\System.Xml.XmlDocument.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.XPath, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Xml.XPath.4.3.0\lib\net46\System.Xml.XPath.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.XPath.XDocument, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Xml.XPath.XDocument.4.3.0\lib\net46\System.Xml.XPath.XDocument.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Abstractions, Version=3.3.1.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.Abstractions.3.3.1\lib\net45\Unity.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Container, Version=5.8.13.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.Container.5.8.13\lib\net45\Unity.Container.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BPMSResources.cs" />
+    <Compile Include="BPMSUtility.cs" />
+    <Compile Include="EngineResponseModel\BeginTaskResponseModel.cs" />
+    <Compile Include="EngineResponseModel\EngineFormModel.cs" />
+    <Compile Include="EngineResponseModel\GetFormResponseModel.cs" />
+    <Compile Include="EngineResponseModel\GetTaskFormResponseModel.cs" />
+    <Compile Include="EngineResponseModel\PostFormResponseModel.cs" />
+    <Compile Include="EngineResponseModel\PostTaskFormResponseModel.cs" />
+    <Compile Include="Engine\ApplicationPageEngine.cs" />
+    <Compile Include="Engine\BaseEngine.cs" />
+    <Compile Include="Engine\Code\AccessCodeHelper.cs" />
+    <Compile Include="Engine\Code\CodeUtility.cs" />
+    <Compile Include="Engine\Code\ControlCodeHelper.cs" />
+    <Compile Include="Engine\Code\EntityCodeHelper.cs" />
+    <Compile Include="Engine\Code\MessageCodeHelper.cs" />
+    <Compile Include="Engine\Code\DocumentCodeHelper.cs" />
+    <Compile Include="Engine\Code\OperationCodeHelper.cs" />
+    <Compile Include="Engine\Code\ProcessCodeHelper.cs" />
+    <Compile Include="Engine\Code\QueryCodeHelper.cs" />
+    <Compile Include="Engine\Code\RoslynCompiler .cs" />
+    <Compile Include="Engine\Code\UrlCodeHelper.cs" />
+    <Compile Include="Engine\Code\UserCodeHelper.cs" />
+    <Compile Include="Engine\Code\VariableCodeHelper.cs" />
+    <Compile Include="Engine\Code\WebServiceCodeHelper.cs" />
+    <Compile Include="Engine\DocumentEngine.cs" />
+    <Compile Include="Engine\DynamicCodeEngine.cs" />
+    <Compile Include="Engine\EntityDefEngine.cs" />
+    <Compile Include="Engine\EventEngine.cs" />
+    <Compile Include="Engine\GatewayEngine.cs" />
+    <Compile Include="Engine\OperationEngine.cs" />
+    <Compile Include="Engine\ProcessEngine.cs" />
+    <Compile Include="Engine\ReportEngine.cs" />
+    <Compile Include="Engine\TaskEngine.cs" />
+    <Compile Include="Engine\ThreadEngine.cs" />
+    <Compile Include="Engine\VariableEngine.cs" />
+    <Compile Include="Extensions\DateExtentions.cs" />
+    <Compile Include="Extensions\JsonExtentions.cs" />
+    <Compile Include="Extensions\XMLExtensions.cs" />
+    <Compile Include="Engine\Code\CodeBase.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Helper\HtmlElementHelper.cs" />
+    <Compile Include="Engine\Variable\EntityVariableTypeEngine.cs" />
+    <Compile Include="Engine\Variable\SqlQueryVariableTypeEngine.cs" />
+    <Compile Include="Engine\Variable\SystemicVariableTypeEngine.cs" />
+    <Compile Include="Engine\DataManageEngine.cs" />
+    <Compile Include="Engine\Variable\VariableTypeEngineBase.cs" />
+    <Compile Include="Library\ReportBuilder.cs" />
+    <Compile Include="Library\ReportBuilderEngine.cs" />
+    <Compile Include="Library\UrlUtility.cs" />
+    <Compile Include="Library\ViewUtility.cs" />
+    <Compile Include="Services\CommunicationService\EmailService.cs" />
+    <Compile Include="Services\RepositoryService\APIAccessService.cs" />
+    <Compile Include="Services\RepositoryService\ApplicationPageAccessService.cs" />
+    <Compile Include="Services\RepositoryService\ApplicationPageService.cs" />
+    <Compile Include="Services\RepositoryService\ConditionService.cs" />
+    <Compile Include="Services\RepositoryService\DataBaseQueryService.cs" />
+    <Compile Include="Services\RepositoryService\DBConnectionService.cs" />
+    <Compile Include="Services\RepositoryService\DepartmentMemberService.cs" />
+    <Compile Include="Services\RepositoryService\DepartmentService.cs" />
+    <Compile Include="Services\RepositoryService\DocumentDefService.cs" />
+    <Compile Include="Services\RepositoryService\DocumentFolderService.cs" />
+    <Compile Include="Services\RepositoryService\DocumentService.cs" />
+    <Compile Include="Services\RepositoryService\DynamicFormService.cs" />
+    <Compile Include="Services\RepositoryService\ElementService.cs" />
+    <Compile Include="Services\RepositoryService\EmailAccountService.cs" />
+    <Compile Include="Services\RepositoryService\EntityDefService.cs" />
+    <Compile Include="Services\RepositoryService\EventService.cs" />
+    <Compile Include="Services\RepositoryService\GatewayService.cs" />
+    <Compile Include="Services\RepositoryService\LaneService.cs" />
+    <Compile Include="Services\RepositoryService\LURowService.cs" />
+    <Compile Include="Services\RepositoryService\LUTableService.cs" />
+    <Compile Include="Services\RepositoryService\OperationService.cs" />
+    <Compile Include="Services\RepositoryService\ProcessGroupService.cs" />
+    <Compile Include="Services\RepositoryService\ProcessService.cs" />
+    <Compile Include="Services\RepositoryService\SequenceFlowService.cs" />
+    <Compile Include="Services\RepositoryService\ServiceBase.cs" />
+    <Compile Include="Services\RepositoryService\SettingDefService.cs" />
+    <Compile Include="Services\RepositoryService\SettingValueService.cs" />
+    <Compile Include="Services\RepositoryService\MessageTypeService.cs" />
+    <Compile Include="Services\RepositoryService\StepService.cs" />
+    <Compile Include="Services\RepositoryService\TaskService.cs" />
+    <Compile Include="Services\RepositoryService\ThreadEventService.cs" />
+    <Compile Include="Services\RepositoryService\ThreadService.cs" />
+    <Compile Include="Services\RepositoryService\ThreadTaskService.cs" />
+    <Compile Include="Services\RepositoryService\ThreadVariableService.cs" />
+    <Compile Include="Services\RepositoryService\UnitOfWork .cs" />
+    <Compile Include="Services\RepositoryService\UserService.cs" />
+    <Compile Include="Services\RepositoryService\VariableDependencyService.cs" />
+    <Compile Include="Services\RepositoryService\VariableService.cs" />
+    <Compile Include="Extensions\QueryableExtensions.cs" />
+    <Compile Include="Factories\RepositoryFactory.cs" />
+    <Compile Include="Factories\XmlWorkflowElementConvertorFactory.cs" />
+    <Compile Include="Library\TypeFieldSizeAttribute.cs" />
+    <Compile Include="SqlServerTypes\Loader.cs" />
+    <Compile Include="WorkflowConvertors\XmlWorkflowBoundaryEventConvertor.cs" />
+    <Compile Include="WorkflowConvertors\XmlWorkflowChildLaneSetConvertor.cs" />
+    <Compile Include="WorkflowConvertors\XmlWorkflowExclusiveGatewayConvertor.cs" />
+    <Compile Include="WorkflowConvertors\XmlWorkflowInclusiveGatewayConvertor.cs" />
+    <Compile Include="WorkflowConvertors\XmlWorkflowIntermediateCatchEventConvertor.cs" />
+    <Compile Include="WorkflowConvertors\XmlWorkflowLaneConvertor.cs" />
+    <Compile Include="WorkflowConvertors\XmlWorkflowLaneSetConvertor.cs" />
+    <Compile Include="WorkflowConvertors\XmlWorkflowEndEventConvertor.cs" />
+    <Compile Include="WorkflowConvertors\XmlWorkflowIntermediateThrowEventConvertor.cs" />
+    <Compile Include="WorkflowConvertors\XmlWorkflowParallelGatewayConvertor.cs" />
+    <Compile Include="WorkflowConvertors\XmlWorkflowProcessConvertor.cs" />
+    <Compile Include="WorkflowConvertors\XmlWorkflowScriptTaskConvertor.cs" />
+    <Compile Include="WorkflowConvertors\XmlWorkflowServiceTaskConvertor.cs" />
+    <Compile Include="WorkflowConvertors\XmlWorkflowStartEventConvertor.cs" />
+    <Compile Include="WorkflowConvertors\XmlWorkflowTaskConvertor.cs" />
+    <Compile Include="WorkflowConvertors\XmlWorkflowUserTaskConvertor.cs" />
+    <Compile Include="WorkflowConvertors\XmlWorkflowElementConvertor.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WorkflowConvertors\XmlWorkflowSequenceFlowConvertor.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DynamicBusiness.BPMS.Domain\DynamicBusiness.BPMS.Domain.csproj">
+      <Project>{843f41b1-7add-46b4-8862-7f46f0d0a739}</Project>
+      <Name>DynamicBusiness.BPMS.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DynamicBusiness.BPMS.SqlDataProvider\DynamicBusiness.BPMS.SqlDataProvider.csproj">
+      <Project>{08b14fc7-cb9a-4948-94e4-f6e96cd877c8}</Project>
+      <Name>DynamicBusiness.BPMS.SqlDataProvider</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SqlServerTypes\readme.htm" />
+    <Content Include="SqlServerTypes\x64\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x64\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

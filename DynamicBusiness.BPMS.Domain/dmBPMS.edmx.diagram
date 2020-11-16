@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="6805bffabf4241d2b6a08c1e09589de4" Name="Diagram1" ZoomLevel="77">
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsAPIAccess" Width="1.5" PointX="0.75" PointY="4.75" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsApplicationPage" Width="1.5" PointX="6" PointY="39.25" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsApplicationPageAccess" Width="1.5" PointX="15" PointY="22.625" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsCondition" Width="1.5" PointX="12.75" PointY="28.5" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsDBConnection" Width="1.5" PointX="6" PointY="5" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsDepartment" Width="1.5" PointX="8.75" PointY="3" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsDepartmentMember" Width="1.5" PointX="11" PointY="8.625" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsDocument" Width="1.5" PointX="7.5" PointY="14.125" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsDocumentDef" Width="1.5" PointX="5.25" PointY="8.5" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsDocumentFolder" Width="1.5" PointX="3" PointY="8.875" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsDynamicForm" Width="1.5" PointX="5.25" PointY="18.5" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsElement" Width="1.5" PointX="5.25" PointY="35" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsEmailAccount" Width="1.5" PointX="2.75" PointY="4.75" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsEntityDef" Width="1.5" PointX="5.25" PointY="24.5" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsEvent" Width="1.5" PointX="7.5" PointY="25.875" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsGateway" Width="1.5" PointX="10.5" PointY="26.125" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsLane" Width="1.5" PointX="10.5" PointY="30.625" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsLURow" Width="1.5" PointX="13" PointY="1" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsLUTable" Width="1.5" PointX="10.75" PointY="1.125" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsMessageType" Width="1.5" PointX="5.25" PointY="28.625" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsOperation" Width="1.5" PointX="5.75" PointY="0.75" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsProcess" Width="1.5" PointX="3" PointY="17.25" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsProcessGroup" Width="1.5" PointX="0.75" PointY="19.625" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsSequenceFlow" Width="1.5" PointX="7.5" PointY="30.125" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsSettingDef" Width="1.5" PointX="0.75" PointY="0.875" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsSettingValue" Width="1.5" PointX="3" PointY="0.875" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsStep" Width="1.5" PointX="12.75" PointY="21.375" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsTask" Width="1.5" PointX="10.5" PointY="20.75" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsThread" Width="1.5" PointX="5.25" PointY="13.875" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsThreadEvent" Width="1.5" PointX="18" PointY="20.125" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsThreadTask" Width="1.5" PointX="15.75" PointY="17.25" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsThreadTaskDelay" Width="1.5" PointX="18" PointY="17.125" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsThreadVariable" Width="1.5" PointX="13.5" PointY="17.5" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsUser" Width="1.5" PointX="3" PointY="13.25" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsVariable" Width="1.5" PointX="8.25" PointY="18.25" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsVariableDependency" Width="1.5" PointX="10.5" PointY="16.5" />
+        <AssociationConnector Association="BPMSModel.FK_ApplicationPageAccess_ApplicationPage" />
+        <AssociationConnector Association="BPMSModel.FK_DynamicForm_ApplicationPage" />
+        <AssociationConnector Association="BPMSModel.FK_Variable_ApplicationPage" />
+        <AssociationConnector Association="BPMSModel.FK_ApplicationPageAccess_Department" />
+        <AssociationConnector Association="BPMSModel.FK_ApplicationPageAccess_User" />
+        <AssociationConnector Association="BPMSModel.FK_Condition_Gateway" />
+        <AssociationConnector Association="BPMSModel.FK_Condition_SequenceFlow" />
+        <AssociationConnector Association="BPMSModel.FK_Variable_DBConnection" />
+        <AssociationConnector Association="BPMSModel.FK_Department_Department" />
+        <AssociationConnector Association="BPMSModel.FK_DepartmentMember_Department" />
+        <AssociationConnector Association="BPMSModel.FK_DepartmentMember_User" />
+        <AssociationConnector Association="BPMSModel.FK_Document_DocumentDef" />
+        <AssociationConnector Association="BPMSModel.FK_Document_EntityDef" />
+        <AssociationConnector Association="BPMSModel.FK_Document_Thread" />
+        <AssociationConnector Association="BPMSModel.FK_DocumentDef_DocumentFolder" />
+        <AssociationConnector Association="BPMSModel.FK_DocumentFolder_DocumentFolder1" />
+        <AssociationConnector Association="BPMSModel.FK_DynamicForm_Process" />
+        <AssociationConnector Association="BPMSModel.FK_Step_DynamicForm" />
+        <AssociationConnector Association="BPMSModel.FK_Element_Process" />
+        <AssociationConnector Association="BPMSModel.FK_sysEvent_sysElement" />
+        <AssociationConnector Association="BPMSModel.FK_sysGateway_sysElement" />
+        <AssociationConnector Association="BPMSModel.FK_sysLane_sysElement" />
+        <AssociationConnector Association="BPMSModel.FK_sysSequenceFlow_sysElement" />
+        <AssociationConnector Association="BPMSModel.FK_sysTask_sysElement" />
+        <AssociationConnector Association="BPMSModel.FK_Variable_EntityDef" />
+        <AssociationConnector Association="BPMSModel.FK_sysEvent_sysMessageType" />
+        <AssociationConnector Association="BPMSModel.FK_sysEvent_sysProcess" />
+        <AssociationConnector Association="BPMSModel.FK_ThreadEvent_Event" />
+        <AssociationConnector Association="BPMSModel.FK_sysGateway_sysProcess" />
+        <AssociationConnector Association="BPMSModel.FK_sysGateway_sysSequenceFlow" />
+        <AssociationConnector Association="BPMSModel.FK_sysLane_sysProcess" />
+        <AssociationConnector Association="BPMSModel.FK_LURow_LUTable" />
+        <AssociationConnector Association="BPMSModel.FK_Process_Process" />
+        <AssociationConnector Association="BPMSModel.FK_sysProcess_sysProcessGroup" />
+        <AssociationConnector Association="BPMSModel.FK_sysSequenceFlow_sysProcess" />
+        <AssociationConnector Association="BPMSModel.FK_sysTask_sysProcess" />
+        <AssociationConnector Association="BPMSModel.FK_Thread_Process" />
+        <AssociationConnector Association="BPMSModel.FK_Variable_Process" />
+        <AssociationConnector Association="BPMSModel.FK_ProcessGroup_ProcessGroup" />
+        <AssociationConnector Association="BPMSModel.FK_SettingValue_SettingDef" />
+        <AssociationConnector Association="BPMSModel.FK_Step_Task" />
+        <AssociationConnector Association="BPMSModel.FK_ThreadTask_Task" />
+        <AssociationConnector Association="BPMSModel.FK_Thread_User" />
+        <AssociationConnector Association="BPMSModel.FK_ThreadEvent_Thread" />
+        <AssociationConnector Association="BPMSModel.FK_ThreadTask_Thread" />
+        <AssociationConnector Association="BPMSModel.FK_ThreadVariable_Thread" />
+        <AssociationConnector Association="BPMSModel.FK_sysThreadEvent_sysThreadTask" />
+        <AssociationConnector Association="BPMSModel.FK_ThreadTask_User" />
+        <AssociationConnector Association="BPMSModel.FK_ThreadTaskDelay_ThreadTask" />
+        <AssociationConnector Association="BPMSModel.FK_ThreadVariable_Variable" />
+        <AssociationConnector Association="BPMSModel.FK_VariableDependency_Variable" />
+        <AssociationConnector Association="BPMSModel.FK_VariableDependency_Variable1" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,156 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+
+namespace DynamicBusiness.BPMS.Domain
+{
+    [DataContract]
+    public class DCConditionModel : DCBaseModel
+    {
+        public DCConditionModel() { }
+        public DCConditionModel(string id, string name, string shapeid, string parentShapeId, bool? isOutputYes, List<DCRowConditionModel> rows, bool isFirst, string funcName)
+            : base(id, name, e_ActionType.Condition, parentShapeId, shapeid, isOutputYes, isFirst, funcName)
+        {
+            this.Rows = rows;
+            this.EvaluateType = e_EvaluateType.And;
+            //if there is now row condition it add a row condition
+            if (this.Rows == null || this.Rows.Count == 0)
+                this.Rows = new List<DCRowConditionModel>() {
+                new DCRowConditionModel(){
+                    FirstConditionType=DCBaseModel.e_ValueType.Static,
+                    FirstConditionValue="",
+                    SecondConditionType=DCBaseModel.e_ValueType.Static,
+                    SecondConditionValue="",
+                    OperationType=DCRowConditionModel.e_OperationType.Equal },
+                };
+        }
+
+        [DataMember]
+        public List<DCRowConditionModel> Rows { get; set; }
+
+        public override object FillData(XElement xElement)
+        {
+            base.FillData(xElement);
+            this.EvaluateType = (DCConditionModel.e_EvaluateType)xElement.GetValue(nameof(DCConditionModel.EvaluateType)).ToIntObj();
+            this.Rows = (from c in xElement.Element(nameof(DCConditionModel.Rows)).Elements(nameof(DCRowConditionModel))
+                         select new DCRowConditionModel()
+                         {
+                             FirstConditionType = (DCBaseModel.e_ValueType)c.GetValue(nameof(DCRowConditionModel.FirstConditionType)).ToIntObj(),
+                             SecondConditionType = (DCBaseModel.e_ValueType)c.GetValue(nameof(DCRowConditionModel.SecondConditionType)).ToIntObj(),
+                             FirstConditionValue = c.GetValue(nameof(DCRowConditionModel.FirstConditionValue)),
+                             SecondConditionValue = c.GetValue(nameof(DCRowConditionModel.SecondConditionValue)),
+                             OperationType = (DCRowConditionModel.e_OperationType)c.GetValue(nameof(DCRowConditionModel.OperationType)).ToIntObj(),
+                         }).ToList();
+            return this;
+        }
+
+        public override XElement ToXmlElement()
+        {
+            return new XElement(nameof(DCConditionModel),
+                     base.ToXmlElementArray(),
+                     new XElement(nameof(DCConditionModel.Rows),
+                     new XElement(nameof(DCConditionModel.EvaluateType), (int)this.EvaluateType),
+                     from c in this.Rows
+                     select new XElement(nameof(DCRowConditionModel),
+                         new XElement(nameof(DCRowConditionModel.FirstConditionType), (int)c.FirstConditionType),
+                         new XElement(nameof(DCRowConditionModel.SecondConditionType), (int)c.SecondConditionType),
+                         new XElement(nameof(DCRowConditionModel.FirstConditionValue), c.FirstConditionValue),
+                         new XElement(nameof(DCRowConditionModel.SecondConditionValue), c.SecondConditionValue),
+                         new XElement(nameof(DCRowConditionModel.OperationType), (int)c.OperationType)
+                         ))
+                     );
+        }
+
+        public override string GetRenderedCode(Guid? processId, Guid? applicationPageId, IUnitOfWork unitOfWork)
+        {
+            string code = string.Empty;
+            foreach (var item in this.Rows)
+            {
+                if (!string.IsNullOrWhiteSpace(code))
+                    code += this.EvaluateType == e_EvaluateType.And ? " && " : " || ";
+                DCBaseModel.e_ConvertType e_FirstSideConvert = e_ConvertType.String;
+                switch (item.FirstConditionType)
+                {
+                    case e_ValueType.Variable:
+                        e_FirstSideConvert = DCBaseModel.GetVariableConvertType(item.FirstConditionValue, processId, applicationPageId, unitOfWork);
+                        break;
+                }
+
+                code += DCBaseModel.RenderValueType(processId, applicationPageId, unitOfWork, item.FirstConditionValue, item.FirstConditionType, e_FirstSideConvert);
+                code += item.GetOperationType();
+                code += DCBaseModel.RenderValueType(processId, applicationPageId, unitOfWork, item.SecondConditionValue, item.SecondConditionType, e_FirstSideConvert);
+
+                code += Environment.NewLine;
+            }
+            return code;
+        }
+
+        [DataMember]
+        public e_EvaluateType EvaluateType { get; set; }
+
+        public enum e_EvaluateType
+        {
+            [Description("And")]
+            And = 1,
+            [Description("Or")]
+            Or = 2
+        }
+
+    }
+
+    /// <summary>
+    /// each row of condition 
+    /// </summary>
+    [DataContract]
+    public class DCRowConditionModel
+    {
+        [DataMember]
+        public DCBaseModel.e_ValueType FirstConditionType { get; set; }
+        [DataMember]
+        public string FirstConditionValue { get; set; }
+        [DataMember]
+        public DCBaseModel.e_ValueType SecondConditionType { get; set; }
+        [DataMember]
+        public string SecondConditionValue { get; set; }
+        [DataMember]
+        public e_OperationType OperationType { get; set; }
+
+        public enum e_OperationType
+        {
+            [Description("Equal")]
+            Equal = 1,
+            [Description("BiggerAndEqualThan")]
+            BiggerAndEqualThan = 2,
+            [Description("LowerAndEqualThan")]
+            LowerAndEqualThan = 3,
+            [Description("BiggerThan")]
+            BiggerThan = 4,
+            [Description("LowerThan")]
+            LowerThan = 5,
+            [Description("NotEqual")]
+            NotEqual = 6,
+            //[Description("ISNULL")]
+            //ISNULL = 7,
+        }
+
+        public string GetOperationType()
+        {
+            switch (this.OperationType)
+            {
+                case e_OperationType.Equal: return " == ";
+                case e_OperationType.BiggerAndEqualThan: return " >= ";
+                case e_OperationType.LowerAndEqualThan: return " <= ";
+                case e_OperationType.BiggerThan: return " > ";
+                case e_OperationType.LowerThan: return " < ";
+                case e_OperationType.NotEqual: return " != ";
+                //case e_OperationType.ISNULL: return " == null";
+                default: return "";
+            }
+        }
+    }
+}

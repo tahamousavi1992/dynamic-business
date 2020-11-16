@@ -1,0 +1,111 @@
+﻿@model SingleActionSettingDTO
+@using DotNetNuke.Web.Mvc.Helpers
+@using DotNetNuke.Collections
+<style>
+    .input-group .select2 {
+        width: 100% !important;
+    }
+</style>
+<h2 id="dnnSitePanel-BasicSettings" class="dnnFormSectionHead">
+    <a href="" class="dnnSectionExpanded">
+        تنظیمات پایه
+    </a>
+</h2>
+<div class="form-horizontal" style="min-height: 300px;" id="divContainerSetting">
+    <div class="form-group">
+        <div class="col-sm-6">
+            @Html.LabelFor(m => Model.WebApiAddress)
+            <div class="input-group input-group-rtl">
+                <span class="input-group-addon">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                </span>
+                @Html.EditorFor(model => model.WebApiAddress, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+            @Html.ValidationMessageFor(model => model.WebApiAddress)
+        </div>
+        <div class="col-sm-6">
+            @Html.LabelFor(m => Model.WebServicePass)
+            <div class="input-group input-group-rtl">
+                <span class="input-group-addon">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                </span>
+                @Html.EditorFor(model => model.WebServicePass, new { htmlAttributes = new { @class = "form-control", onchange = "on_changePass();" } })
+            </div>
+            @Html.ValidationMessageFor(model => model.WebServicePass)
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-6">
+            @Html.LabelFor(m => Model.ShowCardBody)
+            <div class="input-group input-group-rtl">
+                @Html.CheckBoxFor(model => model.ShowCardBody)
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-6">
+            فرم/فرایند
+            <div class="input-group input-group-rtl">
+                <span class="input-group-addon">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                </span>
+                <select name="ddlType" id="ddlType" class="form-control" onchange="ddlType_change(this)">
+                    <option value="1" @(Model.IsProcess ? "selected" : "")>فرانید</option>
+                    <option value="2" @(Model.IsProcess ? "" : "selected")>فرم</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="form-group" style="@(Model.IsProcess?"display:none;":"")" id="divApplicationPageID">
+        <div class="col-sm-6">
+            @Html.LabelFor(m => Model.ApplicationPageID)
+            <div class="input-group combo-search">
+                <span class="input-group-addon">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                </span>
+                @Html.BpmsComboSearchFor(model => model.ApplicationPageID, Model.ApplicationName, (string)ViewBag.ApplicationPageUrl, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group" style="@(Model.IsProcess?"":"display:none;")" id="divProcessID">
+        <div class="col-sm-6">
+            @Html.LabelFor(m => Model.ProcessID)
+            <div class="input-group combo-search">
+                <span class="input-group-addon">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                </span>
+                @Html.BpmsComboSearchFor(model => model.ProcessID, Model.ProcessName, (string)ViewBag.ProcessUrl, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="col-sm-6">
+            @Html.LabelFor(m => Model.ProcessEndFormID)
+            <div class="input-group combo-search">
+                <span class="input-group-addon">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                </span>
+                @Html.BpmsComboSearchFor(model => model.ProcessEndFormID, Model.ProcessEndFormName, (string)ViewBag.ProcessFormUrl, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    //data-sourceUrl
+    setInterval(function () {
+        document.getElementById('ProcessEndFormID').setAttribute('data-parameter', 'processId=' + document.getElementById('ProcessID').value)
+    }, 500);
+    function ddlType_change(target) {
+        document.getElementById('divProcessID').style.display = 'none';
+        document.getElementById('divApplicationPageID').style.display = 'none';
+        if (target.value == "1") {
+            document.getElementById('divProcessID').style.display = '';
+        }
+        else {
+            document.getElementById('divApplicationPageID').style.display = '';
+        }
+    }
+    function on_changePass() {
+        let url = '@(Html.Raw(UrlUtility.GetUrl("UpdatePass", "Settings", ViewBag)))';
+        CallPostAjax(url, getDataModel('divContainerSetting'), null, null, null, null);
+    }
+</script>

@@ -1,0 +1,52 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Data.Entity;
+using DynamicBusiness.BPMS.Domain;
+
+namespace DynamicBusiness.BPMS.BusinessLogic
+{
+    public class LaneRepository : ILaneRepository
+    {
+        private Db_BPMSEntities Context;
+        public LaneRepository(Db_BPMSEntities context)
+        {
+            this.Context = context;
+        }
+
+        public void Add(sysBpmsLane lane)
+        {
+            this.Context.sysBpmsLanes.Add(lane);
+        }
+
+        public void Update(sysBpmsLane lane)
+        {
+            sysBpmsLane retVal = (from p in this.Context.sysBpmsLanes
+                              where p.ID == lane.ID
+                              select p).FirstOrDefault();
+            retVal.Load(lane);
+        }
+
+        public void Delete(Guid id)
+        {
+            sysBpmsLane lane = this.Context.sysBpmsLanes.FirstOrDefault(d => d.ID == id);
+            if (lane != null)
+            {
+                this.Context.sysBpmsLanes.Remove(lane);
+            }
+        }
+
+        public sysBpmsLane GetInfo(Guid id)
+        {
+            return this.Context.sysBpmsLanes.AsNoTracking().FirstOrDefault(d => d.ID == id); ;
+        }
+
+        public List<sysBpmsLane> GetList(Guid? ProcessID)
+        {
+            return this.Context.sysBpmsLanes.Where(d =>
+            (!ProcessID.HasValue || d.sysBpmsElement.ProcessID == ProcessID)).OrderBy(c => c.sysBpmsElement.Name).AsNoTracking().ToList();
+        }
+    }
+}

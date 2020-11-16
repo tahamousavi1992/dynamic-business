@@ -1,0 +1,141 @@
+﻿@model ThreadDetailDTO
+@{
+    ViewBag.Title = "مشاهده درخواست";
+    ViewBag.breadcrumbClass = "fa fa-database";
+    ViewBag.IsPopUp = false;
+    ThreadHistoryDTO ThreadHistoryDTO = new ThreadHistoryDTO();
+}
+<div class="row">
+    <div class="col-xl-12">
+        <!--begin::Card-->
+        <div class="card card-custom gutter-b">
+            <div class="card-header">
+                <h3 class="card-title">
+                    مشاهده درخواست
+                </h3>
+            </div>
+            <div class="card-body">
+                <ul class="nav nav-tabs nav-bold nav-tabs-line" id="AddEditTaskTab">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#MainInfo">
+                            <span class="nav-icon text-right"><i class="fa fa-list-ul"></i></span>
+                            <span class="nav-text">اطلاعات درخواست</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#History">
+                            <span class="nav-icon text-right"><i class="fa fa-user"></i></span>
+                            <span class="nav-text">اقدامات</span>
+                        </a>
+                    </li>
+
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="MainInfo" role="tabpanel" aria-labelledby="MainInfo">
+                        <div class="form">
+                            <div class="form-group row">
+                                <div class="col-lg-6">
+                                    @Html.LabelFor(model => model.Process.Name)
+                                    <div class="input-group">
+                                        @Html.EditorFor(model => model.Process.Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    @Html.LabelFor(model => model.User.FullName)
+                                    <div class="input-group">
+                                        @Html.EditorFor(model => model.User.FullName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-6">
+                                    @Html.LabelFor(model => model.StartDate)
+                                    <div class="input-group">
+                                        @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    @Html.LabelFor(model => model.EndDate)
+                                    <div class="input-group">
+                                        @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                @Html.LabelFor(model => model.StatusLU)
+                                <div class="input-group">
+                                    <input type="text" class="form-control" readonly value="@(((sysBpmsThread.Enum_StatusLU)Model.StatusLU).GetDescription())" />
+                                </div>
+                            </div>
+                            @{
+                                foreach (var item in Model.ListOverviewForms)
+                                {
+                                    <hr />
+                                    @Html.Partial(ViewUtility.GetSharedPresentation("HtmlElement/_UserTaskContent"), item)
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="History" role="tabpanel" aria-labelledby="History">
+                        <div class="form">
+                            <div class="datatable datatable-bordered datatable-head-custom datatable-default datatable-primary datatable-loaded">
+                                <div class="table-information table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => ThreadHistoryDTO.TaskName)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => ThreadHistoryDTO.OwnerUser.FullName)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => ThreadHistoryDTO.ThreadTaskStartDate)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => ThreadHistoryDTO.ThreadTaskEndDate)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => ThreadHistoryDTO.Description)
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.ListThreadHistory)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.TaskName)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.OwnerUser.FullName)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.ThreadTaskStartDate)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.ThreadTaskEndDate)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Description)
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <!--end::Card-->
+    </div>
+</div>
+
+<script type="text/javascript">
+
+</script>

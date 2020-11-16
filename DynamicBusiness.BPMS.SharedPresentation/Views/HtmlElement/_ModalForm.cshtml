@@ -1,0 +1,40 @@
+﻿@model DynamicBusiness.BPMS.BusinessLogic.EngineFormModel
+@{
+    ViewBag.Title = Model != null && Model.FormModel != null ? Model.FormModel.FormName : "";
+    string modalId = Model != null ? (Model.FormModel.DynamicFormID.ToStringObj() + "divModel") : "";
+}
+<div id="@(modalId)" data-callBack="" class="modal fade " role="dialog" aria-labelledby="exampleModalSizeLg" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-windows" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">@ViewBag.Title</h5>
+                <div class="modal-button">
+                    <button type="button" class="btn close window-maximize" data-dismiss="modal" aria-label="Close">
+                        <i class="fad fa-expand-alt modal-square"></i>
+                    </button>
+                    <button type="button" class="btn close" data-dismiss="modal" aria-label="Close">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-body modal-scroll">
+                <div class="form" id="divBpmsParentContainer">
+                    @{
+                        if (Model != null)
+                        {
+                            @Html.Partial(ViewUtility.GetSharedPresentation("HtmlElement/_UserTaskContent"), Model)
+                        }
+                    }
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+    <script>
+        FormControl.initBpmsEngine();
+        document.querySelectorAll('[data-isFooter="true"]').forEach(function (item) {
+            item.closest('.modal-dialog').querySelector('.modal-footer').appendChild(item);
+        })
+    </script>
+</div>

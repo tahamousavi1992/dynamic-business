@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{08B14FC7-CB9A-4948-94E4-F6E96CD877C8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DynamicBusiness.BPMS.BusinessLogic</RootNamespace>
+    <AssemblyName>DynamicBusiness.BPMS.SqlDataProvider</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\AllBins\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\AllBins\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DotNetNuke, Version=9.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\LMS\bin\DotNetNuke.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Soltani\MyProject\IranDnn.UserStats\IranDnn.UserStats\AllBins\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Soltani\MyProject\IranDnn.UserStats\IranDnn.UserStats\AllBins\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataAccessLayer\APIAccessRepository.cs" />
+    <Compile Include="DataAccessLayer\ApplicationPageAccessRepository.cs" />
+    <Compile Include="DataAccessLayer\ApplicationPageRepository.cs" />
+    <Compile Include="DataAccessLayer\ConditionRepository.cs" />
+    <Compile Include="DataAccessLayer\DataBaseQueryRepository.cs" />
+    <Compile Include="DataAccessLayer\DBConnectionRepository.cs" />
+    <Compile Include="DataAccessLayer\DepartmentMemberRepository.cs" />
+    <Compile Include="DataAccessLayer\DepartmentRepository.cs" />
+    <Compile Include="DataAccessLayer\DocumentDefRepository.cs" />
+    <Compile Include="DataAccessLayer\DocumentFolderRepository.cs" />
+    <Compile Include="DataAccessLayer\DocumentRepository.cs" />
+    <Compile Include="DataAccessLayer\DynamicFormRepository.cs" />
+    <Compile Include="DataAccessLayer\ElementRepository.cs" />
+    <Compile Include="DataAccessLayer\EmailAccountRepository.cs" />
+    <Compile Include="DataAccessLayer\EntityDefRepository.cs" />
+    <Compile Include="DataAccessLayer\EventRepository.cs" />
+    <Compile Include="DataAccessLayer\GatewayRepository.cs" />
+    <Compile Include="DataAccessLayer\LaneRepository.cs" />
+    <Compile Include="DataAccessLayer\LURowRepository.cs" />
+    <Compile Include="DataAccessLayer\LUTableRepository.cs" />
+    <Compile Include="DataAccessLayer\OperationRepository.cs" />
+    <Compile Include="DataAccessLayer\ProcessGroupRepository.cs" />
+    <Compile Include="DataAccessLayer\ProcessRepository.cs" />
+    <Compile Include="DataAccessLayer\SequenceFlowRepository.cs" />
+    <Compile Include="DataAccessLayer\SettingDefRepository.cs" />
+    <Compile Include="DataAccessLayer\SettingValueRepository.cs" />
+    <Compile Include="DataAccessLayer\MessageTypeRepository.cs" />
+    <Compile Include="DataAccessLayer\StepRepository.cs" />
+    <Compile Include="DataAccessLayer\TaskRepository.cs" />
+    <Compile Include="DataAccessLayer\ThreadEventRepository.cs" />
+    <Compile Include="DataAccessLayer\ThreadRepository .cs" />
+    <Compile Include="DataAccessLayer\ThreadTaskRepository.cs" />
+    <Compile Include="DataAccessLayer\ThreadVariableRepository.cs" />
+    <Compile Include="DataAccessLayer\UserRepository.cs" />
+    <Compile Include="DataAccessLayer\VariableDependencyRepository.cs" />
+    <Compile Include="DataAccessLayer\VariableRepository.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryableExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DynamicBusiness.BPMS.Domain\DynamicBusiness.BPMS.Domain.csproj">
+      <Project>{843f41b1-7add-46b4-8862-7f46f0d0a739}</Project>
+      <Name>DynamicBusiness.BPMS.Domain</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

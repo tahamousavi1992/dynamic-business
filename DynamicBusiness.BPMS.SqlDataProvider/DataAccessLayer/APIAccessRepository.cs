@@ -1,0 +1,80 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Data.Entity;
+using DynamicBusiness.BPMS.Domain;
+
+namespace DynamicBusiness.BPMS.BusinessLogic
+{
+    public class APIAccessRepository : IAPIAccessRepository
+    {
+        private Db_BPMSEntities Context;
+        public APIAccessRepository(Db_BPMSEntities context)
+        {
+            this.Context = context;
+        }
+
+        public void Update(sysBpmsAPIAccess APIAccess)
+        {
+            sysBpmsAPIAccess retVal = (from P in this.Context.sysBpmsAPIAccesses
+                                   where P.ID == APIAccess.ID
+                                   select P).FirstOrDefault();
+            retVal.Load(APIAccess);
+        }
+
+        public void Add(sysBpmsAPIAccess APIAccess)
+        {
+            APIAccess.ID = Guid.NewGuid();
+            this.Context.sysBpmsAPIAccesses.Add(APIAccess);
+        }
+
+        public sysBpmsAPIAccess GetInfo(Guid ID)
+        {
+            return (from P in this.Context.sysBpmsAPIAccesses
+                    where P.ID == ID
+                    select P).AsNoTracking().FirstOrDefault();
+        }
+
+        public sysBpmsAPIAccess GetInfo(string IPAddress, string AccessKey)
+        {
+            IPAddress = IPAddress.ToStringObj();
+            AccessKey = AccessKey.ToStringObj();
+            return (from P in this.Context.sysBpmsAPIAccesses
+                    where
+                    (IPAddress == string.Empty || P.IPAddress == IPAddress) &&
+                    (AccessKey == string.Empty || P.AccessKey == AccessKey)
+                    select P).AsNoTracking().FirstOrDefault();
+        }
+
+        public List<sysBpmsAPIAccess> GetList(string Name, string IPAddress, string AccessKey, bool? IsActive, PagingProperties currentPaging)
+        {
+            List<sysBpmsAPIAccess> retVal = null;
+            Name = Name.ToStringObj().Trim().ToLower();
+            IPAddress = IPAddress.ToStringObj();
+            AccessKey = AccessKey.ToStringObj();
+
+            var query = (from P in this.Context.sysBpmsAPIAccesses
+                         where
+                         (IPAddress == string.Empty || P.IPAddress == IPAddress) &&
+                         (AccessKey == string.Empty || P.AccessKey == AccessKey) &&
+                         (Name == string.Empty || P.Name.Trim().ToLower().Contains(Name)) &&
+                         (!IsActive.HasValue || P.IsActive == IsActive)
+                         select P);
+            if (currentPaging != null)
+            {
+                currentPaging.RowsCount = query.Count();
+
+                if (Math.Ceiling(Convert.ToDecimal(currentPaging.RowsCount) / Convert.ToDecimal(currentPaging.PageSize)) < currentPaging.PageIndex)
+                    currentPaging.PageIndex = 1;
+
+                retVal = query.OrderBy(p => p.Name).Skip((currentPaging.PageIndex - 1) * currentPaging.PageSize).Take(currentPaging.PageSize).AsNoTracking().ToList();
+            }
+            else
+                retVal = query.OrderBy(p => p.Name).AsNoTracking().ToList();
+            return retVal;
+        }
+
+    }
+}

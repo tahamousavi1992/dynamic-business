@@ -1,0 +1,48 @@
+﻿@model DynamicBusiness.BPMS.BusinessLogic.EngineFormModel
+@{
+    ViewBag.Title = Model != null ? (string.IsNullOrWhiteSpace(Model.FormModel.StepName) ? Model.FormModel.FormName : Model.FormModel.StepName) : "";
+    ViewBag.breadcrumbClass = "fa fa-database";
+    ViewBag.IsPopUp = false;
+}
+<div class="row">
+    <div class="col-xl-12" id="divBpmsParentContainer">
+        <!--begin::Card-->
+        @{
+            if (((bool?)ViewBag.ShowCardBody) == true)
+            {
+                <div class="card card-custom gutter-b">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            @ViewBag.Title
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        @{
+                            if (Model != null)
+                            {
+                                @Html.Partial(ViewUtility.GetSharedPresentation("HtmlElement/_UserTaskContent"), Model)
+                            }
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                if (Model != null)
+                {
+                    @Html.Partial(ViewUtility.GetSharedPresentation("HtmlElement/_UserTaskContent"), Model)
+                }
+            }
+        }
+
+        <!--end::Card-->
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    document.getElementsByTagName('form')[0].onsubmit = function () {
+        return false;
+    };
+
+</script>

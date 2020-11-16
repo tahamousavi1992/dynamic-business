@@ -1,0 +1,52 @@
+﻿@model DynamicBusiness.BPMS.Domain.PagingProperties
+@{
+    string url = UrlUtility.GetUrl(Model.ActionName, Model.ControllerName, ViewBag);
+}
+
+@if (Model.RowsCount > Model.PageSize)
+{
+    <div class="datatable-pager datatable-paging-loaded">
+        <ul class="datatable-pager-nav mb-5 mb-sm-0">
+            @if (Model.HasPreviousPage)
+            {
+                <li>
+                    <a title="صفحه قبل" onclick="loadSearchForm('@(url+(url.Contains("?")?"&":"?"))pageindex=@BPMSUtility.toInt(Model.PageIndex - 1)',@Model.IsAjax.ToString().ToLower(), '@Model.FormID', '@Model.TargetID','@Model.Params',@Html.Raw(Model.GetParameterFunction))"
+                       class="datatable-pager-link datatable-pager-link-prev datatable-pager-link-disabled" data-page="1" disabled="disabled"><i class="fa fa-angle-right"></i></a>
+                </li>
+                <li style=""></li>
+            }
+            <li style="display: none;"><input type="text" class="datatable-pager-input form-control" title="Page number"></li>
+            @for (int i = Model.StartPage; i <= Model.EndPage; i++)
+            {
+                if (Model.PageIndex == i)
+                {
+
+                    <li>
+                        <a class="datatable-pager-link datatable-pager-link-number datatable-pager-link-active" data-page="1">@i</a>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a class="datatable-pager-link datatable-pager-link-number" data-page="2"
+                           onclick="loadSearchForm('@(url+(url.Contains("?")?"&":"?"))PageIndex=@i',@Model.IsAjax.ToString().ToLower(), '@Model.FormID', '@Model.TargetID','@Model.Params',@Html.Raw(Model.GetParameterFunction))" title="@string.Format("{0} {1}", "صفحه", i)">@i</a>
+                    </li>
+                }
+            }
+            @if (Model.HasNextPage)
+            {
+                <li></li>
+                <li>
+                    <a title="صفحه بعد" onclick="loadSearchForm('@(url+(url.Contains("?")?"&":"?"))PageIndex=@BPMSUtility.toInt(Model.PageIndex + 1)',@Model.IsAjax.ToString().ToLower(), '@Model.FormID', '@Model.TargetID','@Model.Params',@Html.Raw(Model.GetParameterFunction))"
+                       class="datatable-pager-link datatable-pager-link-next"><i class="fa fa-angle-left"></i></a>
+                </li>
+            }
+        </ul>
+        <div class="datatable-pager-info">
+            <span class="datatable-pager-detail">@(string.Format("نمایش {0} - {1} از {2} تا", Model.StartPage, Model.EndPage, Model.RowsCount))</span>
+        </div>
+    </div>
+}
+
+
+

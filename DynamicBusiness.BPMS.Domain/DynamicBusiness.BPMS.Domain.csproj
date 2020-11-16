@@ -1,0 +1,437 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{843F41B1-7ADD-46B4-8862-7F46F0D0A739}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DynamicBusiness.BPMS.Domain</RootNamespace>
+    <AssemblyName>DynamicBusiness.BPMS.Domain</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\AllBins\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\AllBins\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DotNetNuke, Version=9.6.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Bin\DotNetNuke.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Bin\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DomainUtility.cs" />
+    <Compile Include="dmBPMS.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dmBPMS.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="dmBPMS.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="dmBPMS.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dmBPMS.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\Attributes\XMLNodeAttributes.cs" />
+    <Compile Include="Entity\HtmlElement\EventDataAttributesModel.cs" />
+    <Compile Include="Entity\HtmlElement\WordCaptchaHtml.cs" />
+    <Compile Include="Entity\HtmlElement\CardHtml.cs" />
+    <Compile Include="Entity\HtmlElement\BindingElementBase.cs" />
+    <Compile Include="Entity\HtmlElement\ButtonHtml.cs" />
+    <Compile Include="Entity\HtmlElement\CheckBoxHtml.cs" />
+    <Compile Include="Entity\HtmlElement\ColumnHtml.cs" />
+    <Compile Include="Entity\HtmlElement\ComboSearchHtml.cs" />
+    <Compile Include="Entity\HtmlElement\DocumentDefinitionModel.cs" />
+    <Compile Include="Entity\HtmlElement\FormHtml.cs" />
+    <Compile Include="Entity\HtmlElement\ContentHtml.cs" />
+    <Compile Include="Entity\HtmlElement\DataGridColumsSetting.cs" />
+    <Compile Include="Entity\HtmlElement\DataGridHtml.cs" />
+    <Compile Include="Entity\HtmlElement\DependentParameterModel.cs" />
+    <Compile Include="Entity\HtmlElement\DropDownHtml.cs" />
+    <Compile Include="Entity\HtmlElement\ElementBase.cs" />
+    <Compile Include="Entity\HtmlElement\CaptchaHtml.cs" />
+    <Compile Include="Entity\HtmlElement\DatePickerHtml.cs" />
+    <Compile Include="Entity\HtmlElement\CkeditorHtml.cs" />
+    <Compile Include="Entity\HtmlElement\FileUploadHtml.cs" />
+    <Compile Include="Entity\HtmlElement\HtmlCodeHtml.cs" />
+    <Compile Include="Entity\HtmlElement\DownloadLinkHtml.cs" />
+    <Compile Include="Entity\HtmlElement\ChartHtml.cs" />
+    <Compile Include="Entity\HtmlElement\ListItemElementBase.cs" />
+    <Compile Include="Entity\HtmlElement\AccordionHtml.cs" />
+    <Compile Include="Entity\HtmlElement\TitleHtml.cs" />
+    <Compile Include="Entity\HtmlElement\LinkHtml.cs" />
+    <Compile Include="Entity\HtmlElement\ImageHtml.cs" />
+    <Compile Include="Entity\HtmlElement\OptionHtml.cs" />
+    <Compile Include="Entity\HtmlElement\CheckBoxListHtml.cs" />
+    <Compile Include="Entity\HtmlElement\RadioButtonListHtml.cs" />
+    <Compile Include="Entity\HtmlElement\RowHtml.cs" />
+    <Compile Include="Entity\HtmlElement\TextBoxHtml.cs" />
+    <Compile Include="Entity\HtmlElement\FormModel.cs" />
+    <Compile Include="Entity\Model\DataModel.cs" />
+    <Compile Include="Entity\Model\EngineCode\CodeBaseSharedModel.cs" />
+    <Compile Include="Entity\Model\EngineCode\DCBaseModel.cs" />
+    <Compile Include="Entity\Model\EngineCode\DCEntityModel.cs" />
+    <Compile Include="Entity\Model\EngineCode\DCCallMethodModel.cs" />
+    <Compile Include="Entity\Model\EngineCode\DCExpressionModel.cs" />
+    <Compile Include="Entity\Model\EngineCode\DCConditionModel.cs" />
+    <Compile Include="Entity\Model\EngineCode\DCSetControlModel.cs" />
+    <Compile Include="Entity\Model\EngineCode\DCWebServiceModel.cs" />
+    <Compile Include="Entity\Model\EngineCode\DesignCodeModel.cs" />
+    <Compile Include="Entity\Model\DisplayMessageType.cs" />
+    <Compile Include="Entity\Model\DynamicFormConfigXmlModel.cs" />
+    <Compile Include="Entity\Model\ElementEventScriptModel.cs" />
+    <Compile Include="Entity\Model\EngineCode\CodeResultModel.cs" />
+    <Compile Include="Entity\Model\EngineCode\DCSetVariableModel.cs" />
+    <Compile Include="Entity\Model\EngineCode\DownloadModel.cs" />
+    <Compile Include="Entity\Model\EngineCode\RedirectUrlModel.cs" />
+    <Compile Include="Entity\Model\EngineResponseModel.cs" />
+    <Compile Include="Entity\Model\EngineSharedModel.cs" />
+    <Compile Include="Entity\Model\EntityDesignXmlModel.cs" />
+    <Compile Include="Entity\Model\EngineCode\VariableModel.cs" />
+    <Compile Include="Entity\Model\EntityRelationModel.cs" />
+    <Compile Include="Entity\Model\FormQueryModel.cs" />
+    <Compile Include="Entity\Model\HtmlElementHelperModel.cs" />
+    <Compile Include="Entity\Model\MessageTypeParamsModel.cs" />
+    <Compile Include="Entity\Model\SubTypeMessageParamEventModel.cs" />
+    <Compile Include="Entity\Model\SubTypeEmailEventModel.cs" />
+    <Compile Include="Entity\Model\SubTypeMessageEventModel.cs" />
+    <Compile Include="Entity\Model\MessageModel.cs" />
+    <Compile Include="Entity\Model\ResultOperation.cs" />
+    <Compile Include="Entity\Model\SubTypeTimerEventModel.cs" />
+    <Compile Include="Entity\Model\ThreadGatewayStatusXmlModel.cs" />
+    <Compile Include="Entity\Model\TreeNodeStateModel.cs" />
+    <Compile Include="Entity\Model\TreeViewModel.cs" />
+    <Compile Include="Entity\Model\UserTaskRuleModel.cs" />
+    <Compile Include="Entity\Partials\sysBpmsAPIAccess.cs" />
+    <Compile Include="Entity\Partials\sysBpmsApplicationPage.cs" />
+    <Compile Include="Entity\Partials\sysBpmsApplicationPageAccess.cs" />
+    <Compile Include="Entity\Partials\sysBpmsDocument.cs" />
+    <Compile Include="Entity\Partials\sysBpmsDocumentDef.cs" />
+    <Compile Include="Entity\Partials\sysBpmsDocumentFolder.cs" />
+    <Compile Include="Entity\Partials\sysBpmsEmailAccount.cs" />
+    <Compile Include="Entity\Partials\sysBpmsLane.cs" />
+    <Compile Include="Entity\Partials\sysBpmsLUTable.cs" />
+    <Compile Include="Entity\Partials\sysBpmsMessageType.cs" />
+    <Compile Include="Entity\Partials\sysBpmsOperation.cs" />
+    <Compile Include="Entity\Partials\sysBpmsProcessGroup.cs" />
+    <Compile Include="Entity\Partials\sysBpmsSettingDef.cs" />
+    <Compile Include="Entity\Partials\sysBpmsSettingValue.cs" />
+    <Compile Include="Entity\Partials\sysBpmsThreadEvent.cs" />
+    <Compile Include="Entity\Partials\sysBpmsVariableDependency.cs" />
+    <Compile Include="Entity\Workflow\IWorkflowElement.cs" />
+    <Compile Include="Entity\Workflow\WorkflowBoundaryEvent.cs" />
+    <Compile Include="Entity\Workflow\WorkflowChildLaneSet.cs" />
+    <Compile Include="Entity\Workflow\WorkflowElement.cs" />
+    <Compile Include="Entity\Workflow\WorkflowEndEvent.cs" />
+    <Compile Include="Entity\Workflow\WorkflowExclusiveGateway.cs" />
+    <Compile Include="Entity\Workflow\WorkflowForm.cs" />
+    <Compile Include="Entity\Workflow\WorkflowFormGroup.cs" />
+    <Compile Include="Entity\Workflow\WorkflowForms.cs" />
+    <Compile Include="Entity\Workflow\WorkflowFormScript.cs" />
+    <Compile Include="Entity\Workflow\WorkflowFormScripts.cs" />
+    <Compile Include="Entity\Workflow\WorkflowInclusiveGateway.cs" />
+    <Compile Include="Entity\Workflow\WorkflowIntermediateCatchEvent.cs" />
+    <Compile Include="Entity\Workflow\WorkflowIntermediateThrowEvent.cs" />
+    <Compile Include="Entity\Workflow\WorkflowIOElement.cs" />
+    <Compile Include="Entity\Workflow\WorkflowLane.cs" />
+    <Compile Include="Entity\Workflow\WorkflowLaneSet.cs" />
+    <Compile Include="Entity\Workflow\WorkflowNoneStartEvent.cs" />
+    <Compile Include="Entity\Workflow\WorkflowParallelGateway.cs" />
+    <Compile Include="Entity\Workflow\WorkflowProcess.cs" />
+    <Compile Include="Entity\Workflow\WorkflowScriptTask.cs" />
+    <Compile Include="Entity\Workflow\WorkflowSequenceFlow.cs" />
+    <Compile Include="Entity\Workflow\WorkflowServiceTask.cs" />
+    <Compile Include="Entity\Workflow\WorkflowStartEvent.cs" />
+    <Compile Include="Entity\Workflow\WorkflowTask.cs" />
+    <Compile Include="Entity\Workflow\WorkflowUserTask.cs" />
+    <Compile Include="Interfaces\Engine\IApplicationPageEngine.cs" />
+    <Compile Include="Interfaces\Engine\IDocumentEngine.cs" />
+    <Compile Include="Interfaces\Engine\IDynamicCodeEngine.cs" />
+    <Compile Include="Interfaces\IDataManageHelper.cs" />
+    <Compile Include="Interfaces\IUnitOfWork.cs" />
+    <Compile Include="Interfaces\IWorkflowElementConvertor.cs" />
+    <Compile Include="Interfaces\Repository\IAPIAccessRepository.cs" />
+    <Compile Include="Interfaces\Repository\IApplicationPageAccessRepository.cs" />
+    <Compile Include="Interfaces\Repository\IApplicationPageRepository.cs" />
+    <Compile Include="Interfaces\Repository\IDocumentDefRepository.cs" />
+    <Compile Include="Interfaces\Repository\IDocumentFolderRepository.cs" />
+    <Compile Include="Interfaces\Repository\IDocumentRepository.cs" />
+    <Compile Include="Interfaces\Repository\IEmailAccountRepository.cs" />
+    <Compile Include="Interfaces\Repository\ILaneRepository.cs" />
+    <Compile Include="Interfaces\Repository\IOperationRepository.cs" />
+    <Compile Include="Interfaces\Repository\IProcessGroupRepository.cs" />
+    <Compile Include="Interfaces\Repository\ISettingDefRepository.cs" />
+    <Compile Include="Interfaces\Repository\ISettingValueRepository.cs" />
+    <Compile Include="Interfaces\Repository\IMessageTypeRepository.cs" />
+    <Compile Include="Interfaces\Repository\IThreadEventRepository.cs" />
+    <Compile Include="Interfaces\Repository\IUserRepository.cs" />
+    <Compile Include="Entity\Model\ComboTreeModel.cs" />
+    <Compile Include="Entity\Model\PagingProperties.cs" />
+    <Compile Include="Entity\Model\CustomValidationResult.cs" />
+    <Compile Include="Entity\Model\EntityPropertyModel.cs" />
+    <Compile Include="Entity\Model\TableSchemaModel.cs" />
+    <Compile Include="Entity\Model\VariableItemModel.cs" />
+    <Compile Include="Entity\Partials\sysBpmsCondition.cs" />
+    <Compile Include="Entity\Partials\sysBpmsDBConnection.cs" />
+    <Compile Include="Entity\Partials\sysBpmsDepartment.cs" />
+    <Compile Include="Entity\Partials\sysBpmsDepartmentMember.cs" />
+    <Compile Include="Entity\Partials\sysBpmsDynamicForm.cs" />
+    <Compile Include="Entity\Partials\sysBpmsElement.cs" />
+    <Compile Include="Entity\Partials\sysBpmsEntityDef.cs" />
+    <Compile Include="Entity\Partials\sysBpmsEvent.cs" />
+    <Compile Include="Entity\Partials\sysBpmsGateway.cs" />
+    <Compile Include="Entity\Partials\sysBpmsLURow.cs" />
+    <Compile Include="Entity\Partials\sysBpmsProcess.cs" />
+    <Compile Include="Entity\Partials\sysBpmsSequenceFlow.cs" />
+    <Compile Include="Entity\Partials\sysBpmsStep.cs" />
+    <Compile Include="Entity\Partials\sysBpmsTask.cs" />
+    <Compile Include="Entity\Partials\sysBpmsThread.cs" />
+    <Compile Include="Entity\Partials\sysBpmsThreadTask.cs" />
+    <Compile Include="Entity\Partials\sysBpmsThreadVariable.cs" />
+    <Compile Include="Entity\Partials\sysBpmsUser.cs" />
+    <Compile Include="Entity\Partials\sysBpmsVariable.cs" />
+    <Compile Include="Entity\Partials\XML_Schema.cs" />
+    <Compile Include="Interfaces\Repository\IVariableDependencyRepository.cs" />
+    <Compile Include="Library\ConvertorExt.cs" />
+    <Compile Include="Library\DesignCodeUtility.cs" />
+    <Compile Include="Library\EnumHelper.cs" />
+    <Compile Include="Library\Languages\DespayNameLang.cs" />
+    <Compile Include="Library\Languages\SharedLang.cs" />
+    <Compile Include="Library\StringCipher.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Interfaces\Repository\IConditionRepository.cs" />
+    <Compile Include="Interfaces\Repository\IDataBaseQueryRepository.cs" />
+    <Compile Include="Interfaces\Repository\IDBConnectionRepository.cs" />
+    <Compile Include="Interfaces\Repository\IDepartmentMemberRepository.cs" />
+    <Compile Include="Interfaces\Repository\IDepartmentRepository.cs" />
+    <Compile Include="Interfaces\Repository\IDynamicFormRepository.cs" />
+    <Compile Include="Interfaces\Repository\IElementRepository.cs" />
+    <Compile Include="Interfaces\Repository\IEntityDefRepository.cs" />
+    <Compile Include="Interfaces\Repository\IEventRepository.cs" />
+    <Compile Include="Interfaces\Repository\IGatewayRepository.cs" />
+    <Compile Include="Interfaces\Repository\ILURowRepository.cs" />
+    <Compile Include="Interfaces\Repository\ILUTableRepository.cs" />
+    <Compile Include="Interfaces\Repository\IProcessRepository.cs" />
+    <Compile Include="Interfaces\Repository\ISequenceFlowRepository.cs" />
+    <Compile Include="Interfaces\Repository\IStepRepository.cs" />
+    <Compile Include="Interfaces\Repository\ITaskRepository.cs" />
+    <Compile Include="Interfaces\Repository\IThreadRepository.cs" />
+    <Compile Include="Interfaces\Repository\IThreadTaskRepository.cs" />
+    <Compile Include="Interfaces\Repository\IThreadVariableRepository.cs" />
+    <Compile Include="Interfaces\Repository\IVariableRepository.cs" />
+    <Compile Include="Library\XmlParserHelper.cs" />
+    <Compile Include="Split_Result.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsAPIAccess.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsApplicationPage.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsApplicationPageAccess.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsCondition.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsDBConnection.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsDepartment.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsDepartmentMember.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsDocument.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsDocumentDef.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsDocumentFolder.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsDynamicForm.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsElement.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsEmailAccount.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsEntityDef.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsEvent.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsGateway.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsLane.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsLURow.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsLUTable.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsMessageType.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsOperation.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsProcess.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsProcessGroup.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsSequenceFlow.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsSettingDef.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsSettingValue.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsStep.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsTask.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsThread.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsThreadEvent.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsThreadTask.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsThreadTaskDelay.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsThreadVariable.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsUser.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsVariable.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysBpmsVariableDependency.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="dmBPMS.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>dmBPMS.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="dmBPMS.edmx.diagram">
+      <DependentUpon>dmBPMS.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="dmBPMS.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>dmBPMS.Context.cs</LastGenOutput>
+      <DependentUpon>dmBPMS.edmx</DependentUpon>
+    </Content>
+    <Content Include="dmBPMS.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>dmBPMS.edmx</DependentUpon>
+      <LastGenOutput>dmBPMS.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
