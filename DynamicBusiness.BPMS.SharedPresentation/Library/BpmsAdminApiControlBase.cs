@@ -16,8 +16,8 @@ using System.Web.Routing;
 
 namespace DynamicBusiness.BPMS.SharedPresentation
 {
-    [System.Web.Http.AllowAnonymous]
-    //[DnnAuthorize]
+    //[System.Web.Http.AllowAnonymous]
+    [BpmsAdminAuth]
     public class BpmsAdminApiControlBase : DnnApiController
     {
         public BpmsAdminApiControlBase()
@@ -50,7 +50,7 @@ namespace DynamicBusiness.BPMS.SharedPresentation
                 this.ApplicationPageId = DomainUtility.GetRegularValue("\"ApplicationPageId\":\"", "\"", data).FirstOrDefault().ToGuidObjNull();
             }
         }
- 
+
         protected void Download(sysBpmsDocument Document)
         {
             if (Document != null)
@@ -163,6 +163,6 @@ namespace DynamicBusiness.BPMS.SharedPresentation
                     }
                 }
             }
-        } 
+        }
     }
 }

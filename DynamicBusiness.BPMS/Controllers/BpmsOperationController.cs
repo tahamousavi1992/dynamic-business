@@ -8,8 +8,7 @@ using DynamicBusiness.BPMS.SharedPresentation;
 using DynamicBusiness.BPMS.Domain;
 
 namespace DynamicBusiness.BPMS.Controllers
-{
-    [System.Web.Http.AllowAnonymous]
+{ 
     public class BpmsOperationController : BpmsAdminApiControlBase
     {
         // GET: BpmsOperation

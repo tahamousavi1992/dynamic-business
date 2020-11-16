@@ -12,8 +12,7 @@ using DynamicBusiness.BPMS.SharedPresentation;
 using System.Web.Script.Serialization;
 
 namespace DynamicBusiness.BPMS.Controllers
-{
-    [System.Web.Http.AllowAnonymous]
+{ 
     public class BpmsProcessController : BpmsAdminApiControlBase
     {
         // GET: /BpmsProcess/

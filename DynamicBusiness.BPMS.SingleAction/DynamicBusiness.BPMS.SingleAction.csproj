@@ -175,9 +175,6 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\SingleActionHome\ThreadDetail.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Settings\Settings.cshtml" />
   </ItemGroup>
   <PropertyGroup>

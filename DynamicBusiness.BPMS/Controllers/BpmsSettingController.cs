@@ -12,8 +12,7 @@ using DynamicBusiness.BPMS.Domain;
 using DynamicBusiness.BPMS.SharedPresentation;
 
 namespace DynamicBusiness.BPMS.Controllers
-{
-    [System.Web.Http.AllowAnonymous]
+{ 
     public class BpmsSettingController : BpmsAdminApiControlBase
     {
         [HttpGet]
@@ -91,14 +90,6 @@ namespace DynamicBusiness.BPMS.Controllers
                         resultOperation = settingValueService.Update(setValue);
                     UrlUtility.NoContainerPath = setValue.Value;
 
-                    //NoSkinPath
-                    setDef = listDef.FirstOrDefault(c => c.Name == sysBpmsSettingDef.e_NameType.NoSkinPath.ToString());
-                    setValue = listValues.FirstOrDefault(c => c.SettingDefID == setDef.ID);
-                    setValue = this.FillObject(setValue, setDef.ID, settingDTO.NoSkinPath.ToStringObj());
-                    if (setValue.ID == Guid.Empty)
-                        resultOperation = settingValueService.Add(setValue);
-                    else
-                        resultOperation = settingValueService.Update(setValue);
 
                     //AddUserAutomatically
                     setDef = listDef.FirstOrDefault(c => c.Name == sysBpmsSettingDef.e_NameType.AddUserAutomatically.ToString());
@@ -108,8 +99,20 @@ namespace DynamicBusiness.BPMS.Controllers
                         resultOperation = settingValueService.Add(setValue);
                     else
                         resultOperation = settingValueService.Update(setValue);
-
+                     
+                    //NoSkinPath
+                    setDef = listDef.FirstOrDefault(c => c.Name == sysBpmsSettingDef.e_NameType.NoSkinPath.ToString());
+                    setValue = listValues.FirstOrDefault(c => c.SettingDefID == setDef.ID);
+                    setValue = this.FillObject(setValue, setDef.ID, settingDTO.NoSkinPath.ToStringObj());
+                    if (setValue.ID == Guid.Empty)
+                        resultOperation = settingValueService.Add(setValue);
+                    else
+                        resultOperation = settingValueService.Update(setValue);
                     UrlUtility.NoSkinPath = setValue.Value;
+
+                    TimerThreadEventScheduler.CheckScheduler();
+                    TimerStartEventScheduler.CheckScheduler();
+
                 }
             }
 

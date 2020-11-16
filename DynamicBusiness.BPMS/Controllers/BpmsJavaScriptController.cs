@@ -10,8 +10,7 @@ using DynamicBusiness.BPMS.SharedPresentation;
 using System.IO;
 
 namespace DynamicBusiness.BPMS.Controllers
-{
-    [System.Web.Http.AllowAnonymous]
+{ 
     public class BpmsJavaScriptController : BpmsAdminApiControlBase
     {
         #region .:: private Properties ::.

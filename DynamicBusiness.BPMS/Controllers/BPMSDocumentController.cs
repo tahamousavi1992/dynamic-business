@@ -14,8 +14,7 @@ using DynamicBusiness.BPMS.SharedPresentation;
 using DotNetNuke.Common.Utilities;
 
 namespace DynamicBusiness.BPMS.Controllers
-{
-    [System.Web.Http.AllowAnonymous]
+{ 
     public class BpmsDocumentController : BpmsAdminApiControlBase
     {
         #region .:: Document ::.

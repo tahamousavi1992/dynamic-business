@@ -32,6 +32,9 @@ namespace DynamicBusiness.BPMS.SingleAction.Controllers
             ShowCardBody = ModuleContext.Configuration.ModuleSettings.GetValueOrDefault(SingleActionSettingDTO.e_SettingType.SingleAction_ShowCardBody.ToString(), string.Empty).ToStringObj().ToLower() == "true";
             ProcessEndFormID = ModuleContext.Configuration.ModuleSettings.GetValueOrDefault(SingleActionSettingDTO.e_SettingType.SingleAction_ProcessEndFormID.ToString(), string.Empty).ToGuidObjNull();
             DomainUtility.SingleActionHomeUr = base.ActivePage.FullUrl;
+
+            ViewBag.SingleActionUrl = UrlUtility.GetApiBase(base.Request, base.PortalSettings.DefaultPortalAlias, "BpmsSingleActionApi").TrimEnd('/') + "/";
+            ViewBag.rootPage = this.Request.RawUrl.Substring(0, this.Request.RawUrl.IndexOf("/" + this.ActivePage.TabName + "/") + this.ActivePage.TabName.Length + 1);
             if (string.IsNullOrWhiteSpace(BaseUrl) || (!DefaultProcessID.HasValue && !DefaultApplicationPageID.HasValue))
             {
                 ViewBag.Message = "Setting is not complete";

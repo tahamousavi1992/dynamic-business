@@ -12,17 +12,12 @@ using DynamicBusiness.BPMS.Domain;
 using DynamicBusiness.BPMS.SharedPresentation;
 
 namespace DynamicBusiness.BPMS.Controllers
-{
-    [System.Web.Http.AllowAnonymous]
+{ 
     public class BpmsLURowController : BpmsAdminApiControlBase
     {
         [HttpGet]
         public object GetList([System.Web.Http.FromUri] LURowIndexSearchDTO indexSearchVM)
         {
-            //base.SetMenuIndex(AdminMenuIndex.LURowIndex);
-            TimerThreadEventScheduler.CheckScheduler();
-            TimerStartEventScheduler.CheckScheduler();
-
             using (LURowService luRowService = new LURowService())
             {
                 indexSearchVM.Update(indexSearchVM.LUTableID.HasValue ? luRowService.GetList(indexSearchVM.LUTableID.Value, "", true, indexSearchVM.GetPagingProperties).Select(c => new LURowDTO(c)).ToList() : new List<LURowDTO>());

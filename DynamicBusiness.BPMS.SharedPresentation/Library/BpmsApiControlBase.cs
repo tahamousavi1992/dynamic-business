@@ -17,7 +17,7 @@ using System.Web.UI;
 
 namespace DynamicBusiness.BPMS.SharedPresentation
 {
-    [System.Web.Http.AllowAnonymous]
+    [BpmsCartableAuth]
     public class BpmsApiControlBase : DnnApiController
     {
         public BpmsApiControlBase()

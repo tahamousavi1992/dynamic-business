@@ -118,7 +118,7 @@ namespace DynamicBusiness.BPMS.Domain
 
         public static bool IsTestEnvironment()
         {
-            return true;
+            return false;
         }
 
         public static string[] GetRegularValue(string Start, string End, string Value)

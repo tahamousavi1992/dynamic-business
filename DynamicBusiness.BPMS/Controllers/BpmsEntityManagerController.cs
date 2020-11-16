@@ -9,8 +9,7 @@ using DynamicBusiness.BPMS.SharedPresentation;
 using System.Data;
 
 namespace DynamicBusiness.BPMS.Controllers
-{
-    [System.Web.Http.AllowAnonymous]
+{ 
     public class BpmsEntityManagerController : BpmsAdminApiControlBase
     {
         // GET: /BpmsTableManager/

@@ -12,8 +12,7 @@ using DynamicBusiness.BPMS.Domain;
 using DynamicBusiness.BPMS.SharedPresentation;
 
 namespace DynamicBusiness.BPMS.Controllers
-{
-    [System.Web.Http.AllowAnonymous]
+{ 
     public class BpmsThreadController : BpmsAdminApiControlBase
     {
         //it retrieves all threads which person has access to.

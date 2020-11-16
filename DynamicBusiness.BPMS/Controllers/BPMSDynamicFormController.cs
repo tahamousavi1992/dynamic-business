@@ -10,8 +10,7 @@ using DynamicBusiness.BPMS.SharedPresentation;
 using Newtonsoft.Json.Linq;
 
 namespace DynamicBusiness.BPMS.Controllers
-{
-    [System.Web.Http.AllowAnonymous]
+{ 
     public class BpmsDynamicFormController : BpmsAdminApiControlBase
     {
         public object GetList([System.Web.Http.FromUri] DynamicFormIndexSearchDTO indexSearchVM)

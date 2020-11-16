@@ -13,8 +13,7 @@ using DynamicBusiness.BPMS.SharedPresentation;
 using DotNetNuke.Entities.Users;
 
 namespace DynamicBusiness.BPMS.Controllers
-{
-    [System.Web.Http.AllowAnonymous]
+{ 
     public class BpmsUserController : BpmsAdminApiControlBase
     {
         // GET: BPMSUser

@@ -13,8 +13,7 @@ using System.Net;
 using DotNetNuke.Web.Api;
 
 namespace DynamicBusiness.BPMS.Controllers
-{
-    [DnnAuthorize]
+{ 
     public class BpmsDesignCodeController : BpmsAdminApiControlBase
     {
         /// <param name="designCode">It is a xml having all info about a code</param>
