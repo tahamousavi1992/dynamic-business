@@ -21,7 +21,7 @@ namespace DynamicBusiness.BPMS.SharedPresentation
 {
     public class BpmsAdminAuth : AuthorizeAttributeBase, IOverrideDefaultAuthLevel
     {
-        public const string AuthModuleFriendlyName = "BPMS Manage";
+        public const string AuthModuleFriendlyName = "BPMS Admin Panel";
         public string Permission { get; set; }
         public override bool IsAuthorized(AuthFilterContext context)
         {
@@ -34,7 +34,7 @@ namespace DynamicBusiness.BPMS.SharedPresentation
                     ModuleController mc = new ModuleController();
 
                     ModuleInfo mi = mc.GetModuleByDefinition(PortalController.Instance.GetCurrentPortalSettings().PortalId, AuthModuleFriendlyName);
-                    return ModulePermissionController.HasModulePermission(mi.ModulePermissions, "VIEW");
+                    return ModulePermissionController.CanViewModule(mi);
                 }
             }
         }

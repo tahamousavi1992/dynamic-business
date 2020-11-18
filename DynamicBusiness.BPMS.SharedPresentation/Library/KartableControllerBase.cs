@@ -25,7 +25,7 @@ namespace DynamicBusiness.BPMS.SharedPresentation
             ViewBag.ProcessId = Request.QueryString["processId"];
             this.ProcessId = BPMSUtility.toInt(Request.QueryString["processId"]);
             Session["dt"] = DateTime.Now.Date;
-            if (!this.Request.IsAjaxRequest() && !this.Request.Url.ToStringObj().Contains("SkinSrc"))
+            if (!this.Request.IsAjaxRequest() && !this.Request.Url.ToStringObj().Contains("SkinSrc") && !string.IsNullOrWhiteSpace(UrlUtility.NoSkinPath))
                 this.Response.Redirect(UrlUtility.MakeNoSkin(this.Request.Url.ToStringObj()));
         }
 

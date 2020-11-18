@@ -128,8 +128,8 @@ namespace DynamicBusiness.BPMS.Controllers
                                     name = variable.Name,
                                     id = variable.ID,
                                     comboTree = variableService.GetVariableAsComboTree(base.ProcessId, base.ApplicationPageId, null).AsJson(),
-                                    entityVariables = variableService.GetList(base.ProcessId, base.ApplicationPageId, (int)sysBpmsVariable.e_VarTypeLU.Object, "", null, true).AsJsonByNameID(),
-                                    listVariables = variableService.GetList(base.ProcessId, base.ApplicationPageId, (int)sysBpmsVariable.e_VarTypeLU.List, "", null, true).AsJsonByName()
+                                    entityVariables = variableService.GetList(base.ProcessId, base.ApplicationPageId, (int)sysBpmsVariable.e_VarTypeLU.Object, "", null, true).Select(c => new { text = c.Name, value = c.ID }).ToList(),
+                                    listVariables = variableService.GetList(base.ProcessId, base.ApplicationPageId, (int)sysBpmsVariable.e_VarTypeLU.List, "", null, true).Select(c => new { text = c.Name, value = c.Name }).ToList()
                                 });
 
                             }

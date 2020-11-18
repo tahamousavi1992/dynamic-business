@@ -25,7 +25,7 @@ namespace DynamicBusiness.BPMS
             ViewBag.ApplicationPageId = Request.QueryString["applicationPageId"]?.ToGuidObjNull() ?? Request.Form["applicationPageId"]?.ToGuidObjNull();
             ViewData["PortalAlias"] = base.PortalSettings.DefaultPortalAlias;
             Session["dt"] = DateTime.Now.Date;
-            if (!this.Request.IsAjaxRequest() && !this.Request.Url.ToStringObj().Contains("SkinSrc"))
+            if (!this.Request.IsAjaxRequest() && !this.Request.Url.ToStringObj().Contains("SkinSrc") && !string.IsNullOrWhiteSpace(UrlUtility.NoSkinPath))
                 this.Response.Redirect(UrlUtility.MakeNoSkin(this.Request.Url.ToStringObj()));
         }
     }

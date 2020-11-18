@@ -80,17 +80,7 @@ namespace DynamicBusiness.BPMS.Controllers
                     else
                         resultOperation = settingValueService.Update(setValue);
 
-                    //NoContainerPath
-                    setDef = listDef.FirstOrDefault(c => c.Name == sysBpmsSettingDef.e_NameType.NoContainerPath.ToString());
-                    setValue = listValues.FirstOrDefault(c => c.SettingDefID == setDef.ID);
-                    setValue = this.FillObject(setValue, setDef.ID, settingDTO.NoContainerPath.ToStringObj());
-                    if (setValue.ID == Guid.Empty)
-                        resultOperation = settingValueService.Add(setValue);
-                    else
-                        resultOperation = settingValueService.Update(setValue);
-                    UrlUtility.NoContainerPath = setValue.Value;
-
-
+                     
                     //AddUserAutomatically
                     setDef = listDef.FirstOrDefault(c => c.Name == sysBpmsSettingDef.e_NameType.AddUserAutomatically.ToString());
                     setValue = listValues.FirstOrDefault(c => c.SettingDefID == setDef.ID);

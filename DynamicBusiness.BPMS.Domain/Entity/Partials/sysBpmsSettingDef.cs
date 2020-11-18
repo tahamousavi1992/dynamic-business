@@ -23,7 +23,6 @@ namespace DynamicBusiness.BPMS.Domain
             ThreadFormatSerlialNumber,
             ThreadStartPointSerlialNumber,
             NoSkinPath,
-            NoContainerPath,
             WebServicePass,
             AddUserAutomatically,
         }

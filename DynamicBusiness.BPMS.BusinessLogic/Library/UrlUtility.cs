@@ -162,11 +162,9 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 UrlUtility.NoSkinPath = "SkinSrc=[G]" + DotNetNuke.Common.Globals.QueryStringEncode(DotNetNuke.UI.Skins.SkinController.RootSkin + "/" + DotNetNuke.Common.Globals.glbHostSkinFolder + "/" + "No Skin");
             }
             Url = Url.Contains("SkinSrc") && !string.IsNullOrWhiteSpace(UrlUtility.NoSkinPath) ? Url : (Url.Contains("?") ? Url + "&" + UrlUtility.NoSkinPath : Url + "?" + UrlUtility.NoSkinPath);
-            Url = Url.Contains("ContainerSrc") ? Url : !string.IsNullOrWhiteSpace(UrlUtility.NoContainerPath) ? (Url.Contains("?") ? Url + "&" + UrlUtility.NoContainerPath : Url + "?" + UrlUtility.NoContainerPath) : Url;
             return Url;
         }
-
-        public static string NoContainerPath = new SettingValueService().GetValue(sysBpmsSettingDef.e_NameType.NoContainerPath.ToString());
+ 
         public static string NoSkinPath = new SettingValueService().GetValue(sysBpmsSettingDef.e_NameType.NoSkinPath.ToString());
     }
 }

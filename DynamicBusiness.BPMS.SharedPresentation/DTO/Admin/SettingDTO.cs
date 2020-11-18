@@ -22,7 +22,6 @@ namespace DynamicBusiness.BPMS.SharedPresentation
             this.ThreadStartPointSerlialNumber = settingValueService.GetValue(sysBpmsSettingDef.e_NameType.ThreadStartPointSerlialNumber.ToString()).ToIntObj();
             this.ThreadFormatSerlialNumber = settingValueService.GetValue(sysBpmsSettingDef.e_NameType.ThreadFormatSerlialNumber.ToString());
             this.NoSkinPath = settingValueService.GetValue(sysBpmsSettingDef.e_NameType.NoSkinPath.ToString());
-            this.NoContainerPath = settingValueService.GetValue(sysBpmsSettingDef.e_NameType.NoContainerPath.ToString());
             this.AddUserAutomatically = settingValueService.GetValue(sysBpmsSettingDef.e_NameType.AddUserAutomatically.ToString()).ToLower() == "true";
         }
 
@@ -43,9 +42,6 @@ namespace DynamicBusiness.BPMS.SharedPresentation
 
         [DataMember]
         public string NoSkinPath { get; set; }
-
-        [DataMember]
-        public string NoContainerPath { get; set; }
 
         [DataMember]
         public bool AddUserAutomatically { get; set; }
