@@ -15,17 +15,27 @@ namespace DynamicBusiness.BPMS.SharedPresentation
 {
     public class KartableControllerBase : DnnController
     {
-        public int ProcessId { get; set; }
+        public bool ShowUserPanelWithNoSkin { get; set; }
+        public bool LoadUserPanelJquery { get; set; }
+        public bool LoadUserPanelBootstrap { get; set; }
         protected override void Initialize(System.Web.Routing.RequestContext requestContext)
         {
             base.Initialize(requestContext);
             this.ViewBag.PortalAlias = base.PortalSettings.DefaultPortalAlias;
-            this.ViewBag.UserInfo = base.User;
             this.ViewBag.ModuleContext = ModuleContext;
             ViewBag.ProcessId = Request.QueryString["processId"];
-            this.ProcessId = BPMSUtility.toInt(Request.QueryString["processId"]);
             Session["dt"] = DateTime.Now.Date;
-            if (!this.Request.IsAjaxRequest() && !this.Request.Url.ToStringObj().Contains("SkinSrc") && !string.IsNullOrWhiteSpace(UrlUtility.NoSkinPath))
+
+            using (SettingValueService settingValueService = new SettingValueService())
+            {
+                this.ShowUserPanelWithNoSkin = settingValueService.GetValue(sysBpmsSettingDef.e_NameType.ShowUserPanelWithNoSkin.ToString()).ToLower() == "true";
+                this.LoadUserPanelJquery = settingValueService.GetValue(sysBpmsSettingDef.e_NameType.LoadUserPanelJquery.ToString()).ToLower() == "true";
+                this.LoadUserPanelBootstrap = settingValueService.GetValue(sysBpmsSettingDef.e_NameType.LoadUserPanelBootstrap.ToString()).ToLower() == "true";
+            }
+
+            if (!this.Request.Url.ToStringObj().Contains("SkinSrc") &&
+                !string.IsNullOrWhiteSpace(UrlUtility.NoSkinPath) &&
+                this.ShowUserPanelWithNoSkin)
                 this.Response.Redirect(UrlUtility.MakeNoSkin(this.Request.Url.ToStringObj()));
         }
 

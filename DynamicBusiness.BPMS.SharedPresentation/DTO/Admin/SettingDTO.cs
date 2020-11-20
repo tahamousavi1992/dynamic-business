@@ -23,6 +23,9 @@ namespace DynamicBusiness.BPMS.SharedPresentation
             this.ThreadFormatSerlialNumber = settingValueService.GetValue(sysBpmsSettingDef.e_NameType.ThreadFormatSerlialNumber.ToString());
             this.NoSkinPath = settingValueService.GetValue(sysBpmsSettingDef.e_NameType.NoSkinPath.ToString());
             this.AddUserAutomatically = settingValueService.GetValue(sysBpmsSettingDef.e_NameType.AddUserAutomatically.ToString()).ToLower() == "true";
+            this.ShowUserPanelWithNoSkin = settingValueService.GetValue(sysBpmsSettingDef.e_NameType.ShowUserPanelWithNoSkin.ToString()).ToLower() == "true";
+            this.LoadUserPanelJquery = settingValueService.GetValue(sysBpmsSettingDef.e_NameType.LoadUserPanelJquery.ToString()).ToLower() == "true";
+            this.LoadUserPanelBootstrap = settingValueService.GetValue(sysBpmsSettingDef.e_NameType.LoadUserPanelBootstrap.ToString()).ToLower() == "true";
         }
 
         [DataMember]
@@ -46,5 +49,13 @@ namespace DynamicBusiness.BPMS.SharedPresentation
         [DataMember]
         public bool AddUserAutomatically { get; set; }
 
+        [DataMember]
+        public bool ShowUserPanelWithNoSkin { get; set; }
+
+        [DataMember]
+        public bool LoadUserPanelJquery { get; set; }
+
+        [DataMember]
+        public bool LoadUserPanelBootstrap { get; set; }
     }
 }

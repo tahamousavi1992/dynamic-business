@@ -3,6 +3,16 @@
 }
 
 <div id="root"></div><noscript>You need to enable JavaScript to run this app.</noscript>
+@{
+    if (!string.IsNullOrWhiteSpace((string)ViewBag.Message))
+    {
+        <div class="alert alert-danger" role="alert">
+            @ViewBag.Message
+        </div>
+    }
+}
+
+
 <script>
     window.rootPage = '@Html.Raw((string)ViewBag.rootPage)'
     window.SingleActionUrl = '@(Html.Raw((string)ViewBag.SingleActionUrl))';

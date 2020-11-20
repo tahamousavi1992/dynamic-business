@@ -21,8 +21,7 @@ namespace DynamicBusiness.BPMS.SingleAction.Controllers
         public static Guid? DefaultApplicationPageID { get; set; }
         public static Guid? DefaultProcessID { get; set; }
         public static bool ShowCardBody { get; set; }
-        public static Guid? ProcessEndFormID { get; set; }
-
+        public static Guid? ProcessEndFormID { get; set; } 
         public ActionResult Index()
         {
             BaseUrl = PortalController.GetPortalSetting(SingleActionSettingDTO.e_SettingType.SingleAction_WebApiAddress.ToString(), base.PortalSettings.PortalId, string.Empty);
@@ -31,10 +30,13 @@ namespace DynamicBusiness.BPMS.SingleAction.Controllers
             DefaultProcessID = ModuleContext.Configuration.ModuleSettings.GetValueOrDefault(SingleActionSettingDTO.e_SettingType.SingleAction_ProcessID.ToString(), string.Empty).ToGuidObjNull();
             ShowCardBody = ModuleContext.Configuration.ModuleSettings.GetValueOrDefault(SingleActionSettingDTO.e_SettingType.SingleAction_ShowCardBody.ToString(), string.Empty).ToStringObj().ToLower() == "true";
             ProcessEndFormID = ModuleContext.Configuration.ModuleSettings.GetValueOrDefault(SingleActionSettingDTO.e_SettingType.SingleAction_ProcessEndFormID.ToString(), string.Empty).ToGuidObjNull();
-            DomainUtility.SingleActionHomeUr = base.ActivePage.FullUrl;
+            DomainUtility.SingleActionHomeUr = base.ActivePage.FullUrl; 
+
+            ViewBag.LoadUserPanelJquery = ModuleContext.Configuration.ModuleSettings.GetValueOrDefault(SingleActionSettingDTO.e_SettingType.SingleAction_Jquery.ToString(), string.Empty).ToStringObj().ToLower() == "true"; ;
+            ViewBag.LoadUserPanelBootstrap = ModuleContext.Configuration.ModuleSettings.GetValueOrDefault(SingleActionSettingDTO.e_SettingType.SingleAction_Bootstrap.ToString(), string.Empty).ToStringObj().ToLower() == "true"; ;
 
             ViewBag.SingleActionUrl = UrlUtility.GetApiBase(base.Request, base.PortalSettings.DefaultPortalAlias, "BpmsSingleActionApi").TrimEnd('/') + "/";
-            ViewBag.rootPage = this.Request.RawUrl.Substring(0, this.Request.RawUrl.IndexOf("/" + this.ActivePage.TabName + "/") + this.ActivePage.TabName.Length + 1);
+            ViewBag.rootPage = this.Request.RawUrl.Substring(0, this.Request.RawUrl.IndexOf("/" + this.ActivePage.TabName ) + this.ActivePage.TabName.Length + 1);
             if (string.IsNullOrWhiteSpace(BaseUrl) || (!DefaultProcessID.HasValue && !DefaultApplicationPageID.HasValue))
             {
                 ViewBag.Message = "Setting is not complete";

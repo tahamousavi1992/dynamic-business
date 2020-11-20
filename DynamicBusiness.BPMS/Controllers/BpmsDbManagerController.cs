@@ -12,14 +12,14 @@ using DynamicBusiness.BPMS.Domain;
 using DynamicBusiness.BPMS.SharedPresentation;
 
 namespace DynamicBusiness.BPMS.Controllers
-{ 
+{
     public class BpmsDbManagerController : BpmsAdminApiControlBase
     {
         [HttpGet]
         public object GetList([System.Web.Http.FromUri] DbManagerIndexSearchDTO indexSearchVM)
-        { 
+        {
             using (DBConnectionService dBConnectionService = new DBConnectionService())
-            { 
+            {
                 indexSearchVM.Update(dBConnectionService.GetList(indexSearchVM.IsAdvSearch ? indexSearchVM.AdvName : indexSearchVM.Name,
                     indexSearchVM.IsAdvSearch ? indexSearchVM.AdvDataSource : string.Empty, string.Empty, indexSearchVM.GetPagingProperties).Select(c => new DBConnectionDTO(c)).ToList());
                 return indexSearchVM;

@@ -16,7 +16,7 @@ namespace DynamicBusiness.BPMS.Domain
             Date = 3,
         }
         public enum e_NameType
-        { 
+        {
             DefaultReportFontFamily,
             ProcessFormatSerlialNumber,
             ProcessStartPointSerlialNumber,
@@ -25,6 +25,9 @@ namespace DynamicBusiness.BPMS.Domain
             NoSkinPath,
             WebServicePass,
             AddUserAutomatically,
+            ShowUserPanelWithNoSkin,
+            LoadUserPanelJquery,
+            LoadUserPanelBootstrap,
         }
         public sysBpmsSettingDef(string name, string title, int valueTypeLU, string defaultValue)
         {

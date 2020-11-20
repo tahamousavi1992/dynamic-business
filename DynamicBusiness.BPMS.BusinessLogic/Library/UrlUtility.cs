@@ -164,7 +164,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             Url = Url.Contains("SkinSrc") && !string.IsNullOrWhiteSpace(UrlUtility.NoSkinPath) ? Url : (Url.Contains("?") ? Url + "&" + UrlUtility.NoSkinPath : Url + "?" + UrlUtility.NoSkinPath);
             return Url;
         }
- 
+
         public static string NoSkinPath = new SettingValueService().GetValue(sysBpmsSettingDef.e_NameType.NoSkinPath.ToString());
     }
 }

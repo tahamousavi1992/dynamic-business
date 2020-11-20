@@ -31,6 +31,10 @@ namespace DynamicBusiness.BPMS.SharedPresentation
         public string ProcessName { get; set; }
         [DataMember]
         public bool ShowCardBody { get; set; }
+        [DataMember]
+        public bool LoadjQuery { get; set; }
+        [DataMember]
+        public bool LoadBootstrap { get; set; }
         public enum e_SettingType
         {
             SingleAction_WebApiAddress,
@@ -39,6 +43,8 @@ namespace DynamicBusiness.BPMS.SharedPresentation
             SingleAction_WebServicePass,
             SingleAction_ShowCardBody,
             SingleAction_ProcessEndFormID,
+            SingleAction_Jquery,
+            SingleAction_Bootstrap,
         }
     }
 }

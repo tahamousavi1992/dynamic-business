@@ -12,7 +12,7 @@ using DynamicBusiness.BPMS.Domain;
 using DynamicBusiness.BPMS.SharedPresentation;
 
 namespace DynamicBusiness.BPMS.Controllers
-{ 
+{
     public class BpmsSettingController : BpmsAdminApiControlBase
     {
         [HttpGet]
@@ -80,7 +80,7 @@ namespace DynamicBusiness.BPMS.Controllers
                     else
                         resultOperation = settingValueService.Update(setValue);
 
-                     
+
                     //AddUserAutomatically
                     setDef = listDef.FirstOrDefault(c => c.Name == sysBpmsSettingDef.e_NameType.AddUserAutomatically.ToString());
                     setValue = listValues.FirstOrDefault(c => c.SettingDefID == setDef.ID);
@@ -89,16 +89,34 @@ namespace DynamicBusiness.BPMS.Controllers
                         resultOperation = settingValueService.Add(setValue);
                     else
                         resultOperation = settingValueService.Update(setValue);
-                     
-                    //NoSkinPath
-                    setDef = listDef.FirstOrDefault(c => c.Name == sysBpmsSettingDef.e_NameType.NoSkinPath.ToString());
+
+                    //ShowUserPanelWithNoSkin
+                    bool showNoSkin = settingDTO.ShowUserPanelWithNoSkin.ToStringObj().ToLower() == "true";
+                    setDef = listDef.FirstOrDefault(c => c.Name == sysBpmsSettingDef.e_NameType.ShowUserPanelWithNoSkin.ToString());
                     setValue = listValues.FirstOrDefault(c => c.SettingDefID == setDef.ID);
-                    setValue = this.FillObject(setValue, setDef.ID, settingDTO.NoSkinPath.ToStringObj());
+                    setValue = this.FillObject(setValue, setDef.ID, settingDTO.ShowUserPanelWithNoSkin.ToStringObj());
                     if (setValue.ID == Guid.Empty)
                         resultOperation = settingValueService.Add(setValue);
                     else
                         resultOperation = settingValueService.Update(setValue);
-                    UrlUtility.NoSkinPath = setValue.Value;
+
+                    //LoadUserPanelJquery
+                    setDef = listDef.FirstOrDefault(c => c.Name == sysBpmsSettingDef.e_NameType.LoadUserPanelJquery.ToString());
+                    setValue = listValues.FirstOrDefault(c => c.SettingDefID == setDef.ID);
+                    setValue = this.FillObject(setValue, setDef.ID, (showNoSkin ? "true" : settingDTO.LoadUserPanelJquery.ToStringObj()));
+                    if (setValue.ID == Guid.Empty)
+                        resultOperation = settingValueService.Add(setValue);
+                    else
+                        resultOperation = settingValueService.Update(setValue);
+
+                    //LoadUserPanelBootstrap
+                    setDef = listDef.FirstOrDefault(c => c.Name == sysBpmsSettingDef.e_NameType.LoadUserPanelBootstrap.ToString());
+                    setValue = listValues.FirstOrDefault(c => c.SettingDefID == setDef.ID);
+                    setValue = this.FillObject(setValue, setDef.ID, (showNoSkin ? "true" : settingDTO.LoadUserPanelBootstrap.ToStringObj()));
+                    if (setValue.ID == Guid.Empty)
+                        resultOperation = settingValueService.Add(setValue);
+                    else
+                        resultOperation = settingValueService.Update(setValue);
 
                     TimerThreadEventScheduler.CheckScheduler();
                     TimerStartEventScheduler.CheckScheduler();

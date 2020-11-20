@@ -1,6 +1,7 @@
 ﻿@model SingleActionSettingDTO
 @using DotNetNuke.Web.Mvc.Helpers
 @using DotNetNuke.Collections
+@{ViewBag.LoadUserPanelBootstrap = true;}
 <style>
     .input-group .select2 {
         width: 100% !important;
@@ -11,78 +12,74 @@
         تنظیمات پایه
     </a>
 </h2>
-<div class="form-horizontal" style="min-height: 300px;" id="divContainerSetting">
-    <div class="form-group">
+<div class="form" style="min-height: 300px;" id="divContainerSetting">
+    <div class="form-group row">
         <div class="col-sm-6">
-            @Html.LabelFor(m => Model.WebApiAddress)
-            <div class="input-group input-group-rtl">
-                <span class="input-group-addon">
-                    <i class="fa fa-user" aria-hidden="true"></i>
-                </span>
-                @Html.EditorFor(model => model.WebApiAddress, new { htmlAttributes = new { @class = "form-control" } })
+            <label> Web Api Address </label>
+            <div class="input-group ">
+                @Html.TextBoxFor(model => model.WebApiAddress, new { @class = "form-control" })
             </div>
             @Html.ValidationMessageFor(model => model.WebApiAddress)
         </div>
         <div class="col-sm-6">
-            @Html.LabelFor(m => Model.WebServicePass)
-            <div class="input-group input-group-rtl">
-                <span class="input-group-addon">
-                    <i class="fa fa-user" aria-hidden="true"></i>
-                </span>
-                @Html.EditorFor(model => model.WebServicePass, new { htmlAttributes = new { @class = "form-control", onchange = "on_changePass();" } })
+            <label> WebService Pass </label>
+            <div class="input-group ">
+                @Html.TextBoxFor(model => model.WebServicePass, new { @class = "form-control", onchange = "on_changePass();" })
             </div>
             @Html.ValidationMessageFor(model => model.WebServicePass)
         </div>
     </div>
-    <div class="form-group">
+    <div class="form-group row">
         <div class="col-sm-6">
-            @Html.LabelFor(m => Model.ShowCardBody)
-            <div class="input-group input-group-rtl">
+            <label> Load Bootstrap </label>
+            <div class="input-group ">
+                @Html.CheckBoxFor(model => model.LoadBootstrap)
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <label>Load jQuery</label>
+            <div class="input-group ">
+                @Html.CheckBoxFor(model => model.LoadjQuery)
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-6">
+            <label>Use CardBody class name</label>
+            <div class="input-group ">
                 @Html.CheckBoxFor(model => model.ShowCardBody)
             </div>
         </div>
     </div>
-    <div class="form-group">
+    <div class="form-group row">
         <div class="col-sm-6">
             فرم/فرایند
-            <div class="input-group input-group-rtl">
-                <span class="input-group-addon">
-                    <i class="fa fa-user" aria-hidden="true"></i>
-                </span>
+            <div class="input-group ">
                 <select name="ddlType" id="ddlType" class="form-control" onchange="ddlType_change(this)">
-                    <option value="1" @(Model.IsProcess ? "selected" : "")>فرانید</option>
-                    <option value="2" @(Model.IsProcess ? "" : "selected")>فرم</option>
+                    <option value="1" @(Model.IsProcess ? "selected" : "")>Workflows</option>
+                    <option value="2" @(Model.IsProcess ? "" : "selected")>Application Pages</option>
                 </select>
             </div>
         </div>
     </div>
-    <div class="form-group" style="@(Model.IsProcess?"display:none;":"")" id="divApplicationPageID">
+    <div class="form-group row" style="@(Model.IsProcess?"display:none;":"")" id="divApplicationPageID">
         <div class="col-sm-6">
             @Html.LabelFor(m => Model.ApplicationPageID)
             <div class="input-group combo-search">
-                <span class="input-group-addon">
-                    <i class="fa fa-user" aria-hidden="true"></i>
-                </span>
                 @Html.BpmsComboSearchFor(model => model.ApplicationPageID, Model.ApplicationName, (string)ViewBag.ApplicationPageUrl, new { @class = "form-control" })
             </div>
         </div>
     </div>
-    <div class="form-group" style="@(Model.IsProcess?"":"display:none;")" id="divProcessID">
+    <div class="form-group row" style="@(Model.IsProcess?"":"display:none;")" id="divProcessID">
         <div class="col-sm-6">
             @Html.LabelFor(m => Model.ProcessID)
             <div class="input-group combo-search">
-                <span class="input-group-addon">
-                    <i class="fa fa-user" aria-hidden="true"></i>
-                </span>
                 @Html.BpmsComboSearchFor(model => model.ProcessID, Model.ProcessName, (string)ViewBag.ProcessUrl, new { @class = "form-control" })
             </div>
         </div>
         <div class="col-sm-6">
             @Html.LabelFor(m => Model.ProcessEndFormID)
             <div class="input-group combo-search">
-                <span class="input-group-addon">
-                    <i class="fa fa-user" aria-hidden="true"></i>
-                </span>
                 @Html.BpmsComboSearchFor(model => model.ProcessEndFormID, Model.ProcessEndFormName, (string)ViewBag.ProcessFormUrl, new { @class = "form-control" })
             </div>
         </div>
@@ -105,7 +102,7 @@
         }
     }
     function on_changePass() {
-        let url = '@(Html.Raw(UrlUtility.GetUrl("UpdatePass", "Settings", ViewBag)))';
+        let url = '@(Html.Raw(ViewBag.Url))';
         CallPostAjax(url, getDataModel('divContainerSetting'), null, null, null, null);
     }
 </script>

@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "داشبورد";
+    ViewBag.Title = "Bpms User Panel";
     Layout = "../Shared/_Layout.cshtml";
 }
 
@@ -12,6 +12,9 @@
     window.signOutUrl = '@(Html.Raw((string)ViewBag.SignOutUrl))';
     window.userFullName = '@(Html.Raw((string)ViewBag.UserFullName))';
     window.dnnMenu = @(Html.Raw((string)ViewBag.DnnMenu));
+    window.showUserPanelWithNoSkin = @(Html.Raw(((bool)ViewBag.ShowUserPanelWithNoSkin).ToString().ToLower()));
+    window.LoadUserPanelJquery = @(Html.Raw(((bool)ViewBag.LoadUserPanelJquery).ToString().ToLower())) ;
+    window.LoadUserPanelBootstrap = @(Html.Raw(((bool)ViewBag.LoadUserPanelBootstrap).ToString().ToLower()));
     window.moduleType = 2;
 </script>
 
