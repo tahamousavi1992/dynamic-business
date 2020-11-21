@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DynamicBusiness.BPMS.BusinessLogic
 {
-    public class OperationCodeHelper
+    public class OperationCodeHelper: IOperationCodeHelper
     {
         public EngineSharedModel EngineSharedModel { get; set; }
         public IUnitOfWork UnitOfWork { get; set; }

@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace DynamicBusiness.BPMS.BusinessLogic
 {
-    public class UserCodeHelper
+    public class UserCodeHelper : IUserCodeHelper
     {
         public EngineSharedModel EngineSharedModel { get; set; }
         public IUnitOfWork UnitOfWork { get; set; }

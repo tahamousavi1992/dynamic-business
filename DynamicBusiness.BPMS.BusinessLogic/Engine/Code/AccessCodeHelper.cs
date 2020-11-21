@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DynamicBusiness.BPMS.BusinessLogic
 {
-    public class AccessCodeHelper
+    public class AccessCodeHelper : IAccessCodeHelper
     {
         private IUnitOfWork UnitOfWork { get; set; }
         public AccessCodeHelper(IUnitOfWork unitOfWork)

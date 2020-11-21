@@ -13,7 +13,7 @@ using System.Net;
 using DotNetNuke.Web.Api;
 
 namespace DynamicBusiness.BPMS.Controllers
-{ 
+{
     public class BpmsDesignCodeController : BpmsAdminApiControlBase
     {
         /// <param name="designCode">It is a xml having all info about a code</param>
@@ -328,7 +328,7 @@ namespace DynamicBusiness.BPMS.Controllers
                 designCode = new DCSetControlModel(Guid.NewGuid().ToString(), model.ShapeId.ToStringObj(),
                    model.ParentShapeId.ToStringObj(), string.Empty, DCBaseModel.e_ValueType.Static,
                     "", model.IsOutputYes, model.IsFirst.ToBoolObj(), null);
-             
+
             using (DynamicFormService dynamicFormService = new DynamicFormService())
                 return new
                 {
@@ -429,8 +429,7 @@ namespace DynamicBusiness.BPMS.Controllers
         [HttpPost]
         public object DoRenderCode(DoRenderCodeDTO doRenderCode)
         {
-            var data = DesignCodeUtility.RenderObjectsToCode(doRenderCode.XmlCode.ToStringObj(),
-                new UnitOfWork(), doRenderCode.ProcessId, doRenderCode.ApplicationPageId, doRenderCode.OnlyConditional, doRenderCode.AddGotoLabel.ToBoolObjNull() ?? true);
+            var data = DesignCodeUtility.RenderObjectsToCode(doRenderCode.XmlCode.ToStringObj());
             return Json(new
             {
                 Code = data.Item1,

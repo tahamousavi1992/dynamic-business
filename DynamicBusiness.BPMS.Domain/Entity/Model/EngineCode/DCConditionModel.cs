@@ -66,28 +66,179 @@ namespace DynamicBusiness.BPMS.Domain
                      );
         }
 
-        public override string GetRenderedCode(Guid? processId, Guid? applicationPageId, IUnitOfWork unitOfWork)
+        public override bool Execute(ICodeBase codeBase)
         {
-            string code = string.Empty;
+            bool result = true;
             foreach (var item in this.Rows)
             {
-                if (!string.IsNullOrWhiteSpace(code))
-                    code += this.EvaluateType == e_EvaluateType.And ? " && " : " || ";
                 DCBaseModel.e_ConvertType e_FirstSideConvert = e_ConvertType.String;
                 switch (item.FirstConditionType)
                 {
                     case e_ValueType.Variable:
-                        e_FirstSideConvert = DCBaseModel.GetVariableConvertType(item.FirstConditionValue, processId, applicationPageId, unitOfWork);
+                        e_FirstSideConvert = DCBaseModel.GetVariableConvertType(item.FirstConditionValue, codeBase.GetProcessID, codeBase.GetApplicationPageID, codeBase.GetUnitOfWork);
                         break;
                 }
+                object firstValue = DCBaseModel.GetValue(codeBase, item.FirstConditionValue, item.FirstConditionType, e_FirstSideConvert);
+                object SecondValue = DCBaseModel.GetValue(codeBase, item.SecondConditionValue, item.SecondConditionType, e_FirstSideConvert);
 
-                code += DCBaseModel.RenderValueType(processId, applicationPageId, unitOfWork, item.FirstConditionValue, item.FirstConditionType, e_FirstSideConvert);
-                code += item.GetOperationType();
-                code += DCBaseModel.RenderValueType(processId, applicationPageId, unitOfWork, item.SecondConditionValue, item.SecondConditionType, e_FirstSideConvert);
+                switch (e_FirstSideConvert)
+                {
+                    case e_ConvertType.String:
+                        switch (item.OperationType)
+                        {
+                            case DCRowConditionModel.e_OperationType.Equal:
+                                result = firstValue.ToStringObjNull() == SecondValue.ToStringObjNull();
+                                break;
+                            case DCRowConditionModel.e_OperationType.BiggerAndEqualThan:
+                                result = (firstValue.ToStringObjNull() == SecondValue.ToStringObjNull()) || (firstValue != null && firstValue.ToStringObjNull().CompareTo(SecondValue.ToStringObjNull()) >= 0);
+                                break;
+                            case DCRowConditionModel.e_OperationType.LowerAndEqualThan:
+                                result = firstValue == null || firstValue.ToStringObjNull().CompareTo(SecondValue.ToStringObjNull()) <= 0;
+                                break;
+                            case DCRowConditionModel.e_OperationType.BiggerThan:
 
-                code += Environment.NewLine;
+                                result = firstValue != null && firstValue.ToStringObjNull().CompareTo(SecondValue.ToStringObjNull()) == 1;
+                                break;
+                            case DCRowConditionModel.e_OperationType.LowerThan:
+                                result = (firstValue == null && SecondValue != null) || (firstValue != null && firstValue.ToStringObjNull().CompareTo(SecondValue.ToStringObjNull()) == -1);
+                                break;
+                            case DCRowConditionModel.e_OperationType.NotEqual:
+                                result = firstValue.ToStringObjNull() != SecondValue.ToStringObjNull();
+                                break;
+                            default: break;
+                        }
+                        break;
+                    case e_ConvertType.Integer:
+                        switch (item.OperationType)
+                        {
+                            case DCRowConditionModel.e_OperationType.Equal:
+                                result = firstValue.ToIntObjNull() == SecondValue.ToIntObjNull();
+                                break;
+                            case DCRowConditionModel.e_OperationType.BiggerAndEqualThan:
+                                result = firstValue.ToIntObjNull() >= SecondValue.ToIntObjNull();
+                                break;
+                            case DCRowConditionModel.e_OperationType.LowerAndEqualThan:
+                                result = firstValue.ToIntObjNull() <= SecondValue.ToIntObjNull();
+                                break;
+                            case DCRowConditionModel.e_OperationType.BiggerThan:
+                                result = firstValue.ToIntObjNull() > SecondValue.ToIntObjNull();
+                                break;
+                            case DCRowConditionModel.e_OperationType.LowerThan:
+                                result = firstValue.ToIntObjNull() < SecondValue.ToIntObjNull();
+                                break;
+                            case DCRowConditionModel.e_OperationType.NotEqual:
+                                result = firstValue.ToIntObjNull() != SecondValue.ToIntObjNull();
+                                break;
+                            default: break;
+                        }
+                        break;
+                    case e_ConvertType.Decimal:
+                        switch (item.OperationType)
+                        {
+                            case DCRowConditionModel.e_OperationType.Equal:
+                                result = firstValue.ToDecimalObjNull() == SecondValue.ToDecimalObjNull();
+                                break;
+                            case DCRowConditionModel.e_OperationType.BiggerAndEqualThan:
+                                result = firstValue.ToDecimalObjNull() >= SecondValue.ToDecimalObjNull();
+                                break;
+                            case DCRowConditionModel.e_OperationType.LowerAndEqualThan:
+                                result = firstValue.ToDecimalObjNull() <= SecondValue.ToDecimalObjNull();
+                                break;
+                            case DCRowConditionModel.e_OperationType.BiggerThan:
+                                result = firstValue.ToDecimalObjNull() > SecondValue.ToDecimalObjNull();
+                                break;
+                            case DCRowConditionModel.e_OperationType.LowerThan:
+                                result = firstValue.ToDecimalObjNull() < SecondValue.ToDecimalObjNull();
+                                break;
+                            case DCRowConditionModel.e_OperationType.NotEqual:
+                                result = firstValue.ToDecimalObjNull() != SecondValue.ToDecimalObjNull();
+                                break;
+                            default: break;
+                        }
+                        break;
+                    case e_ConvertType.DateTime:
+                        switch (item.OperationType)
+                        {
+                            case DCRowConditionModel.e_OperationType.Equal:
+                                result = firstValue.ToDateTimeObjNull() == SecondValue.ToDateTimeObjNull();
+                                break;
+                            case DCRowConditionModel.e_OperationType.BiggerAndEqualThan:
+                                result = firstValue.ToDateTimeObjNull() >= SecondValue.ToDateTimeObjNull();
+                                break;
+                            case DCRowConditionModel.e_OperationType.LowerAndEqualThan:
+                                result = firstValue.ToDateTimeObjNull() <= SecondValue.ToDateTimeObjNull();
+                                break;
+                            case DCRowConditionModel.e_OperationType.BiggerThan:
+                                result = firstValue.ToDateTimeObjNull() > SecondValue.ToDateTimeObjNull();
+                                break;
+                            case DCRowConditionModel.e_OperationType.LowerThan:
+                                result = firstValue.ToDateTimeObjNull() < SecondValue.ToDateTimeObjNull();
+                                break;
+                            case DCRowConditionModel.e_OperationType.NotEqual:
+                                result = firstValue.ToDateTimeObjNull() != SecondValue.ToDateTimeObjNull();
+                                break;
+                            default: break;
+                        }
+                        break;
+                    case e_ConvertType.Boolean:
+                        switch (item.OperationType)
+                        {
+                            case DCRowConditionModel.e_OperationType.Equal:
+                                result = firstValue.ToBoolObjNull() == SecondValue.ToBoolObjNull();
+                                break;
+                            case DCRowConditionModel.e_OperationType.NotEqual:
+                                result = firstValue.ToBoolObjNull() != SecondValue.ToBoolObjNull();
+                                break;
+                            default: result = false; break;
+                        }
+                        break;
+                    case e_ConvertType.Uniqueidentifier:
+                        switch (item.OperationType)
+                        {
+                            case DCRowConditionModel.e_OperationType.Equal:
+                                result = firstValue.ToGuidObjNull() == SecondValue.ToGuidObjNull();
+                                break;
+                            case DCRowConditionModel.e_OperationType.NotEqual:
+                                result = firstValue.ToGuidObjNull() != SecondValue.ToGuidObjNull();
+                                break;
+                            default: result = false; break;
+                        }
+                        break;
+                    case e_ConvertType.Long:
+                        switch (item.OperationType)
+                        {
+                            case DCRowConditionModel.e_OperationType.Equal:
+                                result = firstValue.ToLongObjNull() == SecondValue.ToLongObjNull();
+                                break;
+                            case DCRowConditionModel.e_OperationType.BiggerAndEqualThan:
+                                result = firstValue.ToLongObjNull() >= SecondValue.ToLongObjNull();
+                                break;
+                            case DCRowConditionModel.e_OperationType.LowerAndEqualThan:
+                                result = firstValue.ToLongObjNull() <= SecondValue.ToLongObjNull();
+                                break;
+                            case DCRowConditionModel.e_OperationType.BiggerThan:
+                                result = firstValue.ToLongObjNull() > SecondValue.ToLongObjNull();
+                                break;
+                            case DCRowConditionModel.e_OperationType.LowerThan:
+                                result = firstValue.ToLongObjNull() < SecondValue.ToLongObjNull();
+                                break;
+                            case DCRowConditionModel.e_OperationType.NotEqual:
+                                result = firstValue.ToLongObjNull() != SecondValue.ToLongObjNull();
+                                break;
+                            default: break;
+                        }
+                        break;
+                }
+                if (this.EvaluateType == e_EvaluateType.And && !result)
+                {
+                    break;
+                }
+                if (this.EvaluateType == e_EvaluateType.Or && result)
+                {
+                    break;
+                }
             }
-            return code;
+            return result;
         }
 
         [DataMember]
@@ -100,7 +251,6 @@ namespace DynamicBusiness.BPMS.Domain
             [Description("Or")]
             Or = 2
         }
-
     }
 
     /// <summary>

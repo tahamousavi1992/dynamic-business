@@ -21,6 +21,8 @@ namespace DynamicBusiness.BPMS.CodePanel
 
         private Guid? ProcessID { get; set; }
         private Guid? ApplicationPageId { get; set; }
+        public Guid? GetProcessID { get { return this.ProcessID; } }
+        public Guid? GetApplicationPageID { get { return this.ApplicationPageId; } }
         private BusinessLogic.DataManageEngine DataManageHelperService { get; set; }
         private Domain.FormModel formModel { get; set; }
 
@@ -41,32 +43,38 @@ namespace DynamicBusiness.BPMS.CodePanel
         #region .:: protected Properties::.
         protected Domain.EngineSharedModel EngineSharedModel { get; private set; }
         private Domain.IUnitOfWork UnitOfWork { get; set; }
+        public Domain.IUnitOfWork GetUnitOfWork { get { return this.UnitOfWork; } }
         public Domain.IVariableCodeHelper VariableHelper { get { if (this._variableHelper == null) { this._variableHelper = new BusinessLogic.VariableCodeHelper(this.DataManageHelperService, this.CodeBaseShared); } return this._variableHelper; } }
-        public BusinessLogic.ControlCodeHelper ControlHelper { get { if (this._controlHelper == null) { this._controlHelper = new BusinessLogic.ControlCodeHelper(this.formModel); } return this._controlHelper; } }
-        public BusinessLogic.AccessCodeHelper AccessHelper { get { if (this._AsccessHelper == null) { this._AsccessHelper = new BusinessLogic.AccessCodeHelper(UnitOfWork); } return this._AsccessHelper; } }
-        public BusinessLogic.ProcessCodeHelper ProcessHelper { get { if (this._ProcessHelper == null) { this._ProcessHelper = new BusinessLogic.ProcessCodeHelper(UnitOfWork); } return this._ProcessHelper; } }
-        public BusinessLogic.MessageCodeHelper MessageHelper { get { if (this._messageHelper == null) { this._messageHelper = new BusinessLogic.MessageCodeHelper(this.CodeBaseShared); } return this._messageHelper; } }
-        public BusinessLogic.OperationCodeHelper OperationHelper { get { if (this._operationHelper == null) { this._operationHelper = new BusinessLogic.OperationCodeHelper(this.EngineSharedModel, UnitOfWork); } return this._operationHelper; } }
-        public BusinessLogic.UserCodeHelper UserHelper { get { if (this._userHelper == null) { this._userHelper = new BusinessLogic.UserCodeHelper(this.EngineSharedModel, UnitOfWork); } return this._userHelper; } }
-        public BusinessLogic.UrlCodeHelper UrlHelper { get { if (this._urlHelper == null) { this._urlHelper = new BusinessLogic.UrlCodeHelper(this.BaseQueryModel); } return this._urlHelper; } }
-        public BusinessLogic.DocumentCodeHelper DocumentHelper { get { if (this._documentHelper == null) { this._documentHelper = new BusinessLogic.DocumentCodeHelper(this.EngineSharedModel, UnitOfWork, CodeBaseShared); } return this._documentHelper; } }
-        public BusinessLogic.QueryCodeHelper QueryHelper { get { if (this._queryHelper == null) { this._queryHelper = new BusinessLogic.QueryCodeHelper(UnitOfWork); } return this._queryHelper; } }
-        public BusinessLogic.EntityCodeHelper EntityHelper { get { if (this._entityHelper == null) { this._entityHelper = new BusinessLogic.EntityCodeHelper(this.EngineSharedModel, this.QueryHelper, UnitOfWork); } return this._entityHelper; } }
-        public BusinessLogic.WebServiceCodeHelper WebServiceHelper { get { if (this._webServiceHelper == null) { this._webServiceHelper = new BusinessLogic.WebServiceCodeHelper(this.DataManageHelperService, this.CodeBaseShared); } return this._webServiceHelper; } }
+        public Domain.IControlCodeHelper ControlHelper { get { if (this._controlHelper == null) { this._controlHelper = new BusinessLogic.ControlCodeHelper(this.formModel); } return this._controlHelper; } }
+        public Domain.IAccessCodeHelper AccessHelper { get { if (this._AsccessHelper == null) { this._AsccessHelper = new BusinessLogic.AccessCodeHelper(UnitOfWork); } return this._AsccessHelper; } }
+        public Domain.IProcessCodeHelper ProcessHelper { get { if (this._ProcessHelper == null) { this._ProcessHelper = new BusinessLogic.ProcessCodeHelper(UnitOfWork); } return this._ProcessHelper; } }
+        public Domain.IMessageCodeHelper MessageHelper { get { if (this._messageHelper == null) { this._messageHelper = new BusinessLogic.MessageCodeHelper(this.CodeBaseShared); } return this._messageHelper; } }
+        public Domain.IOperationCodeHelper OperationHelper { get { if (this._operationHelper == null) { this._operationHelper = new BusinessLogic.OperationCodeHelper(this.EngineSharedModel, UnitOfWork); } return this._operationHelper; } }
+        public Domain.IUserCodeHelper UserHelper { get { if (this._userHelper == null) { this._userHelper = new BusinessLogic.UserCodeHelper(this.EngineSharedModel, UnitOfWork); } return this._userHelper; } }
+        public Domain.IUrlCodeHelper UrlHelper { get { if (this._urlHelper == null) { this._urlHelper = new BusinessLogic.UrlCodeHelper(this.BaseQueryModel); } return this._urlHelper; } }
+        public Domain.IDocumentCodeHelper DocumentHelper { get { if (this._documentHelper == null) { this._documentHelper = new BusinessLogic.DocumentCodeHelper(this.EngineSharedModel, UnitOfWork, CodeBaseShared); } return this._documentHelper; } }
+        public Domain.IQueryCodeHelper QueryHelper { get { if (this._queryHelper == null) { this._queryHelper = new BusinessLogic.QueryCodeHelper(UnitOfWork); } return this._queryHelper; } }
+        public Domain.IEntityCodeHelper EntityHelper { get { if (this._entityHelper == null) { this._entityHelper = new BusinessLogic.EntityCodeHelper(this.EngineSharedModel, this.QueryHelper, UnitOfWork); } return this._entityHelper; } }
+        public Domain.IWebServiceCodeHelper WebServiceHelper { get { if (this._webServiceHelper == null) { this._webServiceHelper = new BusinessLogic.WebServiceCodeHelper(this.DataManageHelperService, this.CodeBaseShared); } return this._webServiceHelper; } }
 
         #endregion
 
         #region .:: Public Properties::.
-        public Guid? CurrentUserID { get; private set; }
-        public string CurrentUserName { get; private set; }
-        public Guid? ThreadUserID
+        private Guid? CurrentUserID { get; set; }
+        private string CurrentUserName { get; set; }
+        private Guid? ThreadUserID
         {
             get
             {
                 return this.ThreadID.HasValue ? new BusinessLogic.ThreadService(this.UnitOfWork).GetInfo(this.ThreadID.Value).UserID : default(Guid?);
             }
         }
-        public Guid? ThreadID { get; private set; }
+        private Guid? ThreadID { get; set; }
+
+        public Guid? GetCurrentUserID { get { return this.CurrentUserID; } }
+        public string GetCurrentUserName { get { return this.CurrentUserName; } }
+        public Guid? GetThreadUserID { get { return this.ThreadUserID; } }
+        public Guid? GetThreadID { get { return this.ThreadID; } }
         #endregion
 
         #region .:: internal Properties::.
@@ -77,7 +85,7 @@ namespace DynamicBusiness.BPMS.CodePanel
 
         #region .:: abstract ::.
 
-        public virtual object ExecuteCode() { return null; }
+        public virtual object ExecuteCode(string funcName) { return null; }
 
         #endregion
 

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DynamicBusiness.BPMS.BusinessLogic
 {
-    public class QueryCodeHelper
+    public class QueryCodeHelper : IQueryCodeHelper
     {
         public IUnitOfWork UnitOfWork { get; set; }
         public QueryCodeHelper(IUnitOfWork unitOfWork)

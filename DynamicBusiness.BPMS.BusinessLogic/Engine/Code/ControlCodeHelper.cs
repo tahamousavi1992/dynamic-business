@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DynamicBusiness.BPMS.BusinessLogic
 {
-    public class ControlCodeHelper
+    public class ControlCodeHelper : IControlCodeHelper
     {
         public FormModel FormModel { get; set; }
         public ControlCodeHelper(FormModel formModel)
@@ -17,8 +17,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public void SetValue(string controlId, object value)
         {
-            object calculatedValue = null;
-
+            object calculatedValue;
             if (value is VariableModel)
             {
                 calculatedValue = ((VariableModel)value).Value;

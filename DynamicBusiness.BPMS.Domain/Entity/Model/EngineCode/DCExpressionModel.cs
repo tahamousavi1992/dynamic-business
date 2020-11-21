@@ -39,7 +39,7 @@ namespace DynamicBusiness.BPMS.Domain
                      new XElement(nameof(DCExpressionModel.Assemblies), this.Assemblies)
                      );
         }
-        public override string GetRenderedCode(Guid? processId, Guid? applicationPageId, IUnitOfWork unitOfWork) { return this.ExpressionCode; }
+        public string GetRenderedCode() { return this.ExpressionCode; }
     }
 
 }

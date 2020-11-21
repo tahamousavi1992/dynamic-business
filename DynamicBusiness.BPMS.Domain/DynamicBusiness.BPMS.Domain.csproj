@@ -135,7 +135,6 @@
     <Compile Include="Entity\HtmlElement\FormModel.cs" />
     <Compile Include="Entity\Model\DataModel.cs" />
     <Compile Include="Entity\Model\EngineCode\CodeBaseSharedModel.cs" />
-    <Compile Include="Entity\Model\EngineCode\CodeUtility.cs" />
     <Compile Include="Entity\Model\EngineCode\DCBaseModel.cs" />
     <Compile Include="Entity\Model\EngineCode\DCEntityModel.cs" />
     <Compile Include="Entity\Model\EngineCode\DCCallMethodModel.cs" />
@@ -211,7 +210,18 @@
     <Compile Include="Entity\Workflow\WorkflowStartEvent.cs" />
     <Compile Include="Entity\Workflow\WorkflowTask.cs" />
     <Compile Include="Entity\Workflow\WorkflowUserTask.cs" />
+    <Compile Include="Interfaces\EngineCode\IAccessCodeHelper.cs" />
+    <Compile Include="Interfaces\EngineCode\IControlCodeHelper.cs" />
+    <Compile Include="Interfaces\EngineCode\IDocumentCodeHelper.cs" />
+    <Compile Include="Interfaces\EngineCode\IEntityCodeHelper.cs" />
+    <Compile Include="Interfaces\EngineCode\IMessageCodeHelper.cs" />
+    <Compile Include="Interfaces\EngineCode\IOperationCodeHelper.cs" />
+    <Compile Include="Interfaces\EngineCode\IProcessCodeHelper.cs" />
+    <Compile Include="Interfaces\EngineCode\IQueryCodeHelper.cs" />
+    <Compile Include="Interfaces\EngineCode\IUrlCodeHelper.cs" />
+    <Compile Include="Interfaces\EngineCode\IUserCodeHelper.cs" />
     <Compile Include="Interfaces\EngineCode\IVariableCodeHelper.cs" />
+    <Compile Include="Interfaces\EngineCode\IWebServiceCodeHelper.cs" />
     <Compile Include="Interfaces\Engine\IApplicationPageEngine.cs" />
     <Compile Include="Interfaces\Engine\IDocumentEngine.cs" />
     <Compile Include="Interfaces\Engine\IDynamicCodeEngine.cs" />

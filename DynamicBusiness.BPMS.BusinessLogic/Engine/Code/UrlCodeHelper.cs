@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DynamicBusiness.BPMS.BusinessLogic
 {
-    public class UrlCodeHelper
+    public class UrlCodeHelper : IUrlCodeHelper
     {
         private List<QueryModel> BaseQueryModel { get; set; }
         public RedirectUrlModel RedirectUrlModel { get; set; }
@@ -30,7 +30,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         {
             RedirectUrlModel = new RedirectUrlModel(applicationPageId.ToGuidObj(), (parameters ?? new string[] { }).ToList(), false);
         }
-         
+
         public string GetParameter(string ParameterName)
         {
             if (this.BaseQueryModel != null)

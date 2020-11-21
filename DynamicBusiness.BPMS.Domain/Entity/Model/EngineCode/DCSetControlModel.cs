@@ -31,7 +31,11 @@ namespace DynamicBusiness.BPMS.Domain
         /// </summary>
         [DataMember]
         public string Value { get; set; }
-
+        public override bool Execute(ICodeBase codeBase)
+        { 
+            codeBase.ControlHelper.SetValue(this.ControlId, DCBaseModel.GetValue(codeBase, this.Value, this.ValueType, DCBaseModel.e_ConvertType.String));
+            return true;
+        }
         public override object FillData(XElement xElement)
         {
             base.FillData(xElement);
@@ -49,12 +53,6 @@ namespace DynamicBusiness.BPMS.Domain
                      new XElement(nameof(DCSetControlModel.ValueType), (int)this.ValueType),
                      new XElement(nameof(DCSetControlModel.ControlId), this.ControlId)
                      );
-        }
-        public override string GetRenderedCode(Guid? processId, Guid? applicationPageId, IUnitOfWork unitOfWork)
-        {
-            DCBaseModel.e_ConvertType e_Convert = e_ConvertType.Nothing;
-            string objectValue = DCBaseModel.RenderValueType(processId, applicationPageId, unitOfWork, this.Value, this.ValueType, e_Convert);
-            return $"ControlHelper.SetValue(\"{this.ControlId}\",{objectValue});";
         }
     }
 }

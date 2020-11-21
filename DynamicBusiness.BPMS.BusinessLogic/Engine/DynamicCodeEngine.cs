@@ -36,15 +36,11 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         }
 
         /// <returns>check condition and single line</returns>
-        public bool ExecuteBooleanCode(DesignCodeModel designCode, FormModel formModel = null)
+        public bool ExecuteBooleanCode(DesignCodeModel designCodeModel, FormModel formModel = null)
         {
-            if (string.IsNullOrWhiteSpace(designCode?.Code))
+            if (string.IsNullOrWhiteSpace(designCodeModel?.Code))
                 return true;
-            CodeBase myInstance = DynamicCodeEngine.LoadClass(designCode.ID, base.EngineSharedModel.CurrentProcessID, base.EngineSharedModel.CurrentApplicationPageID);
-
-            myInstance.InitialProperties(base.EngineSharedModel.CurrentProcessID, base.EngineSharedModel.CurrentThreadID, base.EngineSharedModel.CurrentApplicationPageID, base.UnitOfWork, base.EngineSharedModel.BaseQueryModel, GetCurrentUserID(base.EngineSharedModel.CurrentUserName), base.EngineSharedModel.CurrentUserName, formModel, base.EngineSharedModel.ApiSessionID, null);
-            bool result = Convert.ToBoolean(myInstance.ExecuteCode());
-
+            (bool result, CodeBase codeBase) = this.Execute(designCodeModel, formModel, null);
             return result;
         }
 
@@ -55,12 +51,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         {
             if (string.IsNullOrWhiteSpace(designCodeModel?.Code))
                 return null;
-            CodeBase myInstance = DynamicCodeEngine.LoadClass(designCodeModel.ID, base.EngineSharedModel.CurrentProcessID, base.EngineSharedModel.CurrentApplicationPageID);
-
-            myInstance.InitialProperties(base.EngineSharedModel.CurrentProcessID, base.EngineSharedModel.CurrentThreadID, null, base.UnitOfWork, base.EngineSharedModel.BaseQueryModel, GetCurrentUserID(base.EngineSharedModel.CurrentUserName), base.EngineSharedModel.CurrentUserName, null, base.EngineSharedModel.ApiSessionID, codeBaseShared);
-            bool result = Convert.ToBoolean(myInstance.ExecuteCode());
-
-            return new CodeResultModel(result, myInstance.UrlHelper.RedirectUrlModel, myInstance.CodeBaseShared);
+            (bool result, CodeBase codeBase) = this.Execute(designCodeModel, null, codeBaseShared);
+            return new CodeResultModel(result, codeBase.UrlHelper.RedirectUrlModel, codeBase.CodeBaseShared);
         }
 
         //before having showed form,it will execute form's OnEntryFormCode.
@@ -68,11 +60,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         {
             if (string.IsNullOrWhiteSpace(designCodeModel?.Code))
                 return null;
-
-            CodeBase codeBase = DynamicCodeEngine.LoadClass(designCodeModel.ID, base.EngineSharedModel.CurrentProcessID, base.EngineSharedModel.CurrentApplicationPageID);
-            codeBase.InitialProperties(base.EngineSharedModel.CurrentProcessID, base.EngineSharedModel.CurrentThreadID, base.EngineSharedModel.CurrentApplicationPageID, base.UnitOfWork, base.EngineSharedModel.BaseQueryModel, GetCurrentUserID(base.EngineSharedModel.CurrentUserName), base.EngineSharedModel.CurrentUserName, formModel, base.EngineSharedModel.ApiSessionID, codeBaseShared);
-
-            return new CodeResultModel(Convert.ToBoolean(codeBase.ExecuteCode()), codeBase.UrlHelper.RedirectUrlModel, codeBase.CodeBaseShared);
+            (bool result, CodeBase codeBase) = this.Execute(designCodeModel, formModel, codeBaseShared);
+            return new CodeResultModel(result, codeBase.UrlHelper.RedirectUrlModel, codeBase.CodeBaseShared);
         }
 
         //after having posted form,it will execute form's OnExitFormCode
@@ -80,15 +69,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         {
             if (string.IsNullOrWhiteSpace(designCodeModel?.Code))
                 return null;
-            CodeBase codeBase = new CodeBase();
-            //CodeBase codeBase = DynamicCodeEngine.LoadClass(designCodeModel.ID, base.EngineSharedModel.CurrentProcessID, base.EngineSharedModel.CurrentApplicationPageID);
-            codeBase.InitialProperties(base.EngineSharedModel.CurrentProcessID, base.EngineSharedModel.CurrentThreadID, base.EngineSharedModel.CurrentApplicationPageID, base.UnitOfWork, base.EngineSharedModel.BaseQueryModel, GetCurrentUserID(base.EngineSharedModel.CurrentUserName), base.EngineSharedModel.CurrentUserName, formModel, base.EngineSharedModel.ApiSessionID, codeBaseShared);
-            foreach (DCSetVariableModel dCBase in designCodeModel.CodeObjects)
-            {
-                dCBase.Execute(codeBase, base.EngineSharedModel.CurrentProcessID, base.EngineSharedModel.CurrentApplicationPageID, base.UnitOfWork);
-            }
-            return new CodeResultModel(true, codeBase.UrlHelper.RedirectUrlModel, codeBase.CodeBaseShared);
-            //return new CodeResultModel(Convert.ToBoolean(codeBase.ExecuteCode()), codeBase.UrlHelper.RedirectUrlModel, codeBase.CodeBaseShared);
+            (bool result, CodeBase codeBase) = this.Execute(designCodeModel, formModel, codeBaseShared);
+            return new CodeResultModel(result, codeBase.UrlHelper.RedirectUrlModel, codeBase.CodeBaseShared);
         }
 
         public CodeResultModel SaveButtonCode(ButtonHtml buttonHtml, ResultOperation resultOperation,
@@ -123,6 +105,53 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         }
 
         #region ..::private properties ::..
+
+        private (bool result, CodeBase codeBase) Execute(DesignCodeModel designCodeModel, FormModel formModel, CodeBaseSharedModel codeBaseShared)
+        {
+            var listItem = designCodeModel.CodeObjects.Cast<DCBaseModel>().ToList();
+            CodeBase codeBase;
+            bool result = true;
+            if (listItem.Any(c => c is DCExpressionModel))
+                codeBase = DynamicCodeEngine.LoadClass(designCodeModel.ID, base.EngineSharedModel.CurrentProcessID, base.EngineSharedModel.CurrentApplicationPageID);
+            else
+                codeBase = new CodeBase();
+
+            codeBase.InitialProperties(base.EngineSharedModel.CurrentProcessID, base.EngineSharedModel.CurrentThreadID, base.EngineSharedModel.CurrentApplicationPageID, base.UnitOfWork, base.EngineSharedModel.BaseQueryModel, GetCurrentUserID(base.EngineSharedModel.CurrentUserName), base.EngineSharedModel.CurrentUserName, formModel, base.EngineSharedModel.ApiSessionID, codeBaseShared);
+            this.ExecuteCodeModel(listItem, codeBase, string.Empty, ref result);
+            return (result, codeBase);
+        }
+
+        /// <summary>
+        /// this will execute all DCBaseModel Items.
+        /// </summary> 
+        /// <param name="isYesClasue">if is null parent is not a condition otherwise it is output of yes</param>
+        private void ExecuteCodeModel(List<DCBaseModel> codeObjects, CodeBase codeBase, string parentShapeID, ref bool result, bool? isYesClasue = false)
+        {
+            string currentShapeID = string.Empty;
+            bool? nextIsYesClasue = null;
+            foreach (DCBaseModel dcBase in codeObjects.Where(c => c.ParentShapeID == parentShapeID &&
+            (!isYesClasue.HasValue || (isYesClasue == true && c.IsOutputYes == true) || (isYesClasue == false && c.IsOutputYes == false))))
+            {
+                currentShapeID = dcBase.ShapeID;
+                if (dcBase is DCExpressionModel)
+                {
+                    result = codeBase.ExecuteCode(dcBase.FuncName).ToBoolObj();
+                }
+                else
+                {
+                    if (dcBase is DCConditionModel)
+                    {
+                        nextIsYesClasue = dcBase.Execute(codeBase);
+                    }
+                    else
+                        dcBase.Execute(codeBase);
+                }
+            }
+            if (!string.IsNullOrWhiteSpace(currentShapeID))
+            {
+                this.ExecuteCodeModel(codeObjects, codeBase, currentShapeID, ref result, nextIsYesClasue);
+            }
+        }
 
         private static Guid? GetCurrentUserID(string Username)
         {
@@ -259,7 +288,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         public static string MakeClass(string classCode, string className)
         {
             return $"public class c_{className.Replace("-", "_")}: DynamicBusiness.BPMS.CodePanel.CodeBase{{" + Environment.NewLine
-                        + $@"public override object ExecuteCode(){{
+                        + $@"public override object ExecuteCode(string funcName){{
 {classCode + Environment.NewLine + "return true;"}
 }}" +
                         Environment.NewLine + "}"

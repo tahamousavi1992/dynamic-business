@@ -120,23 +120,12 @@ namespace DynamicBusiness.BPMS.Domain
         public static List<string> GetAllSysProperties()
         {
             return new List<string>() {
-                "this.CurrentUserID",
-                "this.CurrentUserName",
-                "this.ThreadUserID",
-                "this.ThreadID",
+                "this.GetCurrentUserID",
+                "this.GetCurrentUserName",
+                "this.GetThreadUserID",
+                "this.GetThreadID",
             }.OrderBy(c => c).ToList();
         }
-
-        public static Dictionary<string, string> GetSysPropertiesAsDictionary()
-        {
-            return new Dictionary<string, string>() {
-                {"CurrentUserID" , "شناسه کاربر فعلی"},
-                {"CurrentUserName" , "نام کاربری فعلی"},
-                {"ThreadUserID" , "شناسه کاربر شروع کننده"},
-                {"ThreadID" , "شناسه روال"}
-            };
-        }
-
 
         public static DesignCodeModel GetDesignCodeFromXml(string xmlData)
         {
@@ -243,105 +232,48 @@ namespace DynamicBusiness.BPMS.Domain
             else return default(T);
         }
 
-        public static Tuple<string, string> RenderObjectsToCode(string xmlData, IUnitOfWork unitOfWork, Guid? processId,
-            Guid? applicationId, bool onlyConditional, bool addGotoLabel)
+        public static Tuple<string, string> RenderObjectsToCode(string xmlData)
         {
             string code = string.Empty;
-            List<object> listItems = GetListOfDesignCode(xmlData);
-            List<Tuple<string, string, string>> addedFunctionList = new List<Tuple<string, string, string>>();
-            string assemblies = string.Join(",", listItems.Where(c => c is DCExpressionModel).Select(c => ((DCExpressionModel)c).Assemblies).Where(c => !string.IsNullOrWhiteSpace(c)));
-            RenderToChildren(addedFunctionList,
-               listItems.Where(c => ((DCBaseModel)c).IsFirst).ToList(),
-               listItems, unitOfWork, processId, applicationId, onlyConditional, addGotoLabel);
+            List<DCExpressionModel> listItems = GetListOfDesignCode(xmlData).Where(c => c is DCExpressionModel).Cast<DCExpressionModel>().ToList();
+            List<(string funcName, string funcBody)> addedFunctionList = new List<(string funcName, string funcBody)>();
+            string assemblies = string.Join(",", listItems.Select(c => c.Assemblies).Where(c => !string.IsNullOrWhiteSpace(c)));
+            RenderExpression(addedFunctionList, listItems);
 
             if (addedFunctionList.Any())
             {
-                if (onlyConditional)
+                code += "switch (funcName){" + Environment.NewLine;
+                addedFunctionList.ForEach(c =>
                 {
-                    if (!string.IsNullOrWhiteSpace(addedFunctionList.FirstOrDefault().Item3))
-                        code += $@"return {addedFunctionList.FirstOrDefault().Item3};";
-                }
-                else
+                    code += "case \"" + c.funcName + "\" :" + Environment.NewLine;
+                    code += c.funcName + "();" + Environment.NewLine;
+                    code += "break;" + Environment.NewLine;
+                });
+                code += "}";
+
+                foreach (var item in addedFunctionList)
                 {
-                    code += "//" + addedFunctionList.FirstOrDefault().Item2.TrimStringStart("//") + Environment.NewLine;
-                    code += $"return {addedFunctionList.FirstOrDefault().Item1}();";
-                    foreach (var item in addedFunctionList)
-                    {
-                        code += Environment.NewLine + "//" + item.Item2.TrimStringStart("//") + Environment.NewLine;
-                        code += $@"object {item.Item1}(){{{Environment.NewLine + item.Item3 }}}";
-                    }
+                    code += Environment.NewLine;
+                    code += $@"object {item.funcName}(){{{Environment.NewLine + item.funcBody + Environment.NewLine + " return true; " }}}";
                 }
             }
 
             return new Tuple<string, string>(code, assemblies);
         }
 
-        private static void RenderToChildren(List<Tuple<string, string, string>> addedFunctionList, List<object> children, List<object> allNodes,
-          IUnitOfWork unitOfWork, Guid? processId, Guid? applicationId, bool OnlyConditional, bool addGotoLabel)
+        private static void RenderExpression(List<(string funcName, string funcBody)> addedFunctionList, List<DCExpressionModel> list)
         {
-            children.ForEach(c =>
+            foreach (DCExpressionModel expressionModel in list)
             {
-                if (string.IsNullOrWhiteSpace(((DCBaseModel)c).FuncName))
-                    ((DCBaseModel)c).FuncName = GetFunctionName(((DCBaseModel)c).ShapeID);
-            });
+                if (string.IsNullOrWhiteSpace(expressionModel.FuncName))
+                    expressionModel.FuncName = GetFunctionName(expressionModel.ShapeID);
 
-            foreach (var Groupitem in children.GroupBy(c => ((DCBaseModel)c).ShapeID))
-            {
-                string funcName = ((DCBaseModel)Groupitem.FirstOrDefault()).FuncName;
+                string actionCode = expressionModel.GetRenderedCode();
+                //Adding action function to list
+                addedFunctionList.Add((expressionModel.FuncName, actionCode));
 
-                //If the functon was previously added, do nothings. 
-                if (!addedFunctionList.Any(c => c.Item1 == funcName))
-                {
-                    if (Groupitem.ToList().Any())
-                    {
-                        //if it is a rectangular shape which contains multi actions.
-                        if (!Groupitem.ToList().Any(c => c is DCConditionModel))
-                        {
-                            string actionCode = string.Empty;
-                            Groupitem.ToList().ForEach((item) =>
-                            {
-                                actionCode += ((DCBaseModel)item).GetRenderedCode(processId, applicationId, unitOfWork) + Environment.NewLine;
-                            });
-                            List<object> listChildren = allNodes.Where(c => ((DCBaseModel)c).ParentShapeID.Contains(Groupitem.Key)).ToList();
-                            //Adding action function to list
-                            addedFunctionList.Add(new Tuple<string, string, string>(funcName, string.Join(Environment.NewLine, Groupitem.Select(c => $"//{((DCBaseModel)c).Name}")), actionCode +
-                                 //Adding next function call syntax.
-                                 //Each shape in diagram has one output line ,therefore there could be only one call syntax.
-                                 Environment.NewLine + (MakeCallFunction(listChildren, true))));
-                            RenderToChildren(addedFunctionList, listChildren, allNodes, unitOfWork, processId, applicationId, OnlyConditional, addGotoLabel);
-                        }
-                        else
-                        {
-                            DCConditionModel item = (DCConditionModel)Groupitem.FirstOrDefault();
-                            if (OnlyConditional)
-                                addedFunctionList.Add(new Tuple<string, string, string>(funcName, item.Name, item.GetRenderedCode(processId, applicationId, unitOfWork).TrimStringEnd(Environment.NewLine)));
-                            else
-                            {
-                                var yesOutputList = allNodes.Where(c => ((DCBaseModel)c).ParentShapeID.Contains(item.ShapeID) && ((DCBaseModel)c).IsOutputYes == true);
-                                var noOutputList = allNodes.Where(c => ((DCBaseModel)c).ParentShapeID.Contains(item.ShapeID) && ((DCBaseModel)c).IsOutputYes == false);
-                                string actionCode = $@"if({item.GetRenderedCode(processId, applicationId, unitOfWork).TrimStringEnd(Environment.NewLine)}){{" +
-        Environment.NewLine + $@"{MakeCallFunction(yesOutputList)}" + Environment.NewLine + "}" +
-        Environment.NewLine + "else{" + Environment.NewLine + MakeCallFunction(noOutputList) + Environment.NewLine + "}";
-                                addedFunctionList.Add(new Tuple<string, string, string>(funcName, item.Name, actionCode));
-                                //Adding Yes output functions 
-                                RenderToChildren(addedFunctionList, yesOutputList.ToList(), allNodes, unitOfWork, processId, applicationId, OnlyConditional, addGotoLabel);
-                                //Adding No output functions
-                                RenderToChildren(addedFunctionList, noOutputList.ToList(), allNodes, unitOfWork, processId, applicationId, OnlyConditional, addGotoLabel);
-                            }
-                        }
-                    }
-
-                }
             }
         }
-
-        private static string MakeCallFunction(IEnumerable<object> items, bool addDefaultRet = true)
-        {
-            return (items?.Any() ?? false) ?
-                $"return {((DCBaseModel)items.FirstOrDefault()).FuncName}();"
-                : (addDefaultRet ? "return true;" : "");
-        }
-
         public static string GetFunctionName(string shapeId) => string.IsNullOrWhiteSpace(shapeId) ? "" : "func" + shapeId.Replace("-", "_").Substring(0, 8);
 
     }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DynamicBusiness.BPMS.BusinessLogic
 {
-    public class ProcessCodeHelper
+    public class ProcessCodeHelper : IProcessCodeHelper
     {
         private IUnitOfWork UnitOfWork { get; set; }
         public ProcessCodeHelper(IUnitOfWork unitOfWork)

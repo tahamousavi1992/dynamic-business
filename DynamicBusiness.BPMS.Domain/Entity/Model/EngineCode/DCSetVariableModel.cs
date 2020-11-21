@@ -32,12 +32,11 @@ namespace DynamicBusiness.BPMS.Domain
         [DataMember]
         public string Value { get; set; }
 
-        public void Execute(ICodeBase codeBase, Guid? processId, Guid? applicationPageId, IUnitOfWork unitOfWork)
+        public override bool Execute(ICodeBase codeBase)
         {
-            //DCBaseModel.e_ConvertType e_Convert = DCBaseModel.GetVariableConvertType(this.VaribleName, processId, applicationPageId, unitOfWork);
-            codeBase.VariableHelper.Set(this.VaribleName, DCBaseModel.GetValue(this.Value, this.ValueType, DCBaseModel.e_ConvertType.String));
+            codeBase.VariableHelper.Set(this.VaribleName, DCBaseModel.GetValue(codeBase, this.Value, this.ValueType, DCBaseModel.e_ConvertType.String));
+            return true;
         }
-
         public override object FillData(XElement xElement)
         {
             base.FillData(xElement);
@@ -55,12 +54,6 @@ namespace DynamicBusiness.BPMS.Domain
                      new XElement(nameof(DCSetVariableModel.ValueType), (int)this.ValueType),
                      new XElement(nameof(DCSetVariableModel.VaribleName), this.VaribleName)
                      );
-        }
-        public override string GetRenderedCode(Guid? processId, Guid? applicationPageId, IUnitOfWork unitOfWork)
-        {
-            DCBaseModel.e_ConvertType e_Convert = DCBaseModel.GetVariableConvertType(this.VaribleName, processId, applicationPageId, unitOfWork);
-            string objectValue = DCBaseModel.RenderValueType(processId, applicationPageId, unitOfWork, this.Value, this.ValueType, e_Convert);
-            return $"VariableHelper.Set(\"{this.VaribleName}\",{objectValue});";
         }
     }
 }

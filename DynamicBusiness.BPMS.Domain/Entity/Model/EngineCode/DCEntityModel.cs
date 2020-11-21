@@ -59,35 +59,36 @@ namespace DynamicBusiness.BPMS.Domain
                      );
         }
 
-        public override string GetRenderedCode(Guid? processId, Guid? applicationPageId, IUnitOfWork unitOfWork)
+        public override bool Execute(ICodeBase codeBase)
         {
-            string code = string.Empty;
-            sysBpmsEntityDef sysBpmsEntityDef = unitOfWork.Repository<IEntityDefRepository>().GetInfo(this.EntityDefID);
+            sysBpmsEntityDef sysBpmsEntityDef = codeBase.GetUnitOfWork.Repository<IEntityDefRepository>().GetInfo(this.EntityDefID);
             switch (this.MethodType)
             {
                 case e_MethodType.Create:
-                    code += $@"VariableModel entityModel = new VariableModel(""{sysBpmsEntityDef.Name}"", new DataModel());
-{
-                        string.Join(Environment.NewLine, sysBpmsEntityDef.AllProperties.Select(c =>
-"entityModel[" + c.Name + "]=" + this.GetParameterCode(this.Rows.FirstOrDefault(d => d.ParameterName == c.Name), c) + ";")) + Environment.NewLine}
-this.EntityHelper.Save(entityModel);";
+                    VariableModel entityModel = new VariableModel(sysBpmsEntityDef.Name, new DataModel());
+                    sysBpmsEntityDef.AllProperties.ForEach(c =>
+                    {
+                        entityModel[c.Name] = this.GetParameterCode(codeBase, this.Rows.FirstOrDefault(d => d.ParameterName == c.Name), c);
+                    });
+                    codeBase.EntityHelper.Save(entityModel);
                     break;
                 case e_MethodType.Update:
-                    code += $@"VariableModel entityModel = new VariableModel(""{sysBpmsEntityDef.Name}"", new DataModel());
-{
-                        string.Join(Environment.NewLine, sysBpmsEntityDef.AllProperties.Select(c =>
-"entityModel[" + c.Name + "]=" + this.GetParameterCode(this.Rows.FirstOrDefault(d => d.ParameterName == c.Name), c) + ";")) + Environment.NewLine}
-this.EntityHelper.Save(entityModel);";
+                    entityModel = new VariableModel(sysBpmsEntityDef.Name, new DataModel());
+                    sysBpmsEntityDef.Properties.ForEach(c =>
+                    {
+                        entityModel[c.Name] = this.GetParameterCode(codeBase, this.Rows.FirstOrDefault(d => d.ParameterName == c.Name), c);
+                    });
+                    codeBase.EntityHelper.Save(entityModel);
                     break;
                 case e_MethodType.Delete:
-                    code += $@"this.EntityHelper.DeleteById(""{sysBpmsEntityDef.Name}"",{this.GetParameterCode(this.Rows.FirstOrDefault(d => d.ParameterName == "ID"), sysBpmsEntityDef.AllProperties.FirstOrDefault(d => d.Name == "ID"))})";
+                    codeBase.EntityHelper.DeleteById(sysBpmsEntityDef.Name, this.GetParameterCode(codeBase, this.Rows.FirstOrDefault(d => d.ParameterName == "ID"), sysBpmsEntityDef.AllProperties.FirstOrDefault(d => d.Name == "ID")).ToGuidObj());
                     break;
             }
-
-            return code;
+            sysBpmsEntityDef = null;
+            return true;
         }
-
-        private string GetParameterCode(DCEntityParametersModel parameterModel, EntityPropertyModel entityProperty)
+         
+        private object GetParameterCode(ICodeBase codeBase, DCEntityParametersModel parameterModel, EntityPropertyModel entityProperty)
         {
             e_ConvertType e_Convert = e_ConvertType.String;
             string pn = parameterModel.ParameterName;
@@ -103,7 +104,7 @@ this.EntityHelper.Save(entityModel);";
                     e_Convert = this.ConvertStrToType(entityProperty.DbType);
                     break;
             }
-            return parameterModel.GetRendered(e_Convert, entityProperty.Required);
+            return parameterModel.GetRendered(codeBase, e_Convert, entityProperty.Required);
         }
 
         private e_ConvertType ConvertStrToType(EntityPropertyModel.e_dbType convert)
@@ -147,9 +148,9 @@ this.EntityHelper.Save(entityModel);";
         [DataMember]
         public bool IsRequired { get; set; }
 
-        public string GetRendered(DCBaseModel.e_ConvertType e_Convert, bool required)
+        public object GetRendered(ICodeBase codeBase, DCBaseModel.e_ConvertType e_Convert, bool required)
         {
-            return DCBaseModel.RenderValueType(null, null, null, this.Value, this.ValueType, e_Convert, !required);
+            return DCBaseModel.GetValue(codeBase, this.Value, this.ValueType, e_Convert, !required);
         }
     }
 }

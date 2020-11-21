@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DynamicBusiness.BPMS.BusinessLogic
 {
-    public class WebServiceCodeHelper
+    public class WebServiceCodeHelper : IWebServiceCodeHelper
     {
         private Domain.CodeBaseSharedModel CodeBaseShared { get; set; }
 

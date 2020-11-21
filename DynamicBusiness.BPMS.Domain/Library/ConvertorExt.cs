@@ -65,14 +65,14 @@ namespace DynamicBusiness.BPMS.Domain
         /// ------------------------------------------------------------------------------------------------
         public static bool ToBoolObj(this object obj)
         {
-            bool bResult = false;
+            bool? bResult = null;
             try
             {
-                if (obj != null && Convert.ToBoolean(obj))
-                    bResult = true;
+                if (obj != null)
+                    bResult = Convert.ToBoolean(obj);
             }
-            catch { bResult = false; }
-            return bResult;
+            catch { bResult = null; }
+            return bResult ?? false;
         }
         public static bool? ToBoolObjNull(this object obj)
         {
@@ -144,6 +144,7 @@ namespace DynamicBusiness.BPMS.Domain
         {
             return System.Text.RegularExpressions.Regex.Replace(text.ToStringObj(), removeThis + "$", "");
         }
+
         public static string TrimStringStart(this string target, string trimString)
         {
             if (string.IsNullOrEmpty(trimString)) return target;
@@ -154,15 +155,37 @@ namespace DynamicBusiness.BPMS.Domain
             }
             return result;
         }
+
+        public static DateTime? ToDateTimeObjNull(this object obj)
+        {
+            try
+            {
+                if (obj != null)
+                    return Convert.ToDateTime(obj);
+            }
+            catch { }
+            return null;
+        }
+
+        public static DateTime ToDateTimeObj(this object obj)
+        {
+            try
+            {
+                if (obj != null)
+                    return Convert.ToDateTime(obj);
+            }
+            catch { }
+            return DateTime.MinValue;
+        }
+
         public static decimal ToDecimalObj(this object obj)
         {
-            decimal OutDecimal = 0;
-
-            if (!string.IsNullOrEmpty(DomainUtility.toString(obj)))
+            decimal OutDecimal;
+            if (!string.IsNullOrEmpty(obj.ToStringObjNull()))
             {
                 obj = obj.ToString().Replace(",", "").Replace("،", "").Replace("/", ".");
                 System.Globalization.CultureInfo culInfo = new System.Globalization.CultureInfo("en-GB", true);
-                if (!decimal.TryParse(DomainUtility.enNumbers(DomainUtility.toString(obj)), NumberStyles.AllowDecimalPoint, culInfo, out OutDecimal))
+                if (!decimal.TryParse(obj.ToStringObjNull(), System.Globalization.NumberStyles.AllowDecimalPoint, culInfo, out OutDecimal))
                     return 0;
             }
             else
@@ -171,6 +194,48 @@ namespace DynamicBusiness.BPMS.Domain
             }
 
             return OutDecimal;
+        }
+
+        public static decimal? ToDecimalObjNull(this object obj)
+        {
+            decimal OutDecimal;
+            if (!string.IsNullOrEmpty(obj.ToStringObjNull()))
+            {
+                obj = obj.ToString().Replace(",", "").Replace("،", "").Replace("/", ".");
+                System.Globalization.CultureInfo culInfo = new System.Globalization.CultureInfo("en-GB", true);
+                if (!decimal.TryParse(obj.ToStringObjNull(), System.Globalization.NumberStyles.AllowDecimalPoint, culInfo, out OutDecimal))
+                    return null;
+            }
+            else
+            {
+                return null;
+            }
+            return OutDecimal;
+        }
+
+        public static long? ToLongObjNull(this object obj)
+        {
+            long OutInt = 0;
+            if (!string.IsNullOrEmpty(obj.ToStringObjNull()))
+            {
+                if (!long.TryParse(obj.ToStringObjNull(), out OutInt))
+                    return null;
+            }
+            else
+                return null;
+            return OutInt;
+        }
+        public static long ToLongObj(this object obj)
+        {
+            long OutInt = 0;
+            if (!string.IsNullOrEmpty(obj.ToStringObjNull()))
+            {
+                if (!long.TryParse(obj.ToStringObjNull(), out OutInt))
+                    return 0;
+            }
+            else
+                return 0;
+            return OutInt;
         }
 
         /// <summary>

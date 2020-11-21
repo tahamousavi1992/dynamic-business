@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace DynamicBusiness.BPMS.BusinessLogic
 {
-    public class EntityCodeHelper
+    public class EntityCodeHelper : IEntityCodeHelper
     {
         public EngineSharedModel EngineSharedModel { get; set; }
         public IUnitOfWork UnitOfWork { get; set; }
-        public QueryCodeHelper QueryHelper { get; set; }
-        public EntityCodeHelper(EngineSharedModel engineSharedModel, QueryCodeHelper queryHelper, IUnitOfWork unitOfWork)
+        public IQueryCodeHelper QueryHelper { get; set; }
+        public EntityCodeHelper(EngineSharedModel engineSharedModel, IQueryCodeHelper queryHelper, IUnitOfWork unitOfWork)
         {
             this.EngineSharedModel = engineSharedModel;
             this.UnitOfWork = unitOfWork;

@@ -30,8 +30,5 @@ namespace DynamicBusiness.BPMS.SharedPresentation
         public Guid? SequenceFlowID { get; set; } 
         [DataMember]
         public string Code { get; set; }
-        //only is used in gateway manage and filled from out
-        [DataMember]
-        public string RenderCode { get; set; }
     }
 }

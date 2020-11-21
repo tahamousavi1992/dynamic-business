@@ -37,10 +37,7 @@ namespace DynamicBusiness.BPMS.Controllers
                                     }).ToList(),
                                     AllowEdit = processService.GetInfo(ProcessId).AllowEdit(),
                                     GatewayID = sysBpmsGateway.ID,
-                                    GetList = conditionService.GetList(sysBpmsGateway.ID, null, null).Select(c => new ConditionDTO(c)
-                                    {
-                                        RenderCode = DesignCodeUtility.GetDesignCodeFromXml(c.Code).Code
-                                    }).ToList(),
+                                    GetList = conditionService.GetList(sysBpmsGateway.ID, null, null).Select(c => new ConditionDTO(c)).ToList(),
                                 };
                         }
                     }

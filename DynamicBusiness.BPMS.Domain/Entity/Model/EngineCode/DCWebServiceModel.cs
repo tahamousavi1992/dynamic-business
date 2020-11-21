@@ -22,11 +22,11 @@ namespace DynamicBusiness.BPMS.Domain
             this.RetVariableName = retVariableName;
             this.Rows = rows ?? new List<DCRowParameterModel>();
         }
-        [DataMember] 
-        [Required]
-        public string Url { get; set; } 
         [DataMember]
-        public string RetVariableName { get; set; } 
+        [Required]
+        public string Url { get; set; }
+        [DataMember]
+        public string RetVariableName { get; set; }
         [DataMember]
         public e_ContentType ContentType { get; set; }
         [DataMember]
@@ -72,37 +72,34 @@ namespace DynamicBusiness.BPMS.Domain
                      );
         }
 
-        public override string GetRenderedCode(Guid? processId, Guid? applicationPageId, IUnitOfWork unitOfWork)
+        public override bool Execute(ICodeBase codeBase)
         {
-            string code = string.Empty;
-            string parameter = string.Join(",",
-                       this.Rows.Where(c => c.Type == DCRowParameterModel.e_Type.Parameter).Select(item => $" new QueryModel(\"{item.Name}\", {this.GetParameterCode(item)})").ToList());
-            string header = "new List<QueryModel>() { " + string.Join(",",
-            this.Rows.Where(c => c.Type == DCRowParameterModel.e_Type.Header).Select(item => $" new QueryModel(\"{item.Name}\", {this.GetParameterCode(item)})").ToList()) + "}";
+            List<QueryModel> parameterList = this.Rows.Where(c => c.Type == DCRowParameterModel.e_Type.Parameter).Select(item => new QueryModel(item.Name, this.GetParameterCode(codeBase, item))).ToList();
+            List<QueryModel> headerList = this.Rows.Where(c => c.Type == DCRowParameterModel.e_Type.Header).Select(item => new QueryModel(item.Name, this.GetParameterCode(codeBase, item))).ToList();
 
-            if (string.IsNullOrWhiteSpace(parameter))
-                parameter = "null";
-            if (this.MethodType == e_MethodType.Get)
+            object result = null;
+            switch (this.MethodType)
             {
-                code = $@"WebServiceHelper.{this.MethodType.ToString()}(""{this.Url}"",{header},{parameter});";
-            }
-            else
-            {
-                code = $@"WebServiceHelper.{this.MethodType.ToString()}(""{this.Url}"",""{this.ContentType.GetDescription()}"",{header},{parameter});";
+                case e_MethodType.Get:
+                    result = codeBase.WebServiceHelper.Get(this.Url, headerList, parameterList.ToArray());
+                    break;
+                case e_MethodType.Post:
+                    result = codeBase.WebServiceHelper.Post(this.Url, this.ContentType.GetDescription(), headerList, parameterList.ToArray());
+                    break;
+                case e_MethodType.Put:
+                    result = codeBase.WebServiceHelper.Put(this.Url, this.ContentType.GetDescription(), headerList, parameterList.ToArray());
+                    break;
             }
             if (!string.IsNullOrWhiteSpace(this.RetVariableName))
             {
-
-                DCBaseModel.e_ConvertType e_Convert = DCBaseModel.GetVariableConvertType(this.RetVariableName, processId, applicationPageId, unitOfWork);
-                code = DCBaseModel.WrapCodeWithConvert(code.TrimEnd(';'), e_Convert);
-                code = $"VariableHelper.Set(\"{this.RetVariableName}\",{code});";
+                codeBase.VariableHelper.Set(this.RetVariableName, result);
             }
-            return code;
+            return true;
         }
 
-        private string GetParameterCode(DCRowParameterModel paraetersModel)
+        private object GetParameterCode(ICodeBase codeBase, DCRowParameterModel paraetersModel)
         {
-            return paraetersModel.GetRendered(e_ConvertType.String);
+            return paraetersModel.GetRendered(codeBase, e_ConvertType.String);
         }
 
         public enum e_ContentType
@@ -138,9 +135,9 @@ namespace DynamicBusiness.BPMS.Domain
         [DataMember]
         public e_Type Type { get; set; }
 
-        public string GetRendered(DCBaseModel.e_ConvertType e_Convert)
+        public object GetRendered(ICodeBase codeBase, DCBaseModel.e_ConvertType e_Convert)
         {
-            return DCBaseModel.RenderValueType(null, null, null, this.Value, this.ValueType, e_Convert);
+            return DCBaseModel.GetValue(codeBase, this.Value, this.ValueType, e_Convert);
         }
 
         public enum e_Type

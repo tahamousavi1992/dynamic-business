@@ -67,7 +67,6 @@ namespace DynamicBusiness.BPMS.Domain
             [Description("Entity")]
             [XmlEnum("8")] Entity = 8,
         }
-        public virtual string GetRenderedCode(Guid? processId, Guid? applicationPageId, IUnitOfWork unitOfWork) { return string.Empty; }
         public virtual object FillData(XElement xElement)
         {
             this.ID = xElement.GetValue(nameof(DCBaseModel.ID));
@@ -94,6 +93,11 @@ namespace DynamicBusiness.BPMS.Domain
                    new XElement(nameof(DCBaseModel.ShapeID), this.ShapeID),
                    new XElement(nameof(DCBaseModel.IsOutputYes), this.IsOutputYes),
                    new XElement(nameof(DCBaseModel.IsFirst), this.IsFirst)};
+        }
+
+        public virtual bool Execute(ICodeBase codeBase)
+        {
+            return true;
         }
 
         /// <summary>
@@ -157,107 +161,59 @@ namespace DynamicBusiness.BPMS.Domain
             }
             return e_Convert;
         }
-        /// <summary>
-        /// it will wrape code with corespondent convert to statement.
-        /// </summary>
-        /// <param name="code">is like VariableHelper.GetValue("varPerson.FirstName")</param>
-        /// <returns>wraped code with corespondent convert to statement.</returns>
-        public static string WrapCodeWithConvert(string code, e_ConvertType e_Convert, bool allowNull = true)
+
+        public static object GetConverted(object value, e_ConvertType e_Convert, bool allowNull = true)
         {
             switch (e_Convert)
             {
                 case e_ConvertType.String:
-                    code = (code.ToStringObj().ToLower().Trim() == "null" || code.ToStringObj().ToLower().Trim() == "\"null\"") ? "null" : $"CodeUtility.ToString{(!allowNull ? "Obj" : "")}({code})";
-                    break;
+                    return (value.ToStringObj().ToLower().Trim() == "null" || value.ToStringObj().ToLower().Trim() == "\"null\"") ? null : (!allowNull ? value.ToStringObj() : value.ToStringObjNull());
                 case e_ConvertType.Integer:
-                    code = $"CodeUtility.ToInt{(!allowNull ? "Obj" : "")}({code})";
-                    break;
+                    return !allowNull ? value.ToIntObj() : value.ToIntObjNull();
                 case e_ConvertType.Decimal:
-                    code = $"CodeUtility.ToDecimal{(!allowNull ? "Obj" : "")}({code})";
-                    break;
-                case e_ConvertType.DateTime:
-                    code = $"CodeUtility.ToDateTime{(!allowNull ? "Obj" : "")}({code})";
-                    break;
-                case e_ConvertType.Boolean:
-                    code = $"CodeUtility.ToBoolean{(!allowNull ? "Obj" : "")}({code})";
-                    break;
-                case e_ConvertType.Long:
-                    code = $"CodeUtility.ToLong{(!allowNull ? "Obj" : "")}({code})";
-                    break;
-                case e_ConvertType.Uniqueidentifier:
-                    code = $"CodeUtility.ToGuid{(!allowNull ? "Obj" : "")}({code})";
-                    break;
-            }
-            return code;
-        }
-
-        public static object GetCodeNew(string code, e_ConvertType e_Convert, bool allowNull = true)
-        {
-            switch (e_Convert)
-            {
-                case e_ConvertType.String:
-                    return (code.ToStringObj().ToLower().Trim() == "null" || code.ToStringObj().ToLower().Trim() == "\"null\"") ? null : (!allowNull ? CodeUtility.ToStringObj(code) : CodeUtility.ToString(code));
-                case e_ConvertType.Integer:
-                    return !allowNull ? CodeUtility.ToIntObj(code) : CodeUtility.ToInt(code); ;
-                case e_ConvertType.Decimal:
-                    return !allowNull ? CodeUtility.ToDecimalObj(code) : CodeUtility.ToDecimal(code);
+                    return !allowNull ? value.ToDecimalObj() : value.ToDecimalObjNull();
 
                 case e_ConvertType.DateTime:
-                    return !allowNull ? CodeUtility.ToDateTimeObj(code) : CodeUtility.ToDateTime(code); ;
+                    return !allowNull ? value.ToDateTimeObj() : value.ToDateTimeObjNull();
 
                 case e_ConvertType.Boolean:
-                    return !allowNull ? CodeUtility.ToBooleanObj(code) : CodeUtility.ToBoolean(code);
+                    return !allowNull ? value.ToBoolObj() : value.ToBoolObjNull();
 
                 case e_ConvertType.Long:
-                    return !allowNull ? CodeUtility.ToLongObj(code) : CodeUtility.ToLong(code);
+                    return !allowNull ? value.ToLongObj() : value.ToLongObjNull();
 
                 case e_ConvertType.Uniqueidentifier:
-                    return !allowNull ? CodeUtility.ToGuidObj(code) : CodeUtility.ToGuid(code);
+                    return !allowNull ? value.ToGuidObj() : value.ToGuidObjNull();
             }
-            return code;
+            return value;
         }
 
-
-        public static string RenderValueType(Guid? processId, Guid? applicationPageId, IUnitOfWork unitOfWork, string value, e_ValueType valueType,
-            DCBaseModel.e_ConvertType e_Convert, bool allowNull = true)
-        {
-            string objectValue = string.Empty;
-            switch (valueType)
-            {
-                case e_ValueType.Static:
-                    objectValue = DCBaseModel.WrapCodeWithConvert($"\"{value}\"", e_Convert, allowNull);
-                    break;
-                case e_ValueType.Control:
-                    objectValue = DCBaseModel.WrapCodeWithConvert($"ControlHelper.GetValue(\"{value}\")", e_Convert, allowNull);
-                    break;
-                case e_ValueType.Parameter:
-                    objectValue = DCBaseModel.WrapCodeWithConvert($"UrlHelper.GetParameter(\"{value}\")", e_Convert, allowNull);
-                    break;
-                case e_ValueType.Variable:
-                    objectValue = DCBaseModel.WrapCodeWithConvert($"VariableHelper.GetValue(\"{value}\")", e_Convert, allowNull);
-                    break;
-                case e_ValueType.SysParameter:
-                    objectValue = DCBaseModel.WrapCodeWithConvert($"this.{value}", e_Convert, allowNull);
-                    break;
-            }
-            return objectValue;
-        }
-
-        public static object GetValue(string value, e_ValueType valueType,
+        public static object GetValue(ICodeBase codeBase, string value, e_ValueType valueType,
            DCBaseModel.e_ConvertType e_Convert, bool allowNull = true)
         {
             switch (valueType)
             {
                 case e_ValueType.Static:
-                    return DCBaseModel.GetCodeNew(value, e_Convert, allowNull);
+                    return DCBaseModel.GetConverted(value, e_Convert, allowNull);
                 case e_ValueType.Control:
-                    return DCBaseModel.GetCodeNew($"ControlHelper.GetValue(\"{value}\")", e_Convert, allowNull);
+                    return DCBaseModel.GetConverted(codeBase.ControlHelper.GetValue(value), e_Convert, allowNull);
                 case e_ValueType.Parameter:
-                    return DCBaseModel.GetCodeNew($"UrlHelper.GetParameter(\"{value}\")", e_Convert, allowNull);
+                    return DCBaseModel.GetConverted(codeBase.UrlHelper.GetParameter(value), e_Convert, allowNull);
                 case e_ValueType.Variable:
-                    return DCBaseModel.GetCodeNew($"VariableHelper.GetValue(\"{value}\")", e_Convert, allowNull);
+                    return DCBaseModel.GetConverted(codeBase.VariableHelper.GetValue(value), e_Convert, allowNull);
                 case e_ValueType.SysParameter:
-                    return DCBaseModel.GetCodeNew($"this.{value}", e_Convert, allowNull);
+                    switch (value)
+                    {
+                        case "GetCurrentUserID":
+                            return DCBaseModel.GetConverted(codeBase.GetCurrentUserID, e_Convert, allowNull);
+                        case "GetCurrentUserName":
+                            return DCBaseModel.GetConverted(codeBase.GetCurrentUserName, e_Convert, allowNull);
+                        case "GetThreadID":
+                            return DCBaseModel.GetConverted(codeBase.GetThreadID, e_Convert, allowNull);
+                        case "GetThreadUserID":
+                            return DCBaseModel.GetConverted(codeBase.GetThreadUserID, e_Convert, allowNull);
+                    }
+                    break;
 
             }
             return null;
