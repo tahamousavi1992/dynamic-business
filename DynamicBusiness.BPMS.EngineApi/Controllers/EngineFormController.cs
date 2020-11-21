@@ -9,12 +9,8 @@ using System.Web;
 using System.Web.Mvc;
 namespace DynamicBusiness.BPMS.EngineApi.Controllers
 {
-    [AllowAnonymous]
-    public class EngineFormController : BpmsApiControlBase
+    public class EngineFormController : BpmsEngineApiControlBase
     {
-
-
-
         [BpmsAuth]
         [HttpGet]
         public List<ComboSearchItem> GetList(Guid? processId = null, string query = "")

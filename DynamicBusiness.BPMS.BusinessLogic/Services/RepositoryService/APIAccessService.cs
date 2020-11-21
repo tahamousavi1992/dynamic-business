@@ -38,9 +38,9 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             return this.UnitOfWork.Repository<IAPIAccessRepository>().GetInfo(ID);
         }
 
-        public sysBpmsAPIAccess GetInfo(string IPAddress, string AccessKey)
+        public bool HasAccess(string ipAddress, string accessKey)
         {
-            return this.UnitOfWork.Repository<IAPIAccessRepository>().GetInfo(IPAddress, AccessKey);
+            return this.UnitOfWork.Repository<IAPIAccessRepository>().HasAccess(ipAddress, accessKey);
         }
 
         public List<sysBpmsAPIAccess> GetList(string Name, string IPAddress, string AccessKey, bool? IsActive, PagingProperties currentPaging = null)

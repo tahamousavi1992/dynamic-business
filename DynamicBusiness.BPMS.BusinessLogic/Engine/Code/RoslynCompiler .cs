@@ -21,8 +21,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 "System.Collections.Generic",
                 "DynamicBusiness.BPMS.Domain",
                 "DotNetNuke.Entities.Users",
-                "DotNetNuke.Security.Membership",
-                "DynamicBusiness.BPMS.EntityMethods",
+                "DotNetNuke.Security.Membership", 
                 "DynamicBusiness.BPMS.CodePanel",
              };
         private static readonly CSharpCompilationOptions DefaultCompilationOptions =

@@ -13,8 +13,6 @@ namespace DynamicBusiness.BPMS.SingleAction.Controllers
     [System.Web.Http.AllowAnonymous]
     public class BpmsGeneralController : DnnApiController
     {
-        public string BaseUrl { get { return PortalController.GetPortalSetting(SingleActionSettingDTO.e_SettingType.SingleAction_WebApiAddress.ToString(), base.PortalSettings.PortalId, string.Empty); } }
-        public string WebServicePass { get { return PortalController.GetPortalSetting(SingleActionSettingDTO.e_SettingType.SingleAction_WebServicePass.ToString(), base.PortalSettings.PortalId, string.Empty); } }
 
         protected HttpRequest MyRequest
         {
@@ -30,8 +28,8 @@ namespace DynamicBusiness.BPMS.SingleAction.Controllers
             if (FormTokenUtility.ValidateFormToken(formToken, HttpContext.Current.Session.SessionID))
             {
                 //when calling main bpms api from client application, there  is no need to pass formToken to main bpms api.
-                string url = UrlUtility.GetApiUrl(this.BaseUrl, action, controller, "", this.GetParameters().ToArray());
-                return ApiUtility.GetData(url, WebServicePass, base.UserInfo.Username, ApiUtility.GetIPAddress(), HttpContext.Current.Session.SessionID, FormTokenUtility.GetIsEncrypted(formToken, HttpContext.Current.Session.SessionID));
+                string url = UrlUtility.GetApiUrl(SingleActionHomeController.Setting.WebApiAddress, action, controller, "", this.GetParameters().ToArray());
+                return ApiUtility.GetData(url, SingleActionHomeController.Setting.WebServicePass, base.UserInfo.Username, ApiUtility.GetIPAddress(), HttpContext.Current.Session.SessionID, FormTokenUtility.GetIsEncrypted(formToken, HttpContext.Current.Session.SessionID));
             }
             else
                 throw new System.Web.Http.HttpResponseException(System.Net.HttpStatusCode.Unauthorized);
@@ -40,11 +38,12 @@ namespace DynamicBusiness.BPMS.SingleAction.Controllers
         [HttpPost]
         public System.Net.Http.HttpResponseMessage PostData(string controller, string action, string formToken = "")
         {
+
             if (FormTokenUtility.ValidateFormToken(formToken, HttpContext.Current.Session.SessionID))
             {
                 //when calling main api from client application, there  is no need to pass formToken to main bpms api.
-                string url = UrlUtility.GetApiUrl(this.BaseUrl, action, controller, "", this.GetParameters().ToArray());
-                return ApiUtility.PostData(url, QueryModel.GetFormDataList(this.MyRequest).ToList(), WebServicePass, base.UserInfo.Username, ApiUtility.GetIPAddress(), HttpContext.Current.Session.SessionID, FormTokenUtility.GetIsEncrypted(formToken, HttpContext.Current.Session.SessionID));
+                string url = UrlUtility.GetApiUrl(SingleActionHomeController.Setting.WebApiAddress, action, controller, "", this.GetParameters().ToArray());
+                return ApiUtility.PostData(url, QueryModel.GetFormDataList(this.MyRequest).ToList(), SingleActionHomeController.Setting.WebServicePass, base.UserInfo.Username, ApiUtility.GetIPAddress(), HttpContext.Current.Session.SessionID, FormTokenUtility.GetIsEncrypted(formToken, HttpContext.Current.Session.SessionID));
             }
             else
                 throw new System.Web.Http.HttpResponseException(System.Net.HttpStatusCode.Unauthorized);

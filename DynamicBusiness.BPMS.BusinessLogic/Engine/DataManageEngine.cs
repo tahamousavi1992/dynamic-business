@@ -143,7 +143,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             foreach (var item in variableModel.Items)
             {
                 foreach (var dataModel in item.ToList())
-                    this.SetValueByBinding(dataModel.Key, item.Value);
+                    this.SetValueByBinding(dataModel.Key, dataModel.Value);
             }
             ResultOperation resultOperation = this.SaveInto();
             if (!resultOperation.IsSuccess)

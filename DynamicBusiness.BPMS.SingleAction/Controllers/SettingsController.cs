@@ -46,7 +46,7 @@ namespace DynamicBusiness.BPMS.SingleAction.Controllers
                 ViewBag.ApplicationPageUrl = ApiUtility.GetGeneralApiUrl(base.Request, base.PortalSettings.DefaultPortalAlias, "GetList", "EngineApplication", FormTokenUtility.GetFormToken(base.Session.SessionID, Guid.Empty, false), true, true);
                 ViewBag.ProcessFormUrl = ApiUtility.GetGeneralApiUrl(base.Request, base.PortalSettings.DefaultPortalAlias, "GetList", "EngineForm", FormTokenUtility.GetFormToken(base.Session.SessionID, Guid.Empty, false), true, true);
                 ViewBag.ProcessUrl = ApiUtility.GetGeneralApiUrl(base.Request, base.PortalSettings.DefaultPortalAlias, "GetList", "EngineProcess", FormTokenUtility.GetFormToken(base.Session.SessionID, Guid.Empty, false), true, true);
-          
+
             }
             catch
             {
@@ -75,7 +75,7 @@ namespace DynamicBusiness.BPMS.SingleAction.Controllers
             ModuleContext.Configuration.ModuleSettings[SingleActionSettingDTO.e_SettingType.SingleAction_Jquery.ToString()] = settings.LoadjQuery.ToStringObj().ToLower();
             ModuleContext.Configuration.ModuleSettings[SingleActionSettingDTO.e_SettingType.SingleAction_Bootstrap.ToString()] = settings.LoadBootstrap.ToStringObj().ToLower();
 
-           
+
             return RedirectToDefaultRoute();
         }
 

@@ -32,6 +32,12 @@ namespace DynamicBusiness.BPMS.Domain
         [DataMember]
         public string Value { get; set; }
 
+        public void Execute(ICodeBase codeBase, Guid? processId, Guid? applicationPageId, IUnitOfWork unitOfWork)
+        {
+            //DCBaseModel.e_ConvertType e_Convert = DCBaseModel.GetVariableConvertType(this.VaribleName, processId, applicationPageId, unitOfWork);
+            codeBase.VariableHelper.Set(this.VaribleName, DCBaseModel.GetValue(this.Value, this.ValueType, DCBaseModel.e_ConvertType.String));
+        }
+
         public override object FillData(XElement xElement)
         {
             base.FillData(xElement);

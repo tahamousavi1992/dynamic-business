@@ -119,7 +119,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         public void SetUrls(string getPopUpUrl, string getPostUrl, HttpRequestBase request, string portalAlias, string formToken)
         {
             this.GetPopUpUrl = string.IsNullOrWhiteSpace(getPopUpUrl) ? string.Empty : UrlUtility.AddParamsToUrl(getPopUpUrl, "formToken", formToken);
-            this.GetPostUrl = getPostUrl;
+            this.GetPostUrl = string.IsNullOrWhiteSpace(getPostUrl) ? string.Empty : UrlUtility.AddParamsToUrl(getPostUrl, "formToken", formToken);
+             
             this.PageParams = UrlUtility.GetParams(request);
             string[] arrayParams = UrlUtility.GetParamsAsArray(request,
              string.Format("threadTaskID={0}", this.ThreadTaskID),

@@ -121,14 +121,14 @@ namespace DynamicBusiness.BPMS.SharedPresentation
             client.DefaultRequestHeaders.Add("isEncrypted", isEncrypted ? "1" : "0");
         }
 
-        public static string GetGeneralApiUrl(HttpRequestBase request, string PortalAlias, string actionName, string controllerName, string token, bool isLoader, bool isGetData, params string[] parameters)
+        public static string GetGeneralApiUrl(HttpRequestBase request, string PortalAlias, string actionName, string controllerName, string formToken, bool isLoader, bool isGetData, params string[] parameters)
         {
             string baseUrl = request.Url.Scheme + "://" + request.Url.Authority + request.ApplicationPath.TrimEnd('/');
             PortalAlias = PortalAlias.Replace("http://", "").Replace("https://", "");
             baseUrl = baseUrl + (PortalAlias.Split('/').Length == 2 ? ("/" + PortalAlias.Split('/')[1]) : "") +$@"/API/{(isLoader ? "BpmsSingleActionApi" : "BpmsApi")}";
 
             //string baseUrl = ((PortalAlias.Contains("http") ? "" : (request.Url.Scheme + "://")) + PortalAlias.TrimEnd('/')) + $@"/API/{(isLoader ? "BpmsSingleActionApi" : "BpmsApi")}";
-            baseUrl += $"/BpmsGeneral/{(isGetData ? "GetData" : "PostData")}?controller={controllerName.TrimStringEnd("Controller")}&action={actionName}{(string.IsNullOrWhiteSpace(token) ? "" : ("&formToken=" + token))}";
+            baseUrl += $"/BpmsGeneral/{(isGetData ? "GetData" : "PostData")}?controller={controllerName.TrimStringEnd("Controller")}&action={actionName}{(string.IsNullOrWhiteSpace(formToken) ? "" : ("&formToken=" + formToken))}";
             if (parameters != null)
             {
                 parameters = parameters.Where(c => !string.IsNullOrWhiteSpace(c.Split('=').LastOrDefault())).ToArray();

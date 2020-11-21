@@ -20,12 +20,12 @@ namespace DynamicBusiness.BPMS.Domain
             this.Rows = rows;
             this.MethodType = (e_MethodType)defaultMethodType;
         }
-        [DataMember] 
+        [DataMember]
         public Guid EntityDefID { get; set; }
         [DataMember]
         public List<DCEntityParametersModel> Rows { get; set; }
 
-        [DataMember] 
+        [DataMember]
         public e_MethodType MethodType { get; set; }
 
         public override object FillData(XElement xElement)
@@ -66,19 +66,21 @@ namespace DynamicBusiness.BPMS.Domain
             switch (this.MethodType)
             {
                 case e_MethodType.Create:
-                    code += $@"new {sysBpmsEntityDef.Name}(this.UnitOfWork){{
-{string.Join(",", sysBpmsEntityDef.AllProperties.Select(c =>
-c.Name + "=" + this.GetParameterCode(this.Rows.FirstOrDefault(d => d.ParameterName == c.Name), c)))}
-}}.Save();";
+                    code += $@"VariableModel entityModel = new VariableModel(""{sysBpmsEntityDef.Name}"", new DataModel());
+{
+                        string.Join(Environment.NewLine, sysBpmsEntityDef.AllProperties.Select(c =>
+"entityModel[" + c.Name + "]=" + this.GetParameterCode(this.Rows.FirstOrDefault(d => d.ParameterName == c.Name), c) + ";")) + Environment.NewLine}
+this.EntityHelper.Save(entityModel);";
                     break;
                 case e_MethodType.Update:
-                    code += $@"new {sysBpmsEntityDef.Name}(this.UnitOfWork){{
-{string.Join(",", sysBpmsEntityDef.AllProperties.Select(c =>
-c.Name + "=" + this.GetParameterCode(this.Rows.FirstOrDefault(d => d.ParameterName == c.Name), c)))}
-}}.Save();";
+                    code += $@"VariableModel entityModel = new VariableModel(""{sysBpmsEntityDef.Name}"", new DataModel());
+{
+                        string.Join(Environment.NewLine, sysBpmsEntityDef.AllProperties.Select(c =>
+"entityModel[" + c.Name + "]=" + this.GetParameterCode(this.Rows.FirstOrDefault(d => d.ParameterName == c.Name), c) + ";")) + Environment.NewLine}
+this.EntityHelper.Save(entityModel);";
                     break;
                 case e_MethodType.Delete:
-                    code += $@"new {sysBpmsEntityDef.Name}(this.UnitOfWork).DeleteById({this.GetParameterCode(this.Rows.FirstOrDefault(d => d.ParameterName == "ID"), sysBpmsEntityDef.AllProperties.FirstOrDefault(d => d.Name == "ID"))});";
+                    code += $@"this.EntityHelper.DeleteById(""{sysBpmsEntityDef.Name}"",{this.GetParameterCode(this.Rows.FirstOrDefault(d => d.ParameterName == "ID"), sysBpmsEntityDef.AllProperties.FirstOrDefault(d => d.Name == "ID"))})";
                     break;
             }
 

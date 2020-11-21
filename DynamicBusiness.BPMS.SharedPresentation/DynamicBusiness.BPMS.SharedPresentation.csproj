@@ -206,10 +206,12 @@
     <Compile Include="DTO\Share\LUTableDTO.cs" />
     <Compile Include="DTO\Share\PostMethodMessage.cs" />
     <Compile Include="HtmlHelper\BpmsCombo.cs" />
+    <Compile Include="Library\AccessUtility.cs" />
     <Compile Include="Library\AdminMenuIndex.cs" />
     <Compile Include="Library\ApiUtility.cs" />
     <Compile Include="Library\BpmsAdminApiControlBase.cs" />
-    <Compile Include="Library\BpmsApiControlBase.cs" />
+    <Compile Include="Library\BpmsEngineApiControlBase.cs" />
+    <Compile Include="Library\BpmsCartableApiControlBase.cs" />
     <Compile Include="Library\FormLoaderApiControllerBase.cs" />
     <Compile Include="Library\FormLoaderControllerBase.cs" />
     <Compile Include="Library\KartableControllerBase.cs" />
@@ -261,7 +263,7 @@
     <Compile Include="DTO\Share\DynamicFormDTO.cs" />
     <Compile Include="DTO\Share\EmailAccountDTO.cs" />
     <Compile Include="DTO\Share\ProcessDTO.cs" />
-    <Compile Include="DTO\FormLoader\FormLoaderSettingDTO.cs" />
+    <Compile Include="DTO\FormLoader\SingleActionSettingDTO.cs" />
     <Compile Include="DTO\Share\UserDTO.cs" />
     <Compile Include="DTO\Share\BaseSearchDTO.cs" />
     <Compile Include="DTO\Share\EngineFormResponseDTO.cs" />
@@ -293,9 +295,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\HtmlElement\_UserTaskContent.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shared\_Paging.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_ShowDataMessage.cshtml" />

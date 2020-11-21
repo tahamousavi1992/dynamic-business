@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DynamicBusiness.BPMS.BusinessLogic
 {
-    public class VariableCodeHelper
+    public class VariableCodeHelper : IVariableCodeHelper
     {
         private CodeBaseSharedModel CodeBaseShared { get; set; }
 

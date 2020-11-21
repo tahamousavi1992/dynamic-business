@@ -18,9 +18,9 @@ using System.Web.UI;
 namespace DynamicBusiness.BPMS.SharedPresentation
 {
     [BpmsCartableAuth]
-    public class BpmsApiControlBase : DnnApiController
+    public class BpmsCartableApiControlBase : DnnApiController
     {
-        public BpmsApiControlBase()
+        public BpmsCartableApiControlBase()
         {
             using (SettingValueService settingValueService = new SettingValueService())
             {
@@ -48,9 +48,8 @@ namespace DynamicBusiness.BPMS.SharedPresentation
 
                         this.ClientId = this.MyRequest.Headers["clientId"].ToStringObj();
                         this.ApiSessionId = DomainUtility.CreateApiSessionID(this.ClientId, this.ClientIp); ;
-                        //set ApiSessionID
-                        sysBpmsAPIAccess apiAccess = apiAccessService.GetInfo(ApiUtility.GetIPAddress(), this.MyRequest.Headers.GetValues("token").FirstOrDefault());
-                        if (apiAccess == null)
+                        //set ApiSessionID 
+                        if (!apiAccessService.HasAccess(ApiUtility.GetIPAddress(), this.MyRequest.Headers.GetValues("token").FirstOrDefault()))
                         {
                             throw new Exception("You are not authorized to access this application.");
                         }
@@ -207,7 +206,7 @@ namespace DynamicBusiness.BPMS.SharedPresentation
                 }
             }
         }
-         
+
         protected string GetRedirectUrl(RedirectUrlModel redirectModel)
         {
             if (redirectModel != null)

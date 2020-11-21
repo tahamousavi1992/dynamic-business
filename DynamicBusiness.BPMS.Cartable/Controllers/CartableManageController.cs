@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace DynamicBusiness.BPMS.Cartable.Controllers
 {
-    public class CartableManageController : BpmsApiControlBase
+    public class CartableManageController : BpmsCartableApiControlBase
     {
         //It retrieves open threads which are in person kartable or step.
         public object GetIndex([System.Web.Http.FromUri] KartableIndexSearchDTO indexSearchVM)

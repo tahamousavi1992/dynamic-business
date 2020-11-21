@@ -212,7 +212,6 @@
     <Compile Include="Engine\ApplicationPageEngine.cs" />
     <Compile Include="Engine\BaseEngine.cs" />
     <Compile Include="Engine\Code\AccessCodeHelper.cs" />
-    <Compile Include="Engine\Code\CodeUtility.cs" />
     <Compile Include="Engine\Code\ControlCodeHelper.cs" />
     <Compile Include="Engine\Code\EntityCodeHelper.cs" />
     <Compile Include="Engine\Code\MessageCodeHelper.cs" />

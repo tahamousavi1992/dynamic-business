@@ -47,8 +47,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             {
                 return base.ExceptionHandler(ex);
             }
-            base.FinalizeService(resultOperation);
-            new DynamicCodeEngine(null).CompileEntityMethods();
+            base.FinalizeService(resultOperation); 
             return resultOperation;
         }
 
@@ -84,8 +83,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             {
                 return base.ExceptionHandler(ex);
             }
-            base.FinalizeService(resultOperation);
-            new DynamicCodeEngine(null).CompileEntityMethods();
+            base.FinalizeService(resultOperation); 
             return resultOperation;
         }
 

@@ -8,8 +8,7 @@ using DynamicBusiness.BPMS.Domain;
 using DynamicBusiness.BPMS.SharedPresentation;
 namespace DynamicBusiness.BPMS.EngineApi.Controllers
 {
-    [System.Web.Http.AllowAnonymous]
-    public class EngineReportController : BpmsApiControlBase
+    public class EngineReportController : BpmsEngineApiControlBase
     {
         [BpmsAuth]
         [HttpGet]

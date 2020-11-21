@@ -80,10 +80,15 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         {
             if (string.IsNullOrWhiteSpace(designCodeModel?.Code))
                 return null;
-            CodeBase codeBase = DynamicCodeEngine.LoadClass(designCodeModel.ID, base.EngineSharedModel.CurrentProcessID, base.EngineSharedModel.CurrentApplicationPageID);
+            CodeBase codeBase = new CodeBase();
+            //CodeBase codeBase = DynamicCodeEngine.LoadClass(designCodeModel.ID, base.EngineSharedModel.CurrentProcessID, base.EngineSharedModel.CurrentApplicationPageID);
             codeBase.InitialProperties(base.EngineSharedModel.CurrentProcessID, base.EngineSharedModel.CurrentThreadID, base.EngineSharedModel.CurrentApplicationPageID, base.UnitOfWork, base.EngineSharedModel.BaseQueryModel, GetCurrentUserID(base.EngineSharedModel.CurrentUserName), base.EngineSharedModel.CurrentUserName, formModel, base.EngineSharedModel.ApiSessionID, codeBaseShared);
-
-            return new CodeResultModel(Convert.ToBoolean(codeBase.ExecuteCode()), codeBase.UrlHelper.RedirectUrlModel, codeBase.CodeBaseShared);
+            foreach (DCSetVariableModel dCBase in designCodeModel.CodeObjects)
+            {
+                dCBase.Execute(codeBase, base.EngineSharedModel.CurrentProcessID, base.EngineSharedModel.CurrentApplicationPageID, base.UnitOfWork);
+            }
+            return new CodeResultModel(true, codeBase.UrlHelper.RedirectUrlModel, codeBase.CodeBaseShared);
+            //return new CodeResultModel(Convert.ToBoolean(codeBase.ExecuteCode()), codeBase.UrlHelper.RedirectUrlModel, codeBase.CodeBaseShared);
         }
 
         public CodeResultModel SaveButtonCode(ButtonHtml buttonHtml, ResultOperation resultOperation,
@@ -106,53 +111,6 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 return result;
             }
             return null;
-        }
-
-        public bool CompileEntityMethods()
-        {
-            string code = string.Empty;
-            List<sysBpmsEntityDef> entityDefs = new EntityDefService().GetList("", "", true);
-            foreach (var item in entityDefs)
-            {
-                code += item.GetCode();
-            }
-
-            string sourceScript = @"using System;
-                            using System.Linq;
-                            using System.Collections.Generic;
-                            namespace DynamicBusiness.BPMS.EntityMethods 
-                             { " + code + " }";
-            string compiled = BPMSResources.FilesRoot + BPMSResources.AssemblyRoot + "\\" + BPMSResources.AssemblyCompiledRoot;
-            string compiledFile = compiled + "\\DynamicBusiness.BPMS.EntityMethods.dll";
-
-            if (!System.IO.Directory.Exists(compiled))
-                System.IO.Directory.CreateDirectory(compiled);
-
-
-            List<string> allAssembly = new List<string>();
-            System.CodeDom.Compiler.CompilerParameters dynamicParams = new System.CodeDom.Compiler.CompilerParameters();
-            System.Reflection.Assembly currentAssembly = System.Reflection.Assembly.GetExecutingAssembly();
-
-            string path = Path.GetDirectoryName(currentAssembly.EscapedCodeBase.Replace("file:///", ""));
-
-            allAssembly.Add(currentAssembly.Location);   // Reference the current assembly from within dynamic one
-            allAssembly.AddRange(Directory.GetFiles(path, "*.dll").Where(dll => currentAssembly.GetReferencedAssemblies().Any(c => dll.Contains(c.Name + ".dll"))).ToList());
-            //add system.dll 
-            allAssembly.Add(typeof(System.ComponentModel.IListSource).Assembly.Location);
-
-            allAssembly.AddRange(currentAssembly.GetReferencedAssemblies().Where(c => !allAssembly.Any(d => d.Contains(c.Name)))
-                .Select(c => System.Reflection.Assembly.ReflectionOnlyLoad(c.FullName).Location).ToList());
-
-            allAssembly = allAssembly.Where(c =>
-            !c.Contains("Stimulsoft.Base.dll") &&
-            !c.Contains("Stimulsoft.Report.dll") &&
-            !c.Contains("Stimulsoft.Report.Web.dll")).ToList();
-
-            // Return the results of compilation.
-            RoslynCompiler.compile(sourceScript, allAssembly, compiledFile);
-            Assembly.Load(File.ReadAllBytes(compiledFile));
-
-            return true;
         }
 
         public void SaveExternalVariable(CodeResultModel codeResultModel)
@@ -203,7 +161,6 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                             using DynamicBusiness.BPMS.Domain;
                             using DotNetNuke.Entities.Users;
                             using DotNetNuke.Security.Membership;
-                            using DynamicBusiness.BPMS.EntityMethods;
                             using DynamicBusiness.BPMS.CodePanel;
                              " + Environment.NewLine + sourceScript;
             string compiled = BPMSResources.FilesRoot + BPMSResources.AssemblyRoot + "\\" + BPMSResources.AssemblyCompiledRoot;
@@ -226,8 +183,6 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             && (!allAssembly.Any(d => d.Contains(c.Name)) || c.Name == "System.Web"))
                 .Select(c => System.Reflection.Assembly.ReflectionOnlyLoad(c.FullName).Location).ToList());
 
-            allAssembly.Add(EntitiyMethodLocation);
-
             allAssembly = allAssembly.Where(c =>
             !c.Contains("Stimulsoft.Base.dll") &&
             !c.Contains("Stimulsoft.Report.dll") &&
@@ -242,8 +197,6 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             Assembly.Load(File.ReadAllBytes(compiledFile));
         }
 
-        public static string EntitiyMethodLocation { get { return BPMSResources.FilesRoot + BPMSResources.AssemblyRoot + "\\" + BPMSResources.AssemblyCompiledRoot + "\\DynamicBusiness.BPMS.EntityMethods.dll"; } }
-
         private static Assembly MyResolveEventHandler(object sender, ResolveEventArgs args)
         {
             // Ignore missing resources
@@ -254,7 +207,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             {
                 try
                 {
-                    string fileName = BPMSResources.FilesRoot + BPMSResources.AssemblyRoot + "\\" + BPMSResources.AssemblyCompiledRoot + "\\" + args.Name.Split(',')[0] + (args.Name.Split(',')[0] == "DynamicBusiness.BPMS.EntityMethods" ? ".dll" : "");
+                    string fileName = BPMSResources.FilesRoot + BPMSResources.AssemblyRoot + "\\" + BPMSResources.AssemblyCompiledRoot + "\\" + args.Name.Split(',')[0];
                     if (System.IO.File.Exists(fileName))
                         return GetAssembly(fileName);
                     else

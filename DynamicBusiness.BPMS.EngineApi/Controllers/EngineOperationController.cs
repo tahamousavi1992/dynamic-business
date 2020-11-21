@@ -11,8 +11,7 @@ using System.Web.Mvc;
 
 namespace DynamicBusiness.BPMS.EngineApi.Controllers
 {
-    [AllowAnonymous]
-    public class EngineOperationController : BpmsApiControlBase
+    public class EngineOperationController : BpmsEngineApiControlBase
     {
         [BpmsAuth]
         [HttpPost]

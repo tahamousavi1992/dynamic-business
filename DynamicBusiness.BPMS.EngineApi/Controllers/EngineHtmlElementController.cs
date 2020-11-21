@@ -11,9 +11,8 @@ using System.Net;
 
 namespace DynamicBusiness.BPMS.EngineApi.Controllers
 {
-    [AllowAnonymous]
     //this controller is used when we want to send html generatd by razor to client.
-    public class EngineHtmlElementController : BpmsApiControlBase
+    public class EngineHtmlElementController : BpmsEngineApiControlBase
     {
         [BpmsAuth]
         [HttpGet]

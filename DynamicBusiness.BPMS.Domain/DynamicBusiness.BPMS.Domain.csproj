@@ -135,6 +135,7 @@
     <Compile Include="Entity\HtmlElement\FormModel.cs" />
     <Compile Include="Entity\Model\DataModel.cs" />
     <Compile Include="Entity\Model\EngineCode\CodeBaseSharedModel.cs" />
+    <Compile Include="Entity\Model\EngineCode\CodeUtility.cs" />
     <Compile Include="Entity\Model\EngineCode\DCBaseModel.cs" />
     <Compile Include="Entity\Model\EngineCode\DCEntityModel.cs" />
     <Compile Include="Entity\Model\EngineCode\DCCallMethodModel.cs" />
@@ -210,9 +211,11 @@
     <Compile Include="Entity\Workflow\WorkflowStartEvent.cs" />
     <Compile Include="Entity\Workflow\WorkflowTask.cs" />
     <Compile Include="Entity\Workflow\WorkflowUserTask.cs" />
+    <Compile Include="Interfaces\EngineCode\IVariableCodeHelper.cs" />
     <Compile Include="Interfaces\Engine\IApplicationPageEngine.cs" />
     <Compile Include="Interfaces\Engine\IDocumentEngine.cs" />
     <Compile Include="Interfaces\Engine\IDynamicCodeEngine.cs" />
+    <Compile Include="Interfaces\EngineCode\ICodeBase.cs" />
     <Compile Include="Interfaces\IDataManageHelper.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />
     <Compile Include="Interfaces\IWorkflowElementConvertor.cs" />

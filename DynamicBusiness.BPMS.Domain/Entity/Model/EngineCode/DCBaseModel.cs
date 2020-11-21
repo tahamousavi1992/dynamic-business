@@ -29,12 +29,12 @@ namespace DynamicBusiness.BPMS.Domain
         }
         [DataMember]
         public string ID { get; set; }
-        [DataMember] 
+        [DataMember]
         [Required]
         public string Name { get; set; }
-        [DataMember] 
+        [DataMember]
         [Required]
-        public string FuncName { get; set; } 
+        public string FuncName { get; set; }
         [DataMember]
         public e_ActionType ActionType { get; set; }
         [DataMember]
@@ -191,6 +191,33 @@ namespace DynamicBusiness.BPMS.Domain
             return code;
         }
 
+        public static object GetCodeNew(string code, e_ConvertType e_Convert, bool allowNull = true)
+        {
+            switch (e_Convert)
+            {
+                case e_ConvertType.String:
+                    return (code.ToStringObj().ToLower().Trim() == "null" || code.ToStringObj().ToLower().Trim() == "\"null\"") ? null : (!allowNull ? CodeUtility.ToStringObj(code) : CodeUtility.ToString(code));
+                case e_ConvertType.Integer:
+                    return !allowNull ? CodeUtility.ToIntObj(code) : CodeUtility.ToInt(code); ;
+                case e_ConvertType.Decimal:
+                    return !allowNull ? CodeUtility.ToDecimalObj(code) : CodeUtility.ToDecimal(code);
+
+                case e_ConvertType.DateTime:
+                    return !allowNull ? CodeUtility.ToDateTimeObj(code) : CodeUtility.ToDateTime(code); ;
+
+                case e_ConvertType.Boolean:
+                    return !allowNull ? CodeUtility.ToBooleanObj(code) : CodeUtility.ToBoolean(code);
+
+                case e_ConvertType.Long:
+                    return !allowNull ? CodeUtility.ToLongObj(code) : CodeUtility.ToLong(code);
+
+                case e_ConvertType.Uniqueidentifier:
+                    return !allowNull ? CodeUtility.ToGuidObj(code) : CodeUtility.ToGuid(code);
+            }
+            return code;
+        }
+
+
         public static string RenderValueType(Guid? processId, Guid? applicationPageId, IUnitOfWork unitOfWork, string value, e_ValueType valueType,
             DCBaseModel.e_ConvertType e_Convert, bool allowNull = true)
         {
@@ -215,6 +242,27 @@ namespace DynamicBusiness.BPMS.Domain
             }
             return objectValue;
         }
+
+        public static object GetValue(string value, e_ValueType valueType,
+           DCBaseModel.e_ConvertType e_Convert, bool allowNull = true)
+        {
+            switch (valueType)
+            {
+                case e_ValueType.Static:
+                    return DCBaseModel.GetCodeNew(value, e_Convert, allowNull);
+                case e_ValueType.Control:
+                    return DCBaseModel.GetCodeNew($"ControlHelper.GetValue(\"{value}\")", e_Convert, allowNull);
+                case e_ValueType.Parameter:
+                    return DCBaseModel.GetCodeNew($"UrlHelper.GetParameter(\"{value}\")", e_Convert, allowNull);
+                case e_ValueType.Variable:
+                    return DCBaseModel.GetCodeNew($"VariableHelper.GetValue(\"{value}\")", e_Convert, allowNull);
+                case e_ValueType.SysParameter:
+                    return DCBaseModel.GetCodeNew($"this.{value}", e_Convert, allowNull);
+
+            }
+            return null;
+        }
+
 
         public enum e_ConvertType
         {

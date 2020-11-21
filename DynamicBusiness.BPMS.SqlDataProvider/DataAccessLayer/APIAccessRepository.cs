@@ -19,8 +19,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         public void Update(sysBpmsAPIAccess APIAccess)
         {
             sysBpmsAPIAccess retVal = (from P in this.Context.sysBpmsAPIAccesses
-                                   where P.ID == APIAccess.ID
-                                   select P).FirstOrDefault();
+                                       where P.ID == APIAccess.ID
+                                       select P).FirstOrDefault();
             retVal.Load(APIAccess);
         }
 
@@ -37,15 +37,15 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                     select P).AsNoTracking().FirstOrDefault();
         }
 
-        public sysBpmsAPIAccess GetInfo(string IPAddress, string AccessKey)
+        public bool HasAccess(string ipAddress, string accessKey)
         {
-            IPAddress = IPAddress.ToStringObj();
-            AccessKey = AccessKey.ToStringObj();
+            ipAddress = ipAddress.ToStringObj();
+            accessKey = accessKey.ToStringObj();
             return (from P in this.Context.sysBpmsAPIAccesses
                     where
-                    (IPAddress == string.Empty || P.IPAddress == IPAddress) &&
-                    (AccessKey == string.Empty || P.AccessKey == AccessKey)
-                    select P).AsNoTracking().FirstOrDefault();
+                    (P.IPAddress == string.Empty || P.IPAddress == null || P.IPAddress == ipAddress) &&
+                    (P.AccessKey == accessKey)
+                    select P).AsNoTracking().Count() > 0;
         }
 
         public List<sysBpmsAPIAccess> GetList(string Name, string IPAddress, string AccessKey, bool? IsActive, PagingProperties currentPaging)

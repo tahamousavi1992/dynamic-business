@@ -10,8 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 namespace DynamicBusiness.BPMS.EngineApi.Controllers
 {
-    [AllowAnonymous]
-    public class EngineCaptchaController : BpmsApiControlBase
+    public class EngineCaptchaController : BpmsEngineApiControlBase
     {
         /// <param name="key">is controlId</param>
         [HttpGet]

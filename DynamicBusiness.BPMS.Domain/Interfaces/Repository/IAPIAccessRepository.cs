@@ -11,7 +11,7 @@ namespace DynamicBusiness.BPMS.Domain
         void Add(sysBpmsAPIAccess apiAccess);
         void Update(sysBpmsAPIAccess apiAccess);
         sysBpmsAPIAccess GetInfo(Guid ID);
-        sysBpmsAPIAccess GetInfo(string IPAddress, string AccessKey);
+        bool HasAccess(string ipAddress, string accessKey);
         List<sysBpmsAPIAccess> GetList(string Name, string IPAddress, string AccessKey, bool? IsActive, PagingProperties currentPaging);
 
     }

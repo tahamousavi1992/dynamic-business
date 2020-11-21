@@ -11,7 +11,7 @@ using DynamicBusiness.BPMS.SharedPresentation;
 
 namespace DynamicBusiness.BPMS.Cartable.Controllers
 {
-    public class CartablePageController : BpmsApiControlBase
+    public class CartablePageController : BpmsCartableApiControlBase
     {
         // GET: KartableThread 
         public object GetIndex(Guid applicationPageId)

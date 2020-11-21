@@ -9,8 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 namespace DynamicBusiness.BPMS.EngineApi.Controllers
 {
-    [AllowAnonymous]
-    public class EngineApplicationController : BpmsApiControlBase
+    public class EngineApplicationController : BpmsEngineApiControlBase
     {
         [BpmsAuth]
         [HttpGet]

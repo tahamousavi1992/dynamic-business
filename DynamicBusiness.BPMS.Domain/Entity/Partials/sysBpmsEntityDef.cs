@@ -91,42 +91,7 @@ namespace DynamicBusiness.BPMS.Domain
             this.DesignXML = EntityDef.DesignXML;
             this.IsActive = EntityDef.IsActive;
         }
-
-
-        public string GetCode()
-        {
-            string code = string.Empty;
-            //add constructor
-            code += $@" public {this.Name}(){{}}";
-            code += $@" public {this.Name}(DynamicBusiness.BPMS.Domain.IUnitOfWork _unitOfWork){{ this.Init(_unitOfWork); }} ";
-            //add init method.
-            code += $@" public {this.Name} Init(DynamicBusiness.BPMS.Domain.IUnitOfWork _unitOfWork){{ base.InitialProperties(_unitOfWork); return this; }} ";
-            code += $@" public string VariableName {{get;set;}}= ""{this.Name}""; ";
-            foreach (var item in this.AllProperties)
-            {
-                code += $@" public {item.CSharpTypeName} {item.Name} {{get;set;}} ";
-            }
-            //Add get by id method.
-            code += $@" public {this.Name} GetById(Guid guid){{return (({this.Name})this.EntityHelper.GetById(""{this.Name}"", guid)).Init(base.UnitOfWork);}} ";
-            //Add delete by id method.
-            code += $@" public void DeleteById(){{this.EntityHelper.DeleteById(""{this.Name}"", this.ID);}} ";
-            //Add save method.
-            code += $@" public void Save(){{this.EntityHelper.Save<{this.Name}>(this);}} ";
-
-            //Add implicit methods.
-            code += $@" public static implicit operator {this.Name}(System.Data.DataTable dataTable){{return (DynamicBusiness.BPMS.Domain.VariableModel)(dataTable);}} ";
-            code += $@" public static implicit operator {this.Name}(DynamicBusiness.BPMS.Domain.VariableModel variableModel){{return DynamicBusiness.BPMS.Domain.VariableModel.ConvertTo<{this.Name}>(variableModel);}} ";
-            code += $@" public static implicit operator DynamicBusiness.BPMS.Domain.VariableModel({this.Name} entityData){{return DynamicBusiness.BPMS.Domain.VariableModel.ConvertFrom<{this.Name}>(entityData);}} ";
-
-            string classCode = $@"
-   public class {this.Name} :DynamicBusiness.BPMS.CodePanel.CodeBase
-   {{
-        public override object ExecuteCode(){{throw new NotImplementedException();}} 
-       {code}
-   }}";
-            return classCode;
-        }
-
+         
         private List<EntityPropertyModel> properties { get; set; }
         public List<EntityPropertyModel> Properties
         {
