@@ -13,7 +13,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 
-namespace DynamicBusiness.BPMS.SharedPresentation
+namespace DynamicBusiness.BPMS.SingleAction
 {
     [System.Web.Http.AllowAnonymous]
     public class SingleActionApiControllerBase : DnnApiController

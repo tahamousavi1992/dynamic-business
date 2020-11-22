@@ -87,14 +87,30 @@ namespace DynamicBusiness.BPMS.Controllers
         private void UpdateWorkflowXML(sysBpmsProcess _Process)
         {
             this.RemoveNameSpaces(_Process);
-            XmlDocument xDocDiagram = BPMSUtility.StringToXml(_Process.WorkflowXML);
-            _Process.WorkflowXML = BPMSUtility.GetXMLAsString(xDocDiagram.SelectSingleNode("//process"));
+            XmlDocument xDocDiagram = this.StringToXml(_Process.WorkflowXML);
+            _Process.WorkflowXML = this.GetXMLAsString(xDocDiagram.SelectSingleNode("//process"));
             this.ConvertWorkflowXMLwithXSL(_Process);
         }
 
+        private XmlDocument StringToXml(string xmlString)
+        {
+            XmlDocument xdoc = new XmlDocument();
+            xdoc.LoadXml(xmlString);
+            return xdoc;
+        }
+
+        private string GetXMLAsString(XmlNode xml)
+        {
+            StringWriter sw = new StringWriter();
+            XmlTextWriter tx = new XmlTextWriter(sw);
+            xml.WriteTo(tx);
+            return sw.ToString();
+        }
+
+
         private void ConvertWorkflowXMLwithXSL(sysBpmsProcess _Process)
         {
-            XmlDocument xdoc = BPMSUtility.StringToXml(_Process.WorkflowXML);
+            XmlDocument xdoc = this.StringToXml(_Process.WorkflowXML);
 
             //Load class pattern
             string XslFile = System.Web.Hosting.HostingEnvironment.MapPath(BPMSResources.Repository + "SplitNodeName.xslt");
@@ -113,7 +129,7 @@ namespace DynamicBusiness.BPMS.Controllers
 
         private void RemoveNameSpaces(sysBpmsProcess _Process)
         {
-            XmlDocument xdoc = BPMSUtility.StringToXml(_Process.DiagramXML);
+            XmlDocument xdoc = this.StringToXml(_Process.DiagramXML);
 
             //Load class pattern
             string XslFile = System.Web.Hosting.HostingEnvironment.MapPath(BPMSResources.Repository + "RemoveNameSpaces.xslt");

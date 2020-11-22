@@ -73,17 +73,20 @@ namespace DynamicBusiness.BPMS.Controllers
         [HttpPost]
         public object TestConnectionString(DBConnectionDTO DBConnectionDTO)
         {
-            sysBpmsDBConnection dBConnection = new sysBpmsDBConnection();
-            ResultOperation resultOperation = dBConnection.Update(DBConnectionDTO.ID, DBConnectionDTO.Name, DBConnectionDTO.DataSource, DBConnectionDTO.InitialCatalog, DBConnectionDTO.UserID, DBConnectionDTO.Password, DBConnectionDTO.IntegratedSecurity);
-            if (resultOperation.IsSuccess)
+            using (DBConnectionService dBConnectionService = new DBConnectionService())
             {
-                if (BPMSUtility.TestConnection(dBConnection))
-                    return new PostMethodMessage(SharedLang.Get("Success.Text"), DisplayMessageType.success);
+                sysBpmsDBConnection dBConnection = new sysBpmsDBConnection();
+                ResultOperation resultOperation = dBConnection.Update(DBConnectionDTO.ID, DBConnectionDTO.Name, DBConnectionDTO.DataSource, DBConnectionDTO.InitialCatalog, DBConnectionDTO.UserID, DBConnectionDTO.Password, DBConnectionDTO.IntegratedSecurity);
+                if (resultOperation.IsSuccess)
+                {
+                    if (dBConnectionService.TestConnection(dBConnection))
+                        return new PostMethodMessage(SharedLang.Get("Success.Text"), DisplayMessageType.success);
+                    else
+                        return new PostMethodMessage("Error while testing", DisplayMessageType.error);
+                }
                 else
-                    return new PostMethodMessage("Error while testing", DisplayMessageType.error);
+                    return new PostMethodMessage(resultOperation.GetErrors(), DisplayMessageType.error);
             }
-            else
-                return new PostMethodMessage(resultOperation.GetErrors(), DisplayMessageType.error);
         }
 
     }

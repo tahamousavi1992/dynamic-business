@@ -3,6 +3,7 @@ using DotNetNuke.Security.Membership;
 using DotNetNuke.Web.Api;
 using DynamicBusiness.BPMS.BusinessLogic;
 using DynamicBusiness.BPMS.Domain;
+using DynamicBusiness.BPMS.SharedPresentation;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,7 +15,7 @@ using System.Web.Http.Controllers;
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace DynamicBusiness.BPMS.SharedPresentation
+namespace DynamicBusiness.BPMS
 {
     //[System.Web.Http.AllowAnonymous]
     [BpmsAdminAuth]

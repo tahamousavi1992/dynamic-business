@@ -141,6 +141,7 @@
     <Content Include="Views\BPMSHome\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\BpmsAdminApiControlBase.cs" />
     <Compile Include="Controllers\BpmsAPIAccessController.cs" />
     <Compile Include="Controllers\BpmsAssemblyController.cs" />
     <Compile Include="Controllers\BpmsConditionController.cs" />

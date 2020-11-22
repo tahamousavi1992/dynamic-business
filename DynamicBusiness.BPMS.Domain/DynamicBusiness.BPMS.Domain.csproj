@@ -66,6 +66,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -299,9 +300,6 @@
     <Compile Include="Interfaces\Repository\IThreadVariableRepository.cs" />
     <Compile Include="Interfaces\Repository\IVariableRepository.cs" />
     <Compile Include="Library\XmlParserHelper.cs" />
-    <Compile Include="Split_Result.cs">
-      <DependentUpon>dmBPMS.tt</DependentUpon>
-    </Compile>
     <Compile Include="sysBpmsAPIAccess.cs">
       <DependentUpon>dmBPMS.tt</DependentUpon>
     </Compile>
@@ -380,6 +378,9 @@
     <Compile Include="sysBpmsSettingValue.cs">
       <DependentUpon>dmBPMS.tt</DependentUpon>
     </Compile>
+    <Compile Include="sysBpmsSplit_Result.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
     <Compile Include="sysBpmsStep.cs">
       <DependentUpon>dmBPMS.tt</DependentUpon>
     </Compile>
@@ -393,9 +394,6 @@
       <DependentUpon>dmBPMS.tt</DependentUpon>
     </Compile>
     <Compile Include="sysBpmsThreadTask.cs">
-      <DependentUpon>dmBPMS.tt</DependentUpon>
-    </Compile>
-    <Compile Include="sysBpmsThreadTaskDelay.cs">
       <DependentUpon>dmBPMS.tt</DependentUpon>
     </Compile>
     <Compile Include="sysBpmsThreadVariable.cs">

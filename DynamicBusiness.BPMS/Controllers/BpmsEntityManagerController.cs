@@ -9,7 +9,7 @@ using DynamicBusiness.BPMS.SharedPresentation;
 using System.Data;
 
 namespace DynamicBusiness.BPMS.Controllers
-{ 
+{
     public class BpmsEntityManagerController : BpmsAdminApiControlBase
     {
         // GET: /BpmsTableManager/
@@ -17,7 +17,7 @@ namespace DynamicBusiness.BPMS.Controllers
         {
             //base.SetMenuIndex(AdminMenuIndex.EntityManagerIndex);
             using (EntityDefService entityDefService = new EntityDefService())
-            { 
+            {
                 indexSearchVM.Update(entityDefService.GetList("", indexSearchVM.Name, null, indexSearchVM.GetPagingProperties).Select(c => new EntityDefDTO(c)).ToList());
                 return indexSearchVM;
             }
@@ -51,49 +51,44 @@ namespace DynamicBusiness.BPMS.Controllers
             using (EntityDefService entityDefService = new EntityDefService())
             {
                 sysBpmsEntityDef entityDef = postAddEdit.EntityDefDTO.ID != Guid.Empty ? entityDefService.GetInfo(postAddEdit.EntityDefDTO.ID) : new sysBpmsEntityDef();
-                if ((postAddEdit.EntityDefDTO.ID == Guid.Empty || entityDef.FormattedTableName != postAddEdit.EntityDefDTO.FormattedTableName) && BPMSUtility.CheckDuplicateTable(postAddEdit.EntityDefDTO.FormattedTableName))
-                {
-                    return new PostMethodMessage(LangUtility.Get("SameTable.Text", nameof(sysBpmsEntityDef)), DisplayMessageType.error);
-                }
-                else
-                {
-                    if (postAddEdit.listProperties != null)
-                    {
-                        foreach (var Item in postAddEdit.listProperties)
-                        {
-                            if (string.IsNullOrWhiteSpace(Item.ID))
-                                Item.ID = Guid.NewGuid().ToString();
-                            Item.IsActive = true;
-                            postAddEdit.EntityDefDTO.Properties.Add(Item);
-                        }
-                    }
-                    if (postAddEdit.listRelations != null)
-                    {
-                        foreach (var Item in postAddEdit.listRelations)
-                        {
-                            Item.ID = string.IsNullOrWhiteSpace(Item.ID) ? Guid.NewGuid().ToString() : Item.ID;
-                            postAddEdit.EntityDefDTO.Relations.Add(Item);
-                        }
-                    }
 
-                    ResultOperation resultOperation = entityDef.Update(postAddEdit.EntityDefDTO.DisplayName, postAddEdit.EntityDefDTO.Name, postAddEdit.EntityDefDTO.TableName, postAddEdit.EntityDefDTO.DesignXML, true, postAddEdit.EntityDefDTO.Properties, postAddEdit.EntityDefDTO.Relations);
+                if (postAddEdit.listProperties != null)
+                {
+                    foreach (var Item in postAddEdit.listProperties)
+                    {
+                        if (string.IsNullOrWhiteSpace(Item.ID))
+                            Item.ID = Guid.NewGuid().ToString();
+                        Item.IsActive = true;
+                        postAddEdit.EntityDefDTO.Properties.Add(Item);
+                    }
+                }
+                if (postAddEdit.listRelations != null)
+                {
+                    foreach (var Item in postAddEdit.listRelations)
+                    {
+                        Item.ID = string.IsNullOrWhiteSpace(Item.ID) ? Guid.NewGuid().ToString() : Item.ID;
+                        postAddEdit.EntityDefDTO.Relations.Add(Item);
+                    }
+                }
+
+                ResultOperation resultOperation = entityDef.Update(postAddEdit.EntityDefDTO.DisplayName, postAddEdit.EntityDefDTO.Name, postAddEdit.EntityDefDTO.TableName, postAddEdit.EntityDefDTO.DesignXML, true, postAddEdit.EntityDefDTO.Properties, postAddEdit.EntityDefDTO.Relations);
+                if (resultOperation.IsSuccess)
+                {
+                    if (entityDef.ID != Guid.Empty)
+                        resultOperation = entityDefService.Update(entityDef);
+                    else
+                        resultOperation = entityDefService.Add(entityDef);
+
                     if (resultOperation.IsSuccess)
                     {
-                        if (entityDef.ID != Guid.Empty)
-                            resultOperation = entityDefService.Update(entityDef);
-                        else
-                            resultOperation = entityDefService.Add(entityDef);
-
-                        if (resultOperation.IsSuccess)
-                        {
-                            return new PostMethodMessage(SharedLang.Get("Success.Text"), DisplayMessageType.success);
-                        }
-                        else
-                            return new PostMethodMessage(resultOperation.GetErrors(), DisplayMessageType.error);
+                        return new PostMethodMessage(SharedLang.Get("Success.Text"), DisplayMessageType.success);
                     }
                     else
                         return new PostMethodMessage(resultOperation.GetErrors(), DisplayMessageType.error);
                 }
+                else
+                    return new PostMethodMessage(resultOperation.GetErrors(), DisplayMessageType.error);
+
             }
         }
 

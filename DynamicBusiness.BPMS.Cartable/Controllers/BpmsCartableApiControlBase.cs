@@ -3,6 +3,7 @@ using DotNetNuke.Security.Membership;
 using DotNetNuke.Web.Api;
 using DynamicBusiness.BPMS.BusinessLogic;
 using DynamicBusiness.BPMS.Domain;
+using DynamicBusiness.BPMS.SharedPresentation;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,7 +16,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.UI;
 
-namespace DynamicBusiness.BPMS.SharedPresentation
+namespace DynamicBusiness.BPMS.Cartable
 {
     [BpmsCartableAuth]
     public class BpmsCartableApiControlBase : DnnApiController

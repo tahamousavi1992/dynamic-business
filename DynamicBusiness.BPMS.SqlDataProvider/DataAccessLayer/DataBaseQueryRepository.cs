@@ -18,30 +18,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         {
             this.Context = context;
         }
-
-        public List<TableSchemaModel> GetTableSchema(string TabelName)
-        {
-            List<TableSchemaModel> properties = new List<TableSchemaModel>();
-
-            using (SqlConnection connection = new SqlConnection(this.GetEntityConnection()))
-            {
-                DataTable dataTable = new DataTable();
-                SqlCommand command = new SqlCommand(string.Format("SELECT * FROM INFORMATION_SCHEMA.COLUMNS  where TABLE_NAME='{0}'", TabelName), connection);
-
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                dataTable.Load(reader);
-
-                foreach (DataRow row in dataTable.Rows)
-                {
-                    properties.Add(new TableSchemaModel(row));
-                }
-
-                reader.Close();
-            }
-            return properties;
-        }
-
+         
         public DataTable GetBySqlQuery(string sqlQuery, string Connectionstr, bool dbNullParams, PagingProperties currentPaging, params SqlParameter[] _params)
         {
             if (dbNullParams)

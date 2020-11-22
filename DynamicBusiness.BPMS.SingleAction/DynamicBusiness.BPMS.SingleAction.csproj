@@ -152,6 +152,8 @@
   <ItemGroup>
     <Compile Include="Controllers\BPMSRouteMapper.cs" />
     <Compile Include="Controllers\BpmsGeneralController.cs" />
+    <Compile Include="Controllers\SingleActionControllerBase.cs" />
+    <Compile Include="Controllers\SingleActionApiControllerBase.cs" />
     <Compile Include="Controllers\SingleActionWorkerController.cs" />
     <Compile Include="Controllers\SingleActionHomeController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />

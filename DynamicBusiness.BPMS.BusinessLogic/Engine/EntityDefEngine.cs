@@ -106,7 +106,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
             return new Tuple<ResultOperation, Guid?>(resultOperation, entityIsExistId);
         }
-         
+
         /// <param name="containerQuery">It is generally used in combosearch which add a parent query that filter table's rows according to query parameter and text field</param>
         public DataTable GetEntity(sysBpmsEntityDef entityDef, sysBpmsVariable variable, List<QueryModel> additionalParams, PagingProperties currentPaging, string containerQuery = null)
         {
@@ -237,15 +237,15 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                     {
                         case EntityPropertyModel.e_dbType.Decimal:
                             if (_Property.Required)
-                                dataList[item.Key] = BPMSUtility.toDecimal(item.Value);
+                                dataList[item.Key] = item.Value.ToDecimalObj();
                             else
-                                dataList[item.Key] = item.Value != null ? (decimal?)BPMSUtility.toDecimal(item.Value) : (decimal?)null;
+                                dataList[item.Key] = item.Value != null ? item.Value.ToDecimalObjNull() : (decimal?)null;
                             break;
                         case EntityPropertyModel.e_dbType.Integer:
                             if (_Property.Required)
-                                dataList[item.Key] = BPMSUtility.toInt(item.Value);
+                                dataList[item.Key] = item.Value.ToIntObj();
                             else
-                                dataList[item.Key] = item.Value != null ? BPMSUtility.toInt(item.Value) : (int?)null;
+                                dataList[item.Key] = item.Value != null ? item.Value.ToIntObjNull() : (int?)null;
                             break;
                         case EntityPropertyModel.e_dbType.Long:
                             if (_Property.Required)
@@ -254,7 +254,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                                 dataList[item.Key] = item.Value != null ? Convert.ToInt64(item.Value) : (long?)null;
                             break;
                         case EntityPropertyModel.e_dbType.String:
-                            dataList[item.Key] = BPMSUtility.toString(item.Value);
+                            dataList[item.Key] = item.Value.ToStringObj();
                             break;
                         case EntityPropertyModel.e_dbType.DateTime:
                             if (string.IsNullOrWhiteSpace(item.Value.ToStringObj()))

@@ -86,7 +86,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                              (!statusLU.Any() || statusLU.Contains(P.StatusLU)) &&
                              (P.OwnerUserID.HasValue || (P.OwnerRole != null && P.OwnerRole != string.Empty)) &&
                              (!P.OwnerUserID.HasValue || UserID == P.OwnerUserID) &&
-                             (P.OwnerRole == string.Empty || Dlist.Count(c => this.Context.Split(P.OwnerRole, ",").Any(f => f.Data == ("0:" + c.RoleLU.ToString().Trim()) || f.Data == (c.DepartmentID.ToString() + ":" + c.RoleLU.ToString().Trim()))) > 0) &&
+                             (P.OwnerRole == string.Empty || Dlist.Count(c => this.Context.sysBpmsSplit(P.OwnerRole, ",").Any(f => f.Data == ("0:" + c.RoleLU.ToString().Trim()) || f.Data == (c.DepartmentID.ToString() + ":" + c.RoleLU.ToString().Trim()))) > 0) &&
                              (!T.MarkerTypeLU.HasValue || T.MarkerTypeLU == (int)Domain.sysBpmsTask.e_MarkerTypeLU.NonSequential ||
                              T.MarkerTypeLU == (int)Domain.sysBpmsTask.e_MarkerTypeLU.Loop
                              || (T.MarkerTypeLU == (int)Domain.sysBpmsTask.e_MarkerTypeLU.Sequential && this.Context.sysBpmsThreadTasks.Count(c => c.ThreadID == P.ThreadID && c.TaskID == P.TaskID && c.StartDate < P.StartDate && c.StatusLU != (int)sysBpmsThreadTask.e_StatusLU.Done) == 0))

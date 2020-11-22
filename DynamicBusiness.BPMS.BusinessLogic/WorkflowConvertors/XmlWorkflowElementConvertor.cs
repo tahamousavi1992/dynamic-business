@@ -19,12 +19,12 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public string GetNameAttributeValue(XElement element)
         {
-            return BPMSUtility.GetXAttributeValue(element, XMLAttributeName.name.ToString());
+            return DomainUtility.GetXAttributeValue(element, XMLAttributeName.name.ToString());
         }
 
         public string GetIdAttributeValue(XElement element)
         {
-            return BPMSUtility.GetXAttributeValue(element, XMLAttributeName.id.ToString());
+            return DomainUtility.GetXAttributeValue(element, XMLAttributeName.id.ToString());
         }
 
         public enum XMLNodeName

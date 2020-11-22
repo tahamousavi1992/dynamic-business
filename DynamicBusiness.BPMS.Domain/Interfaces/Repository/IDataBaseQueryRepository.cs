@@ -9,8 +9,7 @@ using System.Threading.Tasks;
 namespace DynamicBusiness.BPMS.Domain
 {
     public interface IDataBaseQueryRepository
-    {
-        List<TableSchemaModel> GetTableSchema(string TabelName);
+    { 
         DataTable GetBySqlQuery(string sqlQuery, string Connectionstr, bool dbNullParams, PagingProperties currentPaging, params SqlParameter[] _params);
         DataTable GetBySqlQuery(string sqlQuery, bool dbNullParams, PagingProperties currentPaging, params SqlParameter[] _params);
         int ExecuteBySqlQuery(string sqlQuery, string Connectionstr, bool dbNullParams, params SqlParameter[] _params);

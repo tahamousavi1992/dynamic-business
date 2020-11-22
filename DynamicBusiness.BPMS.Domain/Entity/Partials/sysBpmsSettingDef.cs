@@ -28,6 +28,7 @@ namespace DynamicBusiness.BPMS.Domain
             ShowUserPanelWithNoSkin,
             LoadUserPanelJquery,
             LoadUserPanelBootstrap,
+            LastSqlUpdatedVersion,
         }
         public sysBpmsSettingDef(string name, string title, int valueTypeLU, string defaultValue)
         {

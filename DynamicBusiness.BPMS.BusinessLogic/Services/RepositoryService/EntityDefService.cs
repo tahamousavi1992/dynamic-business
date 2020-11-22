@@ -24,11 +24,11 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 this.BeginTransaction();
                 if (listEntity.Any(c => c.TableName == entityDef.TableName && c.ID != entityDef.ID))
                 {
-                    resultOperation.AddError("کاربر گرامی قبلا جدولی با این نام ثبت شده و نمیتوان یک جدول هم نام ساخت.");
+                    resultOperation.AddError(LangUtility.Get("SameTable.Text", nameof(sysBpmsEntityDef)));
                 }
                 if (listEntity.Any(c => c.Name == entityDef.Name && c.ID != entityDef.ID))
                 {
-                    resultOperation.AddError("کاربر گرامی قبلا موجودیتی با این نام ثبت شده و نمیتوان یک موجودیت هم نام ساخت.");
+                    resultOperation.AddError(LangUtility.Get("SameEntity.Text", nameof(sysBpmsEntityDef)));
                 }
 
                 if (resultOperation.IsSuccess)

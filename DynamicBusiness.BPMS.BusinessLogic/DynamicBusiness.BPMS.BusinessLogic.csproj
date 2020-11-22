@@ -202,7 +202,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BPMSResources.cs" />
-    <Compile Include="BPMSUtility.cs" />
     <Compile Include="EngineResponseModel\BeginTaskResponseModel.cs" />
     <Compile Include="EngineResponseModel\EngineFormModel.cs" />
     <Compile Include="EngineResponseModel\GetFormResponseModel.cs" />

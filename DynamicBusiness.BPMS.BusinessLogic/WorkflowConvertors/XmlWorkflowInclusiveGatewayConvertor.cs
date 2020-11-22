@@ -12,7 +12,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
     {
         public override WorkflowInclusiveGateway ConvertFromXml(XElement element)
         {
-            string subType = BPMSUtility.GetXAttributeValue(element, "subType");
+            string subType = DomainUtility.GetXAttributeValue(element, "subType");
 
             WorkflowInclusiveGateway inclusiveGatewayGateway = new WorkflowInclusiveGateway(
                 element.TryGetAttributeFromElement("default"),

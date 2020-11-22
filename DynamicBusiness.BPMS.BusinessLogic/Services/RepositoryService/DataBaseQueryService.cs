@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,11 +12,6 @@ namespace DynamicBusiness.BPMS.BusinessLogic
     public class DataBaseQueryService : ServiceBase
     {
         public DataBaseQueryService(IUnitOfWork unitOfWork = null) : base(unitOfWork) { }
-
-        public List<TableSchemaModel> GetTableSchema(string TabelName)
-        {
-            return this.UnitOfWork.Repository<IDataBaseQueryRepository>().GetTableSchema(TabelName);
-        }
 
         public DataTable GetBySqlQuery(string sqlQuery, string Connectionstr, bool dbNullParams, PagingProperties currentPaging, params SqlParameter[] _params)
         {
@@ -46,6 +42,27 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         {
             return this.UnitOfWork.Repository<IDataBaseQueryRepository>().GetEntityConnection();
         }
- 
+
+        public ResultOperation UpdatedSqlQuery(List<string> querirs)
+        {
+            ResultOperation resultOperation = new ResultOperation();
+            try
+            {
+                this.BeginTransaction();
+                foreach (string query in querirs)
+                {
+                    if (query.Trim() != "SET ANSI_NULLS ON" && query.Trim() != "SET QUOTED_IDENTIFIER")
+                        this.ExecuteBySqlQuery(query, false, null);
+                }
+                this.UnitOfWork.Save();
+
+            }
+            catch (Exception ex)
+            {
+                return base.ExceptionHandler(ex);
+            }
+            base.FinalizeService(resultOperation);
+            return resultOperation;
+        }
     }
 }

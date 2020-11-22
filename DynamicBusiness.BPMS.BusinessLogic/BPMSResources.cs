@@ -25,6 +25,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         public const string TemplatesRoot = ResourcesRoot + "Templates/";
         public const string ImageResourcesRoot = ResourcesRoot + "Images/";
         public const string Repository = ResourcesRoot + "Repository/";
+        public const string SqlDataProvider = Repository + "SqlDataProvider/"; 
         public const string ScriptResourcesRoot = ResourcesRoot + "Js/";
         public const string StyleResourcesRoot = ResourcesRoot + "Styles/";
         public const string ReportResourcesRoot = ResourcesRoot + "Reports/";

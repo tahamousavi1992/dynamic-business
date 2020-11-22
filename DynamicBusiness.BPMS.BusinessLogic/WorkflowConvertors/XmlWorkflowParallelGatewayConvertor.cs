@@ -12,7 +12,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
     {
         public override WorkflowParallelGateway ConvertFromXml(XElement element)
         {
-            string subType = BPMSUtility.GetXAttributeValue(element, "subType");
+            string subType = DomainUtility.GetXAttributeValue(element, "subType");
 
             WorkflowParallelGateway parallelGateway = new WorkflowParallelGateway(
                 element.TryGetAttributeFromElement("default"),

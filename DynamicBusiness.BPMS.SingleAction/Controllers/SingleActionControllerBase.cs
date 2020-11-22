@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 
-namespace DynamicBusiness.BPMS.SharedPresentation
+namespace DynamicBusiness.BPMS.SingleAction
 {
     public class SingleActionControllerBase : DnnController
     { 

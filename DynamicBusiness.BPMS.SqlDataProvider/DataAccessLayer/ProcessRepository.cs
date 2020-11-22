@@ -117,13 +117,13 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                                    (P.TypeLU == (int)sysBpmsProcess.e_TypeLU.General) &&
                                    (P.StatusLU == (int)sysBpmsProcess.Enum_StatusLU.Published) &&
                                    (Elist.Count(c => c.TypeLU == (int)sysBpmsEvent.e_TypeLU.StartEvent && c.SubType == (int)WorkflowStartEvent.BPMNStartEventType.None) > 0) &&
-                                   (this.Context.Split(P.BeginTasks, ",").Any(c => c.Data == T.ElementID)) &&
+                                   (this.Context.sysBpmsSplit(P.BeginTasks, ",").Any(c => c.Data == T.ElementID)) &&
                                    (
                                    (T.OwnerTypeLU == (int)Domain.sysBpmsTask.e_OwnerTypeLU.User && T.UserID.Contains(userIdString)) ||
                                    (T.OwnerTypeLU == (int)Domain.sysBpmsTask.e_OwnerTypeLU.Role &&
                                    (T.RoleName == string.Empty
                                    || T.RoleName == (",0:" + (int)sysBpmsDepartmentMember.e_RoleLU.Requester + ",")//it means that everyone can start this proccess.
-                                   || Dlist.Count(c => this.Context.Split(T.RoleName, ",").Any(f => f.Data == ("0:" + c.RoleLU.ToString().Trim()) || f.Data == (c.DepartmentID.ToString() + ":" + c.RoleLU.ToString().Trim()))) > 0)
+                                   || Dlist.Count(c => this.Context.sysBpmsSplit(T.RoleName, ",").Any(f => f.Data == ("0:" + c.RoleLU.ToString().Trim()) || f.Data == (c.DepartmentID.ToString() + ":" + c.RoleLU.ToString().Trim()))) > 0)
                                    ) ||
                                    (!T.Rule.Contains(staticAccessType)))//it will be calculated in engine.
                                    select T).OrderBy(d => d.sysBpmsElement.sysBpmsProcess.Name).Include(c => c.sysBpmsElement.sysBpmsProcess).AsNoTracking().ToList();

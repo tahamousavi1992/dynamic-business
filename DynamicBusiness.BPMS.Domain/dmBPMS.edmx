@@ -374,16 +374,6 @@
           <Property Name="PriorityLU" Type="int" />
           <Property Name="StatusLU" Type="int" Nullable="false" />
         </EntityType>
-        <EntityType Name="sysBpmsThreadTaskDelay">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="ThreadTaskID" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="Date" Type="datetime" Nullable="false" />
-          <Property Name="UntillDate" Type="datetime" Nullable="false" />
-          <Property Name="Description" Type="nvarchar" MaxLength="100" Nullable="false" />
-        </EntityType>
         <EntityType Name="sysBpmsThreadVariable">
           <Key>
             <PropertyRef Name="ID" />
@@ -961,18 +951,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ThreadTaskDelay_ThreadTask">
-          <End Role="sysBpmsThreadTask" Type="Self.sysBpmsThreadTask" Multiplicity="1" />
-          <End Role="sysBpmsThreadTaskDelay" Type="Self.sysBpmsThreadTaskDelay" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="sysBpmsThreadTask">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="sysBpmsThreadTaskDelay">
-              <PropertyRef Name="ThreadTaskID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_ThreadVariable_Thread">
           <End Role="sysBpmsThread" Type="Self.sysBpmsThread" Multiplicity="1" />
           <End Role="sysBpmsThreadVariable" Type="Self.sysBpmsThreadVariable" Multiplicity="*" />
@@ -1069,7 +1047,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Function Name="Split" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+        <Function Name="sysBpmsSplit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="RowData" Type="nvarchar(max)" Mode="In" />
           <Parameter Name="Delimeter" Type="nvarchar(max)" Mode="In" />
           <ReturnType>
@@ -1113,7 +1091,6 @@
           <EntitySet Name="sysBpmsThread" EntityType="Self.sysBpmsThread" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysBpmsThreadEvent" EntityType="Self.sysBpmsThreadEvent" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysBpmsThreadTask" EntityType="Self.sysBpmsThreadTask" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysBpmsThreadTaskDelay" EntityType="Self.sysBpmsThreadTaskDelay" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysBpmsThreadVariable" EntityType="Self.sysBpmsThreadVariable" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysBpmsUser" EntityType="Self.sysBpmsUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysBpmsVariable" EntityType="Self.sysBpmsVariable" Schema="dbo" store:Type="Tables" />
@@ -1290,10 +1267,6 @@
             <End Role="sysBpmsUser" EntitySet="sysBpmsUser" />
             <End Role="sysBpmsThreadTask" EntitySet="sysBpmsThreadTask" />
           </AssociationSet>
-          <AssociationSet Name="FK_ThreadTaskDelay_ThreadTask" Association="Self.FK_ThreadTaskDelay_ThreadTask">
-            <End Role="sysBpmsThreadTask" EntitySet="sysBpmsThreadTask" />
-            <End Role="sysBpmsThreadTaskDelay" EntitySet="sysBpmsThreadTaskDelay" />
-          </AssociationSet>
           <AssociationSet Name="FK_ThreadVariable_Thread" Association="Self.FK_ThreadVariable_Thread">
             <End Role="sysBpmsThread" EntitySet="sysBpmsThread" />
             <End Role="sysBpmsThreadVariable" EntitySet="sysBpmsThreadVariable" />
@@ -1332,7 +1305,7 @@
     <edmx:ConceptualModels>
       <Schema Namespace="BPMSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="Db_BPMSEntities" annotation:LazyLoadingEnabled="true">
-          <FunctionImport Name="Split" IsComposable="true" ReturnType="Collection(BPMSModel.Split_Result)">
+          <FunctionImport Name="sysBpmsSplit" IsComposable="true" ReturnType="Collection(BPMSModel.sysBpmsSplit_Result)">
             <Parameter Name="RowData" Mode="In" Type="String" />
             <Parameter Name="Delimeter" Mode="In" Type="String" />
           </FunctionImport>
@@ -1367,7 +1340,6 @@
           <EntitySet Name="sysBpmsThreads" EntityType="BPMSModel.sysBpmsThread" />
           <EntitySet Name="sysBpmsThreadEvents" EntityType="BPMSModel.sysBpmsThreadEvent" />
           <EntitySet Name="sysBpmsThreadTasks" EntityType="BPMSModel.sysBpmsThreadTask" />
-          <EntitySet Name="sysBpmsThreadTaskDelays" EntityType="BPMSModel.sysBpmsThreadTaskDelay" />
           <EntitySet Name="sysBpmsThreadVariables" EntityType="BPMSModel.sysBpmsThreadVariable" />
           <EntitySet Name="sysBpmsUsers" EntityType="BPMSModel.sysBpmsUser" />
           <EntitySet Name="sysBpmsVariables" EntityType="BPMSModel.sysBpmsVariable" />
@@ -1564,10 +1536,6 @@
             <End Role="sysBpmsUser" EntitySet="sysBpmsUsers" />
             <End Role="sysBpmsThreadTask" EntitySet="sysBpmsThreadTasks" />
           </AssociationSet>
-          <AssociationSet Name="FK_ThreadTaskDelay_ThreadTask" Association="BPMSModel.FK_ThreadTaskDelay_ThreadTask">
-            <End Role="sysBpmsThreadTask" EntitySet="sysBpmsThreadTasks" />
-            <End Role="sysBpmsThreadTaskDelay" EntitySet="sysBpmsThreadTaskDelays" />
-          </AssociationSet>
           <AssociationSet Name="FK_ThreadVariable_Variable" Association="BPMSModel.FK_ThreadVariable_Variable">
             <End Role="sysBpmsVariable" EntitySet="sysBpmsVariables" />
             <End Role="sysBpmsThreadVariable" EntitySet="sysBpmsThreadVariables" />
@@ -1581,7 +1549,7 @@
             <End Role="sysBpmsVariableDependency" EntitySet="sysBpmsVariableDependencies" />
           </AssociationSet>
           </EntityContainer>
-        <ComplexType Name="Split_Result">
+        <ComplexType Name="sysBpmsSplit_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
           <Property Type="String" Name="Data" Nullable="true" />
         </ComplexType>
@@ -2040,18 +2008,6 @@
           <NavigationProperty Name="sysBpmsThread" Relationship="BPMSModel.FK_ThreadTask_Thread" FromRole="sysBpmsThreadTask" ToRole="sysBpmsThread" />
           <NavigationProperty Name="sysBpmsThreadEvents" Relationship="BPMSModel.FK_sysThreadEvent_sysThreadTask" FromRole="sysBpmsThreadTask" ToRole="sysBpmsThreadEvent" />
           <NavigationProperty Name="sysBpmsUser" Relationship="BPMSModel.FK_ThreadTask_User" FromRole="sysBpmsThreadTask" ToRole="sysBpmsUser" />
-          <NavigationProperty Name="sysBpmsThreadTaskDelays" Relationship="BPMSModel.FK_ThreadTaskDelay_ThreadTask" FromRole="sysBpmsThreadTask" ToRole="sysBpmsThreadTaskDelay" />
-        </EntityType>
-        <EntityType Name="sysBpmsThreadTaskDelay">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Guid" Nullable="false" />
-          <Property Name="ThreadTaskID" Type="Guid" Nullable="false" />
-          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UntillDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="sysBpmsThreadTask" Relationship="BPMSModel.FK_ThreadTaskDelay_ThreadTask" FromRole="sysBpmsThreadTaskDelay" ToRole="sysBpmsThreadTask" />
         </EntityType>
         <EntityType Name="sysBpmsThreadVariable">
           <Key>
@@ -2705,18 +2661,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ThreadTaskDelay_ThreadTask">
-          <End Type="BPMSModel.sysBpmsThreadTask" Role="sysBpmsThreadTask" Multiplicity="1" />
-          <End Type="BPMSModel.sysBpmsThreadTaskDelay" Role="sysBpmsThreadTaskDelay" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="sysBpmsThreadTask">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="sysBpmsThreadTaskDelay">
-              <PropertyRef Name="ThreadTaskID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_ThreadVariable_Variable">
           <End Type="BPMSModel.sysBpmsVariable" Role="sysBpmsVariable" Multiplicity="1" />
           <End Type="BPMSModel.sysBpmsThreadVariable" Role="sysBpmsThreadVariable" Multiplicity="*" />
@@ -2759,9 +2703,9 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="BPMSModelStoreContainer" CdmEntityContainer="Db_BPMSEntities">
-          <FunctionImportMapping FunctionImportName="Split" FunctionName="BPMSModel.Store.Split">
+          <FunctionImportMapping FunctionImportName="sysBpmsSplit" FunctionName="BPMSModel.Store.sysBpmsSplit">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="BPMSModel.Split_Result">
+              <ComplexTypeMapping TypeName="BPMSModel.sysBpmsSplit_Result">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Data" ColumnName="Data" />
               </ComplexTypeMapping>
@@ -3162,17 +3106,6 @@
                 <ScalarProperty Name="OwnerUserID" ColumnName="OwnerUserID" />
                 <ScalarProperty Name="TaskID" ColumnName="TaskID" />
                 <ScalarProperty Name="ThreadID" ColumnName="ThreadID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="sysBpmsThreadTaskDelays">
-            <EntityTypeMapping TypeName="BPMSModel.sysBpmsThreadTaskDelay">
-              <MappingFragment StoreEntitySet="sysBpmsThreadTaskDelay">
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="UntillDate" ColumnName="UntillDate" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="ThreadTaskID" ColumnName="ThreadTaskID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

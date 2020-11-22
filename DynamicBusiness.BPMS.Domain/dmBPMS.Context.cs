@@ -18,7 +18,7 @@ namespace DynamicBusiness.BPMS.Domain
     public partial class Db_BPMSEntities : DbContext
     {
         public Db_BPMSEntities()
-            : base("name=Db_BPMSEntities")
+            : base(DomainUtility.GetConnectionName())
         {
         }
     
@@ -58,14 +58,13 @@ namespace DynamicBusiness.BPMS.Domain
         public virtual DbSet<sysBpmsThread> sysBpmsThreads { get; set; }
         public virtual DbSet<sysBpmsThreadEvent> sysBpmsThreadEvents { get; set; }
         public virtual DbSet<sysBpmsThreadTask> sysBpmsThreadTasks { get; set; }
-        public virtual DbSet<sysBpmsThreadTaskDelay> sysBpmsThreadTaskDelays { get; set; }
         public virtual DbSet<sysBpmsThreadVariable> sysBpmsThreadVariables { get; set; }
         public virtual DbSet<sysBpmsUser> sysBpmsUsers { get; set; }
         public virtual DbSet<sysBpmsVariable> sysBpmsVariables { get; set; }
         public virtual DbSet<sysBpmsVariableDependency> sysBpmsVariableDependencies { get; set; }
     
-        [DbFunction("Db_BPMSEntities", "Split")]
-        public virtual IQueryable<Split_Result> Split(string rowData, string delimeter)
+        [DbFunction("Db_BPMSEntities", "sysBpmsSplit")]
+        public virtual IQueryable<sysBpmsSplit_Result> sysBpmsSplit(string rowData, string delimeter)
         {
             var rowDataParameter = rowData != null ?
                 new ObjectParameter("RowData", rowData) :
@@ -75,7 +74,7 @@ namespace DynamicBusiness.BPMS.Domain
                 new ObjectParameter("Delimeter", delimeter) :
                 new ObjectParameter("Delimeter", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<Split_Result>("[Db_BPMSEntities].[Split](@RowData, @Delimeter)", rowDataParameter, delimeterParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<sysBpmsSplit_Result>("[Db_BPMSEntities].[sysBpmsSplit](@RowData, @Delimeter)", rowDataParameter, delimeterParameter);
         }
     }
 }

@@ -70,6 +70,17 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             return url + (parameters == null || parameters.Count() == 0 ? "" : ((url.Contains("?") ? "" : "/") + string.Join((url.Contains("?") ? "&" : "/"), parameters.Select(c => (url.Contains("?") ? c : c.Replace("=", "/").Trim())))));
         }
 
+        public static string GetAdminUrl(string pageName, params string[] parameters)
+        {
+            if (parameters != null)
+            {
+                parameters = parameters.Where(c => !string.IsNullOrWhiteSpace(c.Split('=').LastOrDefault())).Distinct().ToArray();
+            }
+            string url = DomainUtility.AdminHomeUr.TrimEnd('/') + "/" + pageName;
+            url = ((url.Contains("?") || parameters == null || !parameters.Any() || parameters.Any(c => c.Contains("/"))) ? url : (url + "?"));
+            return url + (parameters == null || parameters.Count() == 0 ? "" : ((url.Contains("?") ? "" : "/") + string.Join((url.Contains("?") ? "&" : "/"), parameters.Select(c => (url.Contains("?") ? c : c.Replace("=", "/").Trim())))));
+        }
+
         /// <param name="formToken">when calling main api from client application, there  is no need to pass formToken to main bpms api.</param>
         public static string GetApiUrl(HttpRequestBase request, string PortalAlias, string actionName, string controllerName, string formToken, params string[] parameters)
         {

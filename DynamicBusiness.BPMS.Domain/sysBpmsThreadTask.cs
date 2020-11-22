@@ -18,7 +18,6 @@ namespace DynamicBusiness.BPMS.Domain
         public sysBpmsThreadTask()
         {
             this.sysBpmsThreadEvents = new HashSet<sysBpmsThreadEvent>();
-            this.sysBpmsThreadTaskDelays = new HashSet<sysBpmsThreadTaskDelay>();
         }
     
         public System.Guid ID { get; set; }
@@ -37,7 +36,5 @@ namespace DynamicBusiness.BPMS.Domain
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<sysBpmsThreadEvent> sysBpmsThreadEvents { get; set; }
         public virtual sysBpmsUser sysBpmsUser { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<sysBpmsThreadTaskDelay> sysBpmsThreadTaskDelays { get; set; }
     }
 }

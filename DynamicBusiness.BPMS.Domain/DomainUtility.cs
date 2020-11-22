@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data.Entity.Core.EntityClient;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
@@ -160,5 +161,24 @@ namespace DynamicBusiness.BPMS.Domain
 
         public static string CartableHomeUr { get; set; }
         public static string SingleActionHomeUr { get; set; }
-    } 
+        public static string AdminHomeUr { get; set; }
+
+
+        private static string ConnectionString { get; set; }
+        public static string GetConnectionName()
+        {
+            if (string.IsNullOrWhiteSpace(ConnectionString))
+            {
+                string connection = System.Configuration.ConfigurationManager.ConnectionStrings["SiteSqlServer"].ConnectionString;
+                System.Data.SqlClient.SqlConnectionStringBuilder scsb = new System.Data.SqlClient.SqlConnectionStringBuilder(connection);
+
+                EntityConnectionStringBuilder ecb = new EntityConnectionStringBuilder();
+                ecb.Metadata = "res://*/dmBPMS.csdl|res://*/dmBPMS.ssdl|res://*/dmBPMS.msl";
+                ecb.Provider = "System.Data.SqlClient";
+                ecb.ProviderConnectionString = scsb.ConnectionString;
+                ConnectionString = ecb.ConnectionString;
+            }
+            return ConnectionString;
+        }
+    }
 }

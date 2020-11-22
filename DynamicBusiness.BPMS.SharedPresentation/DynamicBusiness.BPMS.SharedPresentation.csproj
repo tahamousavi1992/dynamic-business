@@ -209,11 +209,7 @@
     <Compile Include="Library\AccessUtility.cs" />
     <Compile Include="Library\AdminMenuIndex.cs" />
     <Compile Include="Library\ApiUtility.cs" />
-    <Compile Include="Library\BpmsAdminApiControlBase.cs" />
     <Compile Include="Library\BpmsEngineApiControlBase.cs" />
-    <Compile Include="Library\BpmsCartableApiControlBase.cs" />
-    <Compile Include="Library\FormLoaderApiControllerBase.cs" />
-    <Compile Include="Library\FormLoaderControllerBase.cs" />
     <Compile Include="Library\KartableControllerBase.cs" />
     <Compile Include="Library\FormTokenUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
