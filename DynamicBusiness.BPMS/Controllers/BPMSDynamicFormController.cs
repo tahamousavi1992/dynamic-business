@@ -10,13 +10,13 @@ using DynamicBusiness.BPMS.SharedPresentation;
 using Newtonsoft.Json.Linq;
 
 namespace DynamicBusiness.BPMS.Controllers
-{ 
+{
     public class BpmsDynamicFormController : BpmsAdminApiControlBase
     {
         public object GetList([System.Web.Http.FromUri] DynamicFormIndexSearchDTO indexSearchVM)
         {
             using (DynamicFormService dynamicFormService = new DynamicFormService())
-            { 
+            {
                 indexSearchVM.Update(dynamicFormService.GetList(indexSearchVM.ProcessId, null, !indexSearchVM.ProcessId.HasValue, indexSearchVM.Name, null, indexSearchVM.GetPagingProperties).Select(c => new DynamicFormDTO(c)).ToList());
                 return indexSearchVM;
             }
@@ -275,13 +275,29 @@ namespace DynamicBusiness.BPMS.Controllers
         #region .:: Preview ::.
 
         [HttpGet]
-        public object PreviewForm(Guid formID, bool isModal = false)
+        public object GetPreviewForm(Guid FormId)
         {
             using (DynamicFormService dynamicFormService = new DynamicFormService())
             {
-                EngineFormModel engineForm = dynamicFormService.PreviewForm(formID, base.UserInfo?.Username);
-                engineForm.SetUrls(string.Empty, string.Empty, new HttpRequestWrapper(base.MyRequest), base.PortalSettings.DefaultPortalAlias, FormTokenUtility.GetFormToken(HttpContext.Current.Session.SessionID, engineForm?.FormModel?.ContentHtml?.DynamicFormID ?? Guid.Empty, engineForm?.FormModel?.IsEncrypted ?? false));
-                return engineForm;
+                try
+                {
+                    EngineFormModel engineForm = dynamicFormService.PreviewForm(FormId, base.UserInfo?.Username);
+                    engineForm.SetUrls(string.Empty, string.Empty, new HttpRequestWrapper(base.MyRequest), base.PortalSettings.DefaultPortalAlias, FormTokenUtility.GetFormToken(HttpContext.Current.Session.SessionID, engineForm?.FormModel?.ContentHtml?.DynamicFormID ?? Guid.Empty, engineForm?.FormModel?.IsEncrypted ?? false));
+                    return new
+                    { 
+                        Model = engineForm,
+                        Result = true,
+                    };
+                }
+                catch (Exception ex)
+                {
+                    return new
+                    {
+                        MessageList = new List<PostMethodMessage>() { new PostMethodMessage(ex.ToString(), DisplayMessageType.error) },
+                        Result = false
+                    };
+                }
+
             }
         }
 

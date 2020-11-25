@@ -32,26 +32,28 @@ namespace DynamicBusiness.BPMS.SingleAction.Controllers
                 settings.ApplicationPageID = ModuleContext.Configuration.ModuleSettings.GetValueOrDefault(SingleActionSettingDTO.e_SettingType.SingleAction_ApplicationPageID.ToString(), string.Empty).ToGuidObjNull();
                 settings.ProcessEndFormID = ModuleContext.Configuration.ModuleSettings.GetValueOrDefault(SingleActionSettingDTO.e_SettingType.SingleAction_ProcessEndFormID.ToString(), string.Empty).ToGuidObjNull();
                 settings.ProcessID = ModuleContext.Configuration.ModuleSettings.GetValueOrDefault(SingleActionSettingDTO.e_SettingType.SingleAction_ProcessID.ToString(), string.Empty).ToGuidObjNull();
-                settings.ApplicationName = settings.ApplicationPageID.HasValue ? new EngineApplicationProxy(this.BaseUrl, settings.WebServicePass, base.User.Username, ApiUtility.GetIPAddress(), base.Session.SessionID, false).GetInfo(settings.ApplicationPageID.Value)?.Name : "";
-                settings.ProcessName = settings.ProcessID.HasValue ? new EngineProcessProxy(this.BaseUrl, settings.WebServicePass, base.User.Username, ApiUtility.GetIPAddress(), base.Session.SessionID, false).GetInfo(settings.ProcessID.Value)?.Name : "";
+                 settings.ProcessName = settings.ProcessID.HasValue ? new EngineProcessProxy(this.BaseUrl, settings.WebServicePass, base.User.Username, ApiUtility.GetIPAddress(), base.Session.SessionID, false).GetInfo(settings.ProcessID.Value)?.Name : "";
                 settings.ShowCardBody = ModuleContext.Configuration.ModuleSettings.GetValueOrDefault(SingleActionSettingDTO.e_SettingType.SingleAction_ShowCardBody.ToString(), string.Empty).ToStringObj().ToLower() == "true";
                 settings.LoadBootstrap = ModuleContext.Configuration.ModuleSettings.GetValueOrDefault(SingleActionSettingDTO.e_SettingType.SingleAction_Bootstrap.ToString(), string.Empty).ToStringObj().ToLower() == "true";
                 settings.LoadjQuery = ModuleContext.Configuration.ModuleSettings.GetValueOrDefault(SingleActionSettingDTO.e_SettingType.SingleAction_Jquery.ToString(), string.Empty).ToStringObj().ToLower() == "true";
                 settings.ProcessEndFormName = settings.ProcessEndFormID.HasValue ? new EngineFormProxy(this.BaseUrl, settings.WebServicePass, base.User.Username, ApiUtility.GetIPAddress(), base.Session.SessionID, false).GetInfo(settings.ProcessEndFormID.Value)?.Name : ""; ;
+                settings.ApplicationName = settings.ApplicationPageID.HasValue ? new EngineApplicationProxy(this.BaseUrl, settings.WebServicePass, base.User.Username, ApiUtility.GetIPAddress(), base.Session.SessionID, false).GetInfo(settings.ApplicationPageID.Value)?.Name : "";
+
                 if (string.IsNullOrWhiteSpace(settings.ApplicationName) && string.IsNullOrWhiteSpace(settings.ProcessName))
                 {
                     settings.ProcessID = null;
                     settings.ApplicationPageID = null;
                 }
-                ViewBag.ApplicationPageUrl = ApiUtility.GetGeneralApiUrl(base.Request, base.PortalSettings.DefaultPortalAlias, "GetList", "EngineApplication", FormTokenUtility.GetFormToken(base.Session.SessionID, Guid.Empty, false), true, true);
-                ViewBag.ProcessFormUrl = ApiUtility.GetGeneralApiUrl(base.Request, base.PortalSettings.DefaultPortalAlias, "GetList", "EngineForm", FormTokenUtility.GetFormToken(base.Session.SessionID, Guid.Empty, false), true, true);
-                ViewBag.ProcessUrl = ApiUtility.GetGeneralApiUrl(base.Request, base.PortalSettings.DefaultPortalAlias, "GetList", "EngineProcess", FormTokenUtility.GetFormToken(base.Session.SessionID, Guid.Empty, false), true, true);
-
+          
             }
-            catch
+            catch (Exception ex)
             {
 
             }
+            ViewBag.ApplicationPageUrl = ApiUtility.GetGeneralApiUrl(base.Request, base.PortalSettings.DefaultPortalAlias, "GetList", "EngineApplication", FormTokenUtility.GetFormToken(base.Session.SessionID, Guid.Empty, false), true, true);
+            ViewBag.ProcessFormUrl = ApiUtility.GetGeneralApiUrl(base.Request, base.PortalSettings.DefaultPortalAlias, "GetList", "EngineForm", FormTokenUtility.GetFormToken(base.Session.SessionID, Guid.Empty, false), true, true);
+            ViewBag.ProcessUrl = ApiUtility.GetGeneralApiUrl(base.Request, base.PortalSettings.DefaultPortalAlias, "GetList", "EngineProcess", FormTokenUtility.GetFormToken(base.Session.SessionID, Guid.Empty, false), true, true);
+
             ViewBag.Url = base.ActivePage.FullUrl + "/controller/Settings/action/UpdatePass";
             return View(settings);
         }

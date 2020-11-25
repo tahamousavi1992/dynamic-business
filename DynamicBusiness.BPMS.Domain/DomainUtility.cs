@@ -119,7 +119,7 @@ namespace DynamicBusiness.BPMS.Domain
 
         public static bool IsTestEnvironment()
         {
-            return true;
+            return false;
         }
 
         public static string[] GetRegularValue(string Start, string End, string Value)
@@ -167,6 +167,8 @@ namespace DynamicBusiness.BPMS.Domain
         private static string ConnectionString { get; set; }
         public static string GetConnectionName()
         {
+            if (DomainUtility.IsTestEnvironment())
+                return "Db_BPMSEntities";
             if (string.IsNullOrWhiteSpace(ConnectionString))
             {
                 string connection = System.Configuration.ConfigurationManager.ConnectionStrings["SiteSqlServer"].ConnectionString;

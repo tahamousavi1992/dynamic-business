@@ -38,7 +38,10 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                     where P.ID == id
                     select P).AsNoTracking().FirstOrDefault();
         }
-
+        public List<sysBpmsApplicationPageAccess> GetList(Guid departmentId)
+        {
+            return this.Context.sysBpmsApplicationPageAccesses.Where(d => d.DepartmentID == departmentId).AsNoTracking().ToList();
+        }
         public List<sysBpmsApplicationPageAccess> GetList(Guid? applicationPageID, PagingProperties currentPaging)
         {
             using (Db_BPMSEntities db = new Db_BPMSEntities())

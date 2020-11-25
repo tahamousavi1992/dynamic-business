@@ -60,14 +60,40 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             return resultOperation;
         }
 
-        public ResultOperation Delete(Guid DepartmentId)
+        public ResultOperation Delete(Guid departmentId)
         {
             ResultOperation resultOperation = new ResultOperation();
-            if (resultOperation.IsSuccess)
+            try
             {
-                this.UnitOfWork.Repository<IDepartmentRepository>().Delete(DepartmentId);
-                this.UnitOfWork.Save();
+                sysBpmsDepartment department = this.GetInfo(departmentId);
+                if (department.DepartmentID.HasValue)
+                    resultOperation.AddError("This Organization has children, so delete the children first.");
+                if (resultOperation.IsSuccess)
+                {
+                    DepartmentMemberService departmentMemberService = new DepartmentMemberService(base.UnitOfWork);
+                    ApplicationPageAccessService applicationPageAccessService = new ApplicationPageAccessService(base.UnitOfWork);
+                    var members = departmentMemberService.GetList(departmentId, null, null);
+                    var accesses = applicationPageAccessService.GetList(departmentId);
+                    this.BeginTransaction();
+
+                    foreach (var item in members)
+                    {
+                        departmentMemberService.Delete(item.ID);
+                    }
+                    foreach (var item in accesses)
+                    {
+                        applicationPageAccessService.Delete(item.ID);
+                    }
+                    this.UnitOfWork.Repository<IDepartmentRepository>().Delete(departmentId);
+                    this.UnitOfWork.Save();
+                }
             }
+            catch (Exception ex)
+            {
+                return base.ExceptionHandler(ex);
+            }
+            base.FinalizeService(resultOperation);
+
             return resultOperation;
         }
 
@@ -80,7 +106,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         {
             return this.UnitOfWork.Repository<IDepartmentRepository>().GetList(IsActive, Name, ParentDepartmentID);
         }
-         
+
         public TreeViewModel HelperGetTreeList(Guid? SelectedID)
         {
             TreeViewModel Item = new TreeViewModel() { id = "-1", text = "Organizations", icon = "fa fa-folder text-primary", state = new TreeNodeStateModel() { opened = true, } };

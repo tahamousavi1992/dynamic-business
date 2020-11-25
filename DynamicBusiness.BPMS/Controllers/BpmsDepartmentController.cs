@@ -76,8 +76,8 @@ namespace DynamicBusiness.BPMS.Controllers
             }
         }
 
-        [HttpPost]
-        public object GetInActive(Guid ID)
+        [HttpDelete]
+        public object Delete(Guid ID)
         {
             using (DepartmentService departmentService = new DepartmentService())
             {

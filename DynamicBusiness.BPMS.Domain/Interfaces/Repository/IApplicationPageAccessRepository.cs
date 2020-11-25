@@ -13,6 +13,7 @@ namespace DynamicBusiness.BPMS.Domain
         void Delete(Guid id);
         sysBpmsApplicationPageAccess GetInfo(Guid id);
         List<sysBpmsApplicationPageAccess> GetList(Guid? applicationPageID, PagingProperties currentPaging);
+        List<sysBpmsApplicationPageAccess> GetList(Guid departmentId);
         bool GetUserAccess(Guid? userId, Guid applicationPageID, ElementBase.e_AccessType e_AccessType); 
     }
 }

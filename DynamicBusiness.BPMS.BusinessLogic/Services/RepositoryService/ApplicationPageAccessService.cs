@@ -83,7 +83,10 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         {
             return this.UnitOfWork.Repository<IApplicationPageAccessRepository>().GetInfo(ID);
         }
-
+        public List<sysBpmsApplicationPageAccess> GetList(Guid departmentId)
+        {
+            return this.UnitOfWork.Repository<IApplicationPageAccessRepository>().GetList(departmentId);
+        }
         public List<sysBpmsApplicationPageAccess> GetList(Guid? applicationPageID, PagingProperties currentPaging)
         {
             return this.UnitOfWork.Repository<IApplicationPageAccessRepository>().GetList(applicationPageID, currentPaging);
