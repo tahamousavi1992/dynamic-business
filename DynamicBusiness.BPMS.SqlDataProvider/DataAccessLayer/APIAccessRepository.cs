@@ -37,6 +37,15 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                     select P).AsNoTracking().FirstOrDefault();
         }
 
+        public void Delete(Guid id)
+        {
+            sysBpmsAPIAccess sysBpmsAPIAccess = this.Context.sysBpmsAPIAccesses.FirstOrDefault(d => d.ID == id);
+            if (sysBpmsAPIAccess != null)
+            {
+                this.Context.sysBpmsAPIAccesses.Remove(sysBpmsAPIAccess);
+            }
+        }
+
         public bool HasAccess(string ipAddress, string accessKey)
         {
             ipAddress = ipAddress.ToStringObj();

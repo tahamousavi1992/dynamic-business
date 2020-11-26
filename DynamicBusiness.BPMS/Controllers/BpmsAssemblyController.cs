@@ -41,8 +41,7 @@ namespace DynamicBusiness.BPMS.Controllers
 
         [HttpDelete]
         public object Delete(string fileName)
-        {
-            fileName = fileName.Replace("_____", ".");
+        { 
             if (System.IO.File.Exists(this.DirectoryFolder + "\\" + this.GetFileName(fileName)))
             {
                 System.IO.File.Delete(this.DirectoryFolder + "\\" + this.GetFileName(fileName));

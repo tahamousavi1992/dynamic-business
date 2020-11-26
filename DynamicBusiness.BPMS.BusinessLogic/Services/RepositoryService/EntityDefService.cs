@@ -47,7 +47,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             {
                 return base.ExceptionHandler(ex);
             }
-            base.FinalizeService(resultOperation); 
+            base.FinalizeService(resultOperation);
             return resultOperation;
         }
 
@@ -83,7 +83,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             {
                 return base.ExceptionHandler(ex);
             }
-            base.FinalizeService(resultOperation); 
+            base.FinalizeService(resultOperation);
             return resultOperation;
         }
 
@@ -239,7 +239,7 @@ REFERENCES [{foreignEntity.FormattedTableName}] ([{foreignEntity.AllProperties.F
 
                 foreach (EntityPropertyModel property in entityDef.Properties)
                 {
-                    paramsQuery += $"[{property.Name}] {property.SqlTypeName} {property.SqlDefaultValue} {(property.Required ? "NOT NULL" : "NULL")} ,";
+                    paramsQuery += $"[{property.Name}] {property.SqlTypeName} {(property.Required ? "NOT NULL" : "NULL")} ,";
                 }
 
                 //generate table create query.
@@ -255,9 +255,13 @@ $@"CREATE TABLE [{entityDef.FormattedTableName}](
                 }
 
                 dataBaseQueryService.ExecuteBySqlQuery(sqlQuery, false, null);
-
+                 
             }
             this.UpdateDependentEntity(entityDef, entityDef);
+            foreach (EntityPropertyModel property in entityDef.Properties.Where(c => !string.IsNullOrWhiteSpace(c.DefaultValue)))
+            {
+                executeAlterQueries.Add($@" ALTER TABLE {entityDef.FormattedTableName} ADD CONSTRAINT def_{entityDef.FormattedTableName}_{property.Name} {property.SqlDefaultValue} FOR {property.Name} ;");
+            }
             foreach (string query in executeAlterQueries)
             {
                 dataBaseQueryService.ExecuteBySqlQuery(query, false, null);
@@ -290,10 +294,15 @@ $@"CREATE TABLE [{entityDef.FormattedTableName}](
                         }
                         if (currentProperty.DbType != newProperty.DbType ||
                             currentProperty.SqlTypeName != newProperty.SqlTypeName ||
-                            currentProperty.DefaultValue != newProperty.DefaultValue ||
                             currentProperty.Required != newProperty.Required)
                         {
                             addQuery.Add($@" ALTER TABLE {currentEntityDef.FormattedTableName} ALTER COLUMN {newProperty.Name} {newProperty.SqlTypeName} {newProperty.SqlDefaultValue} {(newProperty.Required ? "NOT NULL" : "NULL")} ; ");
+                        }
+                        if (currentProperty.DefaultValue != newProperty.DefaultValue)
+                        {
+                            if (!string.IsNullOrWhiteSpace(currentProperty.DefaultValue))
+                                addQuery.Add($@" ALTER TABLE {currentEntityDef.FormattedTableName} DROP CONSTRAINT def_{currentEntityDef.FormattedTableName}_{currentProperty.Name} ; ");
+                            addQuery.Add($@" ALTER TABLE {currentEntityDef.FormattedTableName} ADD CONSTRAINT def_{currentEntityDef.FormattedTableName}_{newProperty.Name} {newProperty.SqlDefaultValue} FOR {newProperty.Name} ;");
                         }
                     }
                     else

@@ -12,7 +12,7 @@ using DynamicBusiness.BPMS.Domain;
 using DynamicBusiness.BPMS.SharedPresentation;
 
 namespace DynamicBusiness.BPMS.Controllers
-{ 
+{
     public class BpmsLURowController : BpmsAdminApiControlBase
     {
         [HttpGet]
@@ -65,13 +65,11 @@ namespace DynamicBusiness.BPMS.Controllers
         }
 
         [HttpGet]
-        public object GetInActive(Guid ID)
+        public object Delete(Guid ID)
         {
             using (LURowService luRowService = new LURowService())
             {
-                sysBpmsLURow lURow = luRowService.GetInfo(ID);
-                lURow.Update(false);
-                ResultOperation resultOperation = luRowService.Update(lURow);
+                ResultOperation resultOperation = luRowService.Delete(ID);
                 if (resultOperation.IsSuccess)
                     return new PostMethodMessage(SharedLang.Get("Success.Text"), DisplayMessageType.success);
                 return new PostMethodMessage(resultOperation.GetErrors(), DisplayMessageType.error);

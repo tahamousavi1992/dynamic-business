@@ -81,7 +81,7 @@ namespace DynamicBusiness.BPMS.Controllers
 
                     if (resultOperation.IsSuccess)
                     {
-                        return new PostMethodMessage(SharedLang.Get("Success.Text"), DisplayMessageType.success);
+                        return new PostMethodMessage(SharedLang.Get("Success.Text"), DisplayMessageType.success, entityDef.ID);
                     }
                     else
                         return new PostMethodMessage(resultOperation.GetErrors(), DisplayMessageType.error);

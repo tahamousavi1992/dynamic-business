@@ -16,11 +16,11 @@ namespace DynamicBusiness.BPMS.Controllers
     public class BpmsEmailAccountController : BpmsAdminApiControlBase
     {
         [HttpGet]
-        public object GetList([System.Web.Http.FromUri]EmailAccountIndexSearchDTO indexSearchVM)
+        public object GetList([System.Web.Http.FromUri] EmailAccountIndexSearchDTO indexSearchVM)
         {
             //base.SetMenuIndex(AdminMenuIndex.EmailAccountIndex);
             using (EmailAccountService emailAccountService = new EmailAccountService())
-            { 
+            {
                 List<sysBpmsEmailAccount> list = emailAccountService.GetList((int)sysBpmsEmailAccount.e_ObjectTypeLU.Systemic, null, indexSearchVM.GetPagingProperties);
                 indexSearchVM.Update(list.Select(c => new EmailAccountDTO(c)).ToList());
                 return indexSearchVM;
@@ -28,9 +28,9 @@ namespace DynamicBusiness.BPMS.Controllers
         }
 
         [HttpGet]
-        public object GetAddEdit(Guid ID)
+        public object GetAddEdit(Guid? ID = null)
         {
-            return new EmailAccountDTO(new EmailAccountService().GetInfo(ID));
+            return new EmailAccountDTO(ID.HasValue ? new EmailAccountService().GetInfo(ID.Value) : new sysBpmsEmailAccount());
         }
 
         [HttpPost]

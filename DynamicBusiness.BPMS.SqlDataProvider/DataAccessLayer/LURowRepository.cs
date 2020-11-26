@@ -135,6 +135,16 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             retVal.Load(LURow);
         }
 
+        public void Delete(Guid processGroupId)
+        {
+            sysBpmsLURow sysBpmsLURow = this.Context.sysBpmsLURows.FirstOrDefault(d => d.ID == processGroupId);
+            if (sysBpmsLURow != null)
+            {
+                this.Context.sysBpmsLURows.Remove(sysBpmsLURow);
+            }
+        }
+
+
         public void Add(sysBpmsLURow LURow)
         {
             LURow.ID = Guid.NewGuid();

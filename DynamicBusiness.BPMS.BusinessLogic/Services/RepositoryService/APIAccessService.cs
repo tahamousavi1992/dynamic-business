@@ -21,6 +21,16 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             }
             return resultOperation;
         }
+        public ResultOperation Delete(Guid id)
+        {
+            ResultOperation resultOperation = new ResultOperation();
+            if (resultOperation.IsSuccess)
+            {
+                this.UnitOfWork.Repository<IAPIAccessRepository>().Delete(id);
+                this.UnitOfWork.Save();
+            }
+            return resultOperation;
+        }
 
         public ResultOperation Update(sysBpmsAPIAccess APIAccess)
         {

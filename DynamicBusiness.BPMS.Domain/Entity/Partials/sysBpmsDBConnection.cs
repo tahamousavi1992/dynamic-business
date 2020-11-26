@@ -13,16 +13,16 @@ namespace DynamicBusiness.BPMS.Domain
         public ResultOperation Update(Guid ID, string Name, string DataSource, string InitialCatalog, string UserID, string Password, bool IntegratedSecurity)
         {
             this.ID = ID;
-            this.Name = Name;
+            this.Name = Name.ToStringObj();//not null in sql;
             this.DataSource = DataSource;
             this.InitialCatalog = InitialCatalog;
-            this.UserID = UserID;
-            this.Password = Password;
+            this.UserID = UserID.ToStringObj();//not null in sql
+            this.Password = Password.ToStringObj();//not null in sql
             this.IntegratedSecurity = IntegratedSecurity;
 
             ResultOperation resultOperation = new ResultOperation(this);
             if (string.IsNullOrWhiteSpace(this.InitialCatalog))
-                resultOperation.AddError(SharedLang.GetReuired(nameof(sysBpmsDBConnection.Name), nameof(sysBpmsDBConnection)));
+                resultOperation.AddError(SharedLang.GetReuired(nameof(sysBpmsDBConnection.InitialCatalog), nameof(sysBpmsDBConnection)));
             if (string.IsNullOrWhiteSpace(this.DataSource))
                 resultOperation.AddError(SharedLang.GetReuired(nameof(sysBpmsDBConnection.DataSource), nameof(sysBpmsDBConnection)));
 

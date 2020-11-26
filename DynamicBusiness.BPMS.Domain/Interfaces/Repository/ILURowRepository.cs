@@ -18,6 +18,7 @@ namespace DynamicBusiness.BPMS.Domain
         sysBpmsLURow GetInfoByName(string Alias, string NameOf);
         sysBpmsLURow GetInfo(Guid ID, Guid LUTableID, string CodeOf);
         string GetNameOfByAlias(string Alias, string CodeOf);
+        void Delete(Guid ID);
         void Update(sysBpmsLURow LURow);
         void Add(sysBpmsLURow LURow);
     }

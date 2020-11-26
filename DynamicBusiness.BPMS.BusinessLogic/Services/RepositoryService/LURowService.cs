@@ -50,7 +50,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         {
             return this.UnitOfWork.Repository<ILURowRepository>().GetNameOfByAlias(Alias, CodeOf);
         }
- 
+
         public ResultOperation Update(sysBpmsLURow LURow)
         {
             ResultOperation resultOperation = new ResultOperation();
@@ -61,6 +61,26 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             }
             return resultOperation;
         }
+
+        public ResultOperation Delete(Guid Id)
+        {
+            ResultOperation resultOperation = new ResultOperation();
+            if (resultOperation.IsSuccess)
+            {
+                sysBpmsLURow sysBpmsLU = this.GetInfo(Id);
+                if (new OperationService(base.UnitOfWork).GetList(sysBpmsLU.CodeOf.ToIntObj(), null).Any())
+                    resultOperation.AddError($"this LookUp is used by Operations so you have to first delete that items first.");
+                if (new DepartmentMemberService(base.UnitOfWork).GetList(null, sysBpmsLU.CodeOf.ToIntObj(), null).Any())
+                    resultOperation.AddError($"this LookUp is used by Organization's members so you have to first delete that items first.");
+                if (resultOperation.IsSuccess)
+                {
+                    this.UnitOfWork.Repository<ILURowRepository>().Delete(Id);
+                    this.UnitOfWork.Save();
+                }
+            }
+            return resultOperation;
+        }
+
         public ResultOperation Add(sysBpmsLURow LURow)
         {
             ResultOperation resultOperation = new ResultOperation();

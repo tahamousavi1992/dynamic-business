@@ -17,7 +17,7 @@ namespace DynamicBusiness.BPMS.Controllers
     {
         [HttpGet]
         public object GetList([System.Web.Http.FromUri] APIAccessIndexSearchDTO indexSearchVM)
-        { 
+        {
             using (APIAccessService apiAccessService = new APIAccessService())
             {
                 indexSearchVM.Update(apiAccessService.GetList("", "", "", null, indexSearchVM.GetPagingProperties).Select(c => new APIAccessDTO(c)).ToList());
@@ -66,6 +66,21 @@ namespace DynamicBusiness.BPMS.Controllers
             }
             return new PostMethodMessage(SharedLang.Get("Success.Text"), DisplayMessageType.success);
         }
+
+        [HttpDelete]
+        public object Delete(Guid ID)
+        {
+            using (APIAccessService apiAccessService = new APIAccessService())
+            {
+                ResultOperation resultOperation = apiAccessService.Delete(ID);
+                if (resultOperation.IsSuccess)
+                    return new PostMethodMessage(SharedLang.Get("Success.Text"), DisplayMessageType.success);
+                else
+                    return new PostMethodMessage(resultOperation.GetErrors(), DisplayMessageType.error);
+            }
+
+        }
+
 
         [HttpGet]
         public object GetActive(Guid ID)

@@ -123,6 +123,9 @@
   <data name="DataSource.Text" xml:space="preserve">
     <value>Data Source</value>
   </data>
+  <data name="InitialCatalog.Text" xml:space="preserve">
+    <value>InitialCatalog</value>
+  </data>
   <data name="RepetitiveNameError.Text" xml:space="preserve">
     <value>This name was selected before.</value>
   </data>
