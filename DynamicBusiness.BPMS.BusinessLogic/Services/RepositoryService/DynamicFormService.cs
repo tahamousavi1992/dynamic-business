@@ -12,7 +12,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
     {
         public DynamicFormService(IUnitOfWork unitOfWork = null) : base(unitOfWork) { }
 
-        public ResultOperation Add(sysBpmsDynamicForm dynamicForm, string userName)
+        public ResultOperation Add(sysBpmsDynamicForm dynamicForm, sysBpmsApplicationPage appPage, string userName)
         {
             ResultOperation resultOperation = new ResultOperation();
             try
@@ -25,9 +25,10 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                     base.BeginTransaction();
                     if (!dynamicForm.ProcessId.HasValue && !dynamicForm.ApplicationPageID.HasValue)
                     {
-                        sysBpmsApplicationPage applicationPage = new sysBpmsApplicationPage().Update(0, "", false);
-                        resultOperation = new ApplicationPageService(base.UnitOfWork).Add(applicationPage);
-                        dynamicForm.ApplicationPageID = applicationPage.ID;
+                        appPage = appPage ?? new sysBpmsApplicationPage().Update(0, String.Empty, false);
+                        appPage.ID = Guid.Empty;
+                        resultOperation = new ApplicationPageService(base.UnitOfWork).Add(appPage);
+                        dynamicForm.ApplicationPageID = appPage.ID;
                     }
                     if (resultOperation.IsSuccess)
                     {
@@ -121,7 +122,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                         resultOperation = new StepService(this.UnitOfWork).Delete(item.ID);
                         if (!resultOperation.IsSuccess)
                             break;
-                    } 
+                    }
                     if (resultOperation.IsSuccess)
                     {
                         sysBpmsDynamicForm dynamicForm = this.GetInfo(dynamicFormId);
@@ -293,81 +294,84 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         /// <param name="dynamicForm"></param>
         public void UpdateBackendCodeID(sysBpmsDynamicForm dynamicForm)
         {
-            FormModel formModel = new FormModel(JObject.Parse(dynamicForm.DesignJson), HtmlElementHelper.MakeModel(null, null, HtmlElementHelperModel.e_FormAction.FillMode, dynamicForm), null, null, dynamicForm, false);
-            formModel.ContentHtml.Rows.ForEach((row) =>
+            if (!string.IsNullOrWhiteSpace(dynamicForm.DesignJson))
             {
-                generateCodeID(row);
-                if (row is RowHtml)
-                    readRow(row);
-                else
+                FormModel formModel = new FormModel(JObject.Parse(dynamicForm.DesignJson), HtmlElementHelper.MakeModel(null, null, HtmlElementHelperModel.e_FormAction.FillMode, dynamicForm), null, null, dynamicForm, false);
+                formModel.ContentHtml.Rows.ForEach((row) =>
                 {
-                    ((AccordionHtml)row).Cards.ForEach((car) =>
+                    generateCodeID(row);
+                    if (row is RowHtml)
+                        readRow(row);
+                    else
                     {
-                        generateCodeID(car);
-                        ((CardHtml)car).Rows.ForEach((item) =>
+                        ((AccordionHtml)row).Cards.ForEach((car) =>
                         {
-                            readRow(item);
+                            generateCodeID(car);
+                            ((CardHtml)car).Rows.ForEach((item) =>
+                            {
+                                readRow(item);
+                            });
                         });
-                    });
-                }
-            });
-
-            void readRow(object row)
-            {
-                ((RowHtml)row).Columns.ForEach((column) =>
-                {
-                    generateCodeID(column);
-                    column.children.ForEach((item) =>
-                    {
-                        generateCodeID(item);
-                    });
+                    }
                 });
-            }
 
-            void generateCodeID(object item)
-            {
-                replaceID(((ElementBase)item).ExpressionVisibilityCode);
-                if (item is ButtonHtml)
+                void readRow(object row)
                 {
-                    replaceID(((ButtonHtml)item).ExpressionConfirmCode);
-                    replaceID(((ButtonHtml)item).BackendCoding);
-                }
-                else
-                if (item is DataGridHtml)
-                {
-                    DataGridHtml dataGridHtml = (DataGridHtml)item;
-                    dataGridHtml.DataGridColumns.ForEach((column) =>
+                    ((RowHtml)row).Columns.ForEach((column) =>
                     {
-                        column.ItemList.ForEach((cItem) =>
+                        generateCodeID(column);
+                        column.children.ForEach((item) =>
                         {
-                            if (!string.IsNullOrWhiteSpace(cItem.ExpressionConfirmCode))
-                                replaceID(cItem.ExpressionConfirmCode.FromBase64());
-                            if (!string.IsNullOrWhiteSpace(cItem.RunCodeData))
-                                replaceID(cItem.RunCodeData.FromBase64());
+                            generateCodeID(item);
                         });
                     });
                 }
-            }
 
-            void replaceID(string decodedCode)
-            {
-                if (!string.IsNullOrWhiteSpace(decodedCode))
+                void generateCodeID(object item)
                 {
-                    DesignCodeModel designCode = DesignCodeUtility.GetDesignCodeFromXml(decodedCode);
-                    if (designCode != null && !string.IsNullOrWhiteSpace(designCode.ID))
+                    replaceID(((ElementBase)item).ExpressionVisibilityCode);
+                    if (item is ButtonHtml)
                     {
-                        dynamicForm.DesignJson = dynamicForm.DesignJson.Replace(decodedCode.ToBase64(), decodedCode.Replace(designCode.ID, Guid.NewGuid().ToStringObj()).ToBase64());
+                        replaceID(((ButtonHtml)item).ExpressionConfirmCode);
+                        replaceID(((ButtonHtml)item).BackendCoding);
+                    }
+                    else
+                    if (item is DataGridHtml)
+                    {
+                        DataGridHtml dataGridHtml = (DataGridHtml)item;
+                        dataGridHtml.DataGridColumns.ForEach((column) =>
+                        {
+                            column.ItemList.ForEach((cItem) =>
+                            {
+                                if (!string.IsNullOrWhiteSpace(cItem.ExpressionConfirmCode))
+                                    replaceID(cItem.ExpressionConfirmCode.FromBase64());
+                                if (!string.IsNullOrWhiteSpace(cItem.RunCodeData))
+                                    replaceID(cItem.RunCodeData.FromBase64());
+                            });
+                        });
                     }
                 }
+
+                void replaceID(string decodedCode)
+                {
+                    if (!string.IsNullOrWhiteSpace(decodedCode))
+                    {
+                        DesignCodeModel designCode = DesignCodeUtility.GetDesignCodeFromXml(decodedCode);
+                        if (designCode != null && !string.IsNullOrWhiteSpace(designCode.ID))
+                        {
+                            dynamicForm.DesignJson = dynamicForm.DesignJson.Replace(decodedCode.ToBase64(), decodedCode.Replace(designCode.ID, Guid.NewGuid().ToStringObj()).ToBase64());
+                        }
+                    }
+                }
+
+                DesignCodeModel codeModel = DesignCodeUtility.GetDesignCodeFromXml(dynamicForm.OnEntryFormCode);
+                if (codeModel != null && !string.IsNullOrWhiteSpace(codeModel.ID))
+                    dynamicForm.OnEntryFormCode = dynamicForm.OnEntryFormCode.Replace(codeModel.ID, Guid.NewGuid().ToString());
+                codeModel = DesignCodeUtility.GetDesignCodeFromXml(dynamicForm.OnExitFormCode);
+                if (codeModel != null && !string.IsNullOrWhiteSpace(codeModel.ID))
+                    dynamicForm.OnExitFormCode = dynamicForm.OnExitFormCode.Replace(codeModel.ID, Guid.NewGuid().ToString());
+
             }
-
-            DesignCodeModel codeModel = DesignCodeUtility.GetDesignCodeFromXml(dynamicForm.OnEntryFormCode);
-            if (codeModel != null && !string.IsNullOrWhiteSpace(codeModel.ID))
-                dynamicForm.OnEntryFormCode = dynamicForm.OnEntryFormCode.Replace(codeModel.ID, Guid.NewGuid().ToString());
-            codeModel = DesignCodeUtility.GetDesignCodeFromXml(dynamicForm.OnExitFormCode);
-            if (codeModel != null && !string.IsNullOrWhiteSpace(codeModel.ID))
-                dynamicForm.OnExitFormCode = dynamicForm.OnExitFormCode.Replace(codeModel.ID, Guid.NewGuid().ToString());
-
         }
 
         public EngineFormModel PreviewForm(Guid formID, string userName)

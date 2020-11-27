@@ -53,7 +53,7 @@ namespace DynamicBusiness.BPMS.Domain
                        {
                            if (((ElementBase)child).CheckVisibility(formModel))
                            {
-                               ((FormHtml)child).ContentHtml.CheckAllVisibility(formModel);
+                               ((FormHtml)child).ContentHtml?.CheckAllVisibility(formModel);
                            }
                        }
                        else

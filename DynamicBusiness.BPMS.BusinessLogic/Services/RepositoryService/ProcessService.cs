@@ -305,6 +305,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                     //Copy dynamicForm
                     Dictionary<Guid, Guid> formConvertID = new Dictionary<Guid, Guid>();
                     DynamicFormService dynamicFormService = new DynamicFormService(base.UnitOfWork);
+                    ApplicationPageService applicationPageService = new ApplicationPageService(base.UnitOfWork);
                     List<sysBpmsDynamicForm> sysBpmsDynamicFormList = dynamicFormService.GetList(current.ID, null, null, "", null, null);
                     if (resultOperation.IsSuccess)
                         foreach (sysBpmsDynamicForm item in sysBpmsDynamicFormList)
@@ -316,7 +317,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                             //Then update sourceCode value.
                             dynamicFormService.GetSourceCode(item);
                             item.sysBpmsProcess = null;
-                            resultOperation = dynamicFormService.Add(item, userName);
+                            resultOperation = dynamicFormService.Add(item, 
+                                item.ApplicationPageID.HasValue ? applicationPageService.GetInfo(item.ApplicationPageID.Value) : null, userName);
                             formConvertID.Add(oldID, item.ID);
                             if (!resultOperation.IsSuccess)
                                 break;

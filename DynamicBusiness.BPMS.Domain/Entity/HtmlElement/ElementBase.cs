@@ -78,6 +78,7 @@ namespace DynamicBusiness.BPMS.Domain
                 });
 
             }
+            else this.EventDataAttributes = new List<EventDataAttributesModel>();
         }
 
         public void AddElementEventModel(ElementEventScriptModel elementEventScriptModel, bool clear)

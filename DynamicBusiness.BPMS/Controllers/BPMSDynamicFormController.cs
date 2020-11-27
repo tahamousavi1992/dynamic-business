@@ -29,6 +29,14 @@ namespace DynamicBusiness.BPMS.Controllers
             {
                 DynamicFormDTO dynamicFormDTO = ID.HasValue ? new DynamicFormDTO(dynamicFormService.GetInfo(ID.Value)) : new DynamicFormDTO();
                 dynamicFormDTO.ProcessId = base.ProcessId;
+                if (!dynamicFormDTO.ProcessId.HasValue)
+                {
+                    using (LURowService luRowService = new LURowService())
+                    {
+                        dynamicFormDTO.ApplicationPageDTO = new ApplicationPageDTO();
+                        dynamicFormDTO.ApplicationPageDTO.ListGroupLU = luRowService.GetList(sysBpmsLUTable.e_LUTable.ApplicationPageGroupLU.ToString()).Select(c => new LURowDTO(c)).ToList();
+                    }
+                }
                 return dynamicFormDTO;
             }
         }
@@ -36,12 +44,13 @@ namespace DynamicBusiness.BPMS.Controllers
         [HttpPost]
         public object PostAddEdit(DynamicFormDTO dynamicFormDTO)
         {
+            sysBpmsDynamicForm dynamicForm;
             ResultOperation resultOperation = new ResultOperation();
             using (DynamicFormService dynamicFormService = new DynamicFormService())
             {
                 if (dynamicFormDTO.ID != Guid.Empty)
                 {
-                    sysBpmsDynamicForm dynamicForm = dynamicFormService.GetInfo(dynamicFormDTO.ID);
+                    dynamicForm = dynamicFormService.GetInfo(dynamicFormDTO.ID);
                     dynamicForm.Update(dynamicFormDTO.ProcessId, dynamicFormDTO.ApplicationPageID, dynamicFormDTO.Name, dynamicFormDTO.Version, dynamicFormDTO.ShowInOverview);
 
                     DynamicFormConfigXmlModel configXmlModel = dynamicForm.ConfigXmlModel;
@@ -52,18 +61,21 @@ namespace DynamicBusiness.BPMS.Controllers
                 }
                 else
                 {
-                    sysBpmsDynamicForm dynamicForm = new sysBpmsDynamicForm().Update(dynamicFormDTO.ProcessId, dynamicFormDTO.ApplicationPageID, dynamicFormDTO.Name, dynamicFormDTO.Version, dynamicFormDTO.ShowInOverview);
+                    dynamicForm = new sysBpmsDynamicForm().Update(dynamicFormDTO.ProcessId, dynamicFormDTO.ApplicationPageID, dynamicFormDTO.Name, dynamicFormDTO.Version, dynamicFormDTO.ShowInOverview);
 
                     DynamicFormConfigXmlModel configXmlModel = dynamicForm.ConfigXmlModel;
                     configXmlModel.IsEncrypted = dynamicFormDTO.IsEncrypted;
                     dynamicForm.Update(configXmlModel);
+                    //make applicationPage if processId is null.
+                    sysBpmsApplicationPage sysAppPage = !dynamicForm.ProcessId.HasValue ?
+                        new sysBpmsApplicationPage().Update(dynamicFormDTO.ApplicationPageDTO.GroupLU, string.Empty, dynamicFormDTO.ApplicationPageDTO.ShowInMenu) : null;
 
-                    resultOperation = dynamicFormService.Add(dynamicForm, base.UserInfo?.Username);
+                    resultOperation = dynamicFormService.Add(dynamicForm, sysAppPage, base.UserInfo?.Username);
                     base.ApplicationPageId = dynamicForm.ApplicationPageID;
                 }
             }
             if (resultOperation.IsSuccess)
-                return new PostMethodMessage(SharedLang.Get("Success.Text"), DisplayMessageType.success, base.ApplicationPageId);
+                return new PostMethodMessage(SharedLang.Get("Success.Text"), DisplayMessageType.success, new DynamicFormDTO(dynamicForm));
             else
                 return new PostMethodMessage(resultOperation.GetErrors(), DisplayMessageType.error);
         }
@@ -284,7 +296,7 @@ namespace DynamicBusiness.BPMS.Controllers
                     EngineFormModel engineForm = dynamicFormService.PreviewForm(FormId, base.UserInfo?.Username);
                     engineForm.SetUrls(string.Empty, string.Empty, new HttpRequestWrapper(base.MyRequest), base.PortalSettings.DefaultPortalAlias, FormTokenUtility.GetFormToken(HttpContext.Current.Session.SessionID, engineForm?.FormModel?.ContentHtml?.DynamicFormID ?? Guid.Empty, engineForm?.FormModel?.IsEncrypted ?? false));
                     return new
-                    { 
+                    {
                         Model = engineForm,
                         Result = true,
                     };

@@ -314,6 +314,9 @@ $@"CREATE TABLE [{entityDef.FormattedTableName}](
                 //deleted properties
                 foreach (EntityPropertyModel currentProperty in currentEntityDef.Properties.Where(c => !newEntityDef.Properties.Any(d => d.ID == c.ID)))
                 {
+                    //drop default CONSTRAINT
+                    if (!string.IsNullOrWhiteSpace(currentProperty.DefaultValue))
+                        addQuery.Add($@" ALTER TABLE {currentEntityDef.FormattedTableName} DROP CONSTRAINT def_{currentEntityDef.FormattedTableName}_{currentProperty.Name} ; ");
                     //currentProperty.IsActive = false;
                     //newEntityDef.Properties.Add(currentProperty);
                     addQuery.Add($@"ALTER TABLE {currentEntityDef.FormattedTableName} DROP COLUMN {currentProperty.Name};");
