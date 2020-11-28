@@ -30,7 +30,7 @@ namespace DynamicBusiness.BPMS.SharedPresentation
         [DataMember]
         public bool IsFirst { get; set; }
         [DataMember]
-        public List<string> ListData { get; set; }
+        public string Action { get; set; }
 
     }
 }

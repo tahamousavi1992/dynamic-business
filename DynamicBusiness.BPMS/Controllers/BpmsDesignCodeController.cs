@@ -163,11 +163,6 @@ namespace DynamicBusiness.BPMS.Controllers
         [HttpPost]
         public object PostLoadDesignCodeActionList(PostLoadDesignCodeActionListDTO model)
         {
-            var dataList = model.ListData?.Where(c => !string.IsNullOrWhiteSpace(c)).Select(c => new
-            {
-                Base64Code = c,
-                ODesign = DesignCodeUtility.GetObjectOfDesignCode<object>(c.FromBase64())
-            }).ToList();
             using (OperationService operationService = new OperationService())
 
                 return new
@@ -180,10 +175,9 @@ namespace DynamicBusiness.BPMS.Controllers
                     model.IsOutputYes,
                     Name = model.Name.ToStringObj().Trim(),
                     model.IsFirst,
-                    FuncName = (dataList?.Any() ?? false) && !string.IsNullOrWhiteSpace(((DCBaseModel)dataList.FirstOrDefault().ODesign).FuncName) ?
-                    ((DCBaseModel)dataList.FirstOrDefault().ODesign).FuncName :
-                    DesignCodeUtility.GetFunctionName(model.ShapeId),
-                    Model = dataList,
+                    Base64Code = model.Action.ToStringObj(),
+                    FuncName = DesignCodeUtility.GetFunctionName(model.ShapeId),
+                    Model = DesignCodeUtility.GetObjectOfDesignCode<object>(model.Action.ToStringObj().FromBase64()),
                 };
         }
 
@@ -199,7 +193,7 @@ namespace DynamicBusiness.BPMS.Controllers
             }
             else
                 designCode = new DCSetVariableModel(Guid.NewGuid().ToString(), model.ShapeId.ToStringObj(),
-                    model.ParentShapeId.ToStringObj(), string.Empty, DCBaseModel.e_ValueType.Variable, "",
+                    model.ParentShapeId.ToStringObj(), null,
                     model.IsOutputYes, model.IsFirst.ToBoolObj(), null);
 
             using (DynamicFormService dynamicFormService = new DynamicFormService())
@@ -326,8 +320,7 @@ namespace DynamicBusiness.BPMS.Controllers
             }
             else
                 designCode = new DCSetControlModel(Guid.NewGuid().ToString(), model.ShapeId.ToStringObj(),
-                   model.ParentShapeId.ToStringObj(), string.Empty, DCBaseModel.e_ValueType.Static,
-                    "", model.IsOutputYes, model.IsFirst.ToBoolObj(), null);
+                   model.ParentShapeId.ToStringObj(), null, model.IsOutputYes, model.IsFirst.ToBoolObj(), null);
 
             using (DynamicFormService dynamicFormService = new DynamicFormService())
                 return new

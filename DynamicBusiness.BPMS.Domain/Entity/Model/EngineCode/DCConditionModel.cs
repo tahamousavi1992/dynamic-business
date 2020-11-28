@@ -53,8 +53,8 @@ namespace DynamicBusiness.BPMS.Domain
         {
             return new XElement(nameof(DCConditionModel),
                      base.ToXmlElementArray(),
-                     new XElement(nameof(DCConditionModel.Rows),
                      new XElement(nameof(DCConditionModel.EvaluateType), (int)this.EvaluateType),
+                     new XElement(nameof(DCConditionModel.Rows),
                      from c in this.Rows
                      select new XElement(nameof(DCRowConditionModel),
                          new XElement(nameof(DCRowConditionModel.FirstConditionType), (int)c.FirstConditionType),
