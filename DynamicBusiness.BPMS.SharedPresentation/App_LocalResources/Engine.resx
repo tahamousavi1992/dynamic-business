@@ -124,16 +124,16 @@
     <value>Error in performing {0} activity.</value>
   </data>
   <data name="ExceedingParallel.Text" xml:space="preserve">
-    <value>Due to exceeding the allowed limit, parallel execution of the workflow does not allow it to start.</value>
+    <value>Due to exceeding the allowed limit, parallel execution of the process does not allow it to start.</value>
   </data>
   <data name="Failed.Text" xml:space="preserve">
     <value>The operation failed.</value>
   </data>
   <data name="FailedContinueStatus.Text" xml:space="preserve">
-    <value>The workflow is inactive so it cannot be continue.</value>
+    <value>The process is inactive so it cannot be continue.</value>
   </data>
   <data name="FailedIsNotPublished.Text" xml:space="preserve">
-    <value>The workflow is not published.</value>
+    <value>The process is not published.</value>
   </data>
   <data name="FileNotValid.Text" xml:space="preserve">
     <value>The {0} File is not valid.</value>

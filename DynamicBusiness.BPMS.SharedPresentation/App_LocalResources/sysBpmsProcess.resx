@@ -118,33 +118,33 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ActiveError.Text" xml:space="preserve">
-    <value>Inactive workflow cannot be activated.</value>
+    <value>Inactive process cannot be activated.</value>
   </data>
   <data name="DeleteProcessThreadError.Text" xml:space="preserve">
-    <value>The workflow has already been started and has {0} task you have to first delete tasks.</value>
+    <value>The process has already been started and has {0} task you have to first delete tasks.</value>
   </data>
   <data name="e_TypeLU.General.Text" xml:space="preserve">
     <value>Public</value>
   </data>
   <data name="e_TypeLU.NotShowInList.Text" xml:space="preserve">
-    <value>Not Show In Workflow List</value>
+    <value>Not Show In Processes</value>
   </data>
   <data name="e_TypeLU.SubProcess.Text" xml:space="preserve">
     <value>SubProcess</value>
   </data>
   <data name="InActiveError.Text" xml:space="preserve">
-    <value>Active workflow cannot be deactivated.</value>
+    <value>Active process cannot be deactivated.</value>
   </data>
   <data name="NewVersionError.Text" xml:space="preserve">
-    <value>A new version of this workflow has already been created, which is draft</value>
+    <value>A new version of this process has already been created, which is draft</value>
   </data>
   <data name="NotAllowEdit.Text" xml:space="preserve">
-    <value>The published workflow can not be edited, please deactivate the workflow first.</value>
+    <value>The published process can not be edited, please deactivate the process first.</value>
   </data>
   <data name="OldVersionDeleteError.Text" xml:space="preserve">
-    <value>this workflow has a newer version so you have to first delete the newer version</value>
+    <value>This process has a newer version so you have to first delete the newer version</value>
   </data>
   <data name="WorkflowPublishError.Text" xml:space="preserve">
-    <value>The workflow could not be published.</value>
+    <value>The process could not be published.</value>
   </data>
 </root>

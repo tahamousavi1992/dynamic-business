@@ -327,7 +327,7 @@
     <Content Include="App_LocalResources\UserTaskRuleModel.resx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_LocalResources\sysProcess.resx" />
+    <Content Include="App_LocalResources\sysBpmsProcess.resx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_LocalResources\SubTypeEmailEventModel.resx" />

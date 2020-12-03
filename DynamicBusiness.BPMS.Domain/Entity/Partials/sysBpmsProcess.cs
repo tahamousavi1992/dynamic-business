@@ -61,7 +61,7 @@ namespace DynamicBusiness.BPMS.Domain
             Draft = 1,
             [Description("Published")]
             Published = 2,
-            [Description("Inactive")]
+            [Description("Stop/Inactive")]
             Inactive = 3,
             [Description("Old Version")]
             OldVersion = 4

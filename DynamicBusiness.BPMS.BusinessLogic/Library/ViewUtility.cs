@@ -94,6 +94,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             return CurrentBpmsVersion == LastSqlVersionExecuted;
         }
 
+        //It used used for built in upgrade system for now it is not in work.
         public static void UpdatedSqlQuery(int portalId)
         {
             if (!IsUpdatedSqlQueryVesrion(portalId))

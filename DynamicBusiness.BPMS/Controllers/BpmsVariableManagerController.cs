@@ -14,7 +14,6 @@ namespace DynamicBusiness.BPMS.Controllers
         // GET: BpmsVariableManager
         public object GetList(Guid? ProcessId = null, Guid? ApplicationPageId = null)
         {
-            //base.SetMenuIndex(base.ProcessId.HasValue ? AdminMenuIndex.VariableProcessIndex : AdminMenuIndex.VariableApplicationIndex);
             using (VariableService variableService = new VariableService())
                 return new { GetList = variableService.GetList(ProcessId, ApplicationPageId, null, "", null, true).Select(c => new VariableDTO(c)).ToList() };
         }
@@ -61,7 +60,7 @@ namespace DynamicBusiness.BPMS.Controllers
                             Model = variable,
                             ListConnection = dbConnectionService.GetList("").Select(c => new DBConnectionDTO(c)).ToList(),
                             ListTypes = EnumObjHelper.GetEnumList<sysBpmsVariable.e_VarTypeLU>().Select(c => new QueryModel(c.Key.ToString(), c.Value)),
-                            ListRelations = EnumObjHelper.GetEnumList<sysBpmsVariable.e_RelationTypeLU>().Select(c => new QueryModel(c.Key.ToString(), c.Value)),
+                            ListRelations = EnumObjHelper.GetEnumList<sysBpmsVariable.e_RelationTypeLU>().Where(c => variable.ProcessID.HasValue || c.Key != (int)sysBpmsVariable.e_RelationTypeLU.Systemic).Select(c => new QueryModel(c.Key.ToString(), c.Value)),
                             ListEntities = Entities.Select(c => new { c.ID, Name = c.Name + $"({c.DisplayName})" }).ToList(),
                             ListFilters = EnumObjHelper.GetEnumList<sysBpmsVariable.e_FilterTypeLU>().Select(c => new QueryModel(c.Key.ToString(), c.Value)),
                             ListProperties = Properties,

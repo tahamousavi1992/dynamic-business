@@ -38,9 +38,9 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         /// <returns>check condition and single line</returns>
         public bool ExecuteBooleanCode(DesignCodeModel designCodeModel, FormModel formModel = null)
         {
-            if (string.IsNullOrWhiteSpace(designCodeModel?.Code))
+            if (!(designCodeModel.CodeObjects?.Any() ?? false))
                 return true;
-            (bool result, CodeBase codeBase) = this.Execute(designCodeModel, formModel, null);
+            (bool result, CodeBase codeBase) = this.Execute(designCodeModel, formModel, null, onlyCondition: true);
             return result;
         }
 
@@ -49,27 +49,27 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         /// </summary>
         public CodeResultModel ExecuteScriptCode(DesignCodeModel designCodeModel, CodeBaseSharedModel codeBaseShared)
         {
-            if (string.IsNullOrWhiteSpace(designCodeModel?.Code))
+            if (!(designCodeModel.CodeObjects?.Any() ?? false))
                 return null;
-            (bool result, CodeBase codeBase) = this.Execute(designCodeModel, null, codeBaseShared);
+            (bool result, CodeBase codeBase) = this.Execute(designCodeModel, null, codeBaseShared, onlyCondition: false);
             return new CodeResultModel(result, codeBase.UrlHelper.RedirectUrlModel, codeBase.CodeBaseShared);
         }
 
         //before having showed form,it will execute form's OnEntryFormCode.
         public CodeResultModel ExecuteOnEntryFormCode(DesignCodeModel designCodeModel, FormModel formModel, CodeBaseSharedModel codeBaseShared)
         {
-            if (string.IsNullOrWhiteSpace(designCodeModel?.Code))
+            if (!(designCodeModel.CodeObjects?.Any() ?? false))
                 return null;
-            (bool result, CodeBase codeBase) = this.Execute(designCodeModel, formModel, codeBaseShared);
+            (bool result, CodeBase codeBase) = this.Execute(designCodeModel, formModel, codeBaseShared, onlyCondition: false);
             return new CodeResultModel(result, codeBase.UrlHelper.RedirectUrlModel, codeBase.CodeBaseShared);
         }
 
         //after having posted form,it will execute form's OnExitFormCode
         public CodeResultModel ExecuteOnExitFormCode(DesignCodeModel designCodeModel, FormModel formModel, CodeBaseSharedModel codeBaseShared)
         {
-            if (string.IsNullOrWhiteSpace(designCodeModel?.Code))
+            if (!(designCodeModel.CodeObjects?.Any() ?? false))
                 return null;
-            (bool result, CodeBase codeBase) = this.Execute(designCodeModel, formModel, codeBaseShared);
+            (bool result, CodeBase codeBase) = this.Execute(designCodeModel, formModel, codeBaseShared, onlyCondition: false);
             return new CodeResultModel(result, codeBase.UrlHelper.RedirectUrlModel, codeBase.CodeBaseShared);
         }
 
@@ -80,7 +80,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             if (!string.IsNullOrWhiteSpace(buttonHtml.BackendCoding))
                 designCodeModel = DesignCodeUtility.GetDesignCodeFromXml(buttonHtml.BackendCoding);
 
-            if (designCodeModel != null && !string.IsNullOrWhiteSpace(designCodeModel.Code))
+            if (designCodeModel != null && (designCodeModel.CodeObjects?.Any() ?? false))
             {
                 var result = this.ExecuteOnExitFormCode(designCodeModel, formModel, codeBaseShared);
                 if (!result.Result)
@@ -106,7 +106,12 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         #region ..::private properties ::..
 
-        private (bool result, CodeBase codeBase) Execute(DesignCodeModel designCodeModel, FormModel formModel, CodeBaseSharedModel codeBaseShared)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="onlyCondition">Is true for condition rule like visibilty of form or gateway condition</param>
+        /// <returns></returns>
+        private (bool result, CodeBase codeBase) Execute(DesignCodeModel designCodeModel, FormModel formModel, CodeBaseSharedModel codeBaseShared, bool onlyCondition)
         {
             var listItem = designCodeModel.CodeObjects.Cast<DCBaseModel>().ToList();
             CodeBase codeBase;
@@ -117,7 +122,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 codeBase = new CodeBase();
 
             codeBase.InitialProperties(base.EngineSharedModel.CurrentProcessID, base.EngineSharedModel.CurrentThreadID, base.EngineSharedModel.CurrentApplicationPageID, base.UnitOfWork, base.EngineSharedModel.BaseQueryModel, GetCurrentUserID(base.EngineSharedModel.CurrentUserName), base.EngineSharedModel.CurrentUserName, formModel, base.EngineSharedModel.ApiSessionID, codeBaseShared);
-            this.ExecuteCodeModel(listItem, codeBase, string.Empty, ref result);
+            this.ExecuteCodeModel(listItem, codeBase, onlyCondition, string.Empty, ref result);
             return (result, codeBase);
         }
 
@@ -125,7 +130,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         /// this will execute all DCBaseModel Items.
         /// </summary> 
         /// <param name="isYesClasue">if is null parent is not a condition otherwise it is output of yes</param>
-        private void ExecuteCodeModel(List<DCBaseModel> codeObjects, CodeBase codeBase, string parentShapeID, ref bool result, bool? isYesClasue = false)
+        private void ExecuteCodeModel(List<DCBaseModel> codeObjects, CodeBase codeBase, bool onlyCondition, string parentShapeID, ref bool result, bool? isYesClasue = false)
         {
             string currentShapeID = string.Empty;
             bool? nextIsYesClasue = null;
@@ -141,7 +146,10 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 {
                     if (dcBase is DCConditionModel)
                     {
-                        nextIsYesClasue = dcBase.Execute(codeBase);
+                        if (onlyCondition)
+                            result = dcBase.Execute(codeBase);
+                        else
+                            nextIsYesClasue = dcBase.Execute(codeBase);
                     }
                     else
                         dcBase.Execute(codeBase);
@@ -149,7 +157,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             }
             if (!string.IsNullOrWhiteSpace(currentShapeID))
             {
-                this.ExecuteCodeModel(codeObjects, codeBase, currentShapeID, ref result, nextIsYesClasue);
+                this.ExecuteCodeModel(codeObjects, codeBase, onlyCondition, currentShapeID, ref result, nextIsYesClasue);
             }
         }
 

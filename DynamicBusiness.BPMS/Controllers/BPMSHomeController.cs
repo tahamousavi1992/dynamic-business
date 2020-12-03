@@ -17,11 +17,6 @@ namespace DynamicBusiness.BPMS.Controllers
         public ActionResult Index()
         {
             DomainUtility.AdminHomeUr = base.ActivePage.FullUrl;
-            if (!ViewUtility.IsUpdatedSqlQueryVesrion(base.PortalSettings.PortalId))
-            {
-                ViewUtility.UpdatedSqlQuery(base.PortalSettings.PortalId);
-                base.RedirectNoSkin();
-            }
             ViewBag.DnnMenu = ViewUtility.GetMenu(this.ActivePage, base.PortalSettings.PortalId);
             ViewBag.AdminUrl = UrlUtility.GetApiBase(base.Request, base.PortalSettings.DefaultPortalAlias, "BpmsAdminApi").TrimEnd('/') + "/";
             ViewBag.EngineUrl = UrlUtility.GetApiBase(base.Request, base.PortalSettings.DefaultPortalAlias, "BpmsApi").TrimEnd('/') + "/";
