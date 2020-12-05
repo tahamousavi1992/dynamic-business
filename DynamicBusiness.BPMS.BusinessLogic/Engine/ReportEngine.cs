@@ -76,7 +76,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             ReportItems reportFooterItems = new ReportItems();
             ReportTextBoxControl[] footerTxt = new ReportTextBoxControl[3];
             string footer = string.IsNullOrWhiteSpace(dataGridHtml.ReportFooter) ?
-                $" صفحه {ReportGlobalParameters.CurrentPageNumber} از {ReportGlobalParameters.TotalPages}" : dataGridHtml.ReportFooter;
+                $" page {ReportGlobalParameters.CurrentPageNumber} of {ReportGlobalParameters.TotalPages}" : dataGridHtml.ReportFooter;
             footerTxt[0] = new ReportTextBoxControl()
             { Name = "txtCopyright", ValueOrExpression = new string[] { footer } };
             reportFooterItems.TextBoxControls = footerTxt;

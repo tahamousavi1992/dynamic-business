@@ -20,7 +20,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             string directoryVirtualFolder = (BPMSResources.FilesVirtualRoot + BPMSResources.StyleSheetRoot);
             if (System.IO.Directory.Exists(directoryFolder))
             {
-                return new DirectoryInfo(directoryFolder).GetFiles("*.css").Select(c => "~/" + directoryVirtualFolder + "/" + c.Name).ToList();
+                return new DirectoryInfo(directoryFolder).GetFiles("*.css").Select(c => "/" + directoryVirtualFolder + "/" + c.Name).ToList();
             }
             else return new List<string>();
         }

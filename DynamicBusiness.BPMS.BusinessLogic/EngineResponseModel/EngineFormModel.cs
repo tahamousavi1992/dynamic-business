@@ -94,7 +94,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             apiBaseUrl = apiBaseUrl + (PortalAlias.Split('/').Length == 2 ? ("/" + PortalAlias.Split('/')[1]) : "") + "/API/BpmsSingleActionApi";
 
             this.GetPopUpUrl = UrlUtility.AddParamsToUrl(getPopUpUrl, "formToken", formToken);
-            this.GetPostUrl = getPostUrl;
+            this.GetPostUrl = string.IsNullOrWhiteSpace(getPostUrl) ? string.Empty : UrlUtility.AddParamsToUrl(getPostUrl, "formToken", formToken);
             this.PageParams = UrlUtility.GetParams(request);
             string[] arrayParams = UrlUtility.GetParamsAsArray(request,
             string.Format("threadTaskID={0}", this.ThreadTaskID),
@@ -120,7 +120,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         {
             this.GetPopUpUrl = string.IsNullOrWhiteSpace(getPopUpUrl) ? string.Empty : UrlUtility.AddParamsToUrl(getPopUpUrl, "formToken", formToken);
             this.GetPostUrl = string.IsNullOrWhiteSpace(getPostUrl) ? string.Empty : UrlUtility.AddParamsToUrl(getPostUrl, "formToken", formToken);
-             
+
             this.PageParams = UrlUtility.GetParams(request);
             string[] arrayParams = UrlUtility.GetParamsAsArray(request,
              string.Format("threadTaskID={0}", this.ThreadTaskID),
@@ -150,7 +150,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             string directoryVirtualFolder = (BPMSResources.FilesVirtualRoot + BPMSResources.JavaScriptRoot);
             if (System.IO.Directory.Exists(directoryFolder))
             {
-                return new DirectoryInfo(directoryFolder).GetFiles("*.js").Select(c => "~/" + directoryVirtualFolder + "/" + c.Name).ToList();
+                return new DirectoryInfo(directoryFolder).GetFiles("*.js").Select(c => "/" + directoryVirtualFolder + "/" + c.Name).ToList();
             }
             else return new List<string>();
         }

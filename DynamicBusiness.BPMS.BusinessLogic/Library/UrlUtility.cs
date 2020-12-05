@@ -120,7 +120,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             string Params = string.Empty;
             foreach (var item in httpRequest.QueryString.Keys)
             {
-                if (!QueryModel.ForbidenList.Contains(item.ToStringObj().ToLower()) && item.ToString() != "PageIndex" && !Params.Contains(item.ToString() + "="))
+                //check item != null because if in url we add & at the end ,request will have a paramater with null key.
+                if (item != null && !QueryModel.ForbidenList.Contains(item.ToStringObj().ToLower()) && item.ToString() != "PageIndex" && !Params.Contains(item.ToString() + "="))
                     Params += item.ToString() + "=" + httpRequest.QueryString[item.ToString()] + "&";
             }
             foreach (var item in httpRequest.Form.Keys)
@@ -133,6 +134,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         /// <summary>
         /// this method remove repetitive parameters like skinsrc,containersrc,language,controller,action,moduleid,tabid,amp;skinsrc, controlId
+        ///this method will remove formToken parameter.
         /// </summary>
         public static List<string> GetParamsAsArray(HttpRequestBase httpRequest, params string[] additionalParams)
         {
@@ -144,16 +146,16 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                     Params.Add(item);
                 }
             }
-
             foreach (var item in httpRequest.QueryString.Keys)
             {
-                if (!QueryModel.ForbidenList.Contains(item.ToStringObj().ToLower()) && item.ToString() != "PageIndex" && !Params.Any(c => c.StartsWith(item.ToString() + "=")))
+                //check item != null because if in url we add & at the end ,request will have a paramater with null key.
+                if (item != null && item.ToString().ToLower() != "formtoken" && !QueryModel.ForbidenList.Contains(item.ToStringObj().ToLower()) && item.ToString() != "PageIndex" && !Params.Any(c => c.StartsWith(item.ToString() + "=")))
                     Params.Add(item.ToString() + "=" + httpRequest.QueryString[item.ToString()].Trim());
             }
 
             foreach (var item in httpRequest.Form.Keys)
             {
-                if (!QueryModel.ForbidenList.Contains(item.ToStringObj().ToLower()) && item.ToString() != "PageIndex" && !Params.Any(c => c.StartsWith(item.ToString() + "=")))
+                if (!QueryModel.ForbidenList.Contains(item.ToStringObj().ToLower()) && item.ToStringObj().ToLower() != "formtoken" && item.ToString() != "PageIndex" && !Params.Any(c => c.StartsWith(item.ToString() + "=")))
                     Params.Add(item.ToString() + "=" + httpRequest.Form[item.ToString()].Trim());
             }
 

@@ -318,7 +318,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             strTableRow += @"<TablixCell> 
                   <CellContents> 
 
-                   " + GenerateFooterTableTextBox(reportBuilder, "txtFooter_" + table.ReportName + "_", "TableFooter158", $"تعداد - {reportBuilder.TableRows}", padding) + $@" 
+                   " + GenerateFooterTableTextBox(reportBuilder, "txtFooter_" + table.ReportName + "_", "TableFooter158", $"count - {reportBuilder.TableRows}", padding) + $@" 
                   <ColSpan>{columns.Length}</ColSpan>
                   </CellContents> 
                 </TablixCell>{string.Join(" ", Enumerable.Repeat("<TablixCell />", (columns.Length - 1)))}";

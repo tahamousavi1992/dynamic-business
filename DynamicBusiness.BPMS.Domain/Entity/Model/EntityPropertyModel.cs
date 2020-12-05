@@ -139,15 +139,15 @@ namespace DynamicBusiness.BPMS.Domain
             [Description("Integer")]
             Integer = 1,
             [Description("Decimal")]
-            Decimal = 3,
+            Decimal = 2,
             [Description("Long")]
-            Long = 4,
+            Long = 3,
             [Description("DateTime")]
-            DateTime = 5,
+            DateTime = 4,
             [Description("Uniqueidentifier")]
-            Uniqueidentifier = 6,
+            Uniqueidentifier = 5,
             [Description("boolean")]
-            boolean = 7,
+            boolean = 6,
         }
 
     }

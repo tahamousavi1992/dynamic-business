@@ -119,11 +119,6 @@ namespace DynamicBusiness.BPMS.Cartable.Controllers
                                 );
                 }
             }
-        }
-
-        private string[] GetFormUrlParams(Guid applicationPageId)
-        {
-            return UrlUtility.GetParamsAsArray(new HttpRequestWrapper(base.MyRequest), new string[] { $"applicationPageId={applicationPageId}" }).Where(c => !this.MyRequest.Form.AllKeys.Union(new string[] { "controlId" }).Any(d => c.Contains(d + "="))).ToArray();
-        }
+        } 
     }
 }
