@@ -376,7 +376,7 @@ namespace DynamicBusiness.BPMS.Controllers
 
             using (EntityDefService entityDefService = new EntityDefService())
             {
-                var listENtities = entityDefService.GetList(null, null, true);
+                var listENtities = entityDefService.GetList(null, true);
                 if (designCode.EntityDefID != Guid.Empty)
                 {
                     designCode.Rows.ForEach((item) =>

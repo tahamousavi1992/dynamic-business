@@ -198,7 +198,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                     {
                         switch ((sysBpmsVariable.e_RelationTypeLU)variable.RelationTypeLU)
                         {
-                            case sysBpmsVariable.e_RelationTypeLU.Systemic:
+                            case sysBpmsVariable.e_RelationTypeLU.Local:
                                 resultOperation = new SystemicVariableTypeEngine(base.EngineSharedModel, variable, this.ProcessID, this.ThreadID, this.AdditionalParams, this.UnitOfWork).SaveValues(item.Value);
                                 break;
                             case sysBpmsVariable.e_RelationTypeLU.Entity:
@@ -298,7 +298,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                             //this set each DataModel's key corresponding to returned columns by query and then set value into it.  
                             _DataModel = new SqlQueryVariableTypeEngine(base.EngineSharedModel, _Variable, this.ProcessID, this.ThreadID, this.AdditionalParams, base.UnitOfWork).GetResult(currentPaging, containerQuery);
                             break;
-                        case sysBpmsVariable.e_RelationTypeLU.Systemic:
+                        case sysBpmsVariable.e_RelationTypeLU.Local:
                             //this set each DataModel's key corresponding to variable name and then set value into it.  
                             _DataModel = new SystemicVariableTypeEngine(base.EngineSharedModel, _Variable, this.ProcessID, this.ThreadID, this.AdditionalParams, base.UnitOfWork).GetResult();
                             break;

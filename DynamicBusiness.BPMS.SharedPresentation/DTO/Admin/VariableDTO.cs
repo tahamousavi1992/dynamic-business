@@ -13,7 +13,7 @@ namespace DynamicBusiness.BPMS.SharedPresentation
     {
         public VariableDTO()
         {
-            this.listVariableDependencyDTO = new List<VariableDependencyDTO>();
+            this.ListVariableDependencyDTO = new List<VariableDependencyDTO>();
         }
         public VariableDTO(sysBpmsVariable variable)
         {
@@ -31,7 +31,7 @@ namespace DynamicBusiness.BPMS.SharedPresentation
             this.DefaultValue = variable.DefaultValue;
             this.WhereClause = variable.WhereClause;
             this.OrderByClause = variable.OrderByClause;
-            this.listVariableDependencyDTO = variable.sysBpmsVariableDependencies?.Select(c => new VariableDependencyDTO(c)).ToList();
+            this.ListVariableDependencyDTO = variable.sysBpmsVariableDependencies?.Select(c => new VariableDependencyDTO(c)).ToList();
         }
         [DataMember]
         public Guid ID { get; set; }
@@ -95,12 +95,12 @@ namespace DynamicBusiness.BPMS.SharedPresentation
                     return (int)sysBpmsVariable.e_RelationTypeLU.Entity;
                 if (!string.IsNullOrWhiteSpace(this.Query))
                     return (int)sysBpmsVariable.e_RelationTypeLU.SqlQuery;
-                return (int)sysBpmsVariable.e_RelationTypeLU.Systemic;
+                return (int)sysBpmsVariable.e_RelationTypeLU.Local;
             }
             private set { }
         }
         [DataMember]
-        public List<VariableDependencyDTO> listVariableDependencyDTO { get; set; }
+        public List<VariableDependencyDTO> ListVariableDependencyDTO { get; set; }
 
         #region ..:: for PostAddEdit Variable Manager Controller ::..
         public List<VariableDependencyDTO> ListItems { get; set; }

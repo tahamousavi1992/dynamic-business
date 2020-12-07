@@ -24,7 +24,6 @@ namespace DynamicBusiness.BPMS.Domain
         public System.Guid ID { get; set; }
         public string DisplayName { get; set; }
         public string Name { get; set; }
-        public string TableName { get; set; }
         public string DesignXML { get; set; }
         public bool IsActive { get; set; }
     

@@ -35,13 +35,13 @@ namespace DynamicBusiness.BPMS.Controllers
                 using (EntityDefService entityDefService = new EntityDefService())
                 {
                     List<EntityPropertyModel> Properties = new List<EntityPropertyModel>();
-                    var Entities = entityDefService.GetList(string.Empty, string.Empty, true);
+                    var Entities = entityDefService.GetList(string.Empty, true);
                     if (variable != null && variable.EntityDefID.HasValue)
                         Properties = entityDefService.GetInfo(variable.EntityDefID.Value).AllProperties;
                     else
                         Properties = new List<EntityPropertyModel>();
 
-                    variable.listVariableDependencyDTO?.ForEach((item) =>
+                    variable.ListVariableDependencyDTO?.ForEach((item) =>
                     {
                         if (item.ToVariableID.HasValue)
                         {
@@ -60,7 +60,7 @@ namespace DynamicBusiness.BPMS.Controllers
                             Model = variable,
                             ListConnection = dbConnectionService.GetList("").Select(c => new DBConnectionDTO(c)).ToList(),
                             ListTypes = EnumObjHelper.GetEnumList<sysBpmsVariable.e_VarTypeLU>().Select(c => new QueryModel(c.Key.ToString(), c.Value)),
-                            ListRelations = EnumObjHelper.GetEnumList<sysBpmsVariable.e_RelationTypeLU>().Where(c => variable.ProcessID.HasValue || c.Key != (int)sysBpmsVariable.e_RelationTypeLU.Systemic).Select(c => new QueryModel(c.Key.ToString(), c.Value)),
+                            ListRelations = EnumObjHelper.GetEnumList<sysBpmsVariable.e_RelationTypeLU>().Where(c => variable.ProcessID.HasValue || c.Key != (int)sysBpmsVariable.e_RelationTypeLU.Local).Select(c => new QueryModel(c.Key.ToString(), c.Value)),
                             ListEntities = Entities.Select(c => new { c.ID, Name = c.Name + $"({c.DisplayName})" }).ToList(),
                             ListFilters = EnumObjHelper.GetEnumList<sysBpmsVariable.e_FilterTypeLU>().Select(c => new QueryModel(c.Key.ToString(), c.Value)),
                             ListProperties = Properties,
@@ -81,7 +81,7 @@ namespace DynamicBusiness.BPMS.Controllers
             variableDTO.ListDependencies = variableDTO.ListDependencies ?? new List<VariableDependencyDTO>();
             if (variableDTO.ProcessID.HasValue || variableDTO.ApplicationPageID.HasValue)
             {
-                if (RelationTypeLU == (int)sysBpmsVariable.e_RelationTypeLU.Systemic && variableDTO.VarTypeLU == (int)sysBpmsVariable.e_VarTypeLU.List)
+                if (RelationTypeLU == (int)sysBpmsVariable.e_RelationTypeLU.Local && variableDTO.VarTypeLU == (int)sysBpmsVariable.e_VarTypeLU.List)
                     variableDTO.Collection = variableDTO.ListItems.BuildXml();
                 //set ViewBags
                 using (VariableService variableService = new VariableService())

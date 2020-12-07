@@ -14,19 +14,19 @@ namespace DynamicBusiness.BPMS.Domain
     using System.Data.Entity.Infrastructure;
     using System.Data.Entity.Core.Objects;
     using System.Linq;
-    
+
     public partial class Db_BPMSEntities : DbContext
     {
         public Db_BPMSEntities()
             : base(DomainUtility.GetConnectionName())
         {
         }
-    
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
         }
-    
+
         public virtual DbSet<sysBpmsAPIAccess> sysBpmsAPIAccesses { get; set; }
         public virtual DbSet<sysBpmsApplicationPage> sysBpmsApplicationPages { get; set; }
         public virtual DbSet<sysBpmsApplicationPageAccess> sysBpmsApplicationPageAccesses { get; set; }
@@ -62,18 +62,18 @@ namespace DynamicBusiness.BPMS.Domain
         public virtual DbSet<sysBpmsUser> sysBpmsUsers { get; set; }
         public virtual DbSet<sysBpmsVariable> sysBpmsVariables { get; set; }
         public virtual DbSet<sysBpmsVariableDependency> sysBpmsVariableDependencies { get; set; }
-    
+
         [DbFunction("Db_BPMSEntities", "sysBpmsSplit")]
         public virtual IQueryable<sysBpmsSplit_Result> sysBpmsSplit(string rowData, string delimeter)
         {
             var rowDataParameter = rowData != null ?
                 new ObjectParameter("RowData", rowData) :
                 new ObjectParameter("RowData", typeof(string));
-    
+
             var delimeterParameter = delimeter != null ?
                 new ObjectParameter("Delimeter", delimeter) :
                 new ObjectParameter("Delimeter", typeof(string));
-    
+
             return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<sysBpmsSplit_Result>("[Db_BPMSEntities].[sysBpmsSplit](@RowData, @Delimeter)", rowDataParameter, delimeterParameter);
         }
     }

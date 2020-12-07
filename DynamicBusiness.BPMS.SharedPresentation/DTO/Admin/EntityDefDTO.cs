@@ -19,8 +19,7 @@ namespace DynamicBusiness.BPMS.SharedPresentation
                 this.ID = entityDef.ID;
                 this.DesignXML = entityDef.DesignXML;
                 this.IsActive = entityDef.IsActive;
-                this.Name = entityDef.Name;
-                this.TableName = entityDef.TableName;
+                this.Name = entityDef.Name; 
                 this.DisplayName = entityDef.DisplayName;
             }
         }
@@ -38,15 +37,11 @@ namespace DynamicBusiness.BPMS.SharedPresentation
         [Required] 
         [DataMember]
         public string Name { get; set; }
-
-        [Required] 
-        [DataMember]
-        public string TableName { get; set; }
-         
+ 
         [DataMember]
         public string FormattedTableName
         {
-            get { return "Bpms_" + this.TableName; } private set { }
+            get { return "Bpms_" + this.Name; } private set { }
         }
         [DataMember]
         public List<EntityPropertyModel> _Properties { get; set; }

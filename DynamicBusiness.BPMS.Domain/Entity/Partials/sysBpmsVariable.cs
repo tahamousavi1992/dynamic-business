@@ -30,7 +30,7 @@ namespace DynamicBusiness.BPMS.Domain
 
             ResultOperation resultOperation = new ResultOperation(this);
             if (string.IsNullOrWhiteSpace(this.Name))
-                resultOperation.AddError("نام متغیر نمیتواند خالی باشد");
+                resultOperation.AddError(SharedLang.GetReuired(nameof(sysBpmsVariable.Name), nameof(sysBpmsVariable)));
             switch ((sysBpmsVariable.e_RelationTypeLU)this.RelationTypeLU)
             {
                 case sysBpmsVariable.e_RelationTypeLU.Entity:
@@ -47,7 +47,7 @@ namespace DynamicBusiness.BPMS.Domain
                         resultOperation.AddError(SharedLang.GetReuired(nameof(sysBpmsVariable.Query), nameof(sysBpmsVariable)));
                     }
                     break;
-                case sysBpmsVariable.e_RelationTypeLU.Systemic:
+                case sysBpmsVariable.e_RelationTypeLU.Local:
                     if (this.VarTypeLU == (int)sysBpmsVariable.e_VarTypeLU.List && !this.Items.Any())
                     {
                         resultOperation.AddError(LangUtility.Get("AtleastOneItem.Text", nameof(sysBpmsVariable)));
@@ -87,14 +87,14 @@ namespace DynamicBusiness.BPMS.Domain
                     return (int)e_RelationTypeLU.Entity;
                 if (!string.IsNullOrWhiteSpace(this.Query))
                     return (int)e_RelationTypeLU.SqlQuery;
-                return (int)e_RelationTypeLU.Systemic;
+                return (int)e_RelationTypeLU.Local;
             }
         }
 
         public enum e_RelationTypeLU
         {
-            [Description("Systemic")]
-            Systemic = 1,
+            [Description("Local")]
+            Local = 1,
             [Description("Entity")]
             Entity = 2,
             [Description("Query")]

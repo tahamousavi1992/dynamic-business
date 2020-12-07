@@ -12,13 +12,13 @@ using DynamicBusiness.BPMS.SharedPresentation;
 using System.Web.Script.Serialization;
 
 namespace DynamicBusiness.BPMS.Controllers
-{ 
+{
     public class BpmsProcessController : BpmsAdminApiControlBase
     {
         // GET: /BpmsProcess/
-        public object GetList([System.Web.Http.FromUri]ProcessIndexSearchDTO indexSearchVM)
+        public object GetList([System.Web.Http.FromUri] ProcessIndexSearchDTO indexSearchVM)
         {
-      
+
             using (ProcessService processService = new ProcessService())
                 indexSearchVM.Update(processService.GetList(null, null, indexSearchVM.SelectedID, indexSearchVM.GetPagingProperties).Select(c => new ProcessDTO(c)).ToList());
             return indexSearchVM;
@@ -30,6 +30,7 @@ namespace DynamicBusiness.BPMS.Controllers
         {
             return new ProcessDTO()
             {
+                TypeLU = (int)sysBpmsProcess.e_TypeLU.General,
                 StatusLU = (int)sysBpmsProcess.Enum_StatusLU.Draft,
                 ProcessGroupID = ProcessGroupID,
                 ListTypes = EnumObjHelper.GetEnumList<sysBpmsProcess.e_TypeLU>().Select(c => new QueryModel(c.Key.ToString(), c.Value)).ToList()

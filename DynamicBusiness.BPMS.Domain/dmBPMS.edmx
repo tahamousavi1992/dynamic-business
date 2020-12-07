@@ -166,7 +166,6 @@
           <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
           <Property Name="DisplayName" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="TableName" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="DesignXML" Type="nvarchar(max)" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
@@ -1746,7 +1745,6 @@
           <Property Name="ID" Type="Guid" Nullable="false" />
           <Property Name="DisplayName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="TableName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="DesignXML" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="sysBpmsDocuments" Relationship="BPMSModel.FK_Document_EntityDef" FromRole="sysBpmsEntityDef" ToRole="sysBpmsDocument" />
@@ -2882,7 +2880,6 @@
               <MappingFragment StoreEntitySet="sysBpmsEntityDef">
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="DesignXML" ColumnName="DesignXML" />
-                <ScalarProperty Name="TableName" ColumnName="TableName" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
                 <ScalarProperty Name="ID" ColumnName="ID" />

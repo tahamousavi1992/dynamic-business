@@ -20,12 +20,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             ResultOperation resultOperation = new ResultOperation();
             try
             {
-                List<sysBpmsEntityDef> listEntity = this.GetList(string.Empty, string.Empty, null);
+                List<sysBpmsEntityDef> listEntity = this.GetList(string.Empty, null);
                 this.BeginTransaction();
-                if (listEntity.Any(c => c.TableName == entityDef.TableName && c.ID != entityDef.ID))
-                {
-                    resultOperation.AddError(LangUtility.Get("SameTable.Text", nameof(sysBpmsEntityDef)));
-                }
                 if (listEntity.Any(c => c.Name == entityDef.Name && c.ID != entityDef.ID))
                 {
                     resultOperation.AddError(LangUtility.Get("SameEntity.Text", nameof(sysBpmsEntityDef)));
@@ -56,12 +52,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             ResultOperation resultOperation = new ResultOperation();
             try
             {
-                List<sysBpmsEntityDef> listEntity = this.GetList(string.Empty, string.Empty, null);
+                List<sysBpmsEntityDef> listEntity = this.GetList(string.Empty, null);
                 this.BeginTransaction();
-                if (listEntity.Any(c => c.TableName == entityDef.TableName && c.ID != entityDef.ID))
-                {
-                    resultOperation.AddError(LangUtility.Get("SameTable.Text", nameof(sysBpmsEntityDef)));
-                }
                 if (listEntity.Any(c => c.Name == entityDef.Name && c.ID != entityDef.ID))
                 {
                     resultOperation.AddError(LangUtility.Get("SameEntity.Text", nameof(sysBpmsEntityDef)));
@@ -161,9 +153,9 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         /// <param name="TableName">it only search on TableName using like query</param>
         /// <param name="Name">it search on Name,TableName,DisplayName using like query</param>
         /// <returns></returns>
-        public List<sysBpmsEntityDef> GetList(string TableName, string Name, bool? IsActive, PagingProperties currentPaging = null)
+        public List<sysBpmsEntityDef> GetList(string Name, bool? IsActive, PagingProperties currentPaging = null)
         {
-            return this.UnitOfWork.Repository<IEntityDefRepository>().GetList(TableName, Name, IsActive, currentPaging);
+            return this.UnitOfWork.Repository<IEntityDefRepository>().GetList(Name, IsActive, currentPaging);
         }
 
         public List<string> GetList(bool? isActive)
@@ -255,7 +247,7 @@ $@"CREATE TABLE [{entityDef.FormattedTableName}](
                 }
 
                 dataBaseQueryService.ExecuteBySqlQuery(sqlQuery, false, null);
-                 
+
             }
             this.UpdateDependentEntity(entityDef, entityDef);
             foreach (EntityPropertyModel property in entityDef.Properties.Where(c => !string.IsNullOrWhiteSpace(c.DefaultValue)))

@@ -10,12 +10,11 @@ namespace DynamicBusiness.BPMS.Domain
     [Serializable]
     public partial class sysBpmsEntityDef
     {
-        public ResultOperation Update(string displayName, string name, string tableName, string designXML, bool isActive, List<EntityPropertyModel> properties, List<EntityRelationModel> relations)
+        public ResultOperation Update(string displayName, string name, string designXML, bool isActive, List<EntityPropertyModel> properties, List<EntityRelationModel> relations)
         {
-            if (this.ID == Guid.Empty)
-                this.TableName = tableName;
             this.DisplayName = displayName;
-            this.Name = name;
+            if (this.ID == Guid.Empty)
+                this.Name = name.ToStringObj().Trim();
             this.DesignXML = designXML;
             this.IsActive = isActive;
             this.Properties = properties;
@@ -53,15 +52,14 @@ namespace DynamicBusiness.BPMS.Domain
             {
                 resultOperation.AddError(SharedLang.GetReuired(nameof(sysBpmsEntityDef.DisplayName), nameof(sysBpmsEntityDef)));
             }
-            if (string.IsNullOrWhiteSpace(this.TableName))
-            {
-                resultOperation.AddError(SharedLang.GetReuired(nameof(sysBpmsEntityDef.TableName), nameof(sysBpmsEntityDef)));
-            }
             if (string.IsNullOrWhiteSpace(this.Name))
             {
                 resultOperation.AddError(SharedLang.GetReuired(nameof(sysBpmsEntityDef.Name), nameof(sysBpmsEntityDef)));
             }
-
+            if (this.Name.Split(' ').Count() > 1 || this.Name.Contains("-"))
+            {
+                resultOperation.AddError("Name is not valid (do not use space or - in your name)");
+            }
             if (this.Relations != null)
                 foreach (var Item in this.Relations)
                 {
@@ -87,11 +85,10 @@ namespace DynamicBusiness.BPMS.Domain
             this.ID = EntityDef.ID;
             this.Name = EntityDef.Name;
             this.DisplayName = EntityDef.DisplayName;
-            this.TableName = EntityDef.TableName;
             this.DesignXML = EntityDef.DesignXML;
             this.IsActive = EntityDef.IsActive;
         }
-         
+
         private List<EntityPropertyModel> properties { get; set; }
         public List<EntityPropertyModel> Properties
         {
@@ -140,7 +137,7 @@ namespace DynamicBusiness.BPMS.Domain
 
         public string FormattedTableName
         {
-            get { return "Bpms_" + this.TableName; }
+            get { return "Bpms_" + this.Name; }
         }
     }
 }

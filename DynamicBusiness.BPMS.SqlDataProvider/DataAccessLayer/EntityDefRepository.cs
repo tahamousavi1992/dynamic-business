@@ -26,8 +26,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         public void Update(sysBpmsEntityDef entityDef)
         {
             sysBpmsEntityDef retVal = (from p in this.Context.sysBpmsEntityDefs
-                                   where p.ID == entityDef.ID
-                                   select p).FirstOrDefault();
+                                       where p.ID == entityDef.ID
+                                       select p).FirstOrDefault();
             retVal.Load(entityDef);
         }
 
@@ -53,15 +53,13 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                     select P).AsNoTracking().FirstOrDefault();
         }
 
-        public List<sysBpmsEntityDef> GetList(string tableName, string name, bool? isActive, PagingProperties currentPaging)
+        public List<sysBpmsEntityDef> GetList(string name, bool? isActive, PagingProperties currentPaging)
         {
             using (Db_BPMSEntities db = new Db_BPMSEntities())
             {
                 name = name ?? string.Empty;
-                tableName = tableName ?? string.Empty;
                 var query = db.sysBpmsEntityDefs.Where(d =>
-                  (tableName == string.Empty || d.TableName.Contains(tableName)) &&
-                  (name == string.Empty || d.Name.Contains(name) || d.DisplayName.Contains(name) || d.TableName.Contains(name)) &&
+                  (name == string.Empty || d.Name.Contains(name) || d.DisplayName.Contains(name)) &&
                   (!isActive.HasValue || d.IsActive == isActive));
                 if (currentPaging != null)
                 {

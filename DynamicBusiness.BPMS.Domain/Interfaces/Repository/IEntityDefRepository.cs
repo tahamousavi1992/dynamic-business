@@ -13,7 +13,7 @@ namespace DynamicBusiness.BPMS.Domain
         void Delete(Guid entityDefId);
         sysBpmsEntityDef GetInfo(Guid ID);
         sysBpmsEntityDef GetInfo(string name);
-        List<sysBpmsEntityDef> GetList(string tableName, string name, bool? isActive, PagingProperties currentPaging);
+        List<sysBpmsEntityDef> GetList(string name, bool? isActive, PagingProperties currentPaging);
         List<string> GetList(bool? isActive);
     }
 }

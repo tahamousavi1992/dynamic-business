@@ -641,8 +641,11 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             if (resultOperation.IsSuccess)
                 if (!string.IsNullOrWhiteSpace(step.sysBpmsDynamicForm.OnEntryFormCode))
                 {
+                    DynamicCodeEngine dynamicCodeEngine = new DynamicCodeEngine(base.EngineSharedModel, base.UnitOfWork);
                     codeResultModel = new DynamicCodeEngine(base.EngineSharedModel, base.UnitOfWork).ExecuteOnEntryFormCode(DesignCodeUtility.GetDesignCodeFromXml(step.sysBpmsDynamicForm.OnEntryFormCode), formModel, codeBaseShared);
                     DynamicCodeEngine.SetToErrorMessage(codeResultModel, resultOperation);
+                    //If in code any variable is set, it Will save them all at the end
+                    dynamicCodeEngine.SaveExternalVariable(codeResultModel);
                 }
 
             return new EngineResponseModel().InitGet(resultOperation, codeBaseShared.MessageList, codeResultModel?.RedirectUrlModel, formModel);

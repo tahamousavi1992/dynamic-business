@@ -15,10 +15,9 @@ namespace DynamicBusiness.BPMS.Controllers
         // GET: /BpmsTableManager/
         public object GetList([System.Web.Http.FromUri] EntityIndexSearchDTO indexSearchVM)
         {
-            //base.SetMenuIndex(AdminMenuIndex.EntityManagerIndex);
             using (EntityDefService entityDefService = new EntityDefService())
             {
-                indexSearchVM.Update(entityDefService.GetList("", indexSearchVM.Name, null, indexSearchVM.GetPagingProperties).Select(c => new EntityDefDTO(c)).ToList());
+                indexSearchVM.Update(entityDefService.GetList(indexSearchVM.Name, null, indexSearchVM.GetPagingProperties).Select(c => new EntityDefDTO(c)).ToList());
                 return indexSearchVM;
             }
         }
@@ -34,7 +33,7 @@ namespace DynamicBusiness.BPMS.Controllers
                     c.GetEntityDefProperties = c.EntityDefID != Guid.Empty ? entityDefService.GetInfo(c.EntityDefID).AllProperties : new List<EntityPropertyModel>();
                 });
 
-                List<sysBpmsEntityDef> AllPublishedEntityDefs = entityDefService.GetList(string.Empty, string.Empty, true);
+                List<sysBpmsEntityDef> AllPublishedEntityDefs = entityDefService.GetList(string.Empty, true);
                 return Json(new
                 {
                     Model = entityDef,
@@ -71,7 +70,7 @@ namespace DynamicBusiness.BPMS.Controllers
                     }
                 }
 
-                ResultOperation resultOperation = entityDef.Update(postAddEdit.EntityDefDTO.DisplayName, postAddEdit.EntityDefDTO.Name, postAddEdit.EntityDefDTO.TableName, postAddEdit.EntityDefDTO.DesignXML, true, postAddEdit.EntityDefDTO.Properties, postAddEdit.EntityDefDTO.Relations);
+                ResultOperation resultOperation = entityDef.Update(postAddEdit.EntityDefDTO.DisplayName, postAddEdit.EntityDefDTO.Name, postAddEdit.EntityDefDTO.DesignXML, true, postAddEdit.EntityDefDTO.Properties, postAddEdit.EntityDefDTO.Relations);
                 if (resultOperation.IsSuccess)
                 {
                     if (entityDef.ID != Guid.Empty)

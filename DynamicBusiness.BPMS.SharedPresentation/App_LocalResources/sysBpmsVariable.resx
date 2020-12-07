@@ -126,6 +126,9 @@
   <data name="FieldName.Text" xml:space="preserve">
     <value>Field Name</value>
   </data>
+  <data name="Name.Text" xml:space="preserve">
+    <value>Name</value>
+  </data>
   <data name="Query.Text" xml:space="preserve">
     <value>Query</value>
   </data>

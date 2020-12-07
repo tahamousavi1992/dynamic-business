@@ -21,8 +21,7 @@ namespace DynamicBusiness.BPMS.Domain
         {
             this.Options = new List<OptionHtml>();
             this.IsRequired = obj["isRequired"] != null && (bool)obj["isRequired"];
-            this.FontIconCssClass = DomainUtility.toString(obj["fontIconCssClass"]);
-            this.HasOptional = obj["hasOptional"] != null && (bool)obj["hasOptional"];
+            this.FontIconCssClass = DomainUtility.toString(obj["fontIconCssClass"]); 
             this.OptionalCaption = obj["optionalCaption"].ToStringObj();
             this.FillValue(obj);
         }
@@ -30,8 +29,7 @@ namespace DynamicBusiness.BPMS.Domain
         public bool IsRequired { get; set; }
         [DataMember]
         public string FontIconCssClass { get; set; }
-        [DataMember]
-        public bool HasOptional { get; set; }
+ 
         [DataMember]
         public string OptionalCaption { get; set; }
 

@@ -139,7 +139,7 @@
     <value>A new version of this process has already been created, which is draft</value>
   </data>
   <data name="NotAllowEdit.Text" xml:space="preserve">
-    <value>The published process can not be edited, please deactivate the process first.</value>
+    <value>The published process can not be edited, please stop the process first.</value>
   </data>
   <data name="OldVersionDeleteError.Text" xml:space="preserve">
     <value>This process has a newer version so you have to first delete the newer version</value>

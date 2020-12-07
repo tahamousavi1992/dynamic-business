@@ -100,7 +100,7 @@ namespace DynamicBusiness.BPMS.SharedPresentation
                     return (int)sysBpmsVariable.e_RelationTypeLU.Entity;
                 if (!string.IsNullOrWhiteSpace(this.Query))
                     return (int)sysBpmsVariable.e_RelationTypeLU.SqlQuery;
-                return (int)sysBpmsVariable.e_RelationTypeLU.Systemic;
+                return (int)sysBpmsVariable.e_RelationTypeLU.Local;
             }
             private set { }
         }
