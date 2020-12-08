@@ -12,7 +12,5 @@ namespace DynamicBusiness.BPMS.Domain
     {
         [DataMember]
         public List<EntityPropertyModel> EntityPropertyModel { get; set; }
-        [DataMember]
-        public List<EntityRelationModel> EntityRelationModel { get; set; }
     }
 }

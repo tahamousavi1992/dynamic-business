@@ -28,17 +28,12 @@ namespace DynamicBusiness.BPMS.Controllers
             using (EntityDefService entityDefService = new EntityDefService())
             {
                 EntityDefDTO entityDef = new EntityDefDTO(ID.HasValue ? entityDefService.GetInfo(ID.Value) : null);
-                entityDef.Relations.ForEach(c =>
-                {
-                    c.GetEntityDefProperties = c.EntityDefID != Guid.Empty ? entityDefService.GetInfo(c.EntityDefID).AllProperties : new List<EntityPropertyModel>();
-                });
-
                 List<sysBpmsEntityDef> AllPublishedEntityDefs = entityDefService.GetList(string.Empty, true);
                 return Json(new
                 {
                     Model = entityDef,
-                    DbTypes = EnumObjHelper.GetEnumList<EntityPropertyModel.e_dbType>().Select(c => new QueryModel(c.Key.ToString(), c.Value)),
-                    RelationEntityDefs = AllPublishedEntityDefs.Select(c => new QueryModel(c.ID.ToString(), c.Name)),
+                    DbTypes = EnumObjHelper.GetEnumList<EntityPropertyModel.e_dbType>().Where(c=>c.Key!=(int)EntityPropertyModel.e_dbType.Entity).Select(c => new QueryModel(c.Key.ToString(), c.Value)).
+                    Union(AllPublishedEntityDefs.Select(c => new QueryModel((int)EntityPropertyModel.e_dbType.Entity + ":" + c.ID.ToString(), c.Name))).ToList(),
                     RelationProperties = entityDef.AllProperties
                 });
             }
@@ -61,16 +56,8 @@ namespace DynamicBusiness.BPMS.Controllers
                         postAddEdit.EntityDefDTO.Properties.Add(Item);
                     }
                 }
-                if (postAddEdit.listRelations != null)
-                {
-                    foreach (var Item in postAddEdit.listRelations)
-                    {
-                        Item.ID = string.IsNullOrWhiteSpace(Item.ID) ? Guid.NewGuid().ToString() : Item.ID;
-                        postAddEdit.EntityDefDTO.Relations.Add(Item);
-                    }
-                }
 
-                ResultOperation resultOperation = entityDef.Update(postAddEdit.EntityDefDTO.DisplayName, postAddEdit.EntityDefDTO.Name, postAddEdit.EntityDefDTO.DesignXML, true, postAddEdit.EntityDefDTO.Properties, postAddEdit.EntityDefDTO.Relations);
+                ResultOperation resultOperation = entityDef.Update(postAddEdit.EntityDefDTO.DisplayName, postAddEdit.EntityDefDTO.Name, postAddEdit.EntityDefDTO.DesignXML, true, postAddEdit.EntityDefDTO.Properties);
                 if (resultOperation.IsSuccess)
                 {
                     if (entityDef.ID != Guid.Empty)
@@ -133,7 +120,6 @@ namespace DynamicBusiness.BPMS.Controllers
             else
                 return new PostMethodMessage(result.GetErrors(), DisplayMessageType.success);
         }
-
 
         [HttpDelete]
         public object Delete(Guid ID)

@@ -10,15 +10,14 @@ namespace DynamicBusiness.BPMS.Domain
     [Serializable]
     public partial class sysBpmsEntityDef
     {
-        public ResultOperation Update(string displayName, string name, string designXML, bool isActive, List<EntityPropertyModel> properties, List<EntityRelationModel> relations)
+        public ResultOperation Update(string displayName, string name, string designXML, bool isActive, List<EntityPropertyModel> properties)
         {
             this.DisplayName = displayName;
             if (this.ID == Guid.Empty)
                 this.Name = name.ToStringObj().Trim();
             this.DesignXML = designXML;
             this.IsActive = isActive;
-            this.Properties = properties;
-            this.Relations = relations;
+            this.Properties = properties; 
 
             ResultOperation resultOperation = new ResultOperation(this);
             if ((this.Properties == null || !this.Properties.Any()))
@@ -60,23 +59,7 @@ namespace DynamicBusiness.BPMS.Domain
             {
                 resultOperation.AddError("Name is not valid (do not use space or - in your name)");
             }
-            if (this.Relations != null)
-                foreach (var Item in this.Relations)
-                {
-                    if (Item.EntityDefID == Guid.Empty)
-                    {
-                        resultOperation.AddError(SharedLang.GetReuired(nameof(EntityRelationModel.EntityDefID), nameof(sysBpmsEntityDef)));
-                    }
-                    if (string.IsNullOrWhiteSpace(Item.EntityDefPropertyID))
-                    {
-                        resultOperation.AddError(SharedLang.GetReuired(nameof(EntityRelationModel.EntityDefPropertyID), nameof(sysBpmsEntityDef)));
-                    }
-                    if (string.IsNullOrWhiteSpace(Item.PropertyID))
-                    {
-                        resultOperation.AddError(SharedLang.GetReuired(nameof(EntityRelationModel.PropertyID), nameof(sysBpmsEntityDef)));
-                    }
-                }
-
+ 
             return resultOperation;
         }
 
@@ -119,22 +102,7 @@ namespace DynamicBusiness.BPMS.Domain
                 .Union(Properties).ToList();
             }
         }
-
-        private List<EntityRelationModel> relations { get; set; }
-        public List<EntityRelationModel> Relations
-        {
-            get
-            {
-                if (this.relations == null)
-                    this.relations = this.DesignXML.ParseXML<EntityDesignXmlModel>().EntityRelationModel ?? new List<EntityRelationModel>();
-                return relations;
-            }
-            set
-            {
-                relations = value;
-            }
-        }
-
+         
         public string FormattedTableName
         {
             get { return "Bpms_" + this.Name; }

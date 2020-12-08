@@ -238,26 +238,6 @@ namespace DynamicBusiness.BPMS.Domain
             return OutInt;
         }
 
-        /// <summary>
-        /// this is used to format a object using specific format like 'dd/MM/yyyy' ,"#0"
-        /// </summary>
-        public static string ToNewFormat(this object obj, string format)
-        {
-            if (obj == null || string.IsNullOrWhiteSpace(obj.ToStringObj()))
-                return obj.ToStringObj();
-            if (obj is DateTime)
-                return Convert.ToDateTime(obj).ToString(format);
-            if (obj is decimal)
-                return obj.ToDecimalObj().ToString(format);
-            if (obj is int)
-                return obj.ToIntObj().ToString(format);
-            if (obj is double)
-                return double.Parse(obj.ToStringObj()).ToString(format);
-            if (obj is float)
-                return float.Parse(obj.ToStringObj()).ToString(format);
-
-            return obj.ToStringObj();
-        }
 
         /// <summary>
         /// this is used to format a object using specific format like 'dd/MM/yyyy' ,"#0"

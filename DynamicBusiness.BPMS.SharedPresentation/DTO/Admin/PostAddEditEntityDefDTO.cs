@@ -14,7 +14,5 @@ namespace DynamicBusiness.BPMS.SharedPresentation
         public EntityDefDTO EntityDefDTO { get; set; }
         [DataMember]
         public List<EntityPropertyModel> listProperties { get; set; }
-        [DataMember]
-        public List<EntityRelationModel> listRelations { get; set; }
     }
 }

@@ -72,22 +72,6 @@ namespace DynamicBusiness.BPMS.SharedPresentation
                 return Properties.Union(new List<EntityPropertyModel>() { new EntityPropertyModel() { Name = "ID", ID = "1" } }).ToList();
             }private set { }
         }
-        [DataMember]
-        public List<EntityRelationModel> _Relations { get; set; }
-        [DataMember]
-        public List<EntityRelationModel> Relations
-        {
-            get
-            {
-                if (this._Relations == null)
-                    this._Relations = this.DesignXML.ParseXML<EntityDesignXmlModel>().EntityRelationModel ?? new List<EntityRelationModel>();
-                return _Relations;
-            }
-            set
-            {
-                _Relations = value;
-            }
-        }
 
     }
 }

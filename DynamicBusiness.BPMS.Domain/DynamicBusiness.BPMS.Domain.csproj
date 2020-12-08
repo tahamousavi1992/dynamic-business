@@ -155,7 +155,6 @@
     <Compile Include="Entity\Model\EngineSharedModel.cs" />
     <Compile Include="Entity\Model\EntityDesignXmlModel.cs" />
     <Compile Include="Entity\Model\EngineCode\VariableModel.cs" />
-    <Compile Include="Entity\Model\EntityRelationModel.cs" />
     <Compile Include="Entity\Model\FormQueryModel.cs" />
     <Compile Include="Entity\Model\HtmlElementHelperModel.cs" />
     <Compile Include="Entity\Model\MessageTypeParamsModel.cs" />

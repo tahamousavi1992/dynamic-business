@@ -33,7 +33,6 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                     entityDef.DesignXML = new EntityDesignXmlModel()
                     {
                         EntityPropertyModel = entityDef.Properties,
-                        EntityRelationModel = entityDef.Relations
                     }.BuildXml();
                     this.UnitOfWork.Repository<IEntityDefRepository>().Add(entityDef);
                     this.UnitOfWork.Save();
@@ -65,7 +64,6 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                     entityDef.DesignXML = new EntityDesignXmlModel()
                     {
                         EntityPropertyModel = entityDef.Properties,
-                        EntityRelationModel = entityDef.Relations
                     }.BuildXml();
                     this.UnitOfWork.Repository<IEntityDefRepository>().Update(entityDef);
                     this.UnitOfWork.Save();
@@ -169,55 +167,20 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         /// </summary>
         /// <param name="rModel">current EntityRelationModel which is evaluated.</param>
         /// <returns></returns>
-        private void CreateConstraintQuery(EntityRelationModel rModel, sysBpmsEntityDef entityDef, List<string> listQueries, bool dropFirst = false)
+        private void CreateConstraintQuery(EntityPropertyModel rModel, sysBpmsEntityDef entityDef, List<string> listQueries)
         {
-            sysBpmsEntityDef foreignEntity = this.GetInfo(rModel.EntityDefID);
+            sysBpmsEntityDef foreignEntity = this.GetInfo(rModel.RelationToEntityID.Value);
+            string constaintName = this.GetConstraintName(rModel.Name, entityDef.FormattedTableName, foreignEntity.FormattedTableName);
+            //generate foreign key query
+            listQueries.Add($@"ALTER TABLE [{entityDef.FormattedTableName}] 
+WITH CHECK ADD  CONSTRAINT [{constaintName}] FOREIGN KEY([{rModel.Name}])
+REFERENCES [{foreignEntity.FormattedTableName}] ([ID])");
 
-            //If It is making a relation for foreign table base on ID of current table.
-            if (rModel.EntityDefID != entityDef.ID && rModel.PropertyID == "1")
-            {
-                if (dropFirst)
-                    listQueries.Add($@"ALTER TABLE {foreignEntity.FormattedTableName} DROP CONSTRAINT {rModel.ConstraintName};");
-
-                //add number to end of foreign key name to prevent same foreign key name if this foreign table added already. 
-                string numericalIncrement = string.Empty;
-                if (foreignEntity.Relations.Count(c => c.EntityDefID == entityDef.ID) > 1)
-                    numericalIncrement = (foreignEntity.Relations.Where(c => c.EntityDefID == entityDef.ID).Select((c, i) => new { i, c.ID }).FirstOrDefault(c => c.ID == rModel.ID).i + 1).ToString();
-                rModel.ConstraintName = $"FK_{foreignEntity.FormattedTableName}_{entityDef.FormattedTableName + numericalIncrement}";
-
-                //generate foreign key query
-                listQueries.Add($@"ALTER TABLE [{foreignEntity.FormattedTableName}] 
-WITH CHECK ADD  CONSTRAINT [{rModel.ConstraintName}] FOREIGN KEY([{foreignEntity.AllProperties.FirstOrDefault(c => c.ID == rModel.EntityDefPropertyID).Name}])
-REFERENCES [{entityDef.FormattedTableName}] ([{entityDef.AllProperties.FirstOrDefault(c => c.ID == rModel.PropertyID).Name}])");
-
-                listQueries.Add($@"ALTER TABLE  [{foreignEntity.FormattedTableName}] CHECK CONSTRAINT [{rModel.ConstraintName}]");
-
-            }
-            else
-            {
-                if (dropFirst)
-                    listQueries.Add($@"ALTER TABLE {entityDef.FormattedTableName} DROP CONSTRAINT {rModel.ConstraintName};");
-
-                //add number to end of foreign key name to prevent same foreign key name if this foreign table added already. 
-                string numericalIncrement = string.Empty;
-                if (entityDef.Relations.Count(c => c.EntityDefID == foreignEntity.ID) > 1)
-                    numericalIncrement = (entityDef.Relations.Where(c => c.EntityDefID == foreignEntity.ID).Select((c, i) => new { i, c.ID }).FirstOrDefault(c => c.ID == rModel.ID).i + 1).ToString();
-                rModel.ConstraintName = $"FK_{entityDef.FormattedTableName}_{foreignEntity.FormattedTableName + numericalIncrement}";
-
-                //generate foreign key query
-                listQueries.Add($@"ALTER TABLE [{entityDef.FormattedTableName}] 
-WITH CHECK ADD  CONSTRAINT [{rModel.ConstraintName}] FOREIGN KEY([{entityDef.AllProperties.FirstOrDefault(c => c.ID == rModel.PropertyID).Name}])
-REFERENCES [{foreignEntity.FormattedTableName}] ([{foreignEntity.AllProperties.FirstOrDefault(c => c.ID == rModel.EntityDefPropertyID).Name}])");
-
-                listQueries.Add($@"ALTER TABLE  [{entityDef.FormattedTableName}] CHECK CONSTRAINT [{rModel.ConstraintName}]");
-
-            }
-
+            listQueries.Add($@"ALTER TABLE  [{entityDef.FormattedTableName}] CHECK CONSTRAINT [{constaintName}]");
+            rModel.RelationConstaintName = constaintName;
         }
 
-        /// <summary>
-        /// publish a specific process by generating table with relations and properties.
-        /// </summary>
+
         public ResultOperation CreateTable(sysBpmsEntityDef entityDef)
         {
             DataBaseQueryService dataBaseQueryService = new DataBaseQueryService(base.UnitOfWork);
@@ -241,15 +204,14 @@ $@"CREATE TABLE [{entityDef.FormattedTableName}](
 [ThreadID][uniqueidentifier] NULL,
 {paramsQuery.TrimEnd(',')}) ";
 
-                foreach (EntityRelationModel rModel in entityDef.Relations)
+                foreach (EntityPropertyModel property in entityDef.Properties.Where(c => c.DbType == EntityPropertyModel.e_dbType.Entity))
                 {
-                    this.CreateConstraintQuery(rModel, entityDef, executeAlterQueries);
+                    this.CreateConstraintQuery(property, entityDef, executeAlterQueries);
                 }
 
                 dataBaseQueryService.ExecuteBySqlQuery(sqlQuery, false, null);
 
             }
-            this.UpdateDependentEntity(entityDef, entityDef);
             foreach (EntityPropertyModel property in entityDef.Properties.Where(c => !string.IsNullOrWhiteSpace(c.DefaultValue)))
             {
                 executeAlterQueries.Add($@" ALTER TABLE {entityDef.FormattedTableName} ADD CONSTRAINT def_{entityDef.FormattedTableName}_{property.Name} {property.SqlDefaultValue} FOR {property.Name} ;");
@@ -296,11 +258,30 @@ $@"CREATE TABLE [{entityDef.FormattedTableName}](
                                 addQuery.Add($@" ALTER TABLE {currentEntityDef.FormattedTableName} DROP CONSTRAINT def_{currentEntityDef.FormattedTableName}_{currentProperty.Name} ; ");
                             addQuery.Add($@" ALTER TABLE {currentEntityDef.FormattedTableName} ADD CONSTRAINT def_{currentEntityDef.FormattedTableName}_{newProperty.Name} {newProperty.SqlDefaultValue} FOR {newProperty.Name} ;");
                         }
+                        //if property is no longer a entity type drop relation constraint
+                        if (currentProperty.RelationToEntityID.HasValue && !newProperty.RelationToEntityID.HasValue)
+                            addQuery.Add($@"ALTER TABLE {currentEntityDef.FormattedTableName} DROP CONSTRAINT {currentProperty.RelationConstaintName};");
+                        else
+                        {
+                            if (currentProperty.RelationToEntityID != newProperty.RelationToEntityID)
+                            {     //if it had relation add drop constraint relation query
+                                if (currentProperty.RelationToEntityID.HasValue)
+                                {
+                                    addQuery.Add($@"ALTER TABLE {currentEntityDef.FormattedTableName} DROP CONSTRAINT {currentProperty.RelationConstaintName};");
+                                }
+                                this.CreateConstraintQuery(newProperty, newEntityDef, addQuery);
+                            }
+                        }
                     }
                     else
                     {
                         addQuery.Add($@"ALTER TABLE {currentEntityDef.FormattedTableName} ADD {newProperty.Name} {newProperty.SqlTypeName} {newProperty.SqlDefaultValue} {(newProperty.Required ? "NOT NULL" : "NULL")} ;");
+                        //Create Constraint for new properties
+                        if (newProperty.RelationToEntityID.HasValue)
+                            this.CreateConstraintQuery(newProperty, newEntityDef, addQuery);
                     }
+
+
                 }
 
                 //deleted properties
@@ -309,37 +290,17 @@ $@"CREATE TABLE [{entityDef.FormattedTableName}](
                     //drop default CONSTRAINT
                     if (!string.IsNullOrWhiteSpace(currentProperty.DefaultValue))
                         addQuery.Add($@" ALTER TABLE {currentEntityDef.FormattedTableName} DROP CONSTRAINT def_{currentEntityDef.FormattedTableName}_{currentProperty.Name} ; ");
-                    //currentProperty.IsActive = false;
-                    //newEntityDef.Properties.Add(currentProperty);
+                    //if it has relation add drop constraint relation query
+                    if (currentProperty.DbType == EntityPropertyModel.e_dbType.Entity)
+                    {
+                        addQuery.Add($@"ALTER TABLE {currentEntityDef.FormattedTableName} DROP CONSTRAINT {currentProperty.RelationConstaintName};");
+                    }
+                    //drop property query
                     addQuery.Add($@"ALTER TABLE {currentEntityDef.FormattedTableName} DROP COLUMN {currentProperty.Name};");
+
                 }
 
-                //deleted Relations
-                foreach (EntityRelationModel currentRelation in currentEntityDef.Relations.Where(c => !newEntityDef.Relations.Any(d => d.ID == c.ID)))
-                {
-                    addQuery.Add($@"ALTER TABLE {currentEntityDef.FormattedTableName} DROP CONSTRAINT {currentRelation.ConstraintName};");
-                }
-
-                foreach (EntityRelationModel newRelation in newEntityDef.Relations)
-                {
-                    //change Relation
-                    if (currentEntityDef.Relations.Any(c => c.ID == newRelation.ID))
-                    {
-                        EntityRelationModel currentRelation = currentEntityDef.Relations.FirstOrDefault(c => c.ID == newRelation.ID);
-                        if (currentRelation.EntityDefID != newRelation.EntityDefID ||
-                            currentRelation.EntityDefPropertyID != newRelation.EntityDefPropertyID ||
-                            currentRelation.PropertyID != newRelation.PropertyID)
-                        {
-                            this.CreateConstraintQuery(newRelation, newEntityDef, addQuery, true);
-                        }
-                    }
-                    else
-                    {
-                        this.CreateConstraintQuery(newRelation, newEntityDef, addQuery);
-                    }
-                }
             }
-            this.UpdateDependentEntity(currentEntityDef, newEntityDef);
             foreach (string query in addQuery)
             {
                 dataBaseQueryService.ExecuteBySqlQuery(query, false, null);
@@ -356,16 +317,9 @@ $@"CREATE TABLE [{entityDef.FormattedTableName}](
             ResultOperation resultOperation = new ResultOperation();
             List<string> executeAlterQueries = new List<string>();
 
-            foreach (EntityRelationModel rModel in entityDef.Relations)
+            foreach (EntityPropertyModel rModel in entityDef.Properties.Where(c => c.DbType == EntityPropertyModel.e_dbType.Entity))
             {
-                if (rModel.EntityDefID != entityDef.ID && rModel.PropertyID == "1")
-                {
-                    sysBpmsEntityDef foreignEntity = this.GetInfo(rModel.EntityDefID);
-                    executeAlterQueries.Add($@"ALTER TABLE {foreignEntity.FormattedTableName} DROP CONSTRAINT {rModel.ConstraintName}");
-                }
-                else
-                    executeAlterQueries.Add($@"ALTER TABLE {entityDef.FormattedTableName} DROP CONSTRAINT {rModel.ConstraintName}");
-
+                executeAlterQueries.Add($@"ALTER TABLE {entityDef.FormattedTableName} DROP CONSTRAINT {rModel.RelationConstaintName}");
             }
             foreach (string query in executeAlterQueries)
             {
@@ -377,73 +331,9 @@ $@"CREATE TABLE [{entityDef.FormattedTableName}](
             return resultOperation;
         }
 
-        private void UpdateDependentEntity(sysBpmsEntityDef currentEntity, sysBpmsEntityDef newEntity)
+        private string GetConstraintName(string propertName, string tableName, string foreigntableName)
         {
-            //deleted Relations
-            foreach (EntityRelationModel currentRelation in currentEntity.Relations.Where(c => !newEntity.Relations.Any(d => d.ID == c.ID)))
-            {
-                if (currentRelation.EntityDefID != currentEntity.ID)
-                {
-                    sysBpmsEntityDef relatedEntity = this.GetInfo(currentRelation.EntityDefID);
-                    relatedEntity.DesignXML = new EntityDesignXmlModel()
-                    {
-                        EntityPropertyModel = relatedEntity.Properties,
-                        EntityRelationModel = relatedEntity.Relations.Where(c => c.ID != currentRelation.ID).ToList()
-                    }.BuildXml();
-                    this.UnitOfWork.Repository<IEntityDefRepository>().Update(relatedEntity);
-                    this.UnitOfWork.Save();
-                }
-            }
-
-            foreach (EntityRelationModel newRelation in newEntity.Relations)
-            {
-                EntityRelationModel cloneRelation = new EntityRelationModel()
-                {
-                    ID = newRelation.ID,
-                    ConstraintName = newRelation.ConstraintName,
-                    Description = newRelation.Description,
-                    EntityDefID = currentEntity.ID,
-                    EntityDefPropertyID = newRelation.PropertyID,
-                    PropertyID = newRelation.EntityDefPropertyID,
-                };
-
-                //change Relation
-                if (currentEntity.Relations.Any(c => c.ID == newRelation.ID))
-                {
-                    EntityRelationModel currentRelation = currentEntity.Relations.FirstOrDefault(c => c.ID == newRelation.ID);
-                    if (currentRelation.EntityDefID != newRelation.EntityDefID ||
-                        currentRelation.EntityDefPropertyID != newRelation.EntityDefPropertyID ||
-                        currentRelation.PropertyID != newRelation.PropertyID ||
-                        currentRelation.Description != newRelation.Description)
-                    {
-                        if (newRelation.EntityDefID != currentEntity.ID)
-                        {
-                            sysBpmsEntityDef relatedEntity = this.GetInfo(newRelation.EntityDefID);
-                            relatedEntity.DesignXML = new EntityDesignXmlModel()
-                            {
-                                EntityPropertyModel = relatedEntity.Properties,
-                                EntityRelationModel = relatedEntity.Relations.Where(c => c.ID != cloneRelation.ID).Union(new List<EntityRelationModel>() { cloneRelation }).ToList()
-                            }.BuildXml();
-                            base.UnitOfWork.Repository<IEntityDefRepository>().Update(relatedEntity);
-                            base.UnitOfWork.Save();
-                        }
-                    }
-                }
-                else
-                {
-                    if (newRelation.EntityDefID != currentEntity.ID)
-                    {
-                        sysBpmsEntityDef relatedEntity = this.GetInfo(newRelation.EntityDefID);
-                        relatedEntity.DesignXML = new EntityDesignXmlModel()
-                        {
-                            EntityPropertyModel = relatedEntity.Properties,
-                            EntityRelationModel = relatedEntity.Relations.Union(new List<EntityRelationModel>() { cloneRelation }).ToList()
-                        }.BuildXml();
-                        base.UnitOfWork.Repository<IEntityDefRepository>().Update(relatedEntity);
-                        base.UnitOfWork.Save();
-                    }
-                }
-            }
+            return $"FK_{tableName}_{foreigntableName}_{propertName}";
         }
         #endregion
 

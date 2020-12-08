@@ -251,7 +251,6 @@ namespace DynamicBusiness.BPMS.Domain
             foreach (var cItemModel in cItemModelList)
             {
                 string key = "";
-                string format = "";
                 if (item != null && cItemModel.Type == "template")
                 {
                     string template = cItemModel.Name;
@@ -265,8 +264,7 @@ namespace DynamicBusiness.BPMS.Domain
                             if (strMatch.Split(new string[] { "::" }, StringSplitOptions.None).Count() == 2)
                             {
                                 //if has format
-                                format = strMatch.Split(new string[] { "::" }, StringSplitOptions.None)[1];
-                                template = template.Replace($"[{strMatch}]", item[key].ToNewFormat(format));
+                                template = template.Replace($"[{strMatch}]", item[key].ToFormat(strMatch));
                             }
                             else
                             {
@@ -274,8 +272,7 @@ namespace DynamicBusiness.BPMS.Domain
                                     template = template.Replace($"[{strMatch}]", item[strMatch].ToStringObj());
                             }
                         }
-                        key =
-                        format = null;
+                        key = null;
                     }
                     renderColumn += template;
                 }

@@ -68,7 +68,7 @@ namespace DynamicBusiness.BPMS.Domain
                 {
                     string strMatch = findMatch.Groups[1].ToString();
                     if (strMatch.Split(new string[] { "::" }, StringSplitOptions.None).Count() == 2)
-                        this.Label = this.Label.Replace($"[{strMatch}]", this.Helper.DataManageHelper?.GetValueByBinding(strMatch.Split(new string[] { "::" }, StringSplitOptions.None)[0], listFormQueryModel).ToNewFormat(strMatch.Split(new string[] { "::" }, StringSplitOptions.None)[1]));
+                        this.Label = this.Label.Replace($"[{strMatch}]", this.Helper.DataManageHelper?.GetValueByBinding(strMatch.Split(new string[] { "::" }, StringSplitOptions.None)[0], listFormQueryModel).ToFormat(strMatch));
                     else
                         this.Label = this.Label.ToStringObj().Replace(findMatch.Groups[0].ToString(), this.Helper.DataManageHelper.GetValueByBinding(strMatch, listFormQueryModel).ToStringObj());
                 }

@@ -33,21 +33,21 @@ namespace DynamicBusiness.BPMS.Domain
             this.Length = length;
         }
         [DataMember]
-        public string ID { get; set; } 
+        public string ID { get; set; }
         [DataMember]
-        public string Name { get; set; } 
+        public string Name { get; set; }
         [DataMember]
-        public bool Required { get; set; } 
+        public bool Required { get; set; }
         [DataMember]
-        public e_dbType DbType { get; set; } 
+        public e_dbType DbType { get; set; }
         [DataMember]
-        public string DbTypeName { get { return this.DbType.ToString(); } set { } } 
+        public string DbTypeName { get { return this.DbType.ToString(); } set { } }
         [DataMember]
-        public string DefaultValue { get; set; } 
+        public string DefaultValue { get; set; }
         [DataMember]
-        public string Length { get; set; } 
+        public string Length { get; set; }
         [DataMember]
-        public bool IsActive { get; set; } 
+        public bool IsActive { get; set; }
         [DataMember]
         public string Description { get; set; }
         [DataMember]
@@ -58,6 +58,7 @@ namespace DynamicBusiness.BPMS.Domain
                 switch (this.DbType)
                 {
                     case e_dbType.Uniqueidentifier:
+                    case e_dbType.Entity:
                         return "[uniqueidentifier]";
                     case e_dbType.DateTime:
                         return "[datetime]";
@@ -76,32 +77,7 @@ namespace DynamicBusiness.BPMS.Domain
             }
             set { }
         }
-        [DataMember]
-        public string CSharpTypeName
-        {
-            get
-            {
-                switch (this.DbType)
-                {
-                    case e_dbType.Uniqueidentifier:
-                        return "Guid" + (this.Required ? "" : "?");
-                    case e_dbType.DateTime:
-                        return "DateTime" + (this.Required ? "" : "?");
-                    case e_dbType.Decimal:
-                        return "decimal" + (this.Required ? "" : "?");
-                    case e_dbType.Integer:
-                        return "int" + (this.Required ? "" : "?");
-                    case e_dbType.Long:
-                        return "long" + (this.Required ? "" : "?");
-                    case e_dbType.boolean:
-                        return "bool" + (this.Required ? "" : "?");
-                    case e_dbType.String:
-                        return "string";
-                };
-                return "";
-            }
-            set { }
-        }
+       
         [DataMember]
         public string SqlDefaultValue
         {
@@ -132,6 +108,19 @@ namespace DynamicBusiness.BPMS.Domain
             set { }
         }
 
+        /// <summary>
+        /// If e_dbType is entity it will be filled.
+        /// </summary>
+        [DataMember]
+        public Guid? RelationToEntityID { get; set; }
+
+        /// <summary>
+        /// If e_dbType is entity it will be filled.
+        /// </summary>
+        [DataMember]
+        public string RelationConstaintName { get; set; }
+
+
         public enum e_dbType
         {
             [Description("String")]
@@ -148,6 +137,8 @@ namespace DynamicBusiness.BPMS.Domain
             Uniqueidentifier = 5,
             [Description("boolean")]
             boolean = 6,
+            [Description("Entity")]
+            Entity = 7,
         }
 
     }
