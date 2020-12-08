@@ -230,7 +230,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 allAssembly.AddRange(new DirectoryInfo(BPMSResources.FilesRoot + BPMSResources.AssemblyRoot).GetFiles("*.dll").Select(c => c.FullName).ToList());
             }
 
-            RoslynCompiler.compile(FixSourceCode(sourceScript), allAssembly, compiledFile);
+            RoslynCompiler.compile(sourceScript, allAssembly, compiledFile);
             Assembly.Load(File.ReadAllBytes(compiledFile));
         }
 
@@ -260,18 +260,6 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
             }
             return AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(c => c.GetName().Name == args.Name.Split(',')[0]);
-        }
-
-        private static string FixSourceCode(string sourceCode)
-        {
-            using (EntityDefService entityDefService = new EntityDefService())
-            {
-                entityDefService.GetList(true).ForEach(c =>
-                {
-                    sourceCode = DomainUtility.ReplaceRegularValue($" {c}(", ")", $"{c}(this.UnitOfWork)", sourceCode, true);
-                });
-            }
-            return sourceCode;
         }
 
         private static Assembly GetAssembly(string path)

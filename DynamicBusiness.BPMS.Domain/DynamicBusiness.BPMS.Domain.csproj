@@ -142,6 +142,7 @@
     <Compile Include="Entity\Model\EngineCode\DCExpressionModel.cs" />
     <Compile Include="Entity\Model\EngineCode\DCConditionModel.cs" />
     <Compile Include="Entity\Model\EngineCode\DCSetControlModel.cs" />
+    <Compile Include="Entity\Model\EngineCode\DCSqlFunctionModel.cs" />
     <Compile Include="Entity\Model\EngineCode\DCWebServiceModel.cs" />
     <Compile Include="Entity\Model\EngineCode\DesignCodeModel.cs" />
     <Compile Include="Entity\Model\DisplayMessageType.cs" />
@@ -178,7 +179,6 @@
     <Compile Include="Entity\Partials\sysBpmsLane.cs" />
     <Compile Include="Entity\Partials\sysBpmsLUTable.cs" />
     <Compile Include="Entity\Partials\sysBpmsMessageType.cs" />
-    <Compile Include="Entity\Partials\sysBpmsOperation.cs" />
     <Compile Include="Entity\Partials\sysBpmsProcessGroup.cs" />
     <Compile Include="Entity\Partials\sysBpmsSettingDef.cs" />
     <Compile Include="Entity\Partials\sysBpmsSettingValue.cs" />
@@ -237,7 +237,6 @@
     <Compile Include="Interfaces\Repository\IDocumentRepository.cs" />
     <Compile Include="Interfaces\Repository\IEmailAccountRepository.cs" />
     <Compile Include="Interfaces\Repository\ILaneRepository.cs" />
-    <Compile Include="Interfaces\Repository\IOperationRepository.cs" />
     <Compile Include="Interfaces\Repository\IProcessGroupRepository.cs" />
     <Compile Include="Interfaces\Repository\ISettingDefRepository.cs" />
     <Compile Include="Interfaces\Repository\ISettingValueRepository.cs" />
@@ -357,9 +356,6 @@
       <DependentUpon>dmBPMS.tt</DependentUpon>
     </Compile>
     <Compile Include="sysBpmsMessageType.cs">
-      <DependentUpon>dmBPMS.tt</DependentUpon>
-    </Compile>
-    <Compile Include="sysBpmsOperation.cs">
       <DependentUpon>dmBPMS.tt</DependentUpon>
     </Compile>
     <Compile Include="sysBpmsProcess.cs">

@@ -31,7 +31,6 @@ namespace DynamicBusiness.BPMS.CodePanel
         private BusinessLogic.AccessCodeHelper _AsccessHelper { get; set; }
         private BusinessLogic.ProcessCodeHelper _ProcessHelper { get; set; }
         private BusinessLogic.MessageCodeHelper _messageHelper { get; set; }
-        private BusinessLogic.OperationCodeHelper _operationHelper { get; set; }
         private BusinessLogic.UserCodeHelper _userHelper { get; set; }
         private BusinessLogic.UrlCodeHelper _urlHelper { get; set; }
         private BusinessLogic.DocumentCodeHelper _documentHelper { get; set; }
@@ -49,7 +48,6 @@ namespace DynamicBusiness.BPMS.CodePanel
         public Domain.IAccessCodeHelper AccessHelper { get { if (this._AsccessHelper == null) { this._AsccessHelper = new BusinessLogic.AccessCodeHelper(UnitOfWork); } return this._AsccessHelper; } }
         public Domain.IProcessCodeHelper ProcessHelper { get { if (this._ProcessHelper == null) { this._ProcessHelper = new BusinessLogic.ProcessCodeHelper(UnitOfWork); } return this._ProcessHelper; } }
         public Domain.IMessageCodeHelper MessageHelper { get { if (this._messageHelper == null) { this._messageHelper = new BusinessLogic.MessageCodeHelper(this.CodeBaseShared); } return this._messageHelper; } }
-        public Domain.IOperationCodeHelper OperationHelper { get { if (this._operationHelper == null) { this._operationHelper = new BusinessLogic.OperationCodeHelper(this.EngineSharedModel, UnitOfWork); } return this._operationHelper; } }
         public Domain.IUserCodeHelper UserHelper { get { if (this._userHelper == null) { this._userHelper = new BusinessLogic.UserCodeHelper(this.EngineSharedModel, UnitOfWork); } return this._userHelper; } }
         public Domain.IUrlCodeHelper UrlHelper { get { if (this._urlHelper == null) { this._urlHelper = new BusinessLogic.UrlCodeHelper(this.BaseQueryModel); } return this._urlHelper; } }
         public Domain.IDocumentCodeHelper DocumentHelper { get { if (this._documentHelper == null) { this._documentHelper = new BusinessLogic.DocumentCodeHelper(this.EngineSharedModel, UnitOfWork, CodeBaseShared); } return this._documentHelper; } }

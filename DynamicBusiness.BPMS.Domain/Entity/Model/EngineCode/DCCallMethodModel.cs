@@ -14,7 +14,7 @@ namespace DynamicBusiness.BPMS.Domain
     {
         public DCCallMethodModel() { }
         public DCCallMethodModel(string id, string name, string shapeid, string parentShapeId, bool? isOutputYes,
-             bool isFirst, string methodID, int methodGroupType, Func<Guid, List<string>> getOperationParam)
+             bool isFirst, string methodID, int methodGroupType)
             : base(id, name, e_ActionType.CallMethod, parentShapeId, shapeid, isOutputYes, isFirst, null)
         {
 
@@ -67,9 +67,6 @@ namespace DynamicBusiness.BPMS.Domain
                             break;
                     }
                     break;
-                case e_MethodGroupType.Operation:
-                    this.Rows = getOperationParam(this.MethodID.ToGuidObj()).Select(c => new DCMethodParaetersModel() { Value = string.Empty, ValueType = e_ValueType.Static, ParameterName = c }).ToList();
-                    break;
                 case e_MethodGroupType.AccessRule:
                     switch (this.MethodID)
                     {
@@ -114,8 +111,6 @@ namespace DynamicBusiness.BPMS.Domain
             User = 1,
             [Description("Message")]
             Message = 2,
-            [Description("Operation")]
-            Operation = 3,
             [Description("AccessRule")]
             AccessRule = 4,
             [Description("Url")]
@@ -204,14 +199,6 @@ namespace DynamicBusiness.BPMS.Domain
                             break;
                     }
                     break;
-                case e_MethodGroupType.Operation:
-                    List<QueryModel> listQuery = new List<QueryModel>();
-                    this.Rows.ForEach(c =>
-                    {
-                        listQuery.Add(new QueryModel(c.ParameterName, this.GetParameterCode(codeBase, c)));
-                    });
-                    codeBase.OperationHelper.RunQuery(this.MethodID.ToGuidObj(), listQuery.ToArray());
-                    break;
                 case e_MethodGroupType.AccessRule:
                     switch (this.MethodID)
                     {
@@ -293,9 +280,6 @@ namespace DynamicBusiness.BPMS.Domain
                             e_Convert = this.ConvertStrToType("applicationPageId:Guid".Split(',').FirstOrDefault(c => c.Split(':')[0] == pn).Split(':')[1]);
                             break;
                     }
-                    break;
-                case e_MethodGroupType.Operation:
-                    e_Convert = e_ConvertType.Nothing;
                     break;
                 case e_MethodGroupType.AccessRule:
                     switch (this.MethodID)

@@ -70,9 +70,6 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 sysBpmsLURow sysBpmsLU = this.GetInfo(Id);
                 sysBpmsLUTable sysBpmsLUTable = new LUTableService(base.UnitOfWork).GetInfo(sysBpmsLU.LUTableID);
 
-                if (sysBpmsLUTable.Alias == sysBpmsLUTable.e_LUTable.OperationGroupLU.ToString() &&
-                    new OperationService(base.UnitOfWork).GetList(sysBpmsLU.CodeOf.ToIntObj(), null).Any())
-                    resultOperation.AddError($"this LookUp is used by Sql Function so you have to first delete that items first.");
                 if (sysBpmsLUTable.Alias == sysBpmsLUTable.e_LUTable.DepartmentRoleLU.ToString() &&
                     new DepartmentMemberService(base.UnitOfWork).GetList(null, sysBpmsLU.CodeOf.ToIntObj(), null).Any())
                     resultOperation.AddError($"this LookUp is used by Organization's members so you have to first delete that items first.");

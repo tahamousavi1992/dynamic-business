@@ -43,7 +43,6 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 container.RegisterType<IDocumentDefRepository, DocumentDefRepository>();
                 container.RegisterType<IDocumentRepository, DocumentRepository>();
                 container.RegisterType<IVariableDependencyRepository, VariableDependencyRepository>();
-                container.RegisterType<IOperationRepository, OperationRepository>();
                 container.RegisterType<IEmailAccountRepository, EmailAccountRepository>();
                 container.RegisterType<IThreadEventRepository, ThreadEventRepository>();
                 container.RegisterType<IApplicationPageRepository, ApplicationPageRepository>();

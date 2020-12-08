@@ -76,7 +76,6 @@
     <Compile Include="DataAccessLayer\LaneRepository.cs" />
     <Compile Include="DataAccessLayer\LURowRepository.cs" />
     <Compile Include="DataAccessLayer\LUTableRepository.cs" />
-    <Compile Include="DataAccessLayer\OperationRepository.cs" />
     <Compile Include="DataAccessLayer\ProcessGroupRepository.cs" />
     <Compile Include="DataAccessLayer\ProcessRepository.cs" />
     <Compile Include="DataAccessLayer\SequenceFlowRepository.cs" />

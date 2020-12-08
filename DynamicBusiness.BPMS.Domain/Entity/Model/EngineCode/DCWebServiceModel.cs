@@ -15,12 +15,12 @@ namespace DynamicBusiness.BPMS.Domain
     public class DCWebServiceModel : DCBaseModel
     {
         public DCWebServiceModel() { }
-        public DCWebServiceModel(string id, string name, string retVariableName, string url, string shapeid, string parentShapeId, bool? isOutputYes, List<DCRowParameterModel> rows, bool isFirst, string funcName)
+        public DCWebServiceModel(string id, string name, string retVariableName, string url, string shapeid, string parentShapeId, bool? isOutputYes, List<DCRowWebServiceParameterModel> rows, bool isFirst, string funcName)
             : base(id, name, e_ActionType.WebService, parentShapeId, shapeid, isOutputYes, isFirst, funcName)
         {
             this.Url = url;
             this.RetVariableName = retVariableName;
-            this.Rows = rows ?? new List<DCRowParameterModel>();
+            this.Rows = rows ?? new List<DCRowWebServiceParameterModel>();
         }
         [DataMember]
         [Required]
@@ -32,7 +32,7 @@ namespace DynamicBusiness.BPMS.Domain
         [DataMember]
         public e_MethodType MethodType { get; set; }
         [DataMember]
-        public List<DCRowParameterModel> Rows { get; set; }
+        public List<DCRowWebServiceParameterModel> Rows { get; set; }
 
         public override object FillData(XElement xElement)
         {
@@ -42,13 +42,13 @@ namespace DynamicBusiness.BPMS.Domain
             this.ContentType = (DCWebServiceModel.e_ContentType)xElement.GetValue(nameof(DCWebServiceModel.ContentType)).ToIntObj();
             this.MethodType = (DCWebServiceModel.e_MethodType)xElement.GetValue(nameof(DCWebServiceModel.MethodType)).ToIntObj();
 
-            this.Rows = (from c in xElement.Element(nameof(DCWebServiceModel.Rows)).Elements(nameof(DCRowParameterModel))
-                         select new DCRowParameterModel()
+            this.Rows = (from c in xElement.Element(nameof(DCWebServiceModel.Rows)).Elements(nameof(DCRowWebServiceParameterModel))
+                         select new DCRowWebServiceParameterModel()
                          {
-                             Value = c.GetValue(nameof(DCRowParameterModel.Value)).ToStringObj(),
-                             Name = c.GetValue(nameof(DCRowParameterModel.Name)).ToStringObj(),
-                             ValueType = (DCBaseModel.e_ValueType)c.GetValue(nameof(DCRowParameterModel.ValueType)).ToIntObj(),
-                             Type = (DCRowParameterModel.e_Type)c.GetValue(nameof(DCRowParameterModel.Type)).ToIntObj(),
+                             Value = c.GetValue(nameof(DCRowWebServiceParameterModel.Value)).ToStringObj(),
+                             Name = c.GetValue(nameof(DCRowWebServiceParameterModel.Name)).ToStringObj(),
+                             ValueType = (DCBaseModel.e_ValueType)c.GetValue(nameof(DCRowWebServiceParameterModel.ValueType)).ToIntObj(),
+                             Type = (DCRowWebServiceParameterModel.e_Type)c.GetValue(nameof(DCRowWebServiceParameterModel.Type)).ToIntObj(),
                          }).ToList();
             return this;
         }
@@ -63,19 +63,19 @@ namespace DynamicBusiness.BPMS.Domain
                      new XElement(nameof(DCWebServiceModel.MethodType), (int)this.MethodType),
                      new XElement(nameof(DCWebServiceModel.Rows),
                      from c in this.Rows
-                     select new XElement(nameof(DCRowParameterModel),
-                         new XElement(nameof(DCRowParameterModel.Value), c.Value),
-                         new XElement(nameof(DCRowParameterModel.Name), c.Name),
-                         new XElement(nameof(DCRowParameterModel.ValueType), (int)c.ValueType),
-                         new XElement(nameof(DCRowParameterModel.Type), (int)c.Type)
+                     select new XElement(nameof(DCRowWebServiceParameterModel),
+                         new XElement(nameof(DCRowWebServiceParameterModel.Value), c.Value),
+                         new XElement(nameof(DCRowWebServiceParameterModel.Name), c.Name),
+                         new XElement(nameof(DCRowWebServiceParameterModel.ValueType), (int)c.ValueType),
+                         new XElement(nameof(DCRowWebServiceParameterModel.Type), (int)c.Type)
                          ))
                      );
         }
 
         public override bool Execute(ICodeBase codeBase)
         {
-            List<QueryModel> parameterList = this.Rows.Where(c => c.Type == DCRowParameterModel.e_Type.Parameter).Select(item => new QueryModel(item.Name, this.GetParameterCode(codeBase, item))).ToList();
-            List<QueryModel> headerList = this.Rows.Where(c => c.Type == DCRowParameterModel.e_Type.Header).Select(item => new QueryModel(item.Name, this.GetParameterCode(codeBase, item))).ToList();
+            List<QueryModel> parameterList = this.Rows.Where(c => c.Type == DCRowWebServiceParameterModel.e_Type.Parameter).Select(item => new QueryModel(item.Name, this.GetParameterCode(codeBase, item))).ToList();
+            List<QueryModel> headerList = this.Rows.Where(c => c.Type == DCRowWebServiceParameterModel.e_Type.Header).Select(item => new QueryModel(item.Name, this.GetParameterCode(codeBase, item))).ToList();
 
             object result = null;
             switch (this.MethodType)
@@ -97,7 +97,7 @@ namespace DynamicBusiness.BPMS.Domain
             return true;
         }
 
-        private object GetParameterCode(ICodeBase codeBase, DCRowParameterModel paraetersModel)
+        private object GetParameterCode(ICodeBase codeBase, DCRowWebServiceParameterModel paraetersModel)
         {
             return paraetersModel.GetRendered(codeBase, e_ConvertType.String);
         }
@@ -124,7 +124,7 @@ namespace DynamicBusiness.BPMS.Domain
     /// Each row of Parameter 
     /// </summary>
     [DataContract]
-    public class DCRowParameterModel
+    public class DCRowWebServiceParameterModel
     {
         [DataMember]
         public string Name { get; set; }

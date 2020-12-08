@@ -215,7 +215,6 @@
     <Compile Include="Engine\Code\EntityCodeHelper.cs" />
     <Compile Include="Engine\Code\MessageCodeHelper.cs" />
     <Compile Include="Engine\Code\DocumentCodeHelper.cs" />
-    <Compile Include="Engine\Code\OperationCodeHelper.cs" />
     <Compile Include="Engine\Code\ProcessCodeHelper.cs" />
     <Compile Include="Engine\Code\QueryCodeHelper.cs" />
     <Compile Include="Engine\Code\RoslynCompiler .cs" />
@@ -228,7 +227,6 @@
     <Compile Include="Engine\EntityDefEngine.cs" />
     <Compile Include="Engine\EventEngine.cs" />
     <Compile Include="Engine\GatewayEngine.cs" />
-    <Compile Include="Engine\OperationEngine.cs" />
     <Compile Include="Engine\ProcessEngine.cs" />
     <Compile Include="Engine\ReportEngine.cs" />
     <Compile Include="Engine\TaskEngine.cs" />
@@ -270,7 +268,6 @@
     <Compile Include="Services\RepositoryService\LaneService.cs" />
     <Compile Include="Services\RepositoryService\LURowService.cs" />
     <Compile Include="Services\RepositoryService\LUTableService.cs" />
-    <Compile Include="Services\RepositoryService\OperationService.cs" />
     <Compile Include="Services\RepositoryService\ProcessGroupService.cs" />
     <Compile Include="Services\RepositoryService\ProcessService.cs" />
     <Compile Include="Services\RepositoryService\SequenceFlowService.cs" />

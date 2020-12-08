@@ -233,16 +233,6 @@
           <Property Name="ParamsXML" Type="nvarchar(max)" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
-        <EntityType Name="sysBpmsOperation">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="GroupLU" Type="int" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="250" Nullable="false" />
-          <Property Name="SqlCommand" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="TypeLU" Type="int" Nullable="false" />
-        </EntityType>
         <EntityType Name="sysBpmsProcess">
           <Key>
             <PropertyRef Name="ID" />
@@ -1079,7 +1069,6 @@
           <EntitySet Name="sysBpmsLURow" EntityType="Self.sysBpmsLURow" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysBpmsLUTable" EntityType="Self.sysBpmsLUTable" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysBpmsMessageType" EntityType="Self.sysBpmsMessageType" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysBpmsOperation" EntityType="Self.sysBpmsOperation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysBpmsProcess" EntityType="Self.sysBpmsProcess" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysBpmsProcessGroup" EntityType="Self.sysBpmsProcessGroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysBpmsSequenceFlow" EntityType="Self.sysBpmsSequenceFlow" Schema="dbo" store:Type="Tables" />
@@ -1328,7 +1317,6 @@
           <EntitySet Name="sysBpmsLURows" EntityType="BPMSModel.sysBpmsLURow" />
           <EntitySet Name="sysBpmsLUTables" EntityType="BPMSModel.sysBpmsLUTable" />
           <EntitySet Name="sysBpmsMessageTypes" EntityType="BPMSModel.sysBpmsMessageType" />
-          <EntitySet Name="sysBpmsOperations" EntityType="BPMSModel.sysBpmsOperation" />
           <EntitySet Name="sysBpmsProcesses" EntityType="BPMSModel.sysBpmsProcess" />
           <EntitySet Name="sysBpmsProcessGroups" EntityType="BPMSModel.sysBpmsProcessGroup" />
           <EntitySet Name="sysBpmsSequenceFlows" EntityType="BPMSModel.sysBpmsSequenceFlow" />
@@ -1826,16 +1814,6 @@
           <Property Name="ParamsXML" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="sysBpmsEvents" Relationship="BPMSModel.FK_sysEvent_sysMessageType" FromRole="sysBpmsMessageType" ToRole="sysBpmsEvent" />
-        </EntityType>
-        <EntityType Name="sysBpmsOperation">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Guid" Nullable="false" />
-          <Property Name="GroupLU" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="SqlCommand" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="TypeLU" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="sysBpmsProcess">
           <Key>
@@ -2952,17 +2930,6 @@
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="ParamsXML" ColumnName="ParamsXML" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="sysBpmsOperations">
-            <EntityTypeMapping TypeName="BPMSModel.sysBpmsOperation">
-              <MappingFragment StoreEntitySet="sysBpmsOperation">
-                <ScalarProperty Name="TypeLU" ColumnName="TypeLU" />
-                <ScalarProperty Name="SqlCommand" ColumnName="SqlCommand" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="GroupLU" ColumnName="GroupLU" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

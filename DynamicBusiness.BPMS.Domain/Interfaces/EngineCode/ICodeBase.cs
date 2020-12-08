@@ -16,7 +16,6 @@ namespace DynamicBusiness.BPMS.Domain
         IControlCodeHelper ControlHelper { get; }
         IProcessCodeHelper ProcessHelper { get; }
         IMessageCodeHelper MessageHelper { get; }
-        IOperationCodeHelper OperationHelper { get; }
         IUserCodeHelper UserHelper { get; }
         IUrlCodeHelper UrlHelper { get; }
         IDocumentCodeHelper DocumentHelper { get; }

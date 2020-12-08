@@ -163,11 +163,9 @@ namespace DynamicBusiness.BPMS.Controllers
         [HttpPost]
         public object PostLoadDesignCodeActionList(PostLoadDesignCodeActionListDTO model)
         {
-            using (OperationService operationService = new OperationService())
 
                 return new
                 {
-                    ListOperations = operationService.GetList(null, null).Select(c => new OperationDTO(c)).ToList(),
                     ListActionTypes = EnumObjHelper.GetEnumList<DCBaseModel.e_ActionType>().Select(c => new QueryModel(c.Key.ToString(), c.Value)).ToList(),
                     model.ShapeId,
                     DynamicFormId = model.DynamicFormId.ToGuidObjNull(),
@@ -220,11 +218,7 @@ namespace DynamicBusiness.BPMS.Controllers
             else
                 designCode = new DCCallMethodModel(Guid.NewGuid().ToString(), string.Empty, model.ShapeId.ToStringObj(),
                     model.ParentShapeId.ToStringObj(), model.IsOutputYes, model.IsFirst, model.DefaultMethodID,
-                    model.DefaultMethodGroupType, (c) =>
-                    {
-                        using (OperationService operationService = new OperationService())
-                            return operationService.GetParameters(c);
-                    });
+                    model.DefaultMethodGroupType);
             using (DynamicFormService dynamicFormService = new DynamicFormService())
                 return new
                 {
@@ -343,7 +337,7 @@ namespace DynamicBusiness.BPMS.Controllers
                 designCode.IsOutputYes = model.IsOutputYes;
             }
             else
-                designCode = new DCWebServiceModel(Guid.NewGuid().ToString(), "وب سرویس", string.Empty, string.Empty
+                designCode = new DCWebServiceModel(Guid.NewGuid().ToString(), "Web Service", string.Empty, string.Empty
                      , model.ShapeId.ToStringObj(), model.ParentShapeId.ToStringObj(),
                       model.IsOutputYes, null, model.IsFirst.ToBoolObj(), string.Empty);
 
@@ -352,6 +346,32 @@ namespace DynamicBusiness.BPMS.Controllers
                 {
                     ListMethodTypes = EnumObjHelper.GetEnumList<DCWebServiceModel.e_MethodType>().Select(c => new QueryModel(c.Key.ToString(), c.Value)).ToList(),
                     ListContentTypes = EnumObjHelper.GetEnumList<DCWebServiceModel.e_ContentType>().Select(c => new QueryModel(c.Key.ToString(), c.Value)).ToList(),
+                    DynamicFormId = dynamicFormId,
+                    ProcessControls = dynamicFormId != Guid.Empty && dynamicFormId.HasValue ?
+                    dynamicFormService.GetControls(dynamicFormService.GetInfo(dynamicFormId.Value)).Select(c => new QueryModel(c.Key, c.Value)).ToList() : new List<QueryModel>(),
+                    Model = designCode
+                };
+        }
+
+        [HttpPost]
+        public object PostLoadSqlFunctionForm(PostLoadSqlFunctionFormDTO model)
+        {
+            Guid? dynamicFormId = model.DynamicFormId.ToGuidObjNull();
+            DCSqlFunctionModel designCode = null;
+            if (!string.IsNullOrWhiteSpace(model.XmlB64Model))
+            {
+                designCode = DesignCodeUtility.GetObjectOfDesignCode<DCSqlFunctionModel>(model.XmlB64Model.ToStringObj().FromBase64());
+                designCode.IsOutputYes = model.IsOutputYes;
+            }
+            else
+                designCode = new DCSqlFunctionModel(Guid.NewGuid().ToString(), "Sql Query", string.Empty, string.Empty
+                     , model.ShapeId.ToStringObj(), model.ParentShapeId.ToStringObj(),
+                      model.IsOutputYes, null, model.IsFirst.ToBoolObj(), string.Empty);
+
+            using (DynamicFormService dynamicFormService = new DynamicFormService())
+                return new
+                {
+                    ListMethodTypes = EnumObjHelper.GetEnumList<DCSqlFunctionModel.e_MethodType>().Select(c => new QueryModel(c.Key.ToString(), c.Value)).ToList(),
                     DynamicFormId = dynamicFormId,
                     ProcessControls = dynamicFormId != Guid.Empty && dynamicFormId.HasValue ?
                     dynamicFormService.GetControls(dynamicFormService.GetInfo(dynamicFormId.Value)).Select(c => new QueryModel(c.Key, c.Value)).ToList() : new List<QueryModel>(),
@@ -393,15 +413,6 @@ namespace DynamicBusiness.BPMS.Controllers
                         dynamicFormService.GetControls(dynamicFormService.GetInfo(dynamicFormId.Value)).Select(c => new QueryModel(c.Key, c.Value)).ToList() : new List<QueryModel>(),
                         Model = designCode
                     };
-            }
-        }
-
-        [HttpGet]
-        public List<string> GetOperationParameters(Guid operationId)
-        {
-            using (OperationService operationService = new OperationService())
-            {
-                return operationService.GetParameters(operationId);
             }
         }
 

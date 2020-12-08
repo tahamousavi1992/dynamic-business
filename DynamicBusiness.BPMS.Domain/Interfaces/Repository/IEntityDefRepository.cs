@@ -14,6 +14,6 @@ namespace DynamicBusiness.BPMS.Domain
         sysBpmsEntityDef GetInfo(Guid ID);
         sysBpmsEntityDef GetInfo(string name);
         List<sysBpmsEntityDef> GetList(string name, bool? isActive, PagingProperties currentPaging);
-        List<string> GetList(bool? isActive);
+        List<string> GetList(Guid relationToEntityId);
     }
 }

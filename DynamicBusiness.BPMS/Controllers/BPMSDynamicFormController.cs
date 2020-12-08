@@ -175,13 +175,10 @@ namespace DynamicBusiness.BPMS.Controllers
                 if (dynamicFormDTO != null)
                 {
                     using (VariableService variableService = new VariableService())
-                    using (OperationService operationService = new OperationService())
                         return Json(new
                         {
                             //it is used in dataGrid seting for binging form to openForm Column Item Type.
                             ProcessForms = dynamicFormService.GetList(base.ProcessId, null, base.ApplicationPageId.HasValue, string.Empty, null, null).Select(c => new { value = c.ID, text = c.Name }).ToList(),
-                            //it is used in dataGrid seting for binging form to operation Column Item Type.
-                            Operations = new OperationService().GetList(null, null).Select(c => new OperationDTO(c)).ToList(),
                             //it is used for binding variable of entity type to fileupload controls.
                             EntityVariables = variableService.GetList(base.ProcessId, base.ApplicationPageId, (int)sysBpmsVariable.e_VarTypeLU.Object, "", null, true).Select(c => new { text = c.Name, value = c.ID }).ToList(),
                             //it is used for binding variable of list type to list controls like dropdownlist or checkboxlist.

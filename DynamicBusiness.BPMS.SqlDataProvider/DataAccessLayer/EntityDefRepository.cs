@@ -74,13 +74,13 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             }
         }
 
-        public List<string> GetList(bool? isActive)
+        public List<string> GetList(Guid relationToEntityId)
         {
+            string entityID = relationToEntityId.ToStringObj();
             using (Db_BPMSEntities db = new Db_BPMSEntities())
             {
-                var query = db.sysBpmsEntityDefs.Where(d =>
-                  (!isActive.HasValue || d.IsActive == isActive));
-                return query.OrderBy(p => p.Name).Select(c => c.Name).AsNoTracking().ToList();
+                return db.sysBpmsEntityDefs.Where(d => d.DesignXML.Contains(entityID)).OrderBy(p => p.Name)
+                    .Select(c => c.Name).AsNoTracking().ToList();
 
             }
         }

@@ -47,7 +47,6 @@ namespace DynamicBusiness.BPMS.Domain
         public virtual DbSet<sysBpmsLURow> sysBpmsLURows { get; set; }
         public virtual DbSet<sysBpmsLUTable> sysBpmsLUTables { get; set; }
         public virtual DbSet<sysBpmsMessageType> sysBpmsMessageTypes { get; set; }
-        public virtual DbSet<sysBpmsOperation> sysBpmsOperations { get; set; }
         public virtual DbSet<sysBpmsProcess> sysBpmsProcesses { get; set; }
         public virtual DbSet<sysBpmsProcessGroup> sysBpmsProcessGroups { get; set; }
         public virtual DbSet<sysBpmsSequenceFlow> sysBpmsSequenceFlows { get; set; }

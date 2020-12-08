@@ -14,7 +14,6 @@ namespace DynamicBusiness.BPMS.Domain
         {
             DepartmentRoleLU,
             LaneOwnerTypeLU,
-            OperationGroupLU,
             ProcessStatusLU,
             ApplicationPageGroupLU,
         }

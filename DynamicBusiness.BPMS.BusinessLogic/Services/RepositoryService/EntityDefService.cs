@@ -112,23 +112,31 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 List<sysBpmsVariable> listVariable = new VariableService().GetList(null, null, null, "", EntityDefId, null);
                 this.BeginTransaction();
 
+                List<string> relatedEntity = this.GetList(EntityDefId);
+                if (relatedEntity.Any())
+                    resultOperation.AddError($"This entity is related to {string.Join(",", relatedEntity)}");
+
                 if (listVariable.Count > 0)
                     resultOperation.AddError(string.Format(LangUtility.Get("DeleteError.Text", nameof(sysBpmsEntityDef)), string.Join(" ,", listVariable.Select(d => d.Name))));
 
-                DocumentService documentService = new DocumentService(base.UnitOfWork);
-                foreach (var item in listDoc)
-                {
-                    if (resultOperation.IsSuccess)
-                        resultOperation = documentService.Delete(item.GUID);
-                }
-
                 if (resultOperation.IsSuccess)
                 {
-                    this.DropTable(this.GetInfo(EntityDefId));
-                    this.UnitOfWork.Repository<IEntityDefRepository>().Delete(EntityDefId);
-                    this.UnitOfWork.Save();
+                    DocumentService documentService = new DocumentService(base.UnitOfWork);
+                    foreach (var item in listDoc)
+                    {
+                        if (resultOperation.IsSuccess)
+                            resultOperation = documentService.Delete(item.GUID);
+                    }
+
+                    if (resultOperation.IsSuccess)
+                    {
+                        this.DropTable(this.GetInfo(EntityDefId));
+                        this.UnitOfWork.Repository<IEntityDefRepository>().Delete(EntityDefId);
+                        this.UnitOfWork.Save();
+                    }
+                    listDoc = null;
                 }
-                listDoc = null;
+
             }
             catch (Exception ex)
             {
@@ -156,9 +164,9 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             return this.UnitOfWork.Repository<IEntityDefRepository>().GetList(Name, IsActive, currentPaging);
         }
 
-        public List<string> GetList(bool? isActive)
+        public List<string> GetList(Guid relationToEntityId)
         {
-            return this.UnitOfWork.Repository<IEntityDefRepository>().GetList(isActive);
+            return this.UnitOfWork.Repository<IEntityDefRepository>().GetList(relationToEntityId);
         }
 
         #region ..:: Update Database ::..

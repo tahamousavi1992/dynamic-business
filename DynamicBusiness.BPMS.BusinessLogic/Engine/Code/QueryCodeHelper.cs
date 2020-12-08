@@ -31,6 +31,5 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         {
             return new DataBaseQueryService(this.UnitOfWork).ExecuteScalar<T>(sqlQuery, true, QueryModel.GetSqlParameter(_params?.ToList())?.ToArray());
         }
-
     }
 }

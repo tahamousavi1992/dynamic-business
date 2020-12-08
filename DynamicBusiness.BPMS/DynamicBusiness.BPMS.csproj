@@ -159,7 +159,6 @@
     <Compile Include="Controllers\BPMSHomeController.cs" />
     <Compile Include="Controllers\BpmsJavaScriptController.cs" />
     <Compile Include="Controllers\BpmsLURowController.cs" />
-    <Compile Include="Controllers\BpmsOperationController.cs" />
     <Compile Include="Controllers\BpmsProcessController.cs" />
     <Compile Include="Controllers\BpmsEntityManagerController.cs" />
     <Compile Include="Controllers\BPMSRouteMapper.cs" />

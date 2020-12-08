@@ -169,6 +169,7 @@
     <Compile Include="Authentication\BpmsAdminAuth.cs" />
     <Compile Include="DTO\Admin\APIAccessIndexSearchDTO.cs" />
     <Compile Include="DTO\Admin\PostAddEditGatewayDTO.cs" />
+    <Compile Include="DTO\Admin\PostLoadSqlFunctionFormDTO.cs" />
     <Compile Include="DTO\Admin\PostSaveSubTypeMessageDTO.cs" />
     <Compile Include="DTO\Admin\PostSubTypeEmailDTO.cs" />
     <Compile Include="DTO\Admin\PostAddEditUserTaskDTO.cs" />
@@ -191,7 +192,6 @@
     <Compile Include="DTO\Admin\PostEditApplicationPageDTO.cs" />
     <Compile Include="DTO\Admin\DepartmentMemberIndexSearchDTO.cs" />
     <Compile Include="DTO\Admin\DocumentDefIndexSearchDTO.cs" />
-    <Compile Include="DTO\Admin\OperationIndexSearchDTO.cs" />
     <Compile Include="DTO\Admin\EmailAccountIndexSearchDTO.cs" />
     <Compile Include="DTO\Admin\PostAddEditEntityDefDTO.cs" />
     <Compile Include="DTO\Admin\UserIndexSearchDTO.cs" />
@@ -239,7 +239,6 @@
     <Compile Include="DTO\Admin\JsFileDTO.cs" />
     <Compile Include="DTO\Admin\LaneDTO.cs" />
     <Compile Include="DTO\Admin\LURowIndexSearchDTO.cs" />
-    <Compile Include="DTO\Admin\OperationDTO.cs" />
     <Compile Include="DTO\Admin\ServiceTaskDTO.cs" />
     <Compile Include="DTO\Admin\SettingDTO.cs" />
     <Compile Include="DTO\Admin\StepDTO.cs" />
@@ -352,9 +351,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_LocalResources\sysBpmsTask.resx" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_LocalResources\sysBpmsOperation.resx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_LocalResources\sysBpmsEmailAccount.resx" />
