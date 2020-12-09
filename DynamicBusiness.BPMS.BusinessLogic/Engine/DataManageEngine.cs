@@ -53,10 +53,10 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         #region .:: public method ::.
 
-        public VariableModel GetEntityByBinding(string BindTrace, List<QueryModel> listFormQueryModel = null, PagingProperties currentPaging = null, string containerQuery = null)
+        public VariableModel GetEntityByBinding(string BindTrace, List<QueryModel> listFormQueryModel = null, PagingProperties currentPaging = null, string containerQuery = null, string[] includes = null)
         {
             if (!string.IsNullOrWhiteSpace(BindTrace))
-                return this.GetEntitiesByName(BindTrace.Split('.')[0], listFormQueryModel, currentPaging, containerQuery);
+                return this.GetEntitiesByName(BindTrace.Split('.')[0], listFormQueryModel, currentPaging, containerQuery, includes);
             else return null;
         }
 
@@ -281,7 +281,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             }
         }
 
-        private VariableModel GetEntitiesByName(string VarName, List<QueryModel> additionalParams = null, PagingProperties currentPaging = null, string containerQuery = null)
+        private VariableModel GetEntitiesByName(string VarName, List<QueryModel> additionalParams = null, PagingProperties currentPaging = null, string containerQuery = null, string[] includes = null)
         {
             if (additionalParams != null)
                 this.AdditionalParams = additionalParams;
@@ -305,7 +305,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                         case sysBpmsVariable.e_RelationTypeLU.Entity:
                             //this set each DataModel's key corresponding to returned columns by query and then set value into it.  
                             //this method return one DataModel if the _Variable FilterTypeLU is Filtered otherwise it will return list of DataModel.
-                            _DataModel = new EntityVariableTypeEngine(base.EngineSharedModel, _Variable, this.ProcessID, this.ThreadID, this.AdditionalParams, base.UnitOfWork).GetResult(currentPaging, containerQuery);
+                            _DataModel = new EntityVariableTypeEngine(base.EngineSharedModel, _Variable, this.ProcessID, this.ThreadID, this.AdditionalParams, base.UnitOfWork).GetResult(currentPaging, containerQuery, includes);
                             break;
                     }
                     this.GetDataList.Add(new VariableModel(VarName, _DataModel));

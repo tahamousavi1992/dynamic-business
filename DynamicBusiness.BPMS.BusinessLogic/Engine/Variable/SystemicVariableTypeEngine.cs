@@ -16,7 +16,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         {
         }
 
-        public override List<DataModel> GetResult(PagingProperties currentPaging = null, string containerQuery = null)
+        public List<DataModel> GetResult( )
         {
             List<DataModel> _DataModel = new List<DataModel>();
             switch ((sysBpmsVariable.e_VarTypeLU)Variable.VarTypeLU)

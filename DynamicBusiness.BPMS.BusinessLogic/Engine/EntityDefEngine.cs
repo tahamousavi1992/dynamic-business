@@ -108,9 +108,11 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         }
 
         /// <param name="containerQuery">It is generally used in combosearch which add a parent query that filter table's rows according to query parameter and text field</param>
-        public DataTable GetEntity(sysBpmsEntityDef entityDef, sysBpmsVariable variable, List<QueryModel> additionalParams, PagingProperties currentPaging, string containerQuery = null)
+        /// <param name="includes">It is used in List variable in DataGrid and chart is each item in array is like (Product.Name,Order.Name)</param>
+        public DataTable GetEntity(sysBpmsEntityDef entityDef, sysBpmsVariable variable, List<QueryModel> additionalParams, PagingProperties currentPaging, string containerQuery = null, string[] includes = null)
         {
             string columnName = string.Empty;
+            string includesQuery = string.Empty;
             switch ((sysBpmsVariable.e_VarTypeLU)variable.VarTypeLU)
             {
                 case sysBpmsVariable.e_VarTypeLU.Integer:
@@ -120,6 +122,20 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 case sysBpmsVariable.e_VarTypeLU.DateTime:
                 case sysBpmsVariable.e_VarTypeLU.Boolean:
                     columnName = variable.FieldName;
+                    break;
+                case sysBpmsVariable.e_VarTypeLU.List when variable.RelationTypeLU == (int)sysBpmsVariable.e_RelationTypeLU.Entity && includes?.Any() == true:
+                case sysBpmsVariable.e_VarTypeLU.Object when includes?.Any() == true:
+
+                    EntityDefService entityDefService = new EntityDefService(base.UnitOfWork);
+                    foreach (var p in entityDef.Properties.Where(c => c.DbType == EntityPropertyModel.e_dbType.Entity && includes.Any(d => d.Contains(c.Name))))
+                    {
+                        string foreingName = entityDefService.GetInfo(p.RelationToEntityID.Value).FormattedTableName;
+                        string includesColumnNames = string.Join(",", includes.Where(d => d.Split('.')[0] == p.Name).Select(c => $"{c.Split('.')[1]} as {p.Name}__{c.Split('.')[1]}"));
+                        if (!includesColumnNames.Contains($"{p.Name}__ID"))
+                            includesColumnNames += "," + $"ID as {p.Name}__ID";
+
+                        includesQuery += $" left join (select {includesColumnNames} from {foreingName}) {foreingName} on {entityDef.FormattedTableName}.{p.Name}={foreingName}.{p.Name}__ID " + Environment.NewLine;
+                    }
                     break;
             }
             columnName = string.IsNullOrWhiteSpace(columnName) ? "*" : columnName;
@@ -132,7 +148,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             //add variable dependies to whereclause which have relation with current variable.
             this.AddDependencyClause(variable, queryParams, null, ref whereClause, additionalParams);
 
-            string sqlQuery = $" select {entityDef.FormattedTableName}.{columnName} from {entityDef.FormattedTableName} {whereClause} {orderClause} ";
+            string sqlQuery = $" select {columnName} from {entityDef.FormattedTableName} {includesQuery} {whereClause} {orderClause} ";
 
             //If containerQuery  is not null 
             if (!string.IsNullOrWhiteSpace(containerQuery))

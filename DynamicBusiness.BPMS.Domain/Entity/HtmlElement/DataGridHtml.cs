@@ -120,17 +120,42 @@ namespace DynamicBusiness.BPMS.Domain
                         }
                     }
                     this.Helper.DataManageHelper.ClearVariable(this.Fill);
+
                     if (isReportType)
-                        this.Items = this.Helper.DataManageHelper.GetEntityByBinding(this.Fill, listFormQueryModel, null).Items;
+                        this.Items = this.Helper.DataManageHelper.GetEntityByBinding(this.Fill, listFormQueryModel, null, null, this.GetIncludes()?.ToArray()).Items;
                     else
                     {
-                        this.Items = this.Helper.DataManageHelper.GetEntityByBinding(this.Fill, listFormQueryModel, this.PagingProperties).Items;
+                        this.Items = this.Helper.DataManageHelper.GetEntityByBinding(this.Fill, listFormQueryModel, this.PagingProperties, null, this.GetIncludes()?.ToArray()).Items;
                         this.AddRowNumber();
                     }
                 }
                 this.Render();
             }
         }
+
+        //retrieve the relationship tables according to templates that added to columns.
+        private List<string> GetIncludes()
+        {
+            List<string> includes = new List<string>();
+            this.DataGridColumns.ForEach(c =>
+            {
+                c.ItemList.ForEach(d =>
+                {
+                    if (d.Type == "template")
+                    {
+                        MatchCollection matchs = Regex.Matches(d.Name, @"\[(.*?)\]");
+                        foreach (Match findMatch in matchs)
+                        {
+                            string key = findMatch.Groups[1].ToString().Split(new string[] { "::" }, StringSplitOptions.None)[0];
+                            if (key.Split('.').Count() > 1)
+                                includes.Add(key);
+                        }
+                    }
+                });
+            });
+            return includes.Any() ? includes : null;
+        }
+
         public override void FillData(List<QueryModel> listFormQueryModel = null)
         {
             this.FillDataItem(false, listFormQueryModel);
@@ -258,7 +283,7 @@ namespace DynamicBusiness.BPMS.Domain
                     foreach (Match findMatch in matchs)
                     {
                         string strMatch = findMatch.Groups[1].ToString();
-                        key = strMatch.Split(new string[] { "::" }, StringSplitOptions.None)[0];
+                        key = strMatch.Split(new string[] { "::" }, StringSplitOptions.None)[0].Replace(".", "__");
                         if (item.ContainsKey(key))
                         {
                             if (strMatch.Split(new string[] { "::" }, StringSplitOptions.None).Count() == 2)
@@ -268,8 +293,7 @@ namespace DynamicBusiness.BPMS.Domain
                             }
                             else
                             {
-                                if (item.ContainsKey(strMatch))
-                                    template = template.Replace($"[{strMatch}]", item[strMatch].ToStringObj());
+                                template = template.Replace($"[{strMatch}]", item[key].ToStringObj());
                             }
                         }
                         key = null;

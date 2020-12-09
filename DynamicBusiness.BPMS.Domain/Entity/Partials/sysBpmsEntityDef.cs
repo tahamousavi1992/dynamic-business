@@ -17,7 +17,7 @@ namespace DynamicBusiness.BPMS.Domain
                 this.Name = name.ToStringObj().Trim();
             this.DesignXML = designXML;
             this.IsActive = isActive;
-            this.Properties = properties; 
+            this.Properties = properties;
 
             ResultOperation resultOperation = new ResultOperation(this);
             if ((this.Properties == null || !this.Properties.Any()))
@@ -33,15 +33,15 @@ namespace DynamicBusiness.BPMS.Domain
             }
             foreach (var Item in this.Properties)
             {
+                Item.Name = Item.Name.ToStringObj().Trim();
                 if (string.IsNullOrWhiteSpace(Item.Name))
-                {
                     resultOperation.AddError(SharedLang.GetReuired("PropertyName.Text", nameof(sysBpmsEntityDef)));
-                }
-                if (Item.Name.ToLower() == "id")
-                    resultOperation.AddError(LangUtility.Get("PropertyNameError.Text", nameof(sysBpmsEntityDef)));
-                if (Item.Name.ToLower() == "variablename")
-                    resultOperation.AddError(LangUtility.Get("PropertyNameError.Text", nameof(sysBpmsEntityDef)));
-                if (Item.Name.ToLower() == this.Name)
+
+                if (Item.Name.ToLower() == "id" ||
+                    Item.Name.ToLower() == "variablename" ||
+                    Item.Name.ToLower() == this.Name ||
+                    Item.Name.ToLower().Contains(".") ||
+                    Item.Name.ToLower().Contains("__"))
                     resultOperation.AddError(LangUtility.Get("PropertyNameError.Text", nameof(sysBpmsEntityDef)));
 
                 if (Item.IsActive && this.Properties.Any(c => c.ID != Item.ID && c.Name == Item.Name))
@@ -59,7 +59,7 @@ namespace DynamicBusiness.BPMS.Domain
             {
                 resultOperation.AddError("Name is not valid (do not use space or - in your name)");
             }
- 
+
             return resultOperation;
         }
 
@@ -102,7 +102,7 @@ namespace DynamicBusiness.BPMS.Domain
                 .Union(Properties).ToList();
             }
         }
-         
+
         public string FormattedTableName
         {
             get { return "Bpms_" + this.Name; }

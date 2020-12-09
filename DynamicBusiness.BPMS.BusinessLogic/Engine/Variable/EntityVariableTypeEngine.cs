@@ -18,10 +18,10 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             this.EntityDef = new EntityDefService(base.UnitOfWork).GetInfo(Variable.EntityDefID.Value);
         }
         /// <param name="containerQuery">It is generally used in combosearch which add a parent query that filter table's rows according to query parameter and text field</param>
-        public override List<DataModel> GetResult(PagingProperties currentPaging, string containerQuery = null)
+        public List<DataModel> GetResult(PagingProperties currentPaging, string containerQuery = null, string[] includes = null)
         {
             List<DataModel> dataModel = new List<DataModel>();
-            DataTable dataTable = new EntityDefEngine(base.EngineSharedModel, base.UnitOfWork).GetEntity(EntityDef, this.Variable, base.AdditionalParams, currentPaging, containerQuery);
+            DataTable dataTable = new EntityDefEngine(base.EngineSharedModel, base.UnitOfWork).GetEntity(EntityDef, this.Variable, base.AdditionalParams, currentPaging, containerQuery, includes);
             foreach (DataRow _row in dataTable.Rows)
             {
                 dataModel.Add(new DataModel(_row));

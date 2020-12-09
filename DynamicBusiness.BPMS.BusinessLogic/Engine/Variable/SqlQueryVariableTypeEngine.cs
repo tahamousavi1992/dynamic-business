@@ -16,7 +16,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         }
 
         /// <param name="containerQuery">It is generally used in combosearch which add a parent query that filter table's rows according to query parameter and text field</param>
-        public override List<DataModel> GetResult(PagingProperties currentPaging, string containerQuery = null)
+        public List<DataModel> GetResult(PagingProperties currentPaging, string containerQuery = null)
         {
             string ColunName = string.Empty;
             string sqlQuery = Variable.Query;

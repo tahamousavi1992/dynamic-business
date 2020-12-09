@@ -13,7 +13,7 @@ namespace DynamicBusiness.BPMS.Domain
         Guid? ProcessID { get; set; }
         Dictionary<string, object> FormControlValues { get; set; }
         /// <param name="containerQuery">It is generally used in combosearch which add a parent query that filter table's rows according to query parameter and text field</param>
-        VariableModel GetEntityByBinding(string BindTrace, List<QueryModel> listFormQueryModel = null, PagingProperties currentPaging = null, string containerQuery = null);
+        VariableModel GetEntityByBinding(string BindTrace, List<QueryModel> listFormQueryModel = null, PagingProperties currentPaging = null, string containerQuery = null, string[] includes = null);
         object GetValueByBinding(string BindTrace, List<QueryModel> listFormQueryModel = null);
         /// <summary>
         /// it is used when we are getting  
