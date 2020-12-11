@@ -32,7 +32,7 @@ namespace DynamicBusiness.BPMS.Controllers
                 return Json(new
                 {
                     Model = entityDef,
-                    DbTypes = EnumObjHelper.GetEnumList<EntityPropertyModel.e_dbType>().Where(c=>c.Key!=(int)EntityPropertyModel.e_dbType.Entity).Select(c => new QueryModel(c.Key.ToString(), c.Value)).
+                    DbTypes = EnumObjHelper.GetEnumList<EntityPropertyModel.e_dbType>().Where(c => c.Key != (int)EntityPropertyModel.e_dbType.Entity).Select(c => new QueryModel(c.Key.ToString(), c.Value)).
                     Union(AllPublishedEntityDefs.Select(c => new QueryModel((int)EntityPropertyModel.e_dbType.Entity + ":" + c.ID.ToString(), c.Name))).ToList(),
                     RelationProperties = entityDef.AllProperties
                 });
@@ -67,7 +67,7 @@ namespace DynamicBusiness.BPMS.Controllers
 
                     if (resultOperation.IsSuccess)
                     {
-                        return new PostMethodMessage(SharedLang.Get("Success.Text"), DisplayMessageType.success, entityDef.ID);
+                        return new PostMethodMessage(SharedLang.Get("Success.Text"), DisplayMessageType.success, new { entityDef.ID, Name = (entityDef.Name + $"({entityDef.DisplayName})") });
                     }
                     else
                         return new PostMethodMessage(resultOperation.GetErrors(), DisplayMessageType.error);

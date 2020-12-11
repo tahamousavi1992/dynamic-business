@@ -246,7 +246,6 @@ namespace DynamicBusiness.BPMS.Domain
         {
             if (template.Split(new string[] { "::" }, StringSplitOptions.None).Count() == 2)
             {
-
                 //if has format
                 string format = template.Split(new string[] { "::" }, StringSplitOptions.None)[1];
                 if (value == null || string.IsNullOrWhiteSpace(value.ToStringObj()))
