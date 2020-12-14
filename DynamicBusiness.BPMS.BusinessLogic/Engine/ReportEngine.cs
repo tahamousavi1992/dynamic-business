@@ -39,7 +39,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             reportBuilder.Page = new ReportPage();
             reportBuilder.TableRows = dataView.Table.Rows.Count;
 
-            string fontFamily = new SettingValueService(base.UnitOfWork).GetValue(sysBpmsSettingDef.e_NameType.DefaultReportFontFamily.ToString());
+            string fontFamily = new ConfigurationService(base.UnitOfWork).GetValue(sysBpmsConfiguration.e_NameType.DefaultReportFontFamily.ToString());
             if (!string.IsNullOrWhiteSpace(fontFamily))
                 reportBuilder.FontFamily = fontFamily;
 

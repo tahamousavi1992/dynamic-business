@@ -178,6 +178,6 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             return Url;
         }
 
-        public static string NoSkinPath = new SettingValueService().GetValue(sysBpmsSettingDef.e_NameType.NoSkinPath.ToString());
+        public static string NoSkinPath = new ConfigurationService().GetValue(sysBpmsConfiguration.e_NameType.NoSkinPath.ToString());
     }
 }

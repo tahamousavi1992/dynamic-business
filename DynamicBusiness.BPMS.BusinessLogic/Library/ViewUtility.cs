@@ -74,11 +74,11 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             }
             if (string.IsNullOrWhiteSpace(LastSqlVersionExecuted))
             {
-                using (SettingValueService settingValueService = new SettingValueService())
+                using (ConfigurationService configurationService = new ConfigurationService())
                 {
                     try
                     {
-                        LastSqlVersionExecuted = settingValueService.GetValue(sysBpmsSettingDef.e_NameType.LastSqlUpdatedVersion.ToString());
+                        LastSqlVersionExecuted = configurationService.GetValue(sysBpmsConfiguration.e_NameType.LastSqlUpdatedVersion.ToString());
                         if (string.IsNullOrWhiteSpace(LastSqlVersionExecuted))
                             LastSqlVersionExecuted = "00.00.00";
                     }
@@ -112,30 +112,25 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                     }
                     dataBaseQueryService.UpdatedSqlQuery(queries);
 
-                    using (SettingValueService settingValueService = new SettingValueService())
+                    using (ConfigurationService configurationService = new ConfigurationService())
                     {
-                        using (SettingDefService settingDefService = new SettingDefService())
+                        sysBpmsConfiguration settingValue = configurationService.GetList("", sysBpmsConfiguration.e_NameType.LastSqlUpdatedVersion.ToString()).LastOrDefault();
+                        if (settingValue == null)
                         {
-                            sysBpmsSettingDef def = settingDefService.GetInfo(sysBpmsSettingDef.e_NameType.LastSqlUpdatedVersion.ToString());
-                            sysBpmsSettingValue settingValue = settingValueService.GetList(null, "", def.ID).LastOrDefault();
-                            if (settingValue == null)
-                            {
-                                settingValue = new sysBpmsSettingValue();
-                                settingValue.SettingDefID = def.ID;
-                                settingValue.SetDate = DateTime.Now;
-                                settingValue.UserName = "System";
-                                settingValue.Value = CurrentBpmsVersion;
-                                settingValueService.Add(settingValue);
-                            }
-                            else
-                            {
-                                settingValue.SetDate = DateTime.Now;
-                                settingValue.Value = CurrentBpmsVersion;
-                                settingValueService.Update(settingValue);
-                            }
-                            LastSqlVersionExecuted = CurrentBpmsVersion;
-                            UrlUtility.NoSkinPath = settingValueService.GetValue(sysBpmsSettingDef.e_NameType.NoSkinPath.ToString());
+                            settingValue = new sysBpmsConfiguration(); 
+                            settingValue.LastUpdateOn = DateTime.Now; 
+                            settingValue.Value = CurrentBpmsVersion;
+                            configurationService.Add(settingValue);
                         }
+                        else
+                        {
+                            settingValue.LastUpdateOn = DateTime.Now;
+                            settingValue.Value = CurrentBpmsVersion;
+                            configurationService.Update(settingValue);
+                        }
+                        LastSqlVersionExecuted = CurrentBpmsVersion;
+                        UrlUtility.NoSkinPath = configurationService.GetValue(sysBpmsConfiguration.e_NameType.NoSkinPath.ToString());
+
                     }
                 }
             }

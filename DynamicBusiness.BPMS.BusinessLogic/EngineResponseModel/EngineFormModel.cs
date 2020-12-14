@@ -126,7 +126,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
              string.Format("threadTaskID={0}", this.ThreadTaskID),
              string.Format("threadId={0}", this.ThreadID),
              string.Format("applicationPageId={0}", this.ApplicationID)).ToArray();
-            using (SettingValueService settingValueService = new SettingValueService())
+            using (ConfigurationService configurationService = new ConfigurationService())
             {
                 this.DeleteFileUrl = UrlUtility.GetApiUrl(request, portalAlias, "GetDelete", "EngineDocument", formToken);
                 this.DownloadFileUrl = UrlUtility.GetApiUrl(request, portalAlias, "GetDownload", "EngineDocument", formToken);

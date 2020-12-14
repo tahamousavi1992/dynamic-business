@@ -79,8 +79,7 @@
     <Compile Include="DataAccessLayer\ProcessGroupRepository.cs" />
     <Compile Include="DataAccessLayer\ProcessRepository.cs" />
     <Compile Include="DataAccessLayer\SequenceFlowRepository.cs" />
-    <Compile Include="DataAccessLayer\SettingDefRepository.cs" />
-    <Compile Include="DataAccessLayer\SettingValueRepository.cs" />
+    <Compile Include="DataAccessLayer\ConfigurationRepository.cs" />
     <Compile Include="DataAccessLayer\MessageTypeRepository.cs" />
     <Compile Include="DataAccessLayer\StepRepository.cs" />
     <Compile Include="DataAccessLayer\TaskRepository.cs" />

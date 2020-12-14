@@ -47,6 +47,17 @@
           <Property Name="SequenceFlowID" Type="uniqueidentifier" />
           <Property Name="Code" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
+        <EntityType Name="sysBpmsConfiguration">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Label" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="DefaultValue" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Value" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="LastUpdateOn" Type="datetime" />
+        </EntityType>
         <EntityType Name="sysBpmsDBConnection">
           <Key>
             <PropertyRef Name="ID" />
@@ -276,26 +287,6 @@
           <Property Name="Name" Type="nvarchar" MaxLength="250" Nullable="false" />
           <Property Name="SourceElementID" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="TargetElementID" Type="nvarchar" MaxLength="100" />
-        </EntityType>
-        <EntityType Name="sysBpmsSettingDef">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="Title" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="ValueTypeLU" Type="int" Nullable="false" />
-          <Property Name="DefaultValue" Type="nvarchar(max)" Nullable="false" />
-        </EntityType>
-        <EntityType Name="sysBpmsSettingValue">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="SettingDefID" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="SetDate" Type="datetime" Nullable="false" />
-          <Property Name="UserName" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="Value" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <EntityType Name="sysBpmsStep">
           <Key>
@@ -639,18 +630,6 @@
             </Principal>
             <Dependent Role="sysBpmsProcessGroup1">
               <PropertyRef Name="ProcessGroupID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SettingValue_SettingDef">
-          <End Role="sysBpmsSettingDef" Type="Self.sysBpmsSettingDef" Multiplicity="1" />
-          <End Role="sysBpmsSettingValue" Type="Self.sysBpmsSettingValue" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="sysBpmsSettingDef">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="sysBpmsSettingValue">
-              <PropertyRef Name="SettingDefID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1053,6 +1032,7 @@
           <EntitySet Name="sysBpmsApplicationPage" EntityType="Self.sysBpmsApplicationPage" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysBpmsApplicationPageAccess" EntityType="Self.sysBpmsApplicationPageAccess" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysBpmsCondition" EntityType="Self.sysBpmsCondition" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysBpmsConfiguration" EntityType="Self.sysBpmsConfiguration" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysBpmsDBConnection" EntityType="Self.sysBpmsDBConnection" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysBpmsDepartment" EntityType="Self.sysBpmsDepartment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysBpmsDepartmentMember" EntityType="Self.sysBpmsDepartmentMember" Schema="dbo" store:Type="Tables" />
@@ -1072,8 +1052,6 @@
           <EntitySet Name="sysBpmsProcess" EntityType="Self.sysBpmsProcess" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysBpmsProcessGroup" EntityType="Self.sysBpmsProcessGroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysBpmsSequenceFlow" EntityType="Self.sysBpmsSequenceFlow" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysBpmsSettingDef" EntityType="Self.sysBpmsSettingDef" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysBpmsSettingValue" EntityType="Self.sysBpmsSettingValue" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysBpmsStep" EntityType="Self.sysBpmsStep" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysBpmsTask" EntityType="Self.sysBpmsTask" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysBpmsThread" EntityType="Self.sysBpmsThread" Schema="dbo" store:Type="Tables" />
@@ -1158,10 +1136,6 @@
           <AssociationSet Name="FK_ProcessGroup_ProcessGroup" Association="Self.FK_ProcessGroup_ProcessGroup">
             <End Role="sysBpmsProcessGroup" EntitySet="sysBpmsProcessGroup" />
             <End Role="sysBpmsProcessGroup1" EntitySet="sysBpmsProcessGroup" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SettingValue_SettingDef" Association="Self.FK_SettingValue_SettingDef">
-            <End Role="sysBpmsSettingDef" EntitySet="sysBpmsSettingDef" />
-            <End Role="sysBpmsSettingValue" EntitySet="sysBpmsSettingValue" />
           </AssociationSet>
           <AssociationSet Name="FK_Step_DynamicForm" Association="Self.FK_Step_DynamicForm">
             <End Role="sysBpmsDynamicForm" EntitySet="sysBpmsDynamicForm" />
@@ -1301,6 +1275,7 @@
           <EntitySet Name="sysBpmsApplicationPages" EntityType="BPMSModel.sysBpmsApplicationPage" />
           <EntitySet Name="sysBpmsApplicationPageAccesses" EntityType="BPMSModel.sysBpmsApplicationPageAccess" />
           <EntitySet Name="sysBpmsConditions" EntityType="BPMSModel.sysBpmsCondition" />
+          <EntitySet Name="sysBpmsConfigurations" EntityType="BPMSModel.sysBpmsConfiguration" />
           <EntitySet Name="sysBpmsDBConnections" EntityType="BPMSModel.sysBpmsDBConnection" />
           <EntitySet Name="sysBpmsDepartments" EntityType="BPMSModel.sysBpmsDepartment" />
           <EntitySet Name="sysBpmsDepartmentMembers" EntityType="BPMSModel.sysBpmsDepartmentMember" />
@@ -1320,8 +1295,6 @@
           <EntitySet Name="sysBpmsProcesses" EntityType="BPMSModel.sysBpmsProcess" />
           <EntitySet Name="sysBpmsProcessGroups" EntityType="BPMSModel.sysBpmsProcessGroup" />
           <EntitySet Name="sysBpmsSequenceFlows" EntityType="BPMSModel.sysBpmsSequenceFlow" />
-          <EntitySet Name="sysBpmsSettingDefs" EntityType="BPMSModel.sysBpmsSettingDef" />
-          <EntitySet Name="sysBpmsSettingValues" EntityType="BPMSModel.sysBpmsSettingValue" />
           <EntitySet Name="sysBpmsSteps" EntityType="BPMSModel.sysBpmsStep" />
           <EntitySet Name="sysBpmsTasks" EntityType="BPMSModel.sysBpmsTask" />
           <EntitySet Name="sysBpmsThreads" EntityType="BPMSModel.sysBpmsThread" />
@@ -1487,10 +1460,6 @@
             <End Role="sysBpmsProcessGroup" EntitySet="sysBpmsProcessGroups" />
             <End Role="sysBpmsProcessGroup1" EntitySet="sysBpmsProcessGroups" />
           </AssociationSet>
-          <AssociationSet Name="FK_SettingValue_SettingDef" Association="BPMSModel.FK_SettingValue_SettingDef">
-            <End Role="sysBpmsSettingDef" EntitySet="sysBpmsSettingDefs" />
-            <End Role="sysBpmsSettingValue" EntitySet="sysBpmsSettingValues" />
-          </AssociationSet>
           <AssociationSet Name="FK_Step_Task" Association="BPMSModel.FK_Step_Task">
             <End Role="sysBpmsTask" EntitySet="sysBpmsTasks" />
             <End Role="sysBpmsStep" EntitySet="sysBpmsSteps" />
@@ -1589,6 +1558,17 @@
           <Property Name="Code" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="sysBpmsGateway" Relationship="BPMSModel.FK_Condition_Gateway" FromRole="sysBpmsCondition" ToRole="sysBpmsGateway" />
           <NavigationProperty Name="sysBpmsSequenceFlow" Relationship="BPMSModel.FK_Condition_SequenceFlow" FromRole="sysBpmsCondition" ToRole="sysBpmsSequenceFlow" />
+        </EntityType>
+        <EntityType Name="sysBpmsConfiguration">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Label" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="DefaultValue" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Value" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LastUpdateOn" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="sysBpmsDBConnection">
           <Key>
@@ -1877,28 +1857,6 @@
           <NavigationProperty Name="sysBpmsElement" Relationship="BPMSModel.FK_sysSequenceFlow_sysElement" FromRole="sysBpmsSequenceFlow" ToRole="sysBpmsElement" />
           <NavigationProperty Name="sysBpmsGateways" Relationship="BPMSModel.FK_sysGateway_sysSequenceFlow" FromRole="sysBpmsSequenceFlow" ToRole="sysBpmsGateway" />
           <NavigationProperty Name="sysBpmsProcess" Relationship="BPMSModel.FK_sysSequenceFlow_sysProcess" FromRole="sysBpmsSequenceFlow" ToRole="sysBpmsProcess" />
-        </EntityType>
-        <EntityType Name="sysBpmsSettingDef">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Guid" Nullable="false" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Title" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="ValueTypeLU" Type="Int32" Nullable="false" />
-          <Property Name="DefaultValue" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="sysBpmsSettingValues" Relationship="BPMSModel.FK_SettingValue_SettingDef" FromRole="sysBpmsSettingDef" ToRole="sysBpmsSettingValue" />
-        </EntityType>
-        <EntityType Name="sysBpmsSettingValue">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Guid" Nullable="false" />
-          <Property Name="SettingDefID" Type="Guid" Nullable="false" />
-          <Property Name="SetDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UserName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Value" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="sysBpmsSettingDef" Relationship="BPMSModel.FK_SettingValue_SettingDef" FromRole="sysBpmsSettingValue" ToRole="sysBpmsSettingDef" />
         </EntityType>
         <EntityType Name="sysBpmsStep">
           <Key>
@@ -2529,18 +2487,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_SettingValue_SettingDef">
-          <End Type="BPMSModel.sysBpmsSettingDef" Role="sysBpmsSettingDef" Multiplicity="1" />
-          <End Type="BPMSModel.sysBpmsSettingValue" Role="sysBpmsSettingValue" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="sysBpmsSettingDef">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="sysBpmsSettingValue">
-              <PropertyRef Name="SettingDefID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Step_Task">
           <End Type="BPMSModel.sysBpmsTask" Role="sysBpmsTask" Multiplicity="1" />
           <End Type="BPMSModel.sysBpmsStep" Role="sysBpmsStep" Multiplicity="*" />
@@ -2729,6 +2675,18 @@
                 <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="SequenceFlowID" ColumnName="SequenceFlowID" />
                 <ScalarProperty Name="GatewayID" ColumnName="GatewayID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysBpmsConfigurations">
+            <EntityTypeMapping TypeName="BPMSModel.sysBpmsConfiguration">
+              <MappingFragment StoreEntitySet="sysBpmsConfiguration">
+                <ScalarProperty Name="LastUpdateOn" ColumnName="LastUpdateOn" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="DefaultValue" ColumnName="DefaultValue" />
+                <ScalarProperty Name="Label" ColumnName="Label" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2977,28 +2935,6 @@
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
                 <ScalarProperty Name="ElementID" ColumnName="ElementID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="sysBpmsSettingDefs">
-            <EntityTypeMapping TypeName="BPMSModel.sysBpmsSettingDef">
-              <MappingFragment StoreEntitySet="sysBpmsSettingDef">
-                <ScalarProperty Name="DefaultValue" ColumnName="DefaultValue" />
-                <ScalarProperty Name="ValueTypeLU" ColumnName="ValueTypeLU" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="sysBpmsSettingValues">
-            <EntityTypeMapping TypeName="BPMSModel.sysBpmsSettingValue">
-              <MappingFragment StoreEntitySet="sysBpmsSettingValue">
-                <ScalarProperty Name="Value" ColumnName="Value" />
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-                <ScalarProperty Name="SetDate" ColumnName="SetDate" />
-                <ScalarProperty Name="SettingDefID" ColumnName="SettingDefID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

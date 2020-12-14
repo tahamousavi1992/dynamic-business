@@ -14,23 +14,24 @@ namespace DynamicBusiness.BPMS.Domain
     using System.Data.Entity.Infrastructure;
     using System.Data.Entity.Core.Objects;
     using System.Linq;
-
+    
     public partial class Db_BPMSEntities : DbContext
     {
         public Db_BPMSEntities()
-            : base(DomainUtility.GetConnectionName())
+            : base("name=Db_BPMSEntities")
         {
         }
-
+    
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
         }
-
+    
         public virtual DbSet<sysBpmsAPIAccess> sysBpmsAPIAccesses { get; set; }
         public virtual DbSet<sysBpmsApplicationPage> sysBpmsApplicationPages { get; set; }
         public virtual DbSet<sysBpmsApplicationPageAccess> sysBpmsApplicationPageAccesses { get; set; }
         public virtual DbSet<sysBpmsCondition> sysBpmsConditions { get; set; }
+        public virtual DbSet<sysBpmsConfiguration> sysBpmsConfigurations { get; set; }
         public virtual DbSet<sysBpmsDBConnection> sysBpmsDBConnections { get; set; }
         public virtual DbSet<sysBpmsDepartment> sysBpmsDepartments { get; set; }
         public virtual DbSet<sysBpmsDepartmentMember> sysBpmsDepartmentMembers { get; set; }
@@ -50,8 +51,6 @@ namespace DynamicBusiness.BPMS.Domain
         public virtual DbSet<sysBpmsProcess> sysBpmsProcesses { get; set; }
         public virtual DbSet<sysBpmsProcessGroup> sysBpmsProcessGroups { get; set; }
         public virtual DbSet<sysBpmsSequenceFlow> sysBpmsSequenceFlows { get; set; }
-        public virtual DbSet<sysBpmsSettingDef> sysBpmsSettingDefs { get; set; }
-        public virtual DbSet<sysBpmsSettingValue> sysBpmsSettingValues { get; set; }
         public virtual DbSet<sysBpmsStep> sysBpmsSteps { get; set; }
         public virtual DbSet<sysBpmsTask> sysBpmsTasks { get; set; }
         public virtual DbSet<sysBpmsThread> sysBpmsThreads { get; set; }
@@ -61,18 +60,18 @@ namespace DynamicBusiness.BPMS.Domain
         public virtual DbSet<sysBpmsUser> sysBpmsUsers { get; set; }
         public virtual DbSet<sysBpmsVariable> sysBpmsVariables { get; set; }
         public virtual DbSet<sysBpmsVariableDependency> sysBpmsVariableDependencies { get; set; }
-
+    
         [DbFunction("Db_BPMSEntities", "sysBpmsSplit")]
         public virtual IQueryable<sysBpmsSplit_Result> sysBpmsSplit(string rowData, string delimeter)
         {
             var rowDataParameter = rowData != null ?
                 new ObjectParameter("RowData", rowData) :
                 new ObjectParameter("RowData", typeof(string));
-
+    
             var delimeterParameter = delimeter != null ?
                 new ObjectParameter("Delimeter", delimeter) :
                 new ObjectParameter("Delimeter", typeof(string));
-
+    
             return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<sysBpmsSplit_Result>("[Db_BPMSEntities].[sysBpmsSplit](@RowData, @Delimeter)", rowDataParameter, delimeterParameter);
         }
     }

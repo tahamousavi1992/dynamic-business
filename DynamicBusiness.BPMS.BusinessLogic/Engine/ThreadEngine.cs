@@ -52,7 +52,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         private int CalculateSerlialNumber(int NumberOf)
         {
-            int StartPoint = new SettingValueService(base.UnitOfWork).GetValue(sysBpmsSettingDef.e_NameType.ThreadStartPointSerlialNumber.ToString()).ToIntObj();
+            int StartPoint = new ConfigurationService(base.UnitOfWork).GetValue(sysBpmsConfiguration.e_NameType.ThreadStartPointSerlialNumber.ToString()).ToIntObj();
             if (NumberOf < StartPoint)
                 NumberOf += StartPoint - NumberOf;
             return NumberOf;
@@ -60,7 +60,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         private string CalculateFormatNumber(int NumberOf, DateTime OrderDateOf)
         {
-            string SerlialNumberFormat = new SettingValueService(base.UnitOfWork).GetValue(sysBpmsSettingDef.e_NameType.ThreadFormatSerlialNumber.ToString());
+            string SerlialNumberFormat = new ConfigurationService(base.UnitOfWork).GetValue(sysBpmsConfiguration.e_NameType.ThreadFormatSerlialNumber.ToString());
             string NumberFormat = string.Empty;
             string Formated = string.Empty;
 

@@ -240,7 +240,7 @@
     <Compile Include="DTO\Admin\LaneDTO.cs" />
     <Compile Include="DTO\Admin\LURowIndexSearchDTO.cs" />
     <Compile Include="DTO\Admin\ServiceTaskDTO.cs" />
-    <Compile Include="DTO\Admin\SettingDTO.cs" />
+    <Compile Include="DTO\Admin\ConfigurationDTO.cs" />
     <Compile Include="DTO\Admin\StepDTO.cs" />
     <Compile Include="DTO\Admin\StyleSheetDTO.cs" />
     <Compile Include="DTO\Admin\UserTaskDTO.cs" />

@@ -22,7 +22,7 @@ namespace DynamicBusiness.BPMS.SharedPresentation
     {
         public BpmsEngineApiControlBase()
         {
-            using (SettingValueService settingValueService = new SettingValueService())
+            using (ConfigurationService configurationService = new ConfigurationService())
             {
 
                 if (this.MyRequest.Headers.AllKeys.Contains("clientIp"))

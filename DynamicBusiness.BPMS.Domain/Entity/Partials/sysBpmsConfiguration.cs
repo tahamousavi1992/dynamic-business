@@ -7,14 +7,9 @@ using System.Threading.Tasks;
 namespace DynamicBusiness.BPMS.Domain
 {
     [Serializable]
-    public partial class sysBpmsSettingDef
+    public partial class sysBpmsConfiguration
     {
-        public enum e_ValueType
-        {
-            Text = 1,
-            File = 2,
-            Date = 3,
-        }
+        public sysBpmsConfiguration() { }
         public enum e_NameType
         {
             DefaultReportFontFamily,
@@ -30,21 +25,22 @@ namespace DynamicBusiness.BPMS.Domain
             LoadUserPanelBootstrap,
             LastSqlUpdatedVersion,
         }
-        public sysBpmsSettingDef(string name, string title, int valueTypeLU, string defaultValue)
+        public sysBpmsConfiguration(string name, string label, string value, DateTime lastUpdateOn)
         {
             this.Name = name;
-            this.Title = title;
-            this.ValueTypeLU = valueTypeLU;
-            this.DefaultValue = defaultValue;
-        }
+            this.Label = label;
+            this.Value = value;
+            this.LastUpdateOn = lastUpdateOn;
+        } 
 
-        public void Load(sysBpmsSettingDef settingDef)
+        public void Load(sysBpmsConfiguration sysBpmsConfiguration)
         {
-            this.ID = settingDef.ID;
-            this.Name = settingDef.Name;
-            this.Title = settingDef.Title;
-            this.ValueTypeLU = settingDef.ValueTypeLU;
-            this.DefaultValue = settingDef.DefaultValue;
+            this.ID = sysBpmsConfiguration.ID;
+            this.Name = sysBpmsConfiguration.Name;
+            this.Label = sysBpmsConfiguration.Label;
+            this.DefaultValue = sysBpmsConfiguration.DefaultValue;
+            this.Value = sysBpmsConfiguration.Value;
+            this.LastUpdateOn = sysBpmsConfiguration.LastUpdateOn;
         }
     }
 }

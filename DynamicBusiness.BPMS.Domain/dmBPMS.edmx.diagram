@@ -6,39 +6,38 @@
     <edmx:Diagrams>
       <Diagram DiagramId="6805bffabf4241d2b6a08c1e09589de4" Name="Diagram1" ZoomLevel="77">
         <EntityTypeShape EntityType="BPMSModel.sysBpmsAPIAccess" Width="1.5" PointX="0.75" PointY="4.75" />
-        <EntityTypeShape EntityType="BPMSModel.sysBpmsApplicationPage" Width="1.5" PointX="3" PointY="13.5" />
-        <EntityTypeShape EntityType="BPMSModel.sysBpmsApplicationPageAccess" Width="1.5" PointX="14" PointY="14" />
-        <EntityTypeShape EntityType="BPMSModel.sysBpmsCondition" Width="1.5" PointX="12.75" PointY="26.5" />
-        <EntityTypeShape EntityType="BPMSModel.sysBpmsDBConnection" Width="1.5" PointX="6" PointY="4.375" />
-        <EntityTypeShape EntityType="BPMSModel.sysBpmsDepartment" Width="1.5" PointX="8.75" PointY="3" />
-        <EntityTypeShape EntityType="BPMSModel.sysBpmsDepartmentMember" Width="1.5" PointX="11" PointY="14.5" />
-        <EntityTypeShape EntityType="BPMSModel.sysBpmsDocument" Width="1.5" PointX="7.5" PointY="14" />
-        <EntityTypeShape EntityType="BPMSModel.sysBpmsDocumentDef" Width="1.5" PointX="5.25" PointY="8.5" />
-        <EntityTypeShape EntityType="BPMSModel.sysBpmsDocumentFolder" Width="1.5" PointX="3" PointY="8.875" />
-        <EntityTypeShape EntityType="BPMSModel.sysBpmsDynamicForm" Width="1.5" PointX="5.25" PointY="13.5" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsApplicationPage" Width="1.5" PointX="6" PointY="14.5" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsApplicationPageAccess" Width="1.5" PointX="16" PointY="8.25" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsCondition" Width="1.5" PointX="12.75" PointY="24.5" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsConfiguration" Width="1.5" PointX="2.75" PointY="4.75" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsDBConnection" Width="1.5" PointX="3" PointY="13.375" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsDepartment" Width="1.5" PointX="13.75" PointY="3" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsDepartmentMember" Width="1.5" PointX="16" PointY="4.5" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsDocument" Width="1.5" PointX="13.5" PointY="15" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsDocumentDef" Width="1.5" PointX="11.25" PointY="4.5" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsDocumentFolder" Width="1.5" PointX="9" PointY="4.875" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsDynamicForm" Width="1.5" PointX="8.25" PointY="13.5" />
         <EntityTypeShape EntityType="BPMSModel.sysBpmsElement" Width="1.5" PointX="5.25" PointY="34.875" />
-        <EntityTypeShape EntityType="BPMSModel.sysBpmsEmailAccount" Width="1.5" PointX="2.75" PointY="4.75" />
-        <EntityTypeShape EntityType="BPMSModel.sysBpmsEntityDef" Width="1.5" PointX="5.25" PointY="23.5" />
-        <EntityTypeShape EntityType="BPMSModel.sysBpmsEvent" Width="1.5" PointX="7.5" PointY="29.75" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsEmailAccount" Width="1.5" PointX="5.75" PointY="0.75" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsEntityDef" Width="1.5" PointX="11.25" PointY="14.5" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsEvent" Width="1.5" PointX="10.5" PointY="29.75" />
         <EntityTypeShape EntityType="BPMSModel.sysBpmsGateway" Width="1.5" PointX="10.5" PointY="26" />
-        <EntityTypeShape EntityType="BPMSModel.sysBpmsLane" Width="1.5" PointX="7.5" PointY="26.5" />
-        <EntityTypeShape EntityType="BPMSModel.sysBpmsLURow" Width="1.5" PointX="10" PointY="8" />
-        <EntityTypeShape EntityType="BPMSModel.sysBpmsLUTable" Width="1.5" PointX="7.75" PointY="8.125" />
-        <EntityTypeShape EntityType="BPMSModel.sysBpmsMessageType" Width="1.5" PointX="5.25" PointY="30.5" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsLane" Width="1.5" PointX="7.5" PointY="30.5" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsLURow" Width="1.5" PointX="3" PointY="1" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsLUTable" Width="1.5" PointX="0.75" PointY="1.125" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsMessageType" Width="1.5" PointX="8.25" PointY="33.5" />
         <EntityTypeShape EntityType="BPMSModel.sysBpmsProcess" Width="1.5" PointX="3" PointY="17.25" />
         <EntityTypeShape EntityType="BPMSModel.sysBpmsProcessGroup" Width="1.5" PointX="0.75" PointY="19.5" />
         <EntityTypeShape EntityType="BPMSModel.sysBpmsSequenceFlow" Width="1.5" PointX="10.5" PointY="22" />
-        <EntityTypeShape EntityType="BPMSModel.sysBpmsSettingDef" Width="1.5" PointX="0.75" PointY="0.875" />
-        <EntityTypeShape EntityType="BPMSModel.sysBpmsSettingValue" Width="1.5" PointX="3" PointY="0.875" />
-        <EntityTypeShape EntityType="BPMSModel.sysBpmsStep" Width="1.5" PointX="12.75" PointY="22.75" />
-        <EntityTypeShape EntityType="BPMSModel.sysBpmsTask" Width="1.5" PointX="10.5" PointY="30.625" />
-        <EntityTypeShape EntityType="BPMSModel.sysBpmsThread" Width="1.5" PointX="5.25" PointY="18.75" />
-        <EntityTypeShape EntityType="BPMSModel.sysBpmsThreadEvent" Width="1.5" PointX="12.75" PointY="29.5" />
-        <EntityTypeShape EntityType="BPMSModel.sysBpmsThreadTask" Width="1.5" PointX="15.75" PointY="24.75" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsStep" Width="1.5" PointX="10.5" PointY="18.25" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsTask" Width="1.5" PointX="7.5" PointY="25.625" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsThread" Width="1.5" PointX="8.25" PointY="18.75" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsThreadEvent" Width="1.5" PointX="17.75" PointY="24.5" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsThreadTask" Width="1.5" PointX="15.5" PointY="23.25" />
         <EntityTypeShape EntityType="BPMSModel.sysBpmsThreadVariable" Width="1.5" PointX="13.5" PointY="19.625" />
-        <EntityTypeShape EntityType="BPMSModel.sysBpmsUser" Width="1.5" PointX="3" PointY="25.125" />
-        <EntityTypeShape EntityType="BPMSModel.sysBpmsVariable" Width="1.5" PointX="8.25" PointY="18.125" />
-        <EntityTypeShape EntityType="BPMSModel.sysBpmsVariableDependency" Width="1.5" PointX="10.5" PointY="18.375" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsUser" Width="1.5" PointX="6" PointY="5.125" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsVariable" Width="1.5" PointX="5.25" PointY="18.125" />
+        <EntityTypeShape EntityType="BPMSModel.sysBpmsVariableDependency" Width="1.5" PointX="7.5" PointY="9.375" />
         <AssociationConnector Association="BPMSModel.FK_ApplicationPageAccess_ApplicationPage" />
         <AssociationConnector Association="BPMSModel.FK_DynamicForm_ApplicationPage" />
         <AssociationConnector Association="BPMSModel.FK_Variable_ApplicationPage" />
@@ -78,7 +77,6 @@
         <AssociationConnector Association="BPMSModel.FK_Thread_Process" />
         <AssociationConnector Association="BPMSModel.FK_Variable_Process" />
         <AssociationConnector Association="BPMSModel.FK_ProcessGroup_ProcessGroup" />
-        <AssociationConnector Association="BPMSModel.FK_SettingValue_SettingDef" />
         <AssociationConnector Association="BPMSModel.FK_Step_Task" />
         <AssociationConnector Association="BPMSModel.FK_ThreadTask_Task" />
         <AssociationConnector Association="BPMSModel.FK_Thread_User" />

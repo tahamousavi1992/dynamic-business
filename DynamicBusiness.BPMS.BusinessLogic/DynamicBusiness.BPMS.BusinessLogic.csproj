@@ -272,8 +272,7 @@
     <Compile Include="Services\RepositoryService\ProcessService.cs" />
     <Compile Include="Services\RepositoryService\SequenceFlowService.cs" />
     <Compile Include="Services\RepositoryService\ServiceBase.cs" />
-    <Compile Include="Services\RepositoryService\SettingDefService.cs" />
-    <Compile Include="Services\RepositoryService\SettingValueService.cs" />
+    <Compile Include="Services\RepositoryService\ConfigurationService.cs" />
     <Compile Include="Services\RepositoryService\MessageTypeService.cs" />
     <Compile Include="Services\RepositoryService\StepService.cs" />
     <Compile Include="Services\RepositoryService\TaskService.cs" />

@@ -18,40 +18,34 @@ namespace DynamicBusiness.BPMS.EngineApi.Controllers
         [HttpGet]
         public HttpResponseMessage GetDataGridElement(Guid formId, string controlId, Guid? threadId = null)
         {
-            using (SettingValueService settingValueService = new SettingValueService())
-            {
-                sysBpmsDynamicForm dynamicForm = new DynamicFormService().GetInfo(formId);
-                DataGridHtml control = (DataGridHtml)dynamicForm.FindControl(controlId);
+            sysBpmsDynamicForm dynamicForm = new DynamicFormService().GetInfo(formId);
+            DataGridHtml control = (DataGridHtml)dynamicForm.FindControl(controlId);
 
-                EngineSharedModel engineSharedModel = dynamicForm.ProcessId.HasValue ?
-                    new EngineSharedModel(threadId, dynamicForm.ProcessId, base.MyRequest.GetList(base.IsEncrypted, base.ApiSessionId).ToList(), base.ClientUserName, base.ApiSessionId) :
-                    new EngineSharedModel(dynamicForm.ApplicationPageID.Value, base.MyRequest.GetList(base.IsEncrypted, base.ApiSessionId).ToList(), base.ClientUserName, base.ApiSessionId);
+            EngineSharedModel engineSharedModel = dynamicForm.ProcessId.HasValue ?
+                new EngineSharedModel(threadId, dynamicForm.ProcessId, base.MyRequest.GetList(base.IsEncrypted, base.ApiSessionId).ToList(), base.ClientUserName, base.ApiSessionId) :
+                new EngineSharedModel(dynamicForm.ApplicationPageID.Value, base.MyRequest.GetList(base.IsEncrypted, base.ApiSessionId).ToList(), base.ClientUserName, base.ApiSessionId);
 
-                control.Helper = HtmlElementHelper.MakeModel(engineSharedModel, new UnitOfWork(), HtmlElementHelperModel.e_FormAction.Onload, dynamicForm);
-                control.FillData();
+            control.Helper = HtmlElementHelper.MakeModel(engineSharedModel, new UnitOfWork(), HtmlElementHelperModel.e_FormAction.Onload, dynamicForm);
+            control.FillData();
 
-                return Request.CreateResponse(HttpStatusCode.OK, control);
-            }
+            return Request.CreateResponse(HttpStatusCode.OK, control);
         }
 
         [BpmsAuth]
         [HttpGet]
         public HttpResponseMessage GetChartElement(Guid formId, string controlId, Guid? threadId = null)
         {
-            using (SettingValueService settingValueService = new SettingValueService())
-            {
-                sysBpmsDynamicForm dynamicForm = new DynamicFormService().GetInfo(formId);
-                ChartHtml control = (ChartHtml)dynamicForm.FindControl(controlId);
+            sysBpmsDynamicForm dynamicForm = new DynamicFormService().GetInfo(formId);
+            ChartHtml control = (ChartHtml)dynamicForm.FindControl(controlId);
 
-                EngineSharedModel engineSharedModel = dynamicForm.ProcessId.HasValue ?
-                    new EngineSharedModel(threadId, dynamicForm.ProcessId, base.MyRequest.GetList(base.IsEncrypted, base.ApiSessionId).ToList(), base.ClientUserName, base.ApiSessionId) :
-                    new EngineSharedModel(dynamicForm.ApplicationPageID.Value, base.MyRequest.GetList(base.IsEncrypted, base.ApiSessionId).ToList(), base.ClientUserName, base.ApiSessionId);
+            EngineSharedModel engineSharedModel = dynamicForm.ProcessId.HasValue ?
+                new EngineSharedModel(threadId, dynamicForm.ProcessId, base.MyRequest.GetList(base.IsEncrypted, base.ApiSessionId).ToList(), base.ClientUserName, base.ApiSessionId) :
+                new EngineSharedModel(dynamicForm.ApplicationPageID.Value, base.MyRequest.GetList(base.IsEncrypted, base.ApiSessionId).ToList(), base.ClientUserName, base.ApiSessionId);
 
-                control.Helper = HtmlElementHelper.MakeModel(engineSharedModel, new UnitOfWork(), HtmlElementHelperModel.e_FormAction.Onload, dynamicForm);
-                control.FillData();
+            control.Helper = HtmlElementHelper.MakeModel(engineSharedModel, new UnitOfWork(), HtmlElementHelperModel.e_FormAction.Onload, dynamicForm);
+            control.FillData();
 
-                return Request.CreateResponse(HttpStatusCode.OK, control);
-            }
+            return Request.CreateResponse(HttpStatusCode.OK, control);
         }
 
         [BpmsAuth]

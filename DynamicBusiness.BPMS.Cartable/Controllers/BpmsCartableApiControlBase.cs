@@ -23,39 +23,36 @@ namespace DynamicBusiness.BPMS.Cartable
     {
         public BpmsCartableApiControlBase()
         {
-            using (SettingValueService settingValueService = new SettingValueService())
+
+            if (this.MyRequest.Headers.AllKeys.Contains("clientIp"))
+                this.ClientIp = this.MyRequest.Headers["clientIp"].ToStringObj();
+            else
+                this.ClientIp = ApiUtility.GetIPAddress();
+
+            using (APIAccessService apiAccessService = new APIAccessService())
             {
-
-                if (this.MyRequest.Headers.AllKeys.Contains("clientIp"))
-                    this.ClientIp = this.MyRequest.Headers["clientIp"].ToStringObj();
-                else
-                    this.ClientIp = ApiUtility.GetIPAddress();
-
-                using (APIAccessService apiAccessService = new APIAccessService())
+                //api call using toke header,which is password, or formToken ,which is a parameter like antiforgerytoken cosist of sessionId and mainDynamicFormId encripted by sessionId. 
+                if (!this.MyRequest.Headers.AllKeys.Contains("token"))
                 {
-                    //api call using toke header,which is password, or formToken ,which is a parameter like antiforgerytoken cosist of sessionId and mainDynamicFormId encripted by sessionId. 
-                    if (!this.MyRequest.Headers.AllKeys.Contains("token"))
-                    {
-                        this.ClientUserName = DomainUtility.IsTestEnvironment() ? "bpms_expert" : base.UserInfo.Username;
-                        this.ClientFormToken = this.MyRequest.QueryString[FormTokenUtility.FormToken].ToStringObj();
-                        this.ClientId = HttpContext.Current.Session.SessionID;
-                        this.ApiSessionId = DomainUtility.CreateApiSessionID(this.ClientId, this.ClientIp);
-                        this.IsEncrypted = FormTokenUtility.GetIsEncrypted(this.ClientFormToken, this.ClientId);
-                    }
-                    else
-                    {
-                        if (this.MyRequest.Headers.AllKeys.Contains("userName"))
-                            this.ClientUserName = this.MyRequest.Headers["userName"].ToStringObj();
+                    this.ClientUserName = DomainUtility.IsTestEnvironment() ? "bpms_expert" : base.UserInfo.Username;
+                    this.ClientFormToken = this.MyRequest.QueryString[FormTokenUtility.FormToken].ToStringObj();
+                    this.ClientId = HttpContext.Current.Session.SessionID;
+                    this.ApiSessionId = DomainUtility.CreateApiSessionID(this.ClientId, this.ClientIp);
+                    this.IsEncrypted = FormTokenUtility.GetIsEncrypted(this.ClientFormToken, this.ClientId);
+                }
+                else
+                {
+                    if (this.MyRequest.Headers.AllKeys.Contains("userName"))
+                        this.ClientUserName = this.MyRequest.Headers["userName"].ToStringObj();
 
-                        this.ClientId = this.MyRequest.Headers["clientId"].ToStringObj();
-                        this.ApiSessionId = DomainUtility.CreateApiSessionID(this.ClientId, this.ClientIp); ;
-                        //set ApiSessionID 
-                        if (!apiAccessService.HasAccess(ApiUtility.GetIPAddress(), this.MyRequest.Headers.GetValues("token").FirstOrDefault()))
-                        {
-                            throw new Exception("You are not authorized to access this application.");
-                        }
-                        this.IsEncrypted = this.MyRequest.Headers["isEncrypted"].ToStringObj() == "1";
+                    this.ClientId = this.MyRequest.Headers["clientId"].ToStringObj();
+                    this.ApiSessionId = DomainUtility.CreateApiSessionID(this.ClientId, this.ClientIp); ;
+                    //set ApiSessionID 
+                    if (!apiAccessService.HasAccess(ApiUtility.GetIPAddress(), this.MyRequest.Headers.GetValues("token").FirstOrDefault()))
+                    {
+                        throw new Exception("You are not authorized to access this application.");
                     }
+                    this.IsEncrypted = this.MyRequest.Headers["isEncrypted"].ToStringObj() == "1";
                 }
             }
         }

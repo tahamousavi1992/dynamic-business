@@ -47,11 +47,10 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 container.RegisterType<IThreadEventRepository, ThreadEventRepository>();
                 container.RegisterType<IApplicationPageRepository, ApplicationPageRepository>();
                 container.RegisterType<IApplicationPageAccessRepository, ApplicationPageAccessRepository>();
-                container.RegisterType<ISettingDefRepository, SettingDefRepository>();
-                container.RegisterType<ISettingValueRepository, SettingValueRepository>();
                 container.RegisterType<IAPIAccessRepository, APIAccessRepository>();
                 container.RegisterType<IMessageTypeRepository, MessageTypeRepository>();
                 container.RegisterType<IProcessGroupRepository, ProcessGroupRepository>();
+                container.RegisterType<IConfigurationRepository, ConfigurationRepository>();
             }
             return container.Resolve<TAnyType>(new ResolverOverride[] { new ParameterOverride("context", context) });
         }

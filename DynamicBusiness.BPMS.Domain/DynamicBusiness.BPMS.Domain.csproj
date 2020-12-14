@@ -172,6 +172,7 @@
     <Compile Include="Entity\Partials\sysBpmsAPIAccess.cs" />
     <Compile Include="Entity\Partials\sysBpmsApplicationPage.cs" />
     <Compile Include="Entity\Partials\sysBpmsApplicationPageAccess.cs" />
+    <Compile Include="Entity\Partials\sysBpmsConfiguration.cs" />
     <Compile Include="Entity\Partials\sysBpmsDocument.cs" />
     <Compile Include="Entity\Partials\sysBpmsDocumentDef.cs" />
     <Compile Include="Entity\Partials\sysBpmsDocumentFolder.cs" />
@@ -180,8 +181,6 @@
     <Compile Include="Entity\Partials\sysBpmsLUTable.cs" />
     <Compile Include="Entity\Partials\sysBpmsMessageType.cs" />
     <Compile Include="Entity\Partials\sysBpmsProcessGroup.cs" />
-    <Compile Include="Entity\Partials\sysBpmsSettingDef.cs" />
-    <Compile Include="Entity\Partials\sysBpmsSettingValue.cs" />
     <Compile Include="Entity\Partials\sysBpmsThreadEvent.cs" />
     <Compile Include="Entity\Partials\sysBpmsVariableDependency.cs" />
     <Compile Include="Entity\Workflow\IWorkflowElement.cs" />
@@ -238,8 +237,7 @@
     <Compile Include="Interfaces\Repository\IEmailAccountRepository.cs" />
     <Compile Include="Interfaces\Repository\ILaneRepository.cs" />
     <Compile Include="Interfaces\Repository\IProcessGroupRepository.cs" />
-    <Compile Include="Interfaces\Repository\ISettingDefRepository.cs" />
-    <Compile Include="Interfaces\Repository\ISettingValueRepository.cs" />
+    <Compile Include="Interfaces\Repository\IConfigurationRepository.cs" />
     <Compile Include="Interfaces\Repository\IMessageTypeRepository.cs" />
     <Compile Include="Interfaces\Repository\IThreadEventRepository.cs" />
     <Compile Include="Interfaces\Repository\IUserRepository.cs" />
@@ -310,6 +308,9 @@
     <Compile Include="sysBpmsCondition.cs">
       <DependentUpon>dmBPMS.tt</DependentUpon>
     </Compile>
+    <Compile Include="sysBpmsConfiguration.cs">
+      <DependentUpon>dmBPMS.tt</DependentUpon>
+    </Compile>
     <Compile Include="sysBpmsDBConnection.cs">
       <DependentUpon>dmBPMS.tt</DependentUpon>
     </Compile>
@@ -365,12 +366,6 @@
       <DependentUpon>dmBPMS.tt</DependentUpon>
     </Compile>
     <Compile Include="sysBpmsSequenceFlow.cs">
-      <DependentUpon>dmBPMS.tt</DependentUpon>
-    </Compile>
-    <Compile Include="sysBpmsSettingDef.cs">
-      <DependentUpon>dmBPMS.tt</DependentUpon>
-    </Compile>
-    <Compile Include="sysBpmsSettingValue.cs">
       <DependentUpon>dmBPMS.tt</DependentUpon>
     </Compile>
     <Compile Include="sysBpmsSplit_Result.cs">

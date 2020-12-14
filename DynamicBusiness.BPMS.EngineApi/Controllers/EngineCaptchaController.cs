@@ -18,12 +18,9 @@ namespace DynamicBusiness.BPMS.EngineApi.Controllers
         {
             if (formId.HasValue)
             {
-                using (SettingValueService settingValueService = new SettingValueService())
-                {
-                    sysBpmsDynamicForm dynamicForm = new DynamicFormService().GetInfo(formId.Value);
-                    WordCaptchaHtml control = (WordCaptchaHtml)dynamicForm?.FindControl(key);
-                    HttpContext.Current.Session[key] = this.RandomString(control.Length);
-                }
+                sysBpmsDynamicForm dynamicForm = new DynamicFormService().GetInfo(formId.Value);
+                WordCaptchaHtml control = (WordCaptchaHtml)dynamicForm?.FindControl(key);
+                HttpContext.Current.Session[key] = this.RandomString(control.Length);
             }
             else
                 HttpContext.Current.Session[key] = this.RandomString(8);

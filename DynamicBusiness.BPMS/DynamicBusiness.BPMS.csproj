@@ -162,7 +162,7 @@
     <Compile Include="Controllers\BpmsProcessController.cs" />
     <Compile Include="Controllers\BpmsEntityManagerController.cs" />
     <Compile Include="Controllers\BPMSRouteMapper.cs" />
-    <Compile Include="Controllers\BpmsSettingController.cs" />
+    <Compile Include="Controllers\BpmsConfigurationController.cs" />
     <Compile Include="Controllers\BpmsStyleSheetController.cs" />
     <Compile Include="Controllers\BpmsTaskController.cs" />
     <Compile Include="Controllers\BpmsUserController.cs" />

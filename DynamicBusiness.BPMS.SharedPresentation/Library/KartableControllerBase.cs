@@ -26,11 +26,11 @@ namespace DynamicBusiness.BPMS.SharedPresentation
             ViewBag.ProcessId = Request.QueryString["processId"];
             Session["dt"] = DateTime.Now.Date;
 
-            using (SettingValueService settingValueService = new SettingValueService())
+            using (ConfigurationService configurationService = new ConfigurationService())
             {
-                this.ShowUserPanelWithNoSkin = settingValueService.GetValue(sysBpmsSettingDef.e_NameType.ShowUserPanelWithNoSkin.ToString()).ToLower() == "true";
-                this.LoadUserPanelJquery = settingValueService.GetValue(sysBpmsSettingDef.e_NameType.LoadUserPanelJquery.ToString()).ToLower() == "true";
-                this.LoadUserPanelBootstrap = settingValueService.GetValue(sysBpmsSettingDef.e_NameType.LoadUserPanelBootstrap.ToString()).ToLower() == "true";
+                this.ShowUserPanelWithNoSkin = configurationService.GetValue(sysBpmsConfiguration.e_NameType.ShowUserPanelWithNoSkin.ToString()).ToLower() == "true";
+                this.LoadUserPanelJquery = configurationService.GetValue(sysBpmsConfiguration.e_NameType.LoadUserPanelJquery.ToString()).ToLower() == "true";
+                this.LoadUserPanelBootstrap = configurationService.GetValue(sysBpmsConfiguration.e_NameType.LoadUserPanelBootstrap.ToString()).ToLower() == "true";
             }
 
             if (!this.Request.Url.ToStringObj().Contains("SkinSrc") &&
@@ -41,9 +41,9 @@ namespace DynamicBusiness.BPMS.SharedPresentation
 
         protected void AddUserIfNotExist()
         {
-            using (SettingValueService settingValueService = new SettingValueService())
+            using (ConfigurationService configurationService = new ConfigurationService())
             {
-                bool addUser = settingValueService.GetValue(sysBpmsSettingDef.e_NameType.AddUserAutomatically.ToString()).ToLower() == "true";
+                bool addUser = configurationService.GetValue(sysBpmsConfiguration.e_NameType.AddUserAutomatically.ToString()).ToLower() == "true";
                 using (UserService userService = new UserService())
                 {
                     sysBpmsUser sysBpmsUser = userService.GetInfo(base.User.Username);
