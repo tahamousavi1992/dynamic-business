@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 
@@ -34,9 +35,15 @@ namespace DynamicBusiness.BPMS.Domain
         [DataMember]
         public string ChartDataSet { get; set; }
 
+        /// <summary>
+        /// in form it is name (Label DataField) which identify which field of Label Source Variable is for labeling.
+        /// </summary>
         [DataMember]
         public string ChartLabelDataField { get; set; }
 
+        /// <summary>
+        /// in form it is name (Label Source Variable) which indicate a variable list for label data source .
+        /// </summary>
         [DataMember]
         public string ChartFillListLabel { get; set; }
 
@@ -74,23 +81,24 @@ namespace DynamicBusiness.BPMS.Domain
         public override void FillData(List<QueryModel> listFormQueryModel = null)
         {
 
-            List<DataModel> listData = null;
-            List<string> listLabels = new List<string>();
+            List<DataModel> listLabelDS = null;
+            List<string> listLabelDF = new List<string>();
             if (!string.IsNullOrWhiteSpace(this.ChartFillListLabel) && !string.IsNullOrWhiteSpace(this.ChartLabelDataField))
             {
-                listData = this.Helper.DataManageHelper.GetEntityByBinding(this.ChartFillListLabel, listFormQueryModel)?.Items;
-                listLabels = listData.Select(c => "\"" + c[this.ChartLabelDataField].ToFormat(this.ChartLabelDataField) + "\"").ToList();
+                listLabelDS = this.Helper.DataManageHelper.GetEntityByBinding(this.ChartFillListLabel, listFormQueryModel, includes: this.GetIncludes(this.ChartLabelDataField)?.ToArray())?.Items;
+                //.Replace(".", "__") is for getting relationed data like if a field is Person.Name it is returned Person__Name 
+                listLabelDF = listLabelDS.Select(c => "\"" + c[this.ChartLabelDataField.Replace(".", "__")].ToFormat(this.ChartLabelDataField) + "\"").ToList();
             }
 
-            string labels = $"[{string.Join(",", listLabels)}]";
+            string labels = $"[{string.Join(",", listLabelDF)}]";
             string pieBackColor = "";
             if (this.ChartType == e_ChartType.Pie)
             {
                 if (this.ColorType == e_ColorType.Field)
                 {
-                    if (listData != null)
+                    if (listLabelDS != null)
                     {
-                        pieBackColor = $"[{string.Join(",", listData.Select(c => "\"" + c[this.PieColorName].ToStringObj() + "\"").ToList()) }]";
+                        pieBackColor = $"[{string.Join(",", listLabelDS.Select(c => "\"" + c[this.PieColorName].ToStringObj() + "\"").ToList()) }]";
                     }
                 }
                 else
@@ -102,7 +110,7 @@ namespace DynamicBusiness.BPMS.Domain
                     else
                     {
                         Random random = new Random();
-                        pieBackColor = $"[{string.Join(",", listLabels.Select(d => String.Format("\"#80{0:X6}\"", random.Next(0x1000000))))}]";
+                        pieBackColor = $"[{string.Join(",", listLabelDF.Select(d => String.Format("\"#80{0:X6}\"", random.Next(0x1000000))))}]";
                     }
                 }
             }
@@ -111,11 +119,13 @@ namespace DynamicBusiness.BPMS.Domain
                 ""labels"": {labels},
                 ""datasets"": [{string.Join(",", this.ChartDataSet.Split(',').Where(c => !string.IsNullOrWhiteSpace(c)).Select(c =>
                 {
+                    //c is like variableList:FieldName:Color:Label
+                    //label is a text not a field.
                     string item = $@"{{
                     {(this.ChartType == e_ChartType.Pie ? "" : $"\"label\": \"{c.Split(':')[3]}\",")}
                     {(this.IsSmooth ? "\"lineTension\": \"0.000001\"," : "")}
                     ""backgroundColor"": { (this.ChartType == e_ChartType.Pie ? pieBackColor : $"color({this.HexToColor(c.Split(':')[2])}).alpha(0.5).rgbString()")},
-                    ""data"": { $"[{string.Join(",", this.Helper.DataManageHelper.GetEntityByBinding(c.Split(':')[0])?.Items.Select(d => d[c.Split(':')[1]].ToFormat(c.Split(':')[1])).ToList())}]"}
+                    ""data"": { $"[{string.Join(",", this.Helper.DataManageHelper.GetEntityByBinding(c.Split(':')[0], includes: this.GetIncludes(c.Split(':')[1])?.ToArray())?.Items.Select(d => d[c.Split(':')[1].Replace(".", "__")].ToFormat(c.Split(':')[1])).ToList())}]"}
                     { (this.ChartType == e_ChartType.Line ? ",\"fill\": false" : "")}
                 }}";
                     return item;
@@ -123,6 +133,21 @@ namespace DynamicBusiness.BPMS.Domain
 
             }}";
 
+        }
+
+        //retrieve the relationship tables according to templates that added to columns.
+        private List<string> GetIncludes(string fieldName)
+        {
+            List<string> includes = new List<string>();
+            MatchCollection matchs = Regex.Matches(fieldName, @"\[(.*?)\]");
+            foreach (Match findMatch in matchs)
+            {
+                //get first part of format wich is fieldName  Product.Price::##00
+                string key = findMatch.Groups[1].ToString().Split(new string[] { "::" }, StringSplitOptions.None)[0];
+                if (key.Split('.').Count() > 1)
+                    includes.Add(key);
+            }
+            return includes.Any() ? includes : null;
         }
 
         public enum e_ChartType
