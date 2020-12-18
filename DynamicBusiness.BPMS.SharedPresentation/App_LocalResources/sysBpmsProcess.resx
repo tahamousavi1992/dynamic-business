@@ -147,4 +147,13 @@
   <data name="WorkflowPublishError.Text" xml:space="preserve">
     <value>The process could not be published.</value>
   </data>
+  <data name="WorkflowPublishNoEndError.Text" xml:space="preserve">
+    <value>The process could not be published  because an end event is required.</value>
+  </data>
+  <data name="WorkflowPublishNoStartError.Text" xml:space="preserve">
+    <value>The process could not be published because an start event is required.</value>
+  </data>
+  <data name="WorkflowPublishNoStepError.Text" xml:space="preserve">
+    <value>The process could not be published  because all user tasks must have at least one step</value>
+  </data>
 </root>

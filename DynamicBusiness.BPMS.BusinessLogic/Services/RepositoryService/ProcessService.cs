@@ -317,7 +317,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                             //Then update sourceCode value.
                             dynamicFormService.GetSourceCode(item);
                             item.sysBpmsProcess = null;
-                            resultOperation = dynamicFormService.Add(item, 
+                            resultOperation = dynamicFormService.Add(item,
                                 item.ApplicationPageID.HasValue ? applicationPageService.GetInfo(item.ApplicationPageID.Value) : null, userName);
                             formConvertID.Add(oldID, item.ID);
                             if (!resultOperation.IsSuccess)
@@ -479,6 +479,17 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                     resultOperation.AddError(LangUtility.Get("WorkflowPublishError.Text", nameof(sysBpmsProcess)));
                 }
 
+                if (new EventService(base.UnitOfWork).GetList((int)sysBpmsEvent.e_TypeLU.StartEvent, processID, "", null).Count == 0)
+                    resultOperation.AddError(LangUtility.Get("WorkflowPublishNoStartError.Text", nameof(sysBpmsProcess)));
+
+                if (new EventService(base.UnitOfWork).GetList((int)sysBpmsEvent.e_TypeLU.EndEvent, processID, "", null).Count == 0)
+                    resultOperation.AddError(LangUtility.Get("WorkflowPublishNoEndError.Text", nameof(sysBpmsProcess)));
+
+                foreach (var item in new TaskService(base.UnitOfWork).GetList((int)sysBpmsTask.e_TypeLU.UserTask, processID))
+                {
+                    if (item.sysBpmsSteps.Count == 0)
+                        resultOperation.AddError(LangUtility.Get("WorkflowPublishNoStepError.Text", nameof(sysBpmsProcess)));
+                }
                 if (resultOperation.IsSuccess)
                 {
                     process.BeginTasks = string.Join(",", this.GetListBeginTaskElementID(process.ID));
@@ -496,7 +507,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                     }
                     process.StatusLU = (int)sysBpmsProcess.Enum_StatusLU.Published;
                     process.PublishDate = DateTime.Now;
-                    //Update sourceCode firld and Generate assembly
+                    //Update sourceCode fired and Generate assembly
                     GetSourceCode(process);
                     //Update TraceToStartField of Gateway element.
                     resultOperation = new GatewayEngine(null, base.UnitOfWork).UpdateTraceToStart(process);
