@@ -84,7 +84,7 @@ namespace DynamicBusiness.BPMS.Domain
                 {
                     Label = item[this.Text].ToStringObj(),
                     Value = StringCipher.EncryptFormValues(item[this.Key].ToStringObj(), base.Helper.ApiSessionId, base.Helper.IsEncrypted),
-                    Selected = this.Value.ToStringObj() == item[this.Key].ToStringObj()
+                    Selected = this.Value.ToStringObj().Split(',').Contains(item[this.Key].ToStringObj())
                 });
             }
         }
