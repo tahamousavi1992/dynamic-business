@@ -52,7 +52,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             {
                 string fe = System.IO.Path.GetExtension(FileName).Trim('.').ToLower();
                 if (!string.IsNullOrWhiteSpace(documentDef.ValidExtentions) &&
-                 !documentDef.ValidExtentions.ToStringObj().Trim().ToLower().Split(',').Contains(fe))
+                 !documentDef.ValidExtentions.ToStringObj().Trim().ToLower().Split(',').Any(c => c.Trim('.') == fe))
                 {
                     resultOperation.AddError(string.Format(LangUtility.Get("FileNotValid.Text", "Engine"), documentDef.DisplayName));
                     return resultOperation;
@@ -104,7 +104,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 Guid Guid = System.Guid.NewGuid();
                 string fe = System.IO.Path.GetExtension(fileName).Trim('.').ToLower();
                 if (!string.IsNullOrWhiteSpace(documentDef.ValidExtentions) &&
-                    !documentDef.ValidExtentions.ToStringObj().Trim().ToLower().Split(',').Contains(fe))
+                    !documentDef.ValidExtentions.ToStringObj().Trim().ToLower().Split(',').Any(c => c.Trim('.') == fe))
                 {
                     resultOperation.AddError(string.Format(LangUtility.Get("FileNotValid.Text", "Engine"), documentDef.DisplayName));
                     return resultOperation;
