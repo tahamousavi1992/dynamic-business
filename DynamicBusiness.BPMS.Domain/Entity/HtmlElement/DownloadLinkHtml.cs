@@ -17,18 +17,23 @@ namespace DynamicBusiness.BPMS.Domain
         public DownloadLinkHtml(JObject obj, HtmlElementHelperModel _helper, Guid dynamicFormId, bool isFormReadOnly) : base(obj, _helper, dynamicFormId, isFormReadOnly)
         {
             this.VariableId = DomainUtility.toString(obj["entityVariableId"]);
-            this.DocumentDefId = DomainUtility.toString(obj["documentDefId"]);
+            this.DocumentDefId = DomainUtility.toString(obj["documentDefId"]).ToGuidObjNull();
+            this.DocumentFolderId = obj["documentFolderId"].ToGuidObjNull();
             this.ListDocument = new List<Guid>();
-            if (base.Helper.FormAction == HtmlElementHelperModel.e_FormAction.Onload)
-                this.ListDocument = base.Helper?.DocumentEngine?.GetList(this.DocumentDefId.ToGuidObjNull(), this.VariableId.ToGuidObjNull(), null).Select(c => c.GUID).ToList();
+            if (base.Helper.FormAction == HtmlElementHelperModel.e_FormAction.Onload &&
+                (this.DocumentFolderId.HasValue || this.DocumentDefId.HasValue))
+                this.ListDocument = base.Helper?.DocumentEngine?.GetList(this.DocumentDefId.ToGuidObjNull(),
+                    this.VariableId.ToGuidObjNull(), this.DocumentFolderId).Select(c => new { c.GUID, c.CaptionOf }).ToList();
         }
         [DataMember]
         public Guid? ThreadID { get { return base.Helper?.DataManageHelper?.ThreadID; } private set { } }
         [DataMember]
         public string VariableId { get; set; }
         [DataMember]
-        public string DocumentDefId { get; set; }
+        public Guid? DocumentDefId { get; set; }
         [DataMember]
-        public List<Guid> ListDocument { get; set; }
+        public Guid? DocumentFolderId { get; set; }
+        [DataMember]
+        public object ListDocument { get; set; }
     }
 }
