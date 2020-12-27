@@ -8,6 +8,10 @@ namespace DynamicBusiness.BPMS.Domain
 {
     public interface IDocumentEngine
     {
+        /// <summary>
+        /// It is used for Forms inside forms to change appPageID of parent form for retrieving variables.
+        /// </summary>
+        void SetApplicationPageID(Guid appPageID);
         ResultOperation IsValid(FileUploadHtml fileUploadHtml, sysBpmsVariable variable, Guid? entityId, Guid? entitydefid, string currentUserName);
         ResultOperation IsValid(Guid? EntityDefID, Guid? EntityID, System.IO.Stream InputStream, string FileName, Guid DocumentDefID);
         ResultOperation SaveFile(FileUploadHtml fileUploadHtml, sysBpmsVariable variable, Guid? entityId, Guid? entitydefid, string captionOf, string currentUserName);

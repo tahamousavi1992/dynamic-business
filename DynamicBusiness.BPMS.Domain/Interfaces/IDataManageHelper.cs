@@ -9,8 +9,12 @@ namespace DynamicBusiness.BPMS.Domain
 {
     public interface IDataManageEngine
     {
+        EngineSharedModel GetSharedModel();
+        /// <summary>
+        /// It is used for Forms inside forms to change appPageID of parent form for retrieving variables.
+        /// </summary>
+        void SetApplicationPageID(Guid appPageID); 
         Guid? ThreadID { get; set; }
-        Guid? ProcessID { get; set; }
         Dictionary<string, object> FormControlValues { get; set; }
         /// <param name="containerQuery">It is generally used in combosearch which add a parent query that filter table's rows according to query parameter and text field</param>
         VariableModel GetEntityByBinding(string BindTrace, List<QueryModel> listFormQueryModel = null, PagingProperties currentPaging = null, string containerQuery = null, string[] includes = null);

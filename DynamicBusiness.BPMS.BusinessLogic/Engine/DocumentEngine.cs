@@ -11,6 +11,11 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 {
     public class DocumentEngine : BaseEngine, IDocumentEngine
     {
+        /// <summary>
+        /// It is used for Forms inside forms to change appPageID of parent form for retrieving variables.
+        /// </summary>
+        public void SetApplicationPageID(Guid appPageID) => base.EngineSharedModel.CurrentApplicationPageID = appPageID;
+
         private DocumentService DocumentService { get; set; }
         public DocumentEngine(EngineSharedModel engineSharedModel, IUnitOfWork unitOfWork = null) : base(engineSharedModel, unitOfWork)
         {

@@ -52,7 +52,7 @@ namespace DynamicBusiness.BPMS.Domain
             this.ValidationGroup = string.IsNullOrWhiteSpace(obj["validationGroup"].ToStringObj()) ? "nextAction" : obj["validationGroup"].ToStringObj().Trim();
 
             this.HasPostBack = this.subtype == ButtonHtml.e_subtype.submit ||
-                !string.IsNullOrWhiteSpace(DesignCodeUtility.GetDesignCodeFromXml(this.BackendCoding).Code);
+                (DesignCodeUtility.GetDesignCodeFromXml(this.BackendCoding).CodeObjects?.Any() ?? false);
         }
         [DataMember]
         public bool IsReadonly { get; set; }

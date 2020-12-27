@@ -20,7 +20,10 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 unitOfWork, new ApplicationPageEngine(engineSharedModel, unitOfWork),
                 formAction,
                 new DynamicCodeEngine(engineSharedModel, unitOfWork),
-                new DocumentEngine(engineSharedModel, unitOfWork), engineSharedModel, mainDynamicForm.ConfigXmlModel.IsEncrypted);
+                new DocumentEngine(engineSharedModel, unitOfWork),
+                engineSharedModel?.BaseQueryModel,
+                engineSharedModel?.ApiSessionID.ToStringObj(),
+                mainDynamicForm.ConfigXmlModel.IsEncrypted);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace DynamicBusiness.BPMS.Domain
         {
             return this.Rows.SelectMany(r => (r is RowHtml ? ((RowHtml)r).Columns : ((AccordionHtml)r).GetListColumn().ToList()).Select(c =>
             {
-                return c.children.Select(child => child is ContentHtml ? ((ContentHtml)child).FindControlByType<T>() : child).FirstOrDefault(f => f is T);
+                return c.children.Select(child => child is FormHtml ? ((FormHtml)child).ContentHtml.FindControlByType<T>() : child).FirstOrDefault(f => f is T);
             })).Where(c => c != null).Select(c => (T)c).ToList();
         }
 
@@ -28,7 +28,7 @@ namespace DynamicBusiness.BPMS.Domain
         {
             return this.Rows.SelectMany(r => (r is RowHtml ? ((RowHtml)r).Columns : ((AccordionHtml)r).GetListColumn().ToList()).Select(c =>
                     {
-                        return c.children.Select(child => child is ContentHtml ? ((ContentHtml)child).FindControlByID(controlID) : child).FirstOrDefault(f => ((ElementBase)f).Id == controlID);
+                        return c.children.Select(child => child is FormHtml ? ((FormHtml)child).ContentHtml.FindControlByID(controlID) : child).FirstOrDefault(f => ((ElementBase)f).Id == controlID);
                     })).FirstOrDefault(c => c != null);
         }
 

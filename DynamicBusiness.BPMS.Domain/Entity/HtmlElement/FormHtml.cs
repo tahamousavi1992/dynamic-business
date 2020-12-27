@@ -27,6 +27,15 @@ namespace DynamicBusiness.BPMS.Domain
                 sysBpmsDynamicForm dynamicForm = _helper?.UnitOfWork.Repository<IDynamicFormRepository>().GetInfo(dynamicFormId);
                 if (dynamicForm != null)
                 {
+                    //If It is ApplicationPage,It must set ApplicationPageID To current ApplicationPageID for DataManageHelper and DocumentEngine 
+                    //to retrieve variables for current form
+                    Guid? parentAppPageID = _helper.DataManageHelper.GetSharedModel().CurrentApplicationPageID;
+                    if (dynamicForm.ApplicationPageID.HasValue)
+                    {
+                        _helper.DataManageHelper.SetApplicationPageID(dynamicForm.ApplicationPageID.Value);
+                        _helper.DocumentEngine.SetApplicationPageID(dynamicForm.ApplicationPageID.Value);
+                    }
+
                     isFormReadOnly = !isFormReadOnly ? (obj["readOnly"] != null ? ((bool)obj["readOnly"]) : false) : true;
                     //convert form xml code to json object
                     JObject newObj = JObject.Parse(dynamicForm.DesignJson);
@@ -38,6 +47,13 @@ namespace DynamicBusiness.BPMS.Domain
                     base.Helper?.AddScript(dynamicForm.ConfigXmlModel.OnLoadFunctionBody);
                     base.Helper?.AddStyleSheet(dynamicForm.ConfigXmlModel.StyleSheetCode);
                     this.IsFormReadOnly = isFormReadOnly;
+
+                    //If It is ApplicationPage,It must restore ApplicationPageID To parent form for DataManageHelper and DocumentEngine
+                    if (dynamicForm.ApplicationPageID.HasValue)
+                    {
+                        _helper.DataManageHelper.SetApplicationPageID(parentAppPageID.Value);
+                        _helper.DocumentEngine.SetApplicationPageID(parentAppPageID.Value);
+                    }
                 }
             }
 

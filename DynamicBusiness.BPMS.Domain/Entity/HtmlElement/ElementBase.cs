@@ -105,7 +105,7 @@ namespace DynamicBusiness.BPMS.Domain
             return
                    this.Helper?.FormAction == HtmlElementHelperModel.e_FormAction.FillMode ||
                    this.Helper?.FormAction == HtmlElementHelperModel.e_FormAction.Preview ||
-                   (this.Helper?.DataManageHelper?.ProcessID.HasValue ?? false) ||
+                   (this.Helper?.DataManageHelper?.GetSharedModel().CurrentProcessID.HasValue ?? false) ||
                    (this.Helper.applicationPageEngine?.CheckUserAccessByForm(this.DynamicFormID, this.AccessType ?? e_AccessType.AllowView) ?? true);
         }
 

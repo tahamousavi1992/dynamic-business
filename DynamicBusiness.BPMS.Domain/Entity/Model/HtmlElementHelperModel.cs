@@ -13,7 +13,7 @@ namespace DynamicBusiness.BPMS.Domain
         public HtmlElementHelperModel()
         {
 
-        } 
+        }
         public enum e_FormAction
         {
             Onload = 1,//load from database
@@ -56,7 +56,8 @@ namespace DynamicBusiness.BPMS.Domain
         public e_FormAction FormAction { get; set; }
 
         public HtmlElementHelperModel(IDataManageEngine dataManageHelper, IUnitOfWork unitOfWork, IApplicationPageEngine applicationPageEngine,
-            e_FormAction formAction, IDynamicCodeEngine dynamicCodeEngine, IDocumentEngine documentEngine, EngineSharedModel engineSharedModel, bool isEncrypted)
+            e_FormAction formAction, IDynamicCodeEngine dynamicCodeEngine, IDocumentEngine documentEngine,
+            List<QueryModel> listFormQueryModel, string apiSessionID, bool isEncrypted)
         {
             this.ResultOperation = new ResultOperation();
             this.FormAction = formAction;
@@ -65,8 +66,8 @@ namespace DynamicBusiness.BPMS.Domain
             this.applicationPageEngine = applicationPageEngine;
             this.DynamicCodeEngine = dynamicCodeEngine;
             this.DocumentEngine = documentEngine;
-            this.ListFormQueryModel = engineSharedModel?.BaseQueryModel;
-            this.ApiSessionId = engineSharedModel?.ApiSessionID.ToStringObj();
+            this.ListFormQueryModel = listFormQueryModel;
+            this.ApiSessionId = apiSessionID;
             this.IsEncrypted = isEncrypted;
         }
     }
