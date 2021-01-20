@@ -31,7 +31,10 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 sqlQuery = string.Format(containerQuery, sqlQuery);
             }
             //get sql query parameter from listFormQueryModel
-            List<SqlParameter> queryParams = QueryModel.GetSqlParameter(base.GetAllQueryModels(base.AdditionalParams), sqlQuery, base.ThreadID, base.ProcessID).ToList();
+            List<SqlParameter> queryParams = QueryModel.GetSqlParameter(base.GetAllQueryModels(base.AdditionalParams), sqlQuery).ToList();
+            //add default parameters like username, userId and processId ,...
+            this.AddDefaultParams(sqlQuery, queryParams);
+
             this.AddVariableParameters(ref sqlQuery, queryParams);
             DataTable dataTable = string.IsNullOrWhiteSpace(connection) ?
                 new DataBaseQueryService(this.UnitOfWork).GetBySqlQuery(sqlQuery, true, currentPaging, queryParams.ToArray()) :
@@ -55,7 +58,10 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             string connection = new DBConnectionService(this.UnitOfWork).GetInfo(Variable.DBConnectionID.Value).GetConnection;
             string sqlQuery = Variable.Query;
             //get sql query parameter from listFormQueryModel
-            List<SqlParameter> queryParams = QueryModel.GetSqlParameter(base.GetAllQueryModels(base.AdditionalParams), sqlQuery, base.ThreadID, base.ProcessID).ToList();
+            List<SqlParameter> queryParams = QueryModel.GetSqlParameter(base.GetAllQueryModels(base.AdditionalParams), sqlQuery).ToList();
+            //add default parameters like username, userId and processId ,...
+            this.AddDefaultParams(sqlQuery, queryParams);
+
             this.AddVariableParameters(ref sqlQuery, queryParams);
             if (new DataBaseQueryService(this.UnitOfWork).ExecuteBySqlQuery(sqlQuery, connection, true, queryParams.ToArray()) > 0)
                 return new ResultOperation();
@@ -86,5 +92,18 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 }
             }
         }
+
+        private void AddDefaultParams(string sqlQuery, List<SqlParameter> queryParams)
+        {
+            if (sqlQuery.Contains("@ThreadID") && !queryParams.Any(c => c.ParameterName == "@ThreadID"))
+                queryParams.Add(new SqlParameter("@ThreadID", base.ThreadID));
+            if (sqlQuery.Contains("@ProcessID") && !queryParams.Any(c => c.ParameterName == "@ProcessID"))
+                queryParams.Add(new SqlParameter("@ProcessID", base.ProcessID));
+            if (sqlQuery.Contains("@UserID") && !queryParams.Any(c => c.ParameterName == "@UserID"))
+                queryParams.Add(new SqlParameter("@UserID", new UserService(base.UnitOfWork).GetInfo(base.EngineSharedModel?.CurrentUserName)?.ID));
+            if (sqlQuery.Contains("@UserName") && !queryParams.Any(c => c.ParameterName == "@UserName"))
+                queryParams.Add(new SqlParameter("@UserName", base.EngineSharedModel?.CurrentUserName));
+        }
+
     }
 }

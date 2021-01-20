@@ -31,26 +31,13 @@ namespace DynamicBusiness.BPMS.Domain
             }
         }
 
-        public static IEnumerable<SqlParameter> GetSqlParameter(List<QueryModel> list)
+        public static IEnumerable<SqlParameter> GetSqlParameter(List<QueryModel> list, string sqlQuery = null)
         {
-            return list?.Select(c => new SqlParameter("@" + c.Key, c.Value));
-        }
-
-        public static IEnumerable<SqlParameter> GetSqlParameter(List<QueryModel> list, string sqlQuery, Guid? threadId, Guid? processId)
-        {
-
-            List<SqlParameter> queryParams = list?.Select(c => new SqlParameter("@" + c.Key.TrimStart('@'), c.Value))?.ToList() ??
-                new List<SqlParameter>();
-
-            if (sqlQuery.Contains("@ThreadID"))
-                queryParams.Add(new SqlParameter("@ThreadID", threadId));
-
-            if (sqlQuery.Contains("@ProcessID"))
-                queryParams.Add(new SqlParameter("@ProcessID", processId));
-
-            queryParams = queryParams.Where(c => sqlQuery.Contains(c.ParameterName)).ToList();
-
-            return queryParams;
+            if (string.IsNullOrWhiteSpace(sqlQuery))
+                return list?.Select(c => new SqlParameter("@" + c.Key.TrimStart('@'), c.Value));
+            else
+                return list?.Select(c => new SqlParameter("@" + c.Key.TrimStart('@'), c.Value))?.Where(c => sqlQuery.Contains(c.ParameterName)).ToList() ??
+                       new List<SqlParameter>();
         }
 
         public static List<string> ForbidenList
