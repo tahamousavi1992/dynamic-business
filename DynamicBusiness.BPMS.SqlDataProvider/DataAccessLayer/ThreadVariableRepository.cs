@@ -57,7 +57,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         {
             Value = Value ?? string.Empty;
 
-            return this.Context.sysBpmsThreadVariables.Include(c => c.sysBpmsVariable).Where(d =>
+            return this.Context.sysBpmsThreadVariables.Include(c => c.Variable).Where(d =>
               (!ThreadID.HasValue || d.ThreadID == ThreadID) &&
               (!VariableID.HasValue || d.VariableID == VariableID) &&
               (Value == string.Empty || d.Value == Value)).AsNoTracking().ToList();

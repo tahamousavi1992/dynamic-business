@@ -80,8 +80,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 {
                     this.Update(lane);
                     //Element
-                    lane.sysBpmsElement.Name = item.Name;
-                    new ElementService(this.UnitOfWork).Update(lane.sysBpmsElement);
+                    lane.Element.Name = item.Name;
+                    new ElementService(this.UnitOfWork).Update(lane.Element);
                 }
                 else
                 {
@@ -91,7 +91,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                         ElementID = item.ID,
                         ProcessID = processID,
                         //Element
-                        sysBpmsElement = new sysBpmsElement()
+                        Element = new sysBpmsElement()
                         {
                             ID = item.ID,
                             Name = item.Name,
@@ -100,7 +100,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                         }
                     };
                     this.Add(lane);
-                    new ElementService(this.UnitOfWork).Update(lane.sysBpmsElement);
+                    new ElementService(this.UnitOfWork).Update(lane.Element);
                 }
             }
 

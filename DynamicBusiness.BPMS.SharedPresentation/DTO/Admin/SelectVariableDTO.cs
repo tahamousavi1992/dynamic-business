@@ -32,7 +32,7 @@ namespace DynamicBusiness.BPMS.SharedPresentation
             this.DefaultValue = variable.DefaultValue;
             this.WhereClause = variable.WhereClause;
             this.OrderByClause = variable.OrderByClause;
-            this.listVariableDependencyDTO = variable.sysBpmsVariableDependencies?.Select(c => new VariableDependencyDTO(c)).ToList();
+            this.listVariableDependencyDTO = variable.VariableDependencies?.Select(c => new VariableDependencyDTO(c)).ToList();
 
             if (this.EntityDefID.HasValue && this.VarTypeLU == (int)sysBpmsVariable.e_VarTypeLU.Object)
                 using (EntityDefService entityDefService = new EntityDefService())

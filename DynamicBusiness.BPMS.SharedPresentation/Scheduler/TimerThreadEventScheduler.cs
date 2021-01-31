@@ -23,24 +23,24 @@ namespace DynamicBusiness.BPMS.SharedPresentation
                 using (ThreadEventService threadEventService = new ThreadEventService())
                 {
 
-                    List<sysBpmsThreadEvent> listThreadEvent = threadEventService.GetTimerActive(new string[] { nameof(sysBpmsThreadEvent.sysBpmsThread), nameof(sysBpmsThreadEvent.sysBpmsEvent) });
+                    List<sysBpmsThreadEvent> listThreadEvent = threadEventService.GetTimerActive(new string[] { nameof(sysBpmsThreadEvent.Thread), nameof(sysBpmsThreadEvent.Event) });
                     foreach (var Item in listThreadEvent)
                     {
-                        using (ProcessEngine processEngine = new ProcessEngine(new EngineSharedModel(Item.sysBpmsThread, Item.sysBpmsThread.ProcessID, null, string.Empty, string.Empty)))
+                        using (ProcessEngine processEngine = new ProcessEngine(new EngineSharedModel(Item.Thread, Item.Thread.ProcessID, null, string.Empty, string.Empty)))
                         {
                             (ResultOperation result, List<MessageModel> message) = processEngine.ContinueProcess(Item, true);
                             if (result.IsSuccess)
                             {
 
                                 //Add new event If it is an interval timer event
-                                if (Item.sysBpmsEvent.SubTypeTimerEventModel?.Type == (int)SubTypeTimerEventModel.e_Type.Interval &&
-                                    Item.sysBpmsEvent.CancelActivity != true)
+                                if (Item.Event.SubTypeTimerEventModel?.Type == (int)SubTypeTimerEventModel.e_Type.Interval &&
+                                    Item.Event.CancelActivity != true)
                                 {
                                     if (Item.ThreadTaskID.HasValue)
                                     {
                                         sysBpmsThreadTask boundedThreadTask = new ThreadTaskService().GetInfo(Item.ThreadTaskID.Value);
                                         if (boundedThreadTask.StatusLU != (int)sysBpmsThreadTask.e_StatusLU.Done)
-                                            new EventEngine(processEngine.EngineSharedModel).NextTimerExecuteDate(Item.sysBpmsEvent, Item.ThreadTaskID);
+                                            new EventEngine(processEngine.EngineSharedModel).NextTimerExecuteDate(Item.Event, Item.ThreadTaskID);
                                     }
                                 }
                             }

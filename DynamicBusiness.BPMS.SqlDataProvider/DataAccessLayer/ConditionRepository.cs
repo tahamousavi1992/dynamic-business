@@ -49,7 +49,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         public List<sysBpmsCondition> GetList(Guid? gatewayID, Guid? sequenceFlowID, Guid? processId)
         {
             List<sysBpmsCondition> rettVal = this.Context.sysBpmsConditions.Where(d =>
-            (!processId.HasValue || d.sysBpmsGateway.ProcessID == processId) &&
+            (!processId.HasValue || d.Gateway.ProcessID == processId) &&
             (!gatewayID.HasValue || d.GatewayID == gatewayID) &&
             (!sequenceFlowID.HasValue || d.SequenceFlowID == sequenceFlowID)).AsNoTracking().ToList();
 

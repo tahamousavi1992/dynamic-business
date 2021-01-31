@@ -46,7 +46,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         public List<sysBpmsLane> GetList(Guid? ProcessID)
         {
             return this.Context.sysBpmsLanes.Where(d =>
-            (!ProcessID.HasValue || d.sysBpmsElement.ProcessID == ProcessID)).OrderBy(c => c.sysBpmsElement.Name).AsNoTracking().ToList();
+            (!ProcessID.HasValue || d.Element.ProcessID == ProcessID)).OrderBy(c => c.Element.Name).AsNoTracking().ToList();
         }
     }
 }

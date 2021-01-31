@@ -27,9 +27,9 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                                  where p.ID == gateway.ID
                                  select p).FirstOrDefault();
             retVal.Load(gateway);
-            if (gateway.sysBpmsSequenceFlow != null && gateway.sysBpmsSequenceFlow.ID != gateway.DefaultSequenceFlowID)
+            if (gateway.SequenceFlow != null && gateway.SequenceFlow.ID != gateway.DefaultSequenceFlowID)
             {
-                retVal.sysBpmsSequenceFlow = gateway.sysBpmsSequenceFlow;
+                retVal.SequenceFlow = gateway.SequenceFlow;
             }
         }
 
@@ -58,15 +58,15 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public List<sysBpmsGateway> GetList(Guid processID)
         {
-            return this.Context.sysBpmsGateways.Include(c => c.sysBpmsElement).Where(d =>
-              (d.ProcessID == processID)).OrderBy(c => c.sysBpmsElement.Name).AsNoTracking().ToList();
+            return this.Context.sysBpmsGateways.Include(c => c.Element).Where(d =>
+              (d.ProcessID == processID)).OrderBy(c => c.Element.Name).AsNoTracking().ToList();
         }
 
         public List<sysBpmsGateway> GetListByDefaultSequence(Guid defaultSequenceFlowID)
         {
  
-            return this.Context.sysBpmsGateways.Include(c => c.sysBpmsElement).Where(d =>
-              (d.DefaultSequenceFlowID == defaultSequenceFlowID)).OrderBy(c => c.sysBpmsElement.Name).AsNoTracking().ToList();
+            return this.Context.sysBpmsGateways.Include(c => c.Element).Where(d =>
+              (d.DefaultSequenceFlowID == defaultSequenceFlowID)).OrderBy(c => c.Element.Name).AsNoTracking().ToList();
         }
     }
 }

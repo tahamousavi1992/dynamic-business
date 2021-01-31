@@ -96,7 +96,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         {
             List<sysBpmsTask> list = new List<sysBpmsTask>();
             List<sysBpmsEvent> startEvents = (from P in this.Context.sysBpmsEvents
-                                          where P.sysBpmsElement.ProcessID == ID && P.TypeLU == (int)sysBpmsEvent.e_TypeLU.StartEvent
+                                          where P.Element.ProcessID == ID && P.TypeLU == (int)sysBpmsEvent.e_TypeLU.StartEvent
                                           select P).AsNoTracking().ToList();
             foreach (sysBpmsEvent startEvent in startEvents)
             {
@@ -126,7 +126,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                                    || Dlist.Count(c => this.Context.sysBpmsSplit(T.RoleName, ",").Any(f => f.Data == ("0:" + c.RoleLU.ToString().Trim()) || f.Data == (c.DepartmentID.ToString() + ":" + c.RoleLU.ToString().Trim()))) > 0)
                                    ) ||
                                    (!T.Rule.Contains(staticAccessType)))//it will be calculated in engine.
-                                   select T).OrderBy(d => d.sysBpmsElement.sysBpmsProcess.Name).Include(c => c.sysBpmsElement.sysBpmsProcess).AsNoTracking().ToList();
+                                   select T).OrderBy(d => d.Element.Process.Name).Include(c => c.Element.Process).AsNoTracking().ToList();
             return items;
         }
 

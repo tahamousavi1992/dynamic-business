@@ -81,7 +81,7 @@ namespace DynamicBusiness.BPMS.Domain
               }
             ).ToList();
         }
-
+        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         public DynamicFormConfigXmlModel ConfigXmlModel
         {
             get

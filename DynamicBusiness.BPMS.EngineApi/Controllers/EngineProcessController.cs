@@ -43,8 +43,8 @@ namespace DynamicBusiness.BPMS.EngineApi.Controllers
         {
             using (ThreadTaskService threadTaskService = new ThreadTaskService())
             {
-                sysBpmsThreadTask threadTask = threadTaskService.GetInfo(threadTaskID, new string[] { nameof(sysBpmsThreadTask.sysBpmsThread) });
-                using (ProcessEngine processEngine = new ProcessEngine(new EngineSharedModel(threadTask.ThreadID, threadTask.sysBpmsThread.ProcessID, base.MyRequest.GetList(base.IsEncrypted, base.ApiSessionId).ToList(), base.ClientUserName, base.ApiSessionId)))
+                sysBpmsThreadTask threadTask = threadTaskService.GetInfo(threadTaskID, new string[] { nameof(sysBpmsThreadTask.Thread) });
+                using (ProcessEngine processEngine = new ProcessEngine(new EngineSharedModel(threadTask.ThreadID, threadTask.Thread.ProcessID, base.MyRequest.GetList(base.IsEncrypted, base.ApiSessionId).ToList(), base.ClientUserName, base.ApiSessionId)))
                 {
                     return processEngine.GetTaskForm(threadTaskID, stepID);
                 }
@@ -61,8 +61,8 @@ namespace DynamicBusiness.BPMS.EngineApi.Controllers
             using (ThreadTaskService threadTaskService = new ThreadTaskService())
             {
                 List<QueryModel> baseQueryModel = base.MyRequest.GetList(base.IsEncrypted, base.ApiSessionId).ToList();
-                sysBpmsThreadTask threadTask = new ThreadTaskService().GetInfo(threadTaskID, new string[] { nameof(sysBpmsThreadTask.sysBpmsThread) });
-                using (ProcessEngine processEngine = new ProcessEngine(new EngineSharedModel(threadTask.ThreadID, threadTask.sysBpmsThread.ProcessID, baseQueryModel, base.ClientUserName, base.ApiSessionId)))
+                sysBpmsThreadTask threadTask = new ThreadTaskService().GetInfo(threadTaskID, new string[] { nameof(sysBpmsThreadTask.Thread) });
+                using (ProcessEngine processEngine = new ProcessEngine(new EngineSharedModel(threadTask.ThreadID, threadTask.Thread.ProcessID, baseQueryModel, base.ClientUserName, base.ApiSessionId)))
                 {
                     return processEngine.GetForm(threadTaskID, formID, cAccess);
                 }
@@ -78,8 +78,8 @@ namespace DynamicBusiness.BPMS.EngineApi.Controllers
         {
             using (ThreadTaskService threadTaskService = new ThreadTaskService())
             {
-                sysBpmsThreadTask threadTask = threadTaskService.GetInfo(threadTaskID, new string[] { nameof(sysBpmsThreadTask.sysBpmsThread) });
-                using (ProcessEngine processEngine = new ProcessEngine(new EngineSharedModel(threadTask.sysBpmsThread, threadTask.sysBpmsThread.ProcessID, base.MyRequest.GetList(base.IsEncrypted, base.ApiSessionId).ToList(), base.ClientUserName, base.ApiSessionId)))
+                sysBpmsThreadTask threadTask = threadTaskService.GetInfo(threadTaskID, new string[] { nameof(sysBpmsThreadTask.Thread) });
+                using (ProcessEngine processEngine = new ProcessEngine(new EngineSharedModel(threadTask.Thread, threadTask.Thread.ProcessID, base.MyRequest.GetList(base.IsEncrypted, base.ApiSessionId).ToList(), base.ClientUserName, base.ApiSessionId)))
                 {
                     return processEngine.PostTaskForm(threadTaskID, stepID, goNext, controlId);
                 }
@@ -95,8 +95,8 @@ namespace DynamicBusiness.BPMS.EngineApi.Controllers
         {
             using (ThreadTaskService threadTaskService = new ThreadTaskService())
             {
-                sysBpmsThreadTask threadTask = threadTaskService.GetInfo(threadTaskID, new string[] { nameof(sysBpmsThreadTask.sysBpmsThread) });
-                using (ProcessEngine processEngine = new ProcessEngine(new EngineSharedModel(threadTask.ThreadID, threadTask.sysBpmsThread.ProcessID, base.MyRequest.GetList(base.IsEncrypted, base.ApiSessionId).ToList(), base.ClientUserName, base.ApiSessionId)))
+                sysBpmsThreadTask threadTask = threadTaskService.GetInfo(threadTaskID, new string[] { nameof(sysBpmsThreadTask.Thread) });
+                using (ProcessEngine processEngine = new ProcessEngine(new EngineSharedModel(threadTask.ThreadID, threadTask.Thread.ProcessID, base.MyRequest.GetList(base.IsEncrypted, base.ApiSessionId).ToList(), base.ClientUserName, base.ApiSessionId)))
                 {
                     return processEngine.PostForm(threadTaskID, formID, controlId);
                 }
@@ -134,7 +134,7 @@ namespace DynamicBusiness.BPMS.EngineApi.Controllers
                 foreach (sysBpmsThreadTask item in listThreadTask)
                 {
                     using (UserService userService = new UserService())
-                        if (threadTaskService.CheckAccess(item.ID, userService.GetInfo(base.ClientUserName)?.ID, item.sysBpmsTask.ProcessID, false, true).Item1)
+                        if (threadTaskService.CheckAccess(item.ID, userService.GetInfo(base.ClientUserName)?.ID, item.Task.ProcessID, false, true).Item1)
                             listItems.Add(item.ID);
                 }
             }
@@ -153,8 +153,8 @@ namespace DynamicBusiness.BPMS.EngineApi.Controllers
                     {
                         ThreadDetailDTO threadDetailDTO = new ThreadDetailDTO(
                           threadService.GetInfo(threadId,
-                          new string[] { nameof(sysBpmsThread.sysBpmsUser), nameof(sysBpmsThread.sysBpmsProcess) }),
-                          threadTaskService.GetList(threadId, (int)sysBpmsTask.e_TypeLU.UserTask, null, null, new string[] { "sysBpmsTask.sysBpmsElement", nameof(sysBpmsThreadTask.sysBpmsUser) }).Select(c => new ThreadHistoryDTO(c)).ToList());
+                          new string[] { nameof(sysBpmsThread.User), nameof(sysBpmsThread.Process) }),
+                          threadTaskService.GetList(threadId, (int)sysBpmsTask.e_TypeLU.UserTask, null, null, new string[] { "sysBpmsTask.sysBpmsElement", nameof(sysBpmsThreadTask.User) }).Select(c => new ThreadHistoryDTO(c)).ToList());
 
                         List<sysBpmsDynamicForm> listForms = dynamicFormService.GetList(threadDetailDTO.ProcessID, null, null, "", true, null);
                         using (ProcessEngine processEngine = new ProcessEngine(new EngineSharedModel(threadId, threadDetailDTO.ProcessID, this.MyRequest.GetList(false, base.ApiSessionId).ToList(), base.ClientUserName, base.ApiSessionId)))

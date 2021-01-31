@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,8 +51,9 @@ namespace DynamicBusiness.BPMS.Domain
             this.StatusLU = Thread.StatusLU;
             this.GatewayStatusXml = Thread.GatewayStatusXml;
         }
-
+        [NotMapped]
         private List<ThreadGatewayStatusXmlModel> gatewayStatus { get; set; }
+        [NotMapped]
         public List<ThreadGatewayStatusXmlModel> GatewayStatus
         {
             get

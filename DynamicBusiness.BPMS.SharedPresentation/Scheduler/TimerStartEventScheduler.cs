@@ -22,10 +22,10 @@ namespace DynamicBusiness.BPMS.SharedPresentation
             {
                 using (ThreadEventService threadEventService = new ThreadEventService())
                 {
-                    List<sysBpmsEvent> listEvent = new EventService().GetList((int)sysBpmsEvent.e_TypeLU.StartEvent, null, "", (int)WorkflowStartEvent.BPMNStartEventType.Timer, (int)sysBpmsProcess.Enum_StatusLU.Published, new string[] { $"{nameof(sysBpmsEvent.sysBpmsElement)}.{nameof(sysBpmsElement.sysBpmsProcess)}" });
+                    List<sysBpmsEvent> listEvent = new EventService().GetList((int)sysBpmsEvent.e_TypeLU.StartEvent, null, "", (int)WorkflowStartEvent.BPMNStartEventType.Timer, (int)sysBpmsProcess.Enum_StatusLU.Published, new string[] { $"{nameof(sysBpmsEvent.Element)}.{nameof(sysBpmsElement.Process)}" });
                     foreach (sysBpmsEvent Item in listEvent)
                     {
-                        using (EventEngine eventEngine = new EventEngine(new EngineSharedModel(currentThread: null, currentProcessID: Item.sysBpmsElement.ProcessID, baseQueryModel: null, currentUserName: string.Empty, apiSessionId: string.Empty)))
+                        using (EventEngine eventEngine = new EventEngine(new EngineSharedModel(currentThread: null, currentProcessID: Item.Element.ProcessID, baseQueryModel: null, currentUserName: string.Empty, apiSessionId: string.Empty)))
                         {
                             eventEngine.NextTimerExecuteDate(Item, null);
                         }

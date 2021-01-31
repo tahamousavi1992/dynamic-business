@@ -40,7 +40,7 @@ namespace DynamicBusiness.BPMS.Domain
             this.Password = DBConnection.Password;
             this.IntegratedSecurity = DBConnection.IntegratedSecurity;
         }
-
+        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         public string GetConnection
         {
             get { return string.Format("Data Source={0};Initial Catalog={1};User ID={2};Password={3}", this.DataSource, this.InitialCatalog, this.UserID, this.Password); }

@@ -47,7 +47,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         {
             return this.Context.sysBpmsSteps.Where(d =>
                 (!taskID.HasValue || d.TaskID == taskID) &&
-                (!DynamicFormID.HasValue || d.DynamicFormID == DynamicFormID)).OrderBy(c => c.Position).Include(c => c.sysBpmsDynamicForm).AsNoTracking().ToList();
+                (!DynamicFormID.HasValue || d.DynamicFormID == DynamicFormID)).OrderBy(c => c.Position).Include(c => c.DynamicForm).AsNoTracking().ToList();
         }
     }
 }

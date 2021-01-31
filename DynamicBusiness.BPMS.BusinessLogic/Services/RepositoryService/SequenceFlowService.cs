@@ -120,8 +120,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
                         //Element
-                        _SequenceFlow.sysBpmsElement.Name = item.Name;
-                        resultOperation = new ElementService(this.UnitOfWork).Update(_SequenceFlow.sysBpmsElement);
+                        _SequenceFlow.Element.Name = item.Name;
+                        resultOperation = new ElementService(this.UnitOfWork).Update(_SequenceFlow.Element);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
                     }
@@ -136,7 +136,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                             SourceElementID = item.SourceRef,
                             TargetElementID = item.TargetRef,
                             //Element
-                            sysBpmsElement = new sysBpmsElement()
+                            Element = new sysBpmsElement()
                             {
                                 ID = item.ID,
                                 Name = item.Name,

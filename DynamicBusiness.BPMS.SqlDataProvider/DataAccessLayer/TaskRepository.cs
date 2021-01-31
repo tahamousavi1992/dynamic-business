@@ -54,7 +54,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         public List<Domain.sysBpmsTask> GetList(int? typeLU, Guid? processID)
         {
 
-            return this.Context.sysBpmsTasks.Include(c => c.sysBpmsElement).Where(d =>
+            return this.Context.sysBpmsTasks.Include(c => c.Element).Where(d =>
                  (!typeLU.HasValue || d.TypeLU == typeLU) &&
                  (!processID.HasValue || d.ProcessID == processID)).AsNoTracking().ToList();
         }

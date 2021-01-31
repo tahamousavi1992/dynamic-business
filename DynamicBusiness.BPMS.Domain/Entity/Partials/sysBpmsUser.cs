@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ namespace DynamicBusiness.BPMS.Domain
     [Serializable]
     public partial class sysBpmsUser
     {
+        [NotMapped]
         public string FullName
         {
             get { return this.FirstName + " " + this.LastName; }

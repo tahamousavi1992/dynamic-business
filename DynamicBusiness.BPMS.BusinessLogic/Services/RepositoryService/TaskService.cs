@@ -156,7 +156,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                         resultOperation = this.Add(task);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
-                        new ElementService(this.UnitOfWork).Update(task.sysBpmsElement);
+                        new ElementService(this.UnitOfWork).Update(task.Element);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
                     }
@@ -178,7 +178,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                         resultOperation = this.Add(task);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
-                        new ElementService(this.UnitOfWork).Update(task.sysBpmsElement);
+                        new ElementService(this.UnitOfWork).Update(task.Element);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
                     }
@@ -200,7 +200,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                         resultOperation = this.Add(_Task);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
-                        new ElementService(this.UnitOfWork).Update(_Task.sysBpmsElement);
+                        new ElementService(this.UnitOfWork).Update(_Task.Element);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
                     }
@@ -222,7 +222,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                         resultOperation = this.Add(_Task);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
-                        new ElementService(this.UnitOfWork).Update(_Task.sysBpmsElement);
+                        new ElementService(this.UnitOfWork).Update(_Task.Element);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
                     }
@@ -247,8 +247,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             if (!resultOperation.IsSuccess)
                 return resultOperation;
             //Element
-            task.sysBpmsElement.Name = name;
-            resultOperation = new ElementService(this.UnitOfWork).Update(task.sysBpmsElement);
+            task.Element.Name = name;
+            resultOperation = new ElementService(this.UnitOfWork).Update(task.Element);
             return resultOperation;
         }
 
@@ -263,7 +263,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 ProcessID = processId,
                 MarkerTypeLU = markerTypeLU.HasValue ? (int)markerTypeLU : (int?)null,
                 //Element
-                sysBpmsElement = this.InitElement(id, name, processId),
+                Element = this.InitElement(id, name, processId),
             };
         }
 

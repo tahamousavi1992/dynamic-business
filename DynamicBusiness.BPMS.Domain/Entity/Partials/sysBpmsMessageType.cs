@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,7 +29,7 @@ namespace DynamicBusiness.BPMS.Domain
             this.ParamsXML = messageType.ParamsXML;
             this.IsActive = messageType.IsActive;
         }
-
+        [NotMapped]
         public List<MessageTypeParamsModel> ParamsXmlModel
         {
             get => this.ParamsXML.ParseXML<List<MessageTypeParamsModel>>() ?? new List<MessageTypeParamsModel>();

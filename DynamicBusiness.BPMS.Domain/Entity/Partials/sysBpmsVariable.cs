@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -78,7 +79,7 @@ namespace DynamicBusiness.BPMS.Domain
             this.WhereClause = Variable.WhereClause;
             this.OrderByClause = Variable.OrderByClause;
         }
-
+        [NotMapped]
         public int RelationTypeLU
         {
             get
@@ -128,7 +129,7 @@ namespace DynamicBusiness.BPMS.Domain
             [Description("Uniqueidentifier")]
             Uniqueidentifier = 8,
         }
-
+        [NotMapped]
         public IEnumerable<VariableItemModel> Items
         {
             get
@@ -136,7 +137,7 @@ namespace DynamicBusiness.BPMS.Domain
                 return this.Collection.ParseXML<List<VariableItemModel>>();
             }
         }
-
+        [NotMapped]
         public bool IsBindToOneData
         {
             get

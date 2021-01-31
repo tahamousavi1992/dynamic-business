@@ -72,7 +72,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             (!ApplicationPageID.HasValue || d.ApplicationPageID == ApplicationPageID) &&
             (!VarTypeLU.HasValue || d.VarTypeLU == VarTypeLU) &&
             (Name == string.Empty || d.Name.ToLower().Contains(Name)) &&
-            (!EntityIsActive.HasValue || !d.EntityDefID.HasValue || d.sysBpmsEntityDef.IsActive == EntityIsActive) &&
+            (!EntityIsActive.HasValue || !d.EntityDefID.HasValue || d.EntityDef.IsActive == EntityIsActive) &&
             (!EntityDefID.HasValue || d.EntityDefID == EntityDefID)).OrderBy(c => c.Name).Include(includes).AsNoTracking().ToList();
         }
     }

@@ -22,17 +22,17 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public sysBpmsUser GetUser(Guid departmentID, int roleCode)
         {
-            return new DepartmentMemberService(this.UnitOfWork).GetList(departmentID, roleCode, null).FirstOrDefault()?.sysBpmsUser;
+            return new DepartmentMemberService(this.UnitOfWork).GetList(departmentID, roleCode, null).FirstOrDefault()?.User;
         }
 
         public List<sysBpmsUser> GetUserList(Guid departmentID, int? roleCode)
         {
-            return new DepartmentMemberService(this.UnitOfWork).GetList(departmentID, roleCode, null).Select(c => c.sysBpmsUser).ToList();
+            return new DepartmentMemberService(this.UnitOfWork).GetList(departmentID, roleCode, null).Select(c => c.User).ToList();
         }
 
         public List<sysBpmsDepartment> GetDepartmentList(Guid userID)
         {
-            return new DepartmentMemberService(this.UnitOfWork).GetList(null, null, userID).Select(c => c.sysBpmsDepartment).ToList();
+            return new DepartmentMemberService(this.UnitOfWork).GetList(null, null, userID).Select(c => c.Department).ToList();
         }
 
         public int? GetRoleCode(Guid userID, Guid departmentID)

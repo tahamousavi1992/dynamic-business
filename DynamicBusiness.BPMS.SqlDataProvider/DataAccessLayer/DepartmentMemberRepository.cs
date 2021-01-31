@@ -63,8 +63,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                   UserID = c.Key.UserID,
                   RoleLU = c.FirstOrDefault().RoleLU,
                   ID = c.FirstOrDefault().ID,
-                  Department = c.FirstOrDefault().sysBpmsDepartment,
-                  User = c.FirstOrDefault().sysBpmsUser,
+                  Department = c.FirstOrDefault().Department,
+                  User = c.FirstOrDefault().User,
               });
 
             if (currentPaging != null)
@@ -79,8 +79,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                     UserID = c.UserID,
                     RoleLU = c.RoleLU,
                     ID = c.ID,
-                    sysBpmsDepartment = c.Department,
-                    sysBpmsUser = c.User,
+                    Department = c.Department,
+                    User = c.User,
                 }).ToList();
             }
             else return query.OrderByDescending(p => p.ID).ToList().Select(c => new sysBpmsDepartmentMember()
@@ -89,8 +89,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 UserID = c.UserID,
                 RoleLU = c.RoleLU,
                 ID = c.ID,
-                sysBpmsDepartment = c.Department,
-                sysBpmsUser = c.User,
+                Department = c.Department,
+                User = c.User,
             }).ToList();
         }
 

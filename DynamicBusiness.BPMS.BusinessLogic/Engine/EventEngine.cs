@@ -70,27 +70,27 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             }
 
             //intermediate and boundary events
-            List<sysBpmsThreadEvent> sysBpmsThreadEvents = threadEventService.GetMessageActive(senderEvent.ProcessID, senderEvent.MessageTypeID.Value, new string[] { nameof(sysBpmsThreadEvent.sysBpmsEvent), nameof(sysBpmsThreadEvent.sysBpmsThread) });
+            List<sysBpmsThreadEvent> sysBpmsThreadEvents = threadEventService.GetMessageActive(senderEvent.ProcessID, senderEvent.MessageTypeID.Value, new string[] { nameof(sysBpmsThreadEvent.Event), nameof(sysBpmsThreadEvent.Thread) });
             foreach (sysBpmsThreadEvent item in sysBpmsThreadEvents)
             {
-                DataManageEngine receiverDataManage = new DataManageEngine(new EngineSharedModel(item.sysBpmsThread, item.sysBpmsEvent.ProcessID, base.EngineSharedModel.BaseQueryModel, base.EngineSharedModel.CurrentUserName, base.EngineSharedModel.ApiSessionID), base.UnitOfWork);
+                DataManageEngine receiverDataManage = new DataManageEngine(new EngineSharedModel(item.Thread, item.Event.ProcessID, base.EngineSharedModel.BaseQueryModel, base.EngineSharedModel.CurrentUserName, base.EngineSharedModel.ApiSessionID), base.UnitOfWork);
                 string receiverKey = string.Empty; ;
-                switch ((SubTypeMessageEventModel.e_KeyType)item.sysBpmsEvent.SubTypeMessageEventModel.KeyType)
+                switch ((SubTypeMessageEventModel.e_KeyType)item.Event.SubTypeMessageEventModel.KeyType)
                 {
                     case SubTypeMessageEventModel.e_KeyType.Static:
-                        receiverKey = item.sysBpmsEvent.SubTypeMessageEventModel.Key;
+                        receiverKey = item.Event.SubTypeMessageEventModel.Key;
                         break;
                     case SubTypeMessageEventModel.e_KeyType.Variable:
-                        receiverKey = receiverDataManage.GetValueByBinding(item.sysBpmsEvent.SubTypeMessageEventModel.Key).ToStringObj();
+                        receiverKey = receiverDataManage.GetValueByBinding(item.Event.SubTypeMessageEventModel.Key).ToStringObj();
                         break;
                 }
                 if (senderKey == receiverKey)
                 {
-                    Dictionary<string, object> listDefaultVariables = item.sysBpmsEvent.SubTypeMessageEventModel?.MessageParams?.Where(c => !string.IsNullOrWhiteSpace(c.Variable)).ToDictionary(c => c.Variable, c =>
+                    Dictionary<string, object> listDefaultVariables = item.Event.SubTypeMessageEventModel?.MessageParams?.Where(c => !string.IsNullOrWhiteSpace(c.Variable)).ToDictionary(c => c.Variable, c =>
                       {
                           return listParameter.FirstOrDefault(d => d.Key == c.Name).Value;
                       });
-                    new ProcessEngine(new EngineSharedModel(item.sysBpmsThread, item.sysBpmsEvent.ProcessID, base.EngineSharedModel.BaseQueryModel, base.EngineSharedModel.CurrentUserName, base.EngineSharedModel.ApiSessionID), base.UnitOfWork).ContinueProcess(item, true, listDefaultVariables);
+                    new ProcessEngine(new EngineSharedModel(item.Thread, item.Event.ProcessID, base.EngineSharedModel.BaseQueryModel, base.EngineSharedModel.CurrentUserName, base.EngineSharedModel.ApiSessionID), base.UnitOfWork).ContinueProcess(item, true, listDefaultVariables);
                     //Even if there is a error , this method must continue and log that error. 
                     return resultOperation;
                 }
@@ -292,7 +292,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                         {
                             case SubTypeTimerEventModel.e_SetType.Static:
                                 if (_event.TypeLU == (int)sysBpmsEvent.e_TypeLU.StartEvent)
-                                    threadEvent.ExecuteDate = new ProcessService(base.UnitOfWork).GetInfo(_event.sysBpmsElement.ProcessID).PublishDate.Value.AddMinutes(_event.SubTypeTimerEventModel.Minute.Value);
+                                    threadEvent.ExecuteDate = new ProcessService(base.UnitOfWork).GetInfo(_event.Element.ProcessID).PublishDate.Value.AddMinutes(_event.SubTypeTimerEventModel.Minute.Value);
                                 else
                                     threadEvent.ExecuteDate = DateTime.Now.AddMinutes(_event.SubTypeTimerEventModel.Minute.Value);
                                 break;

@@ -46,7 +46,7 @@ namespace DynamicBusiness.BPMS.Cartable.Controllers
             (int)sysBpmsThread.Enum_StatusLU.InProgress,
             (int)sysBpmsThread.Enum_StatusLU.Done,
             (int)sysBpmsThread.Enum_StatusLU.Draft,
-            (int)sysBpmsThread.Enum_StatusLU.InActive}, null, advStartDateFrom, advStartDateTo, advEndDateFrom, advEndDateTo, indexSearchVM.GetPagingProperties, new string[] { nameof(sysBpmsThread.sysBpmsUser), nameof(sysBpmsThread.sysBpmsProcess) });
+            (int)sysBpmsThread.Enum_StatusLU.InActive}, null, advStartDateFrom, advStartDateTo, advEndDateFrom, advEndDateTo, indexSearchVM.GetPagingProperties, new string[] { nameof(sysBpmsThread.User), nameof(sysBpmsThread.Process) });
 
                 using (ProcessService processService = new ProcessService())
                 {
@@ -69,8 +69,8 @@ namespace DynamicBusiness.BPMS.Cartable.Controllers
                     {
                         ThreadDetailDTO threadDetailDTO = new ThreadDetailDTO(
                           threadService.GetInfo(ThreadID,
-                          new string[] { nameof(sysBpmsThread.sysBpmsUser), nameof(sysBpmsThread.sysBpmsProcess) }),
-                          threadTaskService.GetList(ThreadID, (int)sysBpmsTask.e_TypeLU.UserTask, null, null, new string[] { "sysBpmsTask.sysBpmsElement", nameof(sysBpmsThreadTask.sysBpmsUser) }).Select(c => new ThreadHistoryDTO(c)).ToList());
+                          new string[] { nameof(sysBpmsThread.User), nameof(sysBpmsThread.Process) }),
+                          threadTaskService.GetList(ThreadID, (int)sysBpmsTask.e_TypeLU.UserTask, null, null, new string[] { "sysBpmsTask.sysBpmsElement", nameof(sysBpmsThreadTask.User) }).Select(c => new ThreadHistoryDTO(c)).ToList());
 
                         List<sysBpmsDynamicForm> listForms = dynamicFormService.GetList(threadDetailDTO.ProcessID, null, null, "", true, null);
                         using (ProcessEngine processEngine = new ProcessEngine(new EngineSharedModel(ThreadID, threadDetailDTO.ProcessID, this.MyRequest.GetList(false, base.ApiSessionId).ToList(), base.ClientUserName, base.ApiSessionId)))
@@ -141,7 +141,7 @@ namespace DynamicBusiness.BPMS.Cartable.Controllers
                     List = c.ToList().Select(d => new
                     {
                         d.ID,
-                        Name = d.sysBpmsDynamicForms.FirstOrDefault()?.Name ?? "no page"
+                        Name = d.DynamicForms.FirstOrDefault()?.Name ?? "no page"
                     }),
                 }).ToList();
         }

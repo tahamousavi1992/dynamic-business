@@ -49,7 +49,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         public List<sysBpmsApplicationPage> GetList(Guid? dynamicFormID, int? groupLU)
         {
             return this.Context.sysBpmsApplicationPages.Where(d =>
-                 (!dynamicFormID.HasValue || d.sysBpmsDynamicForms.FirstOrDefault().ID == dynamicFormID) &&
+                 (!dynamicFormID.HasValue || d.DynamicForms.FirstOrDefault().ID == dynamicFormID) &&
                  (!groupLU.HasValue || d.GroupLU == groupLU)).OrderBy(c => c.ID).AsNoTracking().ToList();
         }
 
@@ -67,7 +67,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                       (access.Count(c => c.UserID.HasValue && c.UserID == userID) > 0 ||
                       access.Count(c => c.RoleLU.HasValue && Dlist.Count(d => c.RoleLU == d.RoleLU && (!c.DepartmentID.HasValue || c.DepartmentID == d.DepartmentID)) > 0) > 0)
                       ))
-                      select P).OrderBy(c => c.sysBpmsDynamicForms.FirstOrDefault().Name).Include(c => c.sysBpmsDynamicForms).AsNoTracking().ToList();
+                      select P).OrderBy(c => c.DynamicForms.FirstOrDefault().Name).Include(c => c.DynamicForms).AsNoTracking().ToList();
 
             return retVal;
         }

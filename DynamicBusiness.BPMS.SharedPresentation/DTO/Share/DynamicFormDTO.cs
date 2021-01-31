@@ -31,7 +31,7 @@ namespace DynamicBusiness.BPMS.SharedPresentation
                 this.CreatedDate = dynamicForm.CreatedDate;
                 this.UpdatedBy = dynamicForm.UpdatedBy;
                 this.UpdatedDate = dynamicForm.UpdatedDate;
-                this.ApplicationPageDTO = dynamicForm.ApplicationPageID.HasValue ? new ApplicationPageDTO(dynamicForm.sysBpmsApplicationPage) : null;
+                this.ApplicationPageDTO = dynamicForm.ApplicationPageID.HasValue ? new ApplicationPageDTO(dynamicForm.ApplicationPage) : null;
                 this.IsEncrypted = this.ConfigXML.ToStringObj().ParseXML<DynamicFormConfigXmlModel>()?.IsEncrypted ?? false;
             }
         }

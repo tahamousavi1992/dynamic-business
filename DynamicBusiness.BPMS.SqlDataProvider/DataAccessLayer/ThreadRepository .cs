@@ -77,7 +77,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                          where (!UserID.HasValue || P.UserID == UserID) &&
                                (!ProcessID.HasValue || P.ProcessID == ProcessID) &&
                                (allStatus || statusLU.Contains(P.StatusLU)) &&
-                               (!TaskOwnerUserID.HasValue || P.sysBpmsThreadTasks.Count(c => c.OwnerUserID == TaskOwnerUserID) > 0) &&
+                               (!TaskOwnerUserID.HasValue || P.ThreadTasks.Count(c => c.OwnerUserID == TaskOwnerUserID) > 0) &&
                                (!StartFrom.HasValue || DbFunctions.TruncateTime(P.StartDate) >= StartFrom) &&
                                (!StartTo.HasValue || DbFunctions.TruncateTime(P.StartDate) <= StartTo) &&
                                (!EndFrom.HasValue || DbFunctions.TruncateTime(P.EndDate) >= EndFrom) &&

@@ -19,8 +19,8 @@ namespace DynamicBusiness.BPMS.SharedPresentation
             this.ThreadTaskDescription = threadTask.Description;
             this.OwnerUserID = threadTask.OwnerUserID;
             this.ThreadTaskStatusLU = threadTask.StatusLU;
-            this.TaskName = threadTask.sysBpmsTask?.sysBpmsElement?.Name ?? "";
-            this.Thread = new ThreadDTO(threadTask.sysBpmsThread);
+            this.TaskName = threadTask.Task?.Element?.Name ?? "";
+            this.Thread = new ThreadDTO(threadTask.Thread);
         }
         [DataMember]
         public Guid ThreadTaskID { get; set; }

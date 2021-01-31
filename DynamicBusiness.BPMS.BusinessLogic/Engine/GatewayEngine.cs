@@ -36,7 +36,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 case sysBpmsGateway.e_TypeLU.InclusiveGateWay:
                     {
                         List<sysBpmsThreadTask> listRunningThreadTask = new ThreadTaskService(base.UnitOfWork).GetListRunning(base.EngineSharedModel.CurrentThreadID.ToGuidObj());
-                        if (!listRunningThreadTask.Any(c => c.ID != threadTaskID && gateway.TraceToStart.ToStringObj().Split(',').Contains(c.sysBpmsTask.ElementID)))
+                        if (!listRunningThreadTask.Any(c => c.ID != threadTaskID && gateway.TraceToStart.ToStringObj().Split(',').Contains(c.Task.ElementID)))
                         {
                             List<sysBpmsCondition> listCondition = conditionService.GetList(gateway.ID, null, null);
                             foreach (sysBpmsCondition condition in listCondition)

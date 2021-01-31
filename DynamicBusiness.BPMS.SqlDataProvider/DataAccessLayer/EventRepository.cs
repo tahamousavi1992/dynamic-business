@@ -54,31 +54,31 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public List<sysBpmsEvent> GetList(int? TypeLU, Guid? ProcessID, string RefElementID, int? SubType, string[] Includes)
         {
-            return this.Context.sysBpmsEvents.Include(c => c.sysBpmsElement).Where(d =>
+            return this.Context.sysBpmsEvents.Include(c => c.Element).Where(d =>
              (RefElementID == string.Empty || d.RefElementID == RefElementID) &&
              (!TypeLU.HasValue || d.TypeLU == TypeLU) &&
              (!SubType.HasValue || d.SubType == SubType) &&
-             (!ProcessID.HasValue || d.sysBpmsElement.ProcessID == ProcessID)).OrderBy(c => c.TypeLU).Include(Includes).AsNoTracking().ToList();
+             (!ProcessID.HasValue || d.Element.ProcessID == ProcessID)).OrderBy(c => c.TypeLU).Include(Includes).AsNoTracking().ToList();
         }
 
         public List<sysBpmsEvent> GetList(int? TypeLU, Guid? ProcessID, string RefElementID, int? SubType, int? ProcessStatusLU, string[] Includes)
         {
-            return this.Context.sysBpmsEvents.Include(c => c.sysBpmsElement).Where(d =>
+            return this.Context.sysBpmsEvents.Include(c => c.Element).Where(d =>
              (!TypeLU.HasValue || d.TypeLU == TypeLU) &&
-             (!ProcessID.HasValue || d.sysBpmsElement.ProcessID == ProcessID) &&
+             (!ProcessID.HasValue || d.Element.ProcessID == ProcessID) &&
              (RefElementID == string.Empty || d.RefElementID == RefElementID) &&
              (!SubType.HasValue || d.SubType == SubType) &&
-             (!ProcessStatusLU.HasValue || d.sysBpmsElement.sysBpmsProcess.StatusLU == ProcessStatusLU)).OrderBy(c => c.TypeLU).Include(Includes).AsNoTracking().ToList();
+             (!ProcessStatusLU.HasValue || d.Element.Process.StatusLU == ProcessStatusLU)).OrderBy(c => c.TypeLU).Include(Includes).AsNoTracking().ToList();
         }
         public List<sysBpmsEvent> GetListStartMessage(Guid? notProcessID, string key, Guid messageTypeID, string[] Includes)
         {
-            var list = this.Context.sysBpmsEvents.Include(c => c.sysBpmsElement).Where(d =>
+            var list = this.Context.sysBpmsEvents.Include(c => c.Element).Where(d =>
               (!notProcessID.HasValue || d.ProcessID != notProcessID) &&
               (d.MessageTypeID == messageTypeID) &&
               (d.TypeLU == (int)sysBpmsEvent.e_TypeLU.StartEvent) &&
               (d.SubType == (int)WorkflowStartEvent.BPMNStartEventType.Message) &&
-              (d.sysBpmsProcess.StatusLU == (int)sysBpmsProcess.Enum_StatusLU.Published ||
-               d.sysBpmsProcess.StatusLU == (int)sysBpmsProcess.Enum_StatusLU.OldVersion)).OrderBy(c => c.TypeLU).Include(Includes).AsNoTracking().ToList();
+              (d.Process.StatusLU == (int)sysBpmsProcess.Enum_StatusLU.Published ||
+               d.Process.StatusLU == (int)sysBpmsProcess.Enum_StatusLU.OldVersion)).OrderBy(c => c.TypeLU).Include(Includes).AsNoTracking().ToList();
             //Start events can only have static key value.
             return list.Where(c => c.SubTypeMessageEventModel.Key == key).ToList();
         }

@@ -35,21 +35,21 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             List<sysBpmsDepartmentMember> rolelist = new DepartmentMemberService(base.UnitOfWork).GetList(null, null, UserID).ToList();
             ThreadService threadService = new ThreadService(base.UnitOfWork);
             //remove exceeded paralled count per user
-            foreach (Domain.sysBpmsTask item in taskList.Where(c => c.sysBpmsElement.sysBpmsProcess.ParallelCountPerUser > 0))
+            foreach (Domain.sysBpmsTask item in taskList.Where(c => c.Element.Process.ParallelCountPerUser > 0))
             {
-                if (UserID != Guid.Empty && threadService.GetCountActive(UserID, item.sysBpmsElement.ProcessID) >= item.sysBpmsElement.sysBpmsProcess.ParallelCountPerUser)
+                if (UserID != Guid.Empty && threadService.GetCountActive(UserID, item.Element.ProcessID) >= item.Element.Process.ParallelCountPerUser)
                     removedItems.Add(item.ID);
             }
             //remove items that their task is evaluated by Access Code and user's roles and ID is not included in returned method.
             foreach (Domain.sysBpmsTask item in taskList.Where(c => c.UserTaskRuleModel?.AccessType != null && c.UserTaskRuleModel?.AccessType != (int)UserTaskRuleModel.e_UserAccessType.Static))
             {
-                TaskEngine taskEngine = new TaskEngine(new EngineSharedModel(currentThread: null, currentProcessID: item.sysBpmsElement.ProcessID, baseQueryModel: base.EngineSharedModel.BaseQueryModel, currentUserName: base.EngineSharedModel.CurrentUserName, apiSessionId: base.EngineSharedModel.ApiSessionID), this.UnitOfWork);
+                TaskEngine taskEngine = new TaskEngine(new EngineSharedModel(currentThread: null, currentProcessID: item.Element.ProcessID, baseQueryModel: base.EngineSharedModel.BaseQueryModel, currentUserName: base.EngineSharedModel.CurrentUserName, apiSessionId: base.EngineSharedModel.ApiSessionID), this.UnitOfWork);
                 if (!taskEngine.CheckUserAccess(item, UserID, rolelist))
                 {
                     removedItems.Add(item.ID);
                 }
             }
-            return taskList.Where(c => !removedItems.Any(d => d == c.ID)).GroupBy(c => c.sysBpmsElement.sysBpmsProcess.ID).Select(c => c.FirstOrDefault().sysBpmsElement.sysBpmsProcess).ToList();
+            return taskList.Where(c => !removedItems.Any(d => d == c.ID)).GroupBy(c => c.Element.Process.ID).Select(c => c.FirstOrDefault().Element.Process).ToList();
         }
 
         public Tuple<ResultOperation, List<MessageModel>> NextFlow(Guid threadTaskId)
@@ -58,11 +58,11 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             this.MessageList = new List<MessageModel>();
             try
             {
-                sysBpmsThreadTask currentThreadTask = new ThreadTaskService(base.UnitOfWork).GetInfo(threadTaskId, new[] { nameof(sysBpmsThreadTask.sysBpmsTask), nameof(sysBpmsThreadTask.sysBpmsThread) });
+                sysBpmsThreadTask currentThreadTask = new ThreadTaskService(base.UnitOfWork).GetInfo(threadTaskId, new[] { nameof(sysBpmsThreadTask.Task), nameof(sysBpmsThreadTask.Thread) });
                 sysBpmsUser currentUser = new UserService(base.UnitOfWork).GetInfo(base.EngineSharedModel.CurrentUserName);
 
                 this.BeginTransaction();
-                resultOperation = this.GetRecursiveElement(currentThreadTask.sysBpmsTask, false, currentThreadTask);
+                resultOperation = this.GetRecursiveElement(currentThreadTask.Task, false, currentThreadTask);
                 if (!resultOperation.IsSuccess)
                     resultOperation.AddError(LangUtility.Get("Failed.Text", "Engine"));
 
@@ -111,7 +111,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                     resultOperation.AddError(LangUtility.Get("FailedContinueStatus.Text", "Engine"));
                 else
                 {
-                    sysBpmsEvent sysBpmsEvent = threadEvent.sysBpmsEvent ?? new EventService(base.UnitOfWork).GetInfo(threadEvent.EventID);
+                    sysBpmsEvent sysBpmsEvent = threadEvent.Event ?? new EventService(base.UnitOfWork).GetInfo(threadEvent.EventID);
                     sysBpmsUser currentUser = new UserService(base.UnitOfWork).GetInfo(base.EngineSharedModel.CurrentUserName);
 
                     this.BeginTransaction();
@@ -426,7 +426,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             if (!result)
             {
                 ResultOperation resultOperation = new ResultOperation();
-                resultOperation.AddError(string.Format(LangUtility.Get("NoPathSelected.Text", "Engine"), gateway.sysBpmsElement?.Name));
+                resultOperation.AddError(string.Format(LangUtility.Get("NoPathSelected.Text", "Engine"), gateway.Element?.Name));
                 return resultOperation;
             }
             foreach (sysBpmsSequenceFlow item in SequenceFlows)
@@ -556,7 +556,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                                 if (!(codeResultModel?.Result ?? true))
                                 {
                                     rOperation = new ResultOperation();
-                                    rOperation.AddError(string.Format(LangUtility.Get("ErrorActivity.Text", "Engine"), task.sysBpmsElement.Name));
+                                    rOperation.AddError(string.Format(LangUtility.Get("ErrorActivity.Text", "Engine"), task.Element.Name));
                                     return rOperation;
                                 }
 
@@ -575,11 +575,11 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                                 if (!result.IsSuccess)
                                     return result;
                                 //make boundary event.
-                                foreach (sysBpmsEvent itemEvent in new EventService(base.UnitOfWork).GetList(null, base.EngineSharedModel.CurrentProcessID, task.ElementID, null, new[] { nameof(sysBpmsEvent.sysBpmsElement) }))
+                                foreach (sysBpmsEvent itemEvent in new EventService(base.UnitOfWork).GetList(null, base.EngineSharedModel.CurrentProcessID, task.ElementID, null, new[] { nameof(sysBpmsEvent.Element) }))
                                 {
                                     foreach (sysBpmsThreadTask item in listTask)
                                     {
-                                        rOperation = this.EvaluateNextRecursiveItem(itemEvent.sysBpmsElement, isFirstTask, item, null);
+                                        rOperation = this.EvaluateNextRecursiveItem(itemEvent.Element, isFirstTask, item, null);
                                         if (!rOperation.IsSuccess)
                                             return rOperation;
                                     }
@@ -623,26 +623,26 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         {
             FormModel formModel = new FormModel();
             CodeBaseSharedModel codeBaseShared = new CodeBaseSharedModel();
-            sysBpmsThreadTask threadTask = new ThreadTaskService().GetInfo(threadTaskID, new string[] { nameof(sysBpmsThreadTask.sysBpmsTask), nameof(sysBpmsThreadTask.sysBpmsThread) });
+            sysBpmsThreadTask threadTask = new ThreadTaskService().GetInfo(threadTaskID, new string[] { nameof(sysBpmsThreadTask.Task), nameof(sysBpmsThreadTask.Thread) });
             ResultOperation resultOperation = new ResultOperation();
-            List<sysBpmsStep> listStep = new StepService().GetList(threadTask.sysBpmsTask.ID, null);
+            List<sysBpmsStep> listStep = new StepService().GetList(threadTask.Task.ID, null);
             //if step is not specific , this line retrieve first step of task
             sysBpmsStep step = listStep.FirstOrDefault(c => !stepID.HasValue || c.ID == stepID);
             //convert form xml code to json object
-            JObject obj = JObject.Parse(step.sysBpmsDynamicForm.DesignJson);
-            HtmlElementHelperModel htmlElementHelperModel = HtmlElementHelper.MakeModel(base.EngineSharedModel, base.UnitOfWork, HtmlElementHelperModel.e_FormAction.Onload, step.sysBpmsDynamicForm);
+            JObject obj = JObject.Parse(step.DynamicForm.DesignJson);
+            HtmlElementHelperModel htmlElementHelperModel = HtmlElementHelper.MakeModel(base.EngineSharedModel, base.UnitOfWork, HtmlElementHelperModel.e_FormAction.Onload, step.DynamicForm);
             //if json object has a control with type = CONTENT
             if (obj != null && obj["type"].ToString() == "CONTENT")
             {
-                formModel = new FormModel(obj, htmlElementHelperModel, listStep, step, step.sysBpmsDynamicForm, false);
+                formModel = new FormModel(obj, htmlElementHelperModel, listStep, step, step.DynamicForm, false);
                 resultOperation = formModel.ResultOperation;
             }
             CodeResultModel codeResultModel = null;
             if (resultOperation.IsSuccess)
-                if (!string.IsNullOrWhiteSpace(step.sysBpmsDynamicForm.OnEntryFormCode))
+                if (!string.IsNullOrWhiteSpace(step.DynamicForm.OnEntryFormCode))
                 {
                     DynamicCodeEngine dynamicCodeEngine = new DynamicCodeEngine(base.EngineSharedModel, base.UnitOfWork);
-                    codeResultModel = new DynamicCodeEngine(base.EngineSharedModel, base.UnitOfWork).ExecuteOnEntryFormCode(DesignCodeUtility.GetDesignCodeFromXml(step.sysBpmsDynamicForm.OnEntryFormCode), formModel, codeBaseShared);
+                    codeResultModel = new DynamicCodeEngine(base.EngineSharedModel, base.UnitOfWork).ExecuteOnEntryFormCode(DesignCodeUtility.GetDesignCodeFromXml(step.DynamicForm.OnEntryFormCode), formModel, codeBaseShared);
                     DynamicCodeEngine.SetToErrorMessage(codeResultModel, resultOperation);
                     //If in code any variable is set, it Will save them all at the end
                     dynamicCodeEngine.SaveExternalVariable(codeResultModel);
@@ -659,7 +659,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             try
             {
                 FormModel formModel = new FormModel();
-                sysBpmsThreadTask threadTask = new ThreadTaskService(base.UnitOfWork).GetInfo(threadTaskID, new string[] { nameof(sysBpmsThreadTask.sysBpmsTask), nameof(sysBpmsThreadTask.sysBpmsThread) });
+                sysBpmsThreadTask threadTask = new ThreadTaskService(base.UnitOfWork).GetInfo(threadTaskID, new string[] { nameof(sysBpmsThreadTask.Task), nameof(sysBpmsThreadTask.Thread) });
                 sysBpmsDynamicForm dynamicForm = new DynamicFormService(base.UnitOfWork).GetInfo(formID);
                 //If it was done with user do nothing and return.
                 if (threadTask?.StatusLU == (int)sysBpmsThreadTask.e_StatusLU.Done)
@@ -728,21 +728,21 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             try
             {
                 FormModel formModel = new FormModel();
-                sysBpmsThreadTask threadTask = new ThreadTaskService(base.UnitOfWork).GetInfo(threadTaskID, new string[] { nameof(sysBpmsThreadTask.sysBpmsTask), nameof(sysBpmsThreadTask.sysBpmsThread) });
+                sysBpmsThreadTask threadTask = new ThreadTaskService(base.UnitOfWork).GetInfo(threadTaskID, new string[] { nameof(sysBpmsThreadTask.Task), nameof(sysBpmsThreadTask.Thread) });
                 //If it was done with user do nothing and return.
                 if (threadTask.StatusLU == (int)sysBpmsThreadTask.e_StatusLU.Done)
                     resultOperation.AddError(LangUtility.Get("TaskAlreadyCompleted.Text", "Engine"));
                 else
                 {
-                    List<sysBpmsStep> listStep = new StepService(base.UnitOfWork).GetList(threadTask.sysBpmsTask.ID, null);
+                    List<sysBpmsStep> listStep = new StepService(base.UnitOfWork).GetList(threadTask.Task.ID, null);
                     sysBpmsStep step = listStep.FirstOrDefault(c => c.ID == stepID);
 
                     //conver form xml code to json object
-                    JObject obj = JObject.Parse(step.sysBpmsDynamicForm.DesignJson);
+                    JObject obj = JObject.Parse(step.DynamicForm.DesignJson);
                     //if json object has a control with type = CONTENT
                     if (obj != null && obj["type"].ToString() == "CONTENT")
                     {
-                        formModel = new FormModel(obj, HtmlElementHelper.MakeModel(base.EngineSharedModel, base.UnitOfWork, HtmlElementHelperModel.e_FormAction.OnPost, step.sysBpmsDynamicForm), listStep, step, step.sysBpmsDynamicForm, false);
+                        formModel = new FormModel(obj, HtmlElementHelper.MakeModel(base.EngineSharedModel, base.UnitOfWork, HtmlElementHelperModel.e_FormAction.OnPost, step.DynamicForm), listStep, step, step.DynamicForm, false);
                         resultOperation = formModel.ResultOperation;
                     }
                     if (e_ActionType != e_ActionType.PreviousStep)
@@ -772,9 +772,9 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                             if (resultOperation.IsSuccess)
                             {
                                 //execute form OnExitFormCode 
-                                if (!string.IsNullOrWhiteSpace(step.sysBpmsDynamicForm.OnExitFormCode))
+                                if (!string.IsNullOrWhiteSpace(step.DynamicForm.OnExitFormCode))
                                 {
-                                    codeResultModel = new DynamicCodeEngine(base.EngineSharedModel, base.UnitOfWork).ExecuteOnExitFormCode(DesignCodeUtility.GetDesignCodeFromXml(step.sysBpmsDynamicForm.OnExitFormCode), formModel, codeBaseShared);
+                                    codeResultModel = new DynamicCodeEngine(base.EngineSharedModel, base.UnitOfWork).ExecuteOnExitFormCode(DesignCodeUtility.GetDesignCodeFromXml(step.DynamicForm.OnExitFormCode), formModel, codeBaseShared);
                                     DynamicCodeEngine.SetToErrorMessage(codeResultModel, resultOperation);
                                     redirectUrlModel = codeResultModel?.RedirectUrlModel ?? redirectUrlModel;
                                 }

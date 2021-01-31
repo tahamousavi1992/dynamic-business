@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -73,8 +74,9 @@ namespace DynamicBusiness.BPMS.Domain
             boundary = 4,
             IntermediateCatch = 5,
         }
-
+        [NotMapped]
         private SubTypeMessageEventModel subTypeMessageEventModel { get; set; }
+        [NotMapped]
         public SubTypeMessageEventModel SubTypeMessageEventModel
         {
             get
@@ -88,8 +90,9 @@ namespace DynamicBusiness.BPMS.Domain
                 subTypeMessageEventModel = value;
             }
         }
-
+        [NotMapped]
         private SubTypeTimerEventModel subTypeTimerEventModel { get; set; }
+        [NotMapped]
         public SubTypeTimerEventModel SubTypeTimerEventModel
         {
             get

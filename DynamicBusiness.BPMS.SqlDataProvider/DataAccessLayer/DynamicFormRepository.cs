@@ -57,7 +57,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         {
             return (from P in this.Context.sysBpmsSteps
                     where P.ID == StepID
-                    select P.sysBpmsDynamicForm).AsNoTracking().FirstOrDefault();
+                    select P.DynamicForm).AsNoTracking().FirstOrDefault();
         }
 
         public List<sysBpmsDynamicForm> GetList(Guid? processId, Guid? applicationPageID, bool? getPages, string Name, bool? showInOverview, PagingProperties currentPaging)

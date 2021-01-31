@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -71,8 +72,9 @@ namespace DynamicBusiness.BPMS.Domain
             this.DesignXML = EntityDef.DesignXML;
             this.IsActive = EntityDef.IsActive;
         }
-
+        [NotMapped]
         private List<EntityPropertyModel> properties { get; set; }
+        [NotMapped]
         public List<EntityPropertyModel> Properties
         {
             get
@@ -90,6 +92,7 @@ namespace DynamicBusiness.BPMS.Domain
         /// <summary>
         ///retrieve custom properties with systemic one like ID and ThreadID
         /// </summary>
+        [NotMapped]
         public List<EntityPropertyModel> AllProperties
         {
             get
@@ -102,7 +105,7 @@ namespace DynamicBusiness.BPMS.Domain
                 .Union(Properties).ToList();
             }
         }
-
+        [NotMapped]
         public string FormattedTableName
         {
             get { return "Bpms_" + this.Name; }

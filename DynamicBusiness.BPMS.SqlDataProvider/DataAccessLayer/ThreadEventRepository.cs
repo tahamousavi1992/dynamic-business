@@ -51,9 +51,9 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             DateTime dateTimeFrom = DateTime.Now;
             return (from P in this.Context.sysBpmsThreadEvents
                     where
-                    ((P.sysBpmsEvent.TypeLU == ((int)sysBpmsEvent.e_TypeLU.StartEvent) && P.sysBpmsEvent.SubType == (int)WorkflowStartEvent.BPMNStartEventType.Timer) ||
-                    (P.sysBpmsEvent.TypeLU == ((int)sysBpmsEvent.e_TypeLU.boundary) && P.sysBpmsEvent.SubType == (int)WorkflowBoundaryEvent.BPMNBoundaryType.timer) ||
-                    (P.sysBpmsEvent.TypeLU == ((int)sysBpmsEvent.e_TypeLU.IntermediateCatch) && P.sysBpmsEvent.SubType == (int)WorkflowIntermediateCatchEvent.BPMNIntermediateCatchType.Timer)) &&
+                    ((P.Event.TypeLU == ((int)sysBpmsEvent.e_TypeLU.StartEvent) && P.Event.SubType == (int)WorkflowStartEvent.BPMNStartEventType.Timer) ||
+                    (P.Event.TypeLU == ((int)sysBpmsEvent.e_TypeLU.boundary) && P.Event.SubType == (int)WorkflowBoundaryEvent.BPMNBoundaryType.timer) ||
+                    (P.Event.TypeLU == ((int)sysBpmsEvent.e_TypeLU.IntermediateCatch) && P.Event.SubType == (int)WorkflowIntermediateCatchEvent.BPMNIntermediateCatchType.Timer)) &&
                     (P.ExecuteDate <= dateTimeFrom) &&
                     (P.StatusLU == (int)sysBpmsThreadEvent.e_StatusLU.InProgress)
                     select P).Include(Includes).OrderBy(c => c.StartDate).AsNoTracking().ToList();
@@ -63,9 +63,9 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         {
             return (from P in this.Context.sysBpmsThreadEvents
                     where
-                    (P.sysBpmsEvent.ProcessID != notProcessID) &&
-                    ((P.sysBpmsEvent.TypeLU == ((int)sysBpmsEvent.e_TypeLU.boundary) && P.sysBpmsEvent.SubType == (int)WorkflowBoundaryEvent.BPMNBoundaryType.Message) ||
-                    (P.sysBpmsEvent.TypeLU == ((int)sysBpmsEvent.e_TypeLU.IntermediateCatch) && P.sysBpmsEvent.SubType == (int)WorkflowIntermediateCatchEvent.BPMNIntermediateCatchType.Message)) &&
+                    (P.Event.ProcessID != notProcessID) &&
+                    ((P.Event.TypeLU == ((int)sysBpmsEvent.e_TypeLU.boundary) && P.Event.SubType == (int)WorkflowBoundaryEvent.BPMNBoundaryType.Message) ||
+                    (P.Event.TypeLU == ((int)sysBpmsEvent.e_TypeLU.IntermediateCatch) && P.Event.SubType == (int)WorkflowIntermediateCatchEvent.BPMNIntermediateCatchType.Message)) &&
                     (P.StatusLU == (int)sysBpmsThreadEvent.e_StatusLU.InProgress)
                     select P).Include(Includes).OrderBy(c => c.StartDate).AsNoTracking().ToList();
         }

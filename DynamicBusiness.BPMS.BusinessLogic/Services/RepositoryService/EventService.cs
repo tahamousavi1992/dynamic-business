@@ -132,8 +132,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
                         //Element
-                        _Event.sysBpmsElement.Name = item.Name;
-                        resultOperation = elementService.Update(_Event.sysBpmsElement);
+                        _Event.Element.Name = item.Name;
+                        resultOperation = elementService.Update(_Event.Element);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
                     }
@@ -147,7 +147,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                             ProcessID = processID,
                             SubType = (int)item.StartEventType,
                             //Element
-                            sysBpmsElement = new sysBpmsElement()
+                            Element = new sysBpmsElement()
                             {
                                 ID = item.ID,
                                 Name = item.Name,
@@ -159,7 +159,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
 
-                        resultOperation = elementService.Update(_Event.sysBpmsElement);
+                        resultOperation = elementService.Update(_Event.Element);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
                     }
@@ -175,8 +175,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
                         //Element
-                        _Event.sysBpmsElement.Name = item.Name;
-                        resultOperation = elementService.Update(_Event.sysBpmsElement);
+                        _Event.Element.Name = item.Name;
+                        resultOperation = elementService.Update(_Event.Element);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
                     }
@@ -190,7 +190,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                             ProcessID = processID,
                             SubType = (int)item.EndEventType,
                             //Element
-                            sysBpmsElement = new sysBpmsElement()
+                            Element = new sysBpmsElement()
                             {
                                 ID = item.ID,
                                 Name = item.Name,
@@ -214,8 +214,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
                         //Element
-                        _Event.sysBpmsElement.Name = item.Name;
-                        resultOperation = elementService.Update(_Event.sysBpmsElement);
+                        _Event.Element.Name = item.Name;
+                        resultOperation = elementService.Update(_Event.Element);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
                     }
@@ -229,7 +229,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                             ProcessID = processID,
                             SubType = (int)item.IntermediateThrowType,
                             //Element
-                            sysBpmsElement = new sysBpmsElement()
+                            Element = new sysBpmsElement()
                             {
                                 ID = item.ID,
                                 Name = item.Name,
@@ -254,8 +254,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
                         //Element
-                        _Event.sysBpmsElement.Name = item.Name;
-                        resultOperation = elementService.Update(_Event.sysBpmsElement);
+                        _Event.Element.Name = item.Name;
+                        resultOperation = elementService.Update(_Event.Element);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
                     }
@@ -269,7 +269,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                             ProcessID = processID,
                             SubType = (int)item.IntermediateCatchType,
                             //Element
-                            sysBpmsElement = new sysBpmsElement()
+                            Element = new sysBpmsElement()
                             {
                                 ID = item.ID,
                                 Name = item.Name,
@@ -296,8 +296,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
                         //Element
-                        _Event.sysBpmsElement.Name = item.Name;
-                        resultOperation = elementService.Update(_Event.sysBpmsElement);
+                        _Event.Element.Name = item.Name;
+                        resultOperation = elementService.Update(_Event.Element);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
                     }
@@ -313,7 +313,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                             RefElementID = item.AttachedToRef,
                             CancelActivity = item.CancelActivity,
                             //Element
-                            sysBpmsElement = new sysBpmsElement()
+                            Element = new sysBpmsElement()
                             {
                                 ID = item.ID,
                                 Name = item.Name,

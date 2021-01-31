@@ -130,13 +130,13 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 if (gateway != null)
                 {
                     if (newSequenceFlow != null)
-                        gateway.sysBpmsSequenceFlow = newSequenceFlow;
+                        gateway.SequenceFlow = newSequenceFlow;
                     gateway.TypeLU = (int)sysBpmsGateway.e_TypeLU.ExclusiveGateWay;
                     resultOperation = this.Update(gateway);
                     if (!resultOperation.IsSuccess)
                         return resultOperation;
-                    gateway.sysBpmsElement.Name = item.Name;
-                    elementService.Update(gateway.sysBpmsElement);
+                    gateway.Element.Name = item.Name;
+                    elementService.Update(gateway.Element);
                 }
                 else
                 {
@@ -145,9 +145,9 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                         ID = Guid.NewGuid(),
                         ElementID = item.ID,
                         ProcessID = processID,
-                        sysBpmsSequenceFlow = newSequenceFlow,
+                        SequenceFlow = newSequenceFlow,
                         TypeLU = (int)sysBpmsGateway.e_TypeLU.ExclusiveGateWay,
-                        sysBpmsElement = new sysBpmsElement()
+                        Element = new sysBpmsElement()
                         {
                             ID = item.ID,
                             Name = item.Name,
@@ -191,13 +191,13 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 {
 
                     if (newSequenceFlow != null)
-                        gateway.sysBpmsSequenceFlow = newSequenceFlow;
+                        gateway.SequenceFlow = newSequenceFlow;
                     gateway.TypeLU = (int)sysBpmsGateway.e_TypeLU.InclusiveGateWay;
                     resultOperation = this.Update(gateway);
                     if (!resultOperation.IsSuccess)
                         return resultOperation;
-                    gateway.sysBpmsElement.Name = item.Name;
-                    elementService.Update(gateway.sysBpmsElement);
+                    gateway.Element.Name = item.Name;
+                    elementService.Update(gateway.Element);
                 }
                 else
                 {
@@ -206,9 +206,9 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                         ID = Guid.NewGuid(),
                         ElementID = item.ID,
                         ProcessID = processID,
-                        sysBpmsSequenceFlow = newSequenceFlow,
+                        SequenceFlow = newSequenceFlow,
                         TypeLU = (int)sysBpmsGateway.e_TypeLU.InclusiveGateWay,
-                        sysBpmsElement = new sysBpmsElement()
+                        Element = new sysBpmsElement()
                         {
                             ID = item.ID,
                             Name = item.Name,
@@ -232,8 +232,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                     resultOperation = this.Update(gateway);
                     if (!resultOperation.IsSuccess)
                         return resultOperation;
-                    gateway.sysBpmsElement.Name = item.Name;
-                    elementService.Update(gateway.sysBpmsElement);
+                    gateway.Element.Name = item.Name;
+                    elementService.Update(gateway.Element);
                 }
                 else
                 {
@@ -243,7 +243,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                         ElementID = item.ID,
                         ProcessID = processID,
                         TypeLU = (int)sysBpmsGateway.e_TypeLU.ParallelGateWay,
-                        sysBpmsElement = new sysBpmsElement()
+                        Element = new sysBpmsElement()
                         {
                             ID = item.ID,
                             Name = item.Name,

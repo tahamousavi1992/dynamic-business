@@ -87,8 +87,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             name = name.ToStringObj().Trim();
             List<sysBpmsUser> rettVal = null;
             var query = this.Context.sysBpmsUsers.Where(d =>
-              (!roleCode.HasValue || d.sysBpmsDepartmentMembers.Count(c => c.RoleLU == roleCode) > 0) &&
-              (!departmentId.HasValue || d.sysBpmsDepartmentMembers.Count(c => c.DepartmentID == departmentId) > 0) &&
+              (!roleCode.HasValue || d.DepartmentMembers.Count(c => c.RoleLU == roleCode) > 0) &&
+              (!departmentId.HasValue || d.DepartmentMembers.Count(c => c.DepartmentID == departmentId) > 0) &&
               (name == string.Empty || d.Username.Contains(name) || (d.FirstName + " " + d.LastName).Contains(name)));
             if (currentPaging != null)
             {

@@ -228,7 +228,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                         foreach (sysBpmsElement item in sysBpmsElementList)
                         {
                             item.ProcessID = newProcess.ID;
-                            item.sysBpmsProcess = null;
+                            item.Process = null;
                             resultOperation = elementService.Add(item);
                             if (!resultOperation.IsSuccess)
                                 break;
@@ -241,7 +241,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                         {
                             item.ID = Guid.NewGuid();
                             item.ProcessID = newProcess.ID;
-                            item.sysBpmsElement = null;
+                            item.Element = null;
                             laneService.Add(item);
                         }
                     //Copy event
@@ -252,7 +252,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                         {
                             item.ID = Guid.NewGuid();
                             item.ProcessID = newProcess.ID;
-                            item.sysBpmsElement = null;
+                            item.Element = null;
                             resultOperation = eventService.Add(item);
                             if (!resultOperation.IsSuccess)
                                 break;
@@ -268,8 +268,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                             flowConvertID.Add(item.ID, flowNewId);
                             item.ID = flowNewId;
                             item.ProcessID = newProcess.ID;
-                            item.sysBpmsProcess = null;
-                            item.sysBpmsElement = null;
+                            item.Process = null;
+                            item.Element = null;
                             resultOperation = sequenceFlowService.Add(item);
                             if (!resultOperation.IsSuccess)
                                 break;
@@ -284,7 +284,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                             List<sysBpmsCondition> sysBpmsConditionList = conditionService.GetList(item.ID, null, null);
                             item.ID = Guid.NewGuid();
                             item.ProcessID = newProcess.ID;
-                            item.sysBpmsElement = null;
+                            item.Element = null;
                             if (item.DefaultSequenceFlowID.HasValue)
                                 item.DefaultSequenceFlowID = flowConvertID[item.DefaultSequenceFlowID.Value];
                             resultOperation = gatewayService.Add(item);
@@ -295,8 +295,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                                 condition.GatewayID = item.ID;
                                 if (condition.SequenceFlowID.HasValue)
                                     condition.SequenceFlowID = flowConvertID[condition.SequenceFlowID.Value];
-                                condition.sysBpmsGateway = null;
-                                condition.sysBpmsSequenceFlow = null;
+                                condition.Gateway = null;
+                                condition.SequenceFlow = null;
                                 resultOperation = conditionService.Add(condition);
                                 if (!resultOperation.IsSuccess)
                                     break;
@@ -316,7 +316,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                             dynamicFormService.UpdateBackendCodeID(item);
                             //Then update sourceCode value.
                             dynamicFormService.GetSourceCode(item);
-                            item.sysBpmsProcess = null;
+                            item.Process = null;
                             resultOperation = dynamicFormService.Add(item,
                                 item.ApplicationPageID.HasValue ? applicationPageService.GetInfo(item.ApplicationPageID.Value) : null, userName);
                             formConvertID.Add(oldID, item.ID);
@@ -348,8 +348,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                             List<sysBpmsStep> sysBpmsStepList = stepService.GetList(item.ID, null);
                             item.ID = Guid.NewGuid();
                             item.ProcessID = newProcess.ID;
-                            item.sysBpmsProcess = null;
-                            item.sysBpmsElement = null;
+                            item.Process = null;
+                            item.Element = null;
                             resultOperation = taskService.Add(item);
                             if (!resultOperation.IsSuccess)
                                 break;
@@ -358,8 +358,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                                 step.TaskID = item.ID;
                                 if (step.DynamicFormID.HasValue)
                                     step.DynamicFormID = formConvertID[step.DynamicFormID.Value];
-                                step.sysBpmsDynamicForm = null;
-                                step.sysBpmsTask = null;
+                                step.DynamicForm = null;
+                                step.Task = null;
                                 resultOperation = stepService.Add(step);
                                 if (!resultOperation.IsSuccess)
                                     break;
@@ -487,7 +487,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
                 foreach (var item in new TaskService(base.UnitOfWork).GetList((int)sysBpmsTask.e_TypeLU.UserTask, processID))
                 {
-                    if (item.sysBpmsSteps.Count == 0)
+                    if (item.Steps.Count == 0)
                         resultOperation.AddError(LangUtility.Get("WorkflowPublishNoStepError.Text", nameof(sysBpmsProcess)));
                 }
                 if (resultOperation.IsSuccess)

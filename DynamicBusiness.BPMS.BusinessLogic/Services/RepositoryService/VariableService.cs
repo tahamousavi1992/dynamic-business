@@ -199,7 +199,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         public List<ComboTreeModel> GetVariableAsComboTree(Guid? ProcessID, Guid? ApplicationPageID, sysBpmsVariable.e_RelationTypeLU? notRelationTypeLU, string template = "")
         {
             List<ComboTreeModel> Items = new List<ComboTreeModel>();
-            List<sysBpmsVariable> Variables = new VariableService(this.UnitOfWork).GetList(ProcessID, ApplicationPageID, null, "", null, true, new string[] { nameof(sysBpmsVariable.sysBpmsEntityDef) }).Where(c => (!notRelationTypeLU.HasValue || c.RelationTypeLU != (int)notRelationTypeLU) && c.VarTypeLU != (int)sysBpmsVariable.e_VarTypeLU.List).ToList();
+            List<sysBpmsVariable> Variables = new VariableService(this.UnitOfWork).GetList(ProcessID, ApplicationPageID, null, "", null, true, new string[] { nameof(sysBpmsVariable.EntityDef) }).Where(c => (!notRelationTypeLU.HasValue || c.RelationTypeLU != (int)notRelationTypeLU) && c.VarTypeLU != (int)sysBpmsVariable.e_VarTypeLU.List).ToList();
 
             foreach (sysBpmsVariable item in Variables)
             {

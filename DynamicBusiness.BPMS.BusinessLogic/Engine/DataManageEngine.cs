@@ -174,9 +174,9 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             {
                 var item = listSetDataList[i];
                 sysBpmsVariable variable = variableService.GetInfo(base.EngineSharedModel?.CurrentProcessID, base.EngineSharedModel?.CurrentApplicationPageID, item.Key, new string[] { "sysBpmsVariableDependencies.sysBpmsVariable1" });
-                foreach (sysBpmsVariableDependency vDependency in variable.sysBpmsVariableDependencies)
+                foreach (sysBpmsVariableDependency vDependency in variable.VariableDependencies)
                 {
-                    var parentVariable = listSetDataList.Select((c, index) => new { item = c, index }).FirstOrDefault(c => c.item.Key != item.Key && c.item.Key == vDependency.sysBpmsVariable1.Name && i < c.index);
+                    var parentVariable = listSetDataList.Select((c, index) => new { item = c, index }).FirstOrDefault(c => c.item.Key != item.Key && c.item.Key == vDependency.VariableTo.Name && i < c.index);
                     //if variable has a dependency which has higher index ,this code block replace both of them.
                     if (parentVariable != null)
                     {
@@ -193,7 +193,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             {
                 if (resultOperation.IsSuccess)
                 {
-                    sysBpmsVariable variable = variableService.GetInfo(base.EngineSharedModel?.CurrentProcessID, base.EngineSharedModel?.CurrentApplicationPageID, item.Key, new string[] { nameof(sysBpmsVariable.sysBpmsVariableDependencies) });
+                    sysBpmsVariable variable = variableService.GetInfo(base.EngineSharedModel?.CurrentProcessID, base.EngineSharedModel?.CurrentApplicationPageID, item.Key, new string[] { nameof(sysBpmsVariable.VariableDependencies) });
                     if (variable != null)
                     {
                         switch ((sysBpmsVariable.e_RelationTypeLU)variable.RelationTypeLU)
@@ -288,7 +288,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
             if (!this.GetDataList.Any(c => c.Name == VarName))
             {
-                sysBpmsVariable _Variable = new VariableService(base.UnitOfWork).GetInfo(base.EngineSharedModel?.CurrentProcessID, base.EngineSharedModel?.CurrentApplicationPageID, VarName, new string[] { nameof(sysBpmsVariable.sysBpmsVariableDependencies) });
+                sysBpmsVariable _Variable = new VariableService(base.UnitOfWork).GetInfo(base.EngineSharedModel?.CurrentProcessID, base.EngineSharedModel?.CurrentApplicationPageID, VarName, new string[] { nameof(sysBpmsVariable.VariableDependencies) });
                 List<DataModel> _DataModel = new List<DataModel>();
                 if (_Variable != null)
                 {
@@ -320,7 +320,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         public VariableModel GetEntityWithKeyValue(string variableName, Dictionary<string, object> dictionary)
         {
             string whereClause = string.Empty;
-            sysBpmsVariable variable = new VariableService(base.UnitOfWork).GetInfo(base.EngineSharedModel?.CurrentProcessID, base.EngineSharedModel?.CurrentApplicationPageID, variableName, new string[] { nameof(sysBpmsVariable.sysBpmsVariableDependencies), nameof(sysBpmsVariable.sysBpmsEntityDef) });
+            sysBpmsVariable variable = new VariableService(base.UnitOfWork).GetInfo(base.EngineSharedModel?.CurrentProcessID, base.EngineSharedModel?.CurrentApplicationPageID, variableName, new string[] { nameof(sysBpmsVariable.VariableDependencies), nameof(sysBpmsVariable.EntityDef) });
             VariableModel variableModel = null;
             if (variable != null)
             {
@@ -334,7 +334,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                     case sysBpmsVariable.e_RelationTypeLU.Entity:
                         //this set each DataModel's key corresponding to returned columns by query and then set value into it.  
                         //this method return one DataModel if the _Variable FilterTypeLU is Filtered otherwise it will return list of DataModel.
-                        variable.WhereClause = string.Join(" and ", dictionary.Select(c => $"{variable.sysBpmsEntityDef.FormattedTableName}.{c.Key}='{c.Value}'"));
+                        variable.WhereClause = string.Join(" and ", dictionary.Select(c => $"{variable.EntityDef.FormattedTableName}.{c.Key}='{c.Value}'"));
                         variableModel = new VariableModel(variableName, new EntityVariableTypeEngine(base.EngineSharedModel, variable, base.EngineSharedModel?.CurrentProcessID, this.ThreadID, this.AdditionalParams, base.UnitOfWork).GetResult(null));
                         break;
                 }

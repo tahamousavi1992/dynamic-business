@@ -20,7 +20,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             sysBpmsThread sysBpmsThread = new ThreadService(this.UnitOfWork).GetInfo(threadID);
             if (sysBpmsThread.StatusLU == (int)sysBpmsThread.Enum_StatusLU.InProgress ||
                 sysBpmsThread.StatusLU == (int)sysBpmsThread.Enum_StatusLU.Draft)
-                return string.Join(",", new ThreadTaskService(this.UnitOfWork).GetList(threadID, null, null, null).Where(c => c.StatusLU == (int)sysBpmsThreadTask.e_StatusLU.New || c.StatusLU == (int)sysBpmsThreadTask.e_StatusLU.Ongoing).Select(c => c.sysBpmsTask.sysBpmsElement.Name).ToList());
+                return string.Join(",", new ThreadTaskService(this.UnitOfWork).GetList(threadID, null, null, null).Where(c => c.StatusLU == (int)sysBpmsThreadTask.e_StatusLU.New || c.StatusLU == (int)sysBpmsThreadTask.e_StatusLU.Ongoing).Select(c => c.Task.Element.Name).ToList());
             else return ((sysBpmsThread.Enum_StatusLU)sysBpmsThread.StatusLU).GetDescription();
         }
     }

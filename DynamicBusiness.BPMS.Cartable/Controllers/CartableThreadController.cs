@@ -18,8 +18,8 @@ namespace DynamicBusiness.BPMS.Cartable.Controllers
         {
             using (ThreadTaskService threadTaskService = new ThreadTaskService())
             {
-                sysBpmsThreadTask threadTask = threadTaskService.GetInfo(threadTaskID, new string[] { nameof(sysBpmsThreadTask.sysBpmsThread) });
-                using (ProcessEngine ProcessEngine = new ProcessEngine(new EngineSharedModel(threadTask.ThreadID, threadTask.sysBpmsThread.ProcessID, this.MyRequest.GetList(false, base.ApiSessionId).ToList(), base.ClientUserName, base.ApiSessionId)))
+                sysBpmsThreadTask threadTask = threadTaskService.GetInfo(threadTaskID, new string[] { nameof(sysBpmsThreadTask.Thread) });
+                using (ProcessEngine ProcessEngine = new ProcessEngine(new EngineSharedModel(threadTask.ThreadID, threadTask.Thread.ProcessID, this.MyRequest.GetList(false, base.ApiSessionId).ToList(), base.ClientUserName, base.ApiSessionId)))
                 {
                     GetTaskFormResponseModel responseVM = ProcessEngine.GetTaskForm(threadTaskID, stepID);
                     if (responseVM.EngineFormModel != null)
@@ -35,7 +35,7 @@ namespace DynamicBusiness.BPMS.Cartable.Controllers
                         MessageList = responseVM?.ListMessageModel.Select(c => new PostMethodMessage(c.Message, c.DisplayMessageType)),
                         RedirectUrl = base.GetRedirectUrl(responseVM?.RedirectUrlModel),
                         Result = true,
-                        ThreadTasks = threadTaskService.GetList(threadTask.ThreadID, (int)sysBpmsTask.e_TypeLU.UserTask, null, null, new string[] { "sysBpmsTask.sysBpmsElement", nameof(sysBpmsThreadTask.sysBpmsUser) }).Select(c => new ThreadHistoryDTO(c)).ToList()
+                        ThreadTasks = threadTaskService.GetList(threadTask.ThreadID, (int)sysBpmsTask.e_TypeLU.UserTask, null, null, new string[] { "sysBpmsTask.sysBpmsElement", nameof(sysBpmsThreadTask.User) }).Select(c => new ThreadHistoryDTO(c)).ToList()
                     };
 
                 }
@@ -50,8 +50,8 @@ namespace DynamicBusiness.BPMS.Cartable.Controllers
             {
                 using (DynamicFormService dynamicFormService = new DynamicFormService())
                 {
-                    sysBpmsThreadTask threadTask = threadTaskService.GetInfo(threadTaskID, new string[] { nameof(sysBpmsThreadTask.sysBpmsThread) });
-                    using (ProcessEngine ProcessEngine = new ProcessEngine(new EngineSharedModel(threadTask.ThreadID, threadTask.sysBpmsThread.ProcessID, this.MyRequest.GetList(dynamicFormService.GetInfo(formID).ConfigXmlModel.IsEncrypted, base.ApiSessionId).ToList(), base.ClientUserName, base.ApiSessionId)))
+                    sysBpmsThreadTask threadTask = threadTaskService.GetInfo(threadTaskID, new string[] { nameof(sysBpmsThreadTask.Thread) });
+                    using (ProcessEngine ProcessEngine = new ProcessEngine(new EngineSharedModel(threadTask.ThreadID, threadTask.Thread.ProcessID, this.MyRequest.GetList(dynamicFormService.GetInfo(formID).ConfigXmlModel.IsEncrypted, base.ApiSessionId).ToList(), base.ClientUserName, base.ApiSessionId)))
                     {
                         GetTaskFormResponseModel responseVM = ProcessEngine.GetForm(threadTaskID, formID);
                         if (responseVM.EngineFormModel != null)
@@ -81,8 +81,8 @@ namespace DynamicBusiness.BPMS.Cartable.Controllers
             {
                 using (DynamicFormService dynamicFormService = new DynamicFormService())
                 {
-                    sysBpmsThreadTask threadTask = threadTaskService.GetInfo(threadTaskID, new string[] { nameof(sysBpmsThreadTask.sysBpmsThread) });
-                    using (ProcessEngine ProcessEngine = new ProcessEngine(new EngineSharedModel(threadTask.ThreadID, threadTask.sysBpmsThread.ProcessID, this.MyRequest.GetList(dynamicFormService.GetInfo(formID).ConfigXmlModel.IsEncrypted, base.ApiSessionId).ToList(), base.ClientUserName, base.ApiSessionId)))
+                    sysBpmsThreadTask threadTask = threadTaskService.GetInfo(threadTaskID, new string[] { nameof(sysBpmsThreadTask.Thread) });
+                    using (ProcessEngine ProcessEngine = new ProcessEngine(new EngineSharedModel(threadTask.ThreadID, threadTask.Thread.ProcessID, this.MyRequest.GetList(dynamicFormService.GetInfo(formID).ConfigXmlModel.IsEncrypted, base.ApiSessionId).ToList(), base.ClientUserName, base.ApiSessionId)))
                     {
                         PostTaskFormResponseModel responseVM = ProcessEngine.PostForm(threadTaskID, formID, controlId);
 
@@ -119,8 +119,8 @@ namespace DynamicBusiness.BPMS.Cartable.Controllers
             {
                 using (DynamicFormService dynamicFormService = new DynamicFormService())
                 {
-                    sysBpmsThreadTask threadTask = new ThreadTaskService().GetInfo(threadTaskID, new string[] { nameof(sysBpmsThreadTask.sysBpmsThread) });
-                    using (ProcessEngine processEngine = new ProcessEngine(new EngineSharedModel(threadTask.sysBpmsThread, threadTask.sysBpmsThread.ProcessID, this.MyRequest.GetList(dynamicFormService.GetInfoByStepID(stepID).ConfigXmlModel.IsEncrypted, base.ApiSessionId).ToList(), base.ClientUserName, base.ApiSessionId)))
+                    sysBpmsThreadTask threadTask = new ThreadTaskService().GetInfo(threadTaskID, new string[] { nameof(sysBpmsThreadTask.Thread) });
+                    using (ProcessEngine processEngine = new ProcessEngine(new EngineSharedModel(threadTask.Thread, threadTask.Thread.ProcessID, this.MyRequest.GetList(dynamicFormService.GetInfoByStepID(stepID).ConfigXmlModel.IsEncrypted, base.ApiSessionId).ToList(), base.ClientUserName, base.ApiSessionId)))
                     {
                         PostTaskFormResponseModel responseVM = processEngine.PostTaskForm(threadTaskID, stepID, goNext, controlId);
 

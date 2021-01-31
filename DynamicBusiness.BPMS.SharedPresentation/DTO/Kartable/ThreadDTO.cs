@@ -27,8 +27,8 @@ namespace DynamicBusiness.BPMS.SharedPresentation
                 this.Number = thread.Number;
                 this.FormattedNumber = thread.FormattedNumber;
                 this.StatusLU = thread.StatusLU;
-                this.User = thread.UserID.HasValue ? (thread.sysBpmsUser != null ? new UserDTO(thread.sysBpmsUser) : new UserDTO(new UserService().GetInfo(this.UserID.Value))) : new UserDTO();
-                this.Process = new ProcessDTO(thread.sysBpmsProcess);
+                this.User = thread.UserID.HasValue ? (thread.User != null ? new UserDTO(thread.User) : new UserDTO(new UserService().GetInfo(this.UserID.Value))) : new UserDTO();
+                this.Process = new ProcessDTO(thread.Process);
             }
         }
         [DataMember]

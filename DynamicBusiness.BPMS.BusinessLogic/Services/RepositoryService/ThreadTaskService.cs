@@ -219,14 +219,14 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 }
                 else
                 {
-                    if (!threadTask.sysBpmsThread.UserID.HasValue && !threadTask.OwnerUserID.HasValue && string.IsNullOrWhiteSpace(threadTask.OwnerRole))
+                    if (!threadTask.Thread.UserID.HasValue && !threadTask.OwnerUserID.HasValue && string.IsNullOrWhiteSpace(threadTask.OwnerRole))
                         return (true, "");
                 }
-                if (threadTask.sysBpmsTask.UserTaskRuleModel?.AccessType != (int)UserTaskRuleModel.e_UserAccessType.Static &&
-                    threadTask.sysBpmsTask.UserTaskRuleModel?.AccessType != (int)UserTaskRuleModel.e_UserAccessType.Variable)
+                if (threadTask.Task.UserTaskRuleModel?.AccessType != (int)UserTaskRuleModel.e_UserAccessType.Static &&
+                    threadTask.Task.UserTaskRuleModel?.AccessType != (int)UserTaskRuleModel.e_UserAccessType.Variable)
                     return (true, "");
 
-                if (accessByTracking && threadTask.sysBpmsTask.IsInRole(null, (int)sysBpmsDepartmentMember.e_RoleLU.Requester))
+                if (accessByTracking && threadTask.Task.IsInRole(null, (int)sysBpmsDepartmentMember.e_RoleLU.Requester))
                     return (true, "");
             }
             return (false, LangUtility.Get("AccessError.Text", nameof(sysBpmsThreadTask)));

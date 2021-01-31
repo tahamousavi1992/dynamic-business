@@ -41,7 +41,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         public bool HasAny(Guid processId, Guid taskId)
         {
             return (from P in this.Context.sysBpmsThreadTasks
-                    where P.sysBpmsThread.ProcessID == processId && P.TaskID == taskId
+                    where P.Thread.ProcessID == processId && P.TaskID == taskId
                     select P).Count() > 0;
         }
 
@@ -58,7 +58,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         {
             return (from P in this.Context.sysBpmsThreadTasks
                     where P.ThreadID == ThreadID &&
-                    (!TaskType.HasValue || P.sysBpmsTask.TypeLU == TaskType) &&
+                    (!TaskType.HasValue || P.Task.TypeLU == TaskType) &&
                     (!statusLU.HasValue || P.StatusLU == statusLU) &&
                     (!taskId.HasValue || P.TaskID == taskId)
                     select P).Include(Includes).OrderByDescending(c => c.StartDate).AsNoTracking().ToList();
@@ -70,7 +70,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                     where P.ThreadID == ThreadID &&
                     (P.StatusLU == (int)sysBpmsThreadTask.e_StatusLU.New ||
                     P.StatusLU == (int)sysBpmsThreadTask.e_StatusLU.Ongoing)
-                    select P).Include(c => c.sysBpmsTask).AsNoTracking().ToList();
+                    select P).Include(c => c.Task).AsNoTracking().ToList();
         }
 
         public List<sysBpmsThreadTask> GetListKartable(Guid UserID, int[] statusLU, PagingProperties currentPaging)
@@ -90,7 +90,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                              (!T.MarkerTypeLU.HasValue || T.MarkerTypeLU == (int)Domain.sysBpmsTask.e_MarkerTypeLU.NonSequential ||
                              T.MarkerTypeLU == (int)Domain.sysBpmsTask.e_MarkerTypeLU.Loop
                              || (T.MarkerTypeLU == (int)Domain.sysBpmsTask.e_MarkerTypeLU.Sequential && this.Context.sysBpmsThreadTasks.Count(c => c.ThreadID == P.ThreadID && c.TaskID == P.TaskID && c.StartDate < P.StartDate && c.StatusLU != (int)sysBpmsThreadTask.e_StatusLU.Done) == 0))
-                             select P).Include(c => c.sysBpmsTask.sysBpmsElement).Include(c => c.sysBpmsThread.sysBpmsProcess).AsNoTracking();
+                             select P).Include(c => c.Task.Element).Include(c => c.Thread.Process).AsNoTracking();
 
 
                 if (currentPaging != null)

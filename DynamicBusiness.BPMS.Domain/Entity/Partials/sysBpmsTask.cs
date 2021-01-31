@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -115,6 +116,7 @@ namespace DynamicBusiness.BPMS.Domain
             [Description("Loop")]
             Loop = 3,
         }
+        [NotMapped]
         public UserTaskRuleModel UserTaskRuleModel
         {
             get
@@ -128,7 +130,7 @@ namespace DynamicBusiness.BPMS.Domain
         {
             return this.GetDepartmentRoles.Any(c => (!departmentId.HasValue || c.Item1 == departmentId) && c.Item2.ToIntObj() == roleLU);
         }
-
+        [NotMapped]
         public List<Tuple<Guid?, string>> GetDepartmentRoles
         {
             get

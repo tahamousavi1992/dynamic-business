@@ -59,7 +59,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             SourceElementID = DomainUtility.toString(SourceElementID);
 
             rettVal = this.Context.sysBpmsSequenceFlows.Where(d =>
-            (d.sysBpmsElement.ProcessID == ProcessID) &&
+            (d.Element.ProcessID == ProcessID) &&
             (TargetElementID == string.Empty || d.TargetElementID == TargetElementID) &&
             (SourceElementID == string.Empty || d.SourceElementID == SourceElementID) &&
             (Name == string.Empty || d.Name == Name)).AsNoTracking().ToList();

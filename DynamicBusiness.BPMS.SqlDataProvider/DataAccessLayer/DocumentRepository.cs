@@ -56,7 +56,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             (!EntityID.HasValue || d.EntityID == EntityID) &&
             (!DocumentDefID.HasValue || d.DocumentDefID == DocumentDefID) &&
             (!threadId.HasValue || d.ThreadID == threadId) &&
-            (!DocumentFolderID.HasValue || d.sysBpmsDocumentDef.DocumentFolderID == DocumentFolderID)).AsNoTracking().ToList();
+            (!DocumentFolderID.HasValue || d.DocumentDef.DocumentFolderID == DocumentFolderID)).AsNoTracking().ToList();
 
             return rettVal;
         }
