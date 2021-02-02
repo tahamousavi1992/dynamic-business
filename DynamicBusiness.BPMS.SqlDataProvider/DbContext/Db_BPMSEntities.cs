@@ -8,6 +8,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
     using System.Linq;
     using DynamicBusiness.BPMS.Domain;
     using System.Data.Entity.ModelConfiguration.Conventions;
+    using CodeFirstStoreFunctions;
 
     public partial class Db_BPMSEntities : DbContext
     {
@@ -25,6 +26,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Conventions.Add(new FunctionsConvention<Db_BPMSEntities>("dbo"));
+            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
             //throw new UnintentionalCodeFirstException(); 
         }
@@ -62,8 +65,12 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         public virtual DbSet<sysBpmsUser> sysBpmsUsers { get; set; }
         public virtual DbSet<sysBpmsVariable> sysBpmsVariables { get; set; }
         public virtual DbSet<sysBpmsVariableDependency> sysBpmsVariableDependencies { get; set; }
+        /// <summary>
+        /// It must be removed or commented when running add-migration command
+        /// </summary>
+        public virtual DbSet<sysBpmsSplit_Result> sysBpmsSplit_Results { get; set; }
 
-        [DbFunction("Db_BPMSEntities", "sysBpmsSplit")]
+        [DbFunction(nameof(Db_BPMSEntities), "sysBpmsSplit")]
         public virtual IQueryable<sysBpmsSplit_Result> sysBpmsSplit(string rowData, string delimeter)
         {
             var rowDataParameter = rowData != null ?

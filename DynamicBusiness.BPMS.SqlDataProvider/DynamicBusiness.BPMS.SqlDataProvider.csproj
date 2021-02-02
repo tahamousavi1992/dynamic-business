@@ -38,6 +38,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CodeFirstStoreFunctions, Version=1.2.0.0, Culture=neutral, PublicKeyToken=46c4868af4307d2c, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.CodeFirstStoreFunctions.1.2.0\lib\net45\CodeFirstStoreFunctions.dll</HintPath>
+    </Reference>
     <Reference Include="DotNetNuke, Version=9.3.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\LMS\bin\DotNetNuke.dll</HintPath>
@@ -93,9 +96,9 @@
     <Compile Include="DataAccessLayer\VariableDependencyRepository.cs" />
     <Compile Include="DataAccessLayer\VariableRepository.cs" />
     <Compile Include="DbContext\Db_BPMSEntities.cs" />
-    <Compile Include="Migrations\202101312139542_version_1.cs" />
-    <Compile Include="Migrations\202101312139542_version_1.designer.cs">
-      <DependentUpon>202101312139542_version_1.cs</DependentUpon>
+    <Compile Include="Migrations\202102012310492_version_1.cs" />
+    <Compile Include="Migrations\202102012310492_version_1.designer.cs">
+      <DependentUpon>202102012310492_version_1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -112,8 +115,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202101312139542_version_1.resx">
-      <DependentUpon>202101312139542_version_1.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202102012310492_version_1.resx">
+      <DependentUpon>202102012310492_version_1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

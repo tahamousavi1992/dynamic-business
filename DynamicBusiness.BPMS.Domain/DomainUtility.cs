@@ -175,7 +175,6 @@ namespace DynamicBusiness.BPMS.Domain
                 System.Data.SqlClient.SqlConnectionStringBuilder scsb = new System.Data.SqlClient.SqlConnectionStringBuilder(connection);
 
                 EntityConnectionStringBuilder ecb = new EntityConnectionStringBuilder();
-                ecb.Metadata = "res://*/dmBPMS.csdl|res://*/dmBPMS.ssdl|res://*/dmBPMS.msl";
                 ecb.Provider = "System.Data.SqlClient";
                 ecb.ProviderConnectionString = scsb.ConnectionString;
                 ConnectionString = ecb.ConnectionString;

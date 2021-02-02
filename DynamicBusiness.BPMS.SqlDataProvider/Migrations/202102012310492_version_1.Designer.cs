@@ -13,7 +13,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "202101312139542_version_1"; }
+            get { return "202102012310492_version_1"; }
         }
         
         string IMigrationMetadata.Source
