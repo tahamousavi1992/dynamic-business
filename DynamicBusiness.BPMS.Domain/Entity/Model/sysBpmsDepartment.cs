@@ -4,7 +4,7 @@ namespace DynamicBusiness.BPMS.Domain
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
-
+    using System.ComponentModel.DataAnnotations;
     public partial class sysBpmsDepartment
     {
         
@@ -18,6 +18,8 @@ namespace DynamicBusiness.BPMS.Domain
         public System.Guid ID { get; set; }
         [ForeignKey(nameof(ParentDepartment))]
         public Nullable<System.Guid> DepartmentID { get; set; }
+        [Required]
+        [MaxLength(500)]
         public string Name { get; set; }
         public bool IsActive { get; set; }
     

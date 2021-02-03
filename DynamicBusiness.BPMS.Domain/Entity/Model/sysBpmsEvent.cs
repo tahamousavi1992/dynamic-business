@@ -4,7 +4,7 @@ namespace DynamicBusiness.BPMS.Domain
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
-
+    using System.ComponentModel.DataAnnotations;
     public partial class sysBpmsEvent
     {
         
@@ -15,10 +15,13 @@ namespace DynamicBusiness.BPMS.Domain
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public System.Guid ID { get; set; }
         [ForeignKey(nameof(Element))]
+        [Required]
+        [MaxLength(100)]
         public string ElementID { get; set; }
         public int TypeLU { get; set; }
         public string ConfigurationXML { get; set; }
         public Nullable<int> SubType { get; set; }
+        [MaxLength(100)]
         public string RefElementID { get; set; }
         public Nullable<bool> CancelActivity { get; set; }
         [ForeignKey(nameof(Process))]

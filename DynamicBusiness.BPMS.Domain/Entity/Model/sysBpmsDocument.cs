@@ -25,7 +25,11 @@ namespace DynamicBusiness.BPMS.Domain
         public Nullable<System.Guid> ThreadID { get; set; }
 
         public System.DateTime AtachDateOf { get; set; }
+        [Required]
+        [MaxLength(10)]
         public string FileExtention { get; set; }
+        [Required]
+        [MaxLength(1000)]
         public string CaptionOf { get; set; }
     
         public virtual sysBpmsDocumentDef DocumentDef { get; set; }

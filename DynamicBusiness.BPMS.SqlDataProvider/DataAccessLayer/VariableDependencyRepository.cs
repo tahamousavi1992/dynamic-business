@@ -55,7 +55,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public List<sysBpmsVariableDependency> GetList(Guid processId)
         {
-            return this.Context.sysBpmsVariableDependencies.Where(d => d.VariableDependent.ProcessID == processId).AsNoTracking().ToList();
+            return this.Context.sysBpmsVariableDependencies.Where(d => d.DependentVariable.ProcessID == processId).AsNoTracking().ToList();
         }
 
     }

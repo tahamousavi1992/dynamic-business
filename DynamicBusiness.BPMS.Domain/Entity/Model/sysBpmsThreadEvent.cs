@@ -4,7 +4,7 @@ namespace DynamicBusiness.BPMS.Domain
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
-
+   
     public partial class sysBpmsThreadEvent
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

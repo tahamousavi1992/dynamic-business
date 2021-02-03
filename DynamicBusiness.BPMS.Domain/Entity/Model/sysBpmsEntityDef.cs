@@ -4,7 +4,7 @@ namespace DynamicBusiness.BPMS.Domain
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
-
+    using System.ComponentModel.DataAnnotations;
     public partial class sysBpmsEntityDef
     {
         
@@ -15,8 +15,13 @@ namespace DynamicBusiness.BPMS.Domain
         }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public System.Guid ID { get; set; }
+        [Required]
+        [MaxLength(500)]
         public string DisplayName { get; set; }
+        [Required]
+        [MaxLength(500)]
         public string Name { get; set; }
+        [Required]
         public string DesignXML { get; set; }
         public bool IsActive { get; set; }
     

@@ -4,7 +4,7 @@ namespace DynamicBusiness.BPMS.Domain
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
-
+    using System.ComponentModel.DataAnnotations;
     public partial class sysBpmsThreadTask
     {
         
@@ -22,6 +22,7 @@ namespace DynamicBusiness.BPMS.Domain
         public Nullable<System.Guid> OwnerUserID { get; set; }
         public System.DateTime StartDate { get; set; }
         public Nullable<System.DateTime> EndDate { get; set; }
+        [Required]
         public string Description { get; set; }
         public string OwnerRole { get; set; }
         public Nullable<int> PriorityLU { get; set; }

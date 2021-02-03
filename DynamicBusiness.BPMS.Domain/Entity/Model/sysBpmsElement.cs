@@ -4,7 +4,7 @@ namespace DynamicBusiness.BPMS.Domain
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
-
+    using System.ComponentModel.DataAnnotations;
     public partial class sysBpmsElement
     {
         
@@ -16,7 +16,10 @@ namespace DynamicBusiness.BPMS.Domain
             this.SequenceFlows = new HashSet<sysBpmsSequenceFlow>();
             this.Tasks = new HashSet<sysBpmsTask>();
         }
+        [MaxLength(100)]
         public string ID { get; set; }
+        [Required]
+        [MaxLength(500)]
         public string Name { get; set; }
         public int TypeLU { get; set; }
         [ForeignKey(nameof(Process))]

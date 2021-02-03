@@ -4,7 +4,7 @@ namespace DynamicBusiness.BPMS.Domain
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
-
+    using System.ComponentModel.DataAnnotations;
     public partial class sysBpmsThread
     {
         
@@ -25,6 +25,7 @@ namespace DynamicBusiness.BPMS.Domain
         public System.Guid ProcessID { get; set; }
         [ForeignKey(nameof(User))]
         public Nullable<System.Guid> UserID { get; set; }
+        [MaxLength(50)]
         public string FormattedNumber { get; set; }
         public Nullable<int> Number { get; set; }
     

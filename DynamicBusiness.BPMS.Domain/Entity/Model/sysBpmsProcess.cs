@@ -4,7 +4,7 @@ namespace DynamicBusiness.BPMS.Domain
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
-
+    using System.ComponentModel.DataAnnotations;
     public partial class sysBpmsProcess
     {
         
@@ -25,10 +25,13 @@ namespace DynamicBusiness.BPMS.Domain
         public System.Guid ID { get; set; }
         public string FormattedNumber { get; set; }
         public Nullable<int> Number { get; set; }
+        [Required]
+        [MaxLength(500)]
         public string Name { get; set; }
         public string Description { get; set; }
         public Nullable<int> ProcessVersion { get; set; }
         public Nullable<int> StatusLU { get; set; }
+        [MaxLength(500)]
         public string CreatorUsername { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }

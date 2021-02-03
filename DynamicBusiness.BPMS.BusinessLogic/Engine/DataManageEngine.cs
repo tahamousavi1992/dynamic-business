@@ -176,7 +176,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 sysBpmsVariable variable = variableService.GetInfo(base.EngineSharedModel?.CurrentProcessID, base.EngineSharedModel?.CurrentApplicationPageID, item.Key, new string[] { "sysBpmsVariableDependencies.sysBpmsVariable1" });
                 foreach (sysBpmsVariableDependency vDependency in variable.VariableDependencies)
                 {
-                    var parentVariable = listSetDataList.Select((c, index) => new { item = c, index }).FirstOrDefault(c => c.item.Key != item.Key && c.item.Key == vDependency.VariableTo.Name && i < c.index);
+                    var parentVariable = listSetDataList.Select((c, index) => new { item = c, index }).FirstOrDefault(c => c.item.Key != item.Key && c.item.Key == vDependency.ToVariable.Name && i < c.index);
                     //if variable has a dependency which has higher index ,this code block replace both of them.
                     if (parentVariable != null)
                     {

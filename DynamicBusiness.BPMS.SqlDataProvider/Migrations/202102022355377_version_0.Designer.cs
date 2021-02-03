@@ -7,13 +7,13 @@ namespace DynamicBusiness.BPMS.BusinessLogic.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class version_1 : IMigrationMetadata
+    public sealed partial class version_0 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(version_1));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(version_0));
         
         string IMigrationMetadata.Id
         {
-            get { return "202102012310492_version_1"; }
+            get { return "202102022355377_version_0"; }
         }
         
         string IMigrationMetadata.Source

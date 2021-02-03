@@ -4,7 +4,7 @@ namespace DynamicBusiness.BPMS.Domain
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
-
+    using System.ComponentModel.DataAnnotations;
     public partial class sysBpmsThreadVariable
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -13,6 +13,7 @@ namespace DynamicBusiness.BPMS.Domain
         public System.Guid ThreadID { get; set; }
         [ForeignKey(nameof(Variable))]
         public System.Guid VariableID { get; set; }
+        [Required]
         public string Value { get; set; }
     
         public virtual sysBpmsThread Thread { get; set; }

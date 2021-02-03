@@ -4,7 +4,7 @@ namespace DynamicBusiness.BPMS.Domain
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
-
+    using System.ComponentModel.DataAnnotations;
     public partial class sysBpmsProcessGroup
     {
         
@@ -17,6 +17,8 @@ namespace DynamicBusiness.BPMS.Domain
         public System.Guid ID { get; set; }
         [ForeignKey(nameof(ProcessGroup))]
         public Nullable<System.Guid> ProcessGroupID { get; set; }
+        [Required]
+        [MaxLength(500)]
         public string Name { get; set; }
         public string Description { get; set; }
     

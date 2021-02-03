@@ -4,7 +4,7 @@ namespace DynamicBusiness.BPMS.Domain
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
-
+    using System.ComponentModel.DataAnnotations;
     public partial class sysBpmsVariable
     {
         
@@ -24,8 +24,11 @@ namespace DynamicBusiness.BPMS.Domain
         public Nullable<System.Guid> EntityDefID { get; set; }
         [ForeignKey(nameof(DBConnection))]
         public Nullable<System.Guid> DBConnectionID { get; set; }
+        [Required]
+        [MaxLength(500)]
         public string Name { get; set; }
         public int VarTypeLU { get; set; }
+        [MaxLength(250)]
         public string FieldName { get; set; }
         public string Query { get; set; }
         public Nullable<int> FilterTypeLU { get; set; }

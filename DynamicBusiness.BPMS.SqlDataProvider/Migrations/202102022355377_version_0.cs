@@ -3,7 +3,7 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class version_1 : DbMigration
+    public partial class version_0 : DbMigration
     {
         public override void Up()
         {
@@ -12,9 +12,9 @@
                 c => new
                     {
                         ID = c.Guid(nullable: false, identity: true),
-                        Name = c.String(),
-                        IPAddress = c.String(),
-                        AccessKey = c.String(),
+                        Name = c.String(nullable: false, maxLength: 500),
+                        IPAddress = c.String(nullable: false, maxLength: 50),
+                        AccessKey = c.String(nullable: false, maxLength: 500),
                         IsActive = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.ID);
@@ -59,7 +59,7 @@
                         ID = c.Guid(nullable: false, identity: true),
                         ProcessId = c.Guid(),
                         ApplicationPageID = c.Guid(),
-                        Name = c.String(),
+                        Name = c.String(nullable: false, maxLength: 500),
                         DesignJson = c.String(),
                         OnExitFormCode = c.String(),
                         OnEntryFormCode = c.String(),
@@ -67,9 +67,9 @@
                         ConfigXML = c.String(),
                         ShowInOverview = c.Boolean(),
                         SourceCode = c.String(),
-                        CreatedBy = c.String(),
+                        CreatedBy = c.String(nullable: false, maxLength: 500),
                         CreatedDate = c.DateTime(nullable: false),
-                        UpdatedBy = c.String(),
+                        UpdatedBy = c.String(nullable: false, maxLength: 500),
                         UpdatedDate = c.DateTime(nullable: false),
                     })
                 .PrimaryKey(t => t.ID)
@@ -85,11 +85,11 @@
                         ID = c.Guid(nullable: false, identity: true),
                         FormattedNumber = c.String(),
                         Number = c.Int(),
-                        Name = c.String(),
+                        Name = c.String(nullable: false, maxLength: 500),
                         Description = c.String(),
                         ProcessVersion = c.Int(),
                         StatusLU = c.Int(),
-                        CreatorUsername = c.String(),
+                        CreatorUsername = c.String(maxLength: 500),
                         CreateDate = c.DateTime(),
                         UpdateDate = c.DateTime(),
                         DiagramXML = c.String(),
@@ -112,8 +112,8 @@
                 "dbo.sysBpmsElement",
                 c => new
                     {
-                        ID = c.String(nullable: false, maxLength: 128),
-                        Name = c.String(),
+                        ID = c.String(nullable: false, maxLength: 100),
+                        Name = c.String(nullable: false, maxLength: 500),
                         TypeLU = c.Int(nullable: false),
                         ProcessID = c.Guid(nullable: false),
                     })
@@ -126,11 +126,11 @@
                 c => new
                     {
                         ID = c.Guid(nullable: false, identity: true),
-                        ElementID = c.String(maxLength: 128),
+                        ElementID = c.String(nullable: false, maxLength: 100),
                         TypeLU = c.Int(nullable: false),
                         ConfigurationXML = c.String(),
                         SubType = c.Int(),
-                        RefElementID = c.String(),
+                        RefElementID = c.String(maxLength: 100),
                         CancelActivity = c.Boolean(),
                         ProcessID = c.Guid(nullable: false),
                         MessageTypeID = c.Guid(),
@@ -148,8 +148,8 @@
                 c => new
                     {
                         ID = c.Guid(nullable: false, identity: true),
-                        Name = c.String(),
-                        ParamsXML = c.String(),
+                        Name = c.String(nullable: false, maxLength: 500),
+                        ParamsXML = c.String(nullable: false),
                         IsActive = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.ID);
@@ -185,7 +185,7 @@
                         GatewayStatusXml = c.String(),
                         ProcessID = c.Guid(nullable: false),
                         UserID = c.Guid(),
-                        FormattedNumber = c.String(),
+                        FormattedNumber = c.String(maxLength: 50),
                         Number = c.Int(),
                     })
                 .PrimaryKey(t => t.ID)
@@ -205,8 +205,8 @@
                         EntityID = c.Guid(),
                         ThreadID = c.Guid(),
                         AtachDateOf = c.DateTime(nullable: false),
-                        FileExtention = c.String(),
-                        CaptionOf = c.String(),
+                        FileExtention = c.String(nullable: false, maxLength: 10),
+                        CaptionOf = c.String(nullable: false, maxLength: 1000),
                     })
                 .PrimaryKey(t => t.GUID)
                 .ForeignKey("dbo.sysBpmsDocumentDef", t => t.DocumentDefID)
@@ -222,10 +222,10 @@
                     {
                         ID = c.Guid(nullable: false, identity: true),
                         DocumentFolderID = c.Guid(nullable: false),
-                        NameOf = c.String(),
-                        DisplayName = c.String(),
+                        NameOf = c.String(nullable: false),
+                        DisplayName = c.String(nullable: false),
                         MaxSize = c.Int(),
-                        ValidExtentions = c.String(),
+                        ValidExtentions = c.String(nullable: false),
                         IsMandatory = c.Boolean(nullable: false),
                         Description = c.String(),
                         IsSystemic = c.Boolean(nullable: false),
@@ -240,8 +240,8 @@
                 c => new
                     {
                         ID = c.Guid(nullable: false, identity: true),
-                        NameOf = c.String(),
-                        DisplayName = c.String(),
+                        NameOf = c.String(nullable: false, maxLength: 500),
+                        DisplayName = c.String(nullable: false, maxLength: 500),
                         DocumentFolderID = c.Guid(),
                         IsActive = c.Boolean(nullable: false),
                     })
@@ -254,9 +254,9 @@
                 c => new
                     {
                         ID = c.Guid(nullable: false, identity: true),
-                        DisplayName = c.String(),
-                        Name = c.String(),
-                        DesignXML = c.String(),
+                        DisplayName = c.String(nullable: false, maxLength: 500),
+                        Name = c.String(nullable: false, maxLength: 500),
+                        DesignXML = c.String(nullable: false),
                         IsActive = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.ID);
@@ -270,9 +270,9 @@
                         ApplicationPageID = c.Guid(),
                         EntityDefID = c.Guid(),
                         DBConnectionID = c.Guid(),
-                        Name = c.String(),
+                        Name = c.String(nullable: false, maxLength: 500),
                         VarTypeLU = c.Int(nullable: false),
-                        FieldName = c.String(),
+                        FieldName = c.String(maxLength: 250),
                         Query = c.String(),
                         FilterTypeLU = c.Int(),
                         Collection = c.String(),
@@ -295,11 +295,11 @@
                 c => new
                     {
                         ID = c.Guid(nullable: false, identity: true),
-                        Name = c.String(),
-                        DataSource = c.String(),
-                        InitialCatalog = c.String(),
-                        UserID = c.String(),
-                        Password = c.String(),
+                        Name = c.String(nullable: false, maxLength: 500),
+                        DataSource = c.String(nullable: false, maxLength: 500),
+                        InitialCatalog = c.String(nullable: false, maxLength: 500),
+                        UserID = c.String(nullable: false, maxLength: 500),
+                        Password = c.String(nullable: false, maxLength: 500),
                         IntegratedSecurity = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.ID);
@@ -311,7 +311,7 @@
                         ID = c.Guid(nullable: false, identity: true),
                         ThreadID = c.Guid(nullable: false),
                         VariableID = c.Guid(nullable: false),
-                        Value = c.String(),
+                        Value = c.String(nullable: false),
                     })
                 .PrimaryKey(t => t.ID)
                 .ForeignKey("dbo.sysBpmsThread", t => t.ThreadID)
@@ -325,9 +325,9 @@
                     {
                         ID = c.Guid(nullable: false, identity: true),
                         DependentVariableID = c.Guid(nullable: false),
-                        DependentPropertyName = c.String(),
+                        DependentPropertyName = c.String(nullable: false, maxLength: 250),
                         ToVariableID = c.Guid(),
-                        ToPropertyName = c.String(),
+                        ToPropertyName = c.String(nullable: false, maxLength: 250),
                         Description = c.String(),
                         sysBpmsVariable_ID = c.Guid(),
                         sysBpmsVariable_ID1 = c.Guid(),
@@ -352,7 +352,7 @@
                         OwnerUserID = c.Guid(),
                         StartDate = c.DateTime(nullable: false),
                         EndDate = c.DateTime(),
-                        Description = c.String(),
+                        Description = c.String(nullable: false),
                         OwnerRole = c.String(),
                         PriorityLU = c.Int(),
                         StatusLU = c.Int(nullable: false),
@@ -370,9 +370,9 @@
                 c => new
                     {
                         ID = c.Guid(nullable: false, identity: true),
-                        ElementID = c.String(maxLength: 128),
+                        ElementID = c.String(nullable: false, maxLength: 100),
                         TypeLU = c.Int(nullable: false),
-                        Code = c.String(),
+                        Code = c.String(nullable: false),
                         MarkerTypeLU = c.Int(),
                         OwnerTypeLU = c.Int(),
                         RoleName = c.String(),
@@ -393,7 +393,7 @@
                         ID = c.Guid(nullable: false, identity: true),
                         TaskID = c.Guid(nullable: false),
                         Position = c.Int(nullable: false),
-                        Name = c.String(),
+                        Name = c.String(nullable: false, maxLength: 500),
                         DynamicFormID = c.Guid(),
                     })
                 .PrimaryKey(t => t.ID)
@@ -407,12 +407,12 @@
                 c => new
                     {
                         ID = c.Guid(nullable: false, identity: true),
-                        Username = c.String(),
-                        FirstName = c.String(),
-                        LastName = c.String(),
-                        Email = c.String(),
-                        Tel = c.String(),
-                        Mobile = c.String(),
+                        Username = c.String(nullable: false, maxLength: 500),
+                        FirstName = c.String(maxLength: 500),
+                        LastName = c.String(maxLength: 500),
+                        Email = c.String(maxLength: 500),
+                        Tel = c.String(maxLength: 30),
+                        Mobile = c.String(maxLength: 30),
                     })
                 .PrimaryKey(t => t.ID);
             
@@ -437,7 +437,7 @@
                     {
                         ID = c.Guid(nullable: false, identity: true),
                         DepartmentID = c.Guid(),
-                        Name = c.String(),
+                        Name = c.String(nullable: false, maxLength: 500),
                         IsActive = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.ID)
@@ -449,7 +449,7 @@
                 c => new
                     {
                         ID = c.Guid(nullable: false, identity: true),
-                        ElementID = c.String(maxLength: 128),
+                        ElementID = c.String(nullable: false, maxLength: 100),
                         DefaultSequenceFlowID = c.Guid(),
                         TypeLU = c.Int(),
                         TraceToStart = c.String(),
@@ -470,7 +470,7 @@
                         ID = c.Guid(nullable: false, identity: true),
                         GatewayID = c.Guid(nullable: false),
                         SequenceFlowID = c.Guid(),
-                        Code = c.String(),
+                        Code = c.String(nullable: false),
                     })
                 .PrimaryKey(t => t.ID)
                 .ForeignKey("dbo.sysBpmsGateway", t => t.GatewayID)
@@ -483,11 +483,11 @@
                 c => new
                     {
                         ID = c.Guid(nullable: false, identity: true),
-                        ElementID = c.String(maxLength: 128),
+                        ElementID = c.String(nullable: false, maxLength: 100),
                         ProcessID = c.Guid(nullable: false),
-                        Name = c.String(),
-                        SourceElementID = c.String(),
-                        TargetElementID = c.String(),
+                        Name = c.String(nullable: false, maxLength: 500),
+                        SourceElementID = c.String(nullable: false, maxLength: 100),
+                        TargetElementID = c.String(maxLength: 100),
                     })
                 .PrimaryKey(t => t.ID)
                 .ForeignKey("dbo.sysBpmsElement", t => t.ElementID)
@@ -500,7 +500,7 @@
                 c => new
                     {
                         ID = c.Guid(nullable: false, identity: true),
-                        ElementID = c.String(maxLength: 128),
+                        ElementID = c.String(nullable: false, maxLength: 100),
                         ProcessID = c.Guid(nullable: false),
                     })
                 .PrimaryKey(t => t.ID)
@@ -515,7 +515,7 @@
                     {
                         ID = c.Guid(nullable: false, identity: true),
                         ProcessGroupID = c.Guid(),
-                        Name = c.String(),
+                        Name = c.String(nullable: false, maxLength: 500),
                         Description = c.String(),
                     })
                 .PrimaryKey(t => t.ID)
@@ -527,10 +527,10 @@
                 c => new
                     {
                         ID = c.Guid(nullable: false, identity: true),
-                        Name = c.String(),
-                        Label = c.String(),
-                        DefaultValue = c.String(),
-                        Value = c.String(),
+                        Name = c.String(nullable: false, maxLength: 500),
+                        Label = c.String(nullable: false, maxLength: 500),
+                        DefaultValue = c.String(nullable: false),
+                        Value = c.String(nullable: false),
                         LastUpdateOn = c.DateTime(),
                     })
                 .PrimaryKey(t => t.ID);
@@ -542,11 +542,11 @@
                         ID = c.Guid(nullable: false, identity: true),
                         ObjectTypeLU = c.Int(nullable: false),
                         ObjectID = c.Guid(),
-                        SMTP = c.String(),
-                        Port = c.String(),
-                        MailUserName = c.String(),
-                        MailPassword = c.String(),
-                        Email = c.String(),
+                        SMTP = c.String(nullable: false, maxLength: 500),
+                        Port = c.String(nullable: false, maxLength: 10),
+                        MailUserName = c.String(nullable: false, maxLength: 500),
+                        MailPassword = c.String(nullable: false, maxLength: 500),
+                        Email = c.String(nullable: false, maxLength: 500),
                     })
                 .PrimaryKey(t => t.ID);
             
@@ -556,8 +556,8 @@
                     {
                         ID = c.Guid(nullable: false, identity: true),
                         LUTableID = c.Guid(nullable: false),
-                        NameOf = c.String(),
-                        CodeOf = c.String(),
+                        NameOf = c.String(nullable: false, maxLength: 500),
+                        CodeOf = c.String(nullable: false, maxLength: 500),
                         DisplayOrder = c.Int(nullable: false),
                         IsSystemic = c.Boolean(nullable: false),
                         IsActive = c.Boolean(nullable: false),
@@ -571,10 +571,19 @@
                 c => new
                     {
                         ID = c.Guid(nullable: false, identity: true),
-                        NameOf = c.String(),
-                        Alias = c.String(),
+                        NameOf = c.String(nullable: false, maxLength: 500),
+                        Alias = c.String(nullable: false, maxLength: 500),
                         IsSystemic = c.Boolean(nullable: false),
                         IsActive = c.Boolean(nullable: false),
+                    })
+                .PrimaryKey(t => t.ID);
+            
+            CreateTable(
+                "dbo.sysBpmsSplit_Result",
+                c => new
+                    {
+                        ID = c.Int(nullable: false, identity: true),
+                        Data = c.String(),
                     })
                 .PrimaryKey(t => t.ID);
             
@@ -686,6 +695,7 @@
             DropIndex("dbo.sysBpmsApplicationPageAccess", new[] { "UserID" });
             DropIndex("dbo.sysBpmsApplicationPageAccess", new[] { "DepartmentID" });
             DropIndex("dbo.sysBpmsApplicationPageAccess", new[] { "ApplicationPageID" });
+            DropTable("dbo.sysBpmsSplit_Result");
             DropTable("dbo.sysBpmsLUTable");
             DropTable("dbo.sysBpmsLURow");
             DropTable("dbo.sysBpmsEmailAccount");
