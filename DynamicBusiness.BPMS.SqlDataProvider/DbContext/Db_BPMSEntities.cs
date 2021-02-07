@@ -12,21 +12,23 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
     public partial class Db_BPMSEntities : DbContext
     {
-        //public Db_BPMSEntities()
-        //  : base(DomainUtility.GetConnectionName())
-        //{
-        //    Database.SetInitializer(new NullDatabaseInitializer<Db_BPMSEntities>());
-        //}
-
         public Db_BPMSEntities()
-            : base("Db_BPMSEntities")
+          : base(DomainUtility.GetConnectionName())
         {
             Database.SetInitializer(new NullDatabaseInitializer<Db_BPMSEntities>());
         }
 
+        //public Db_BPMSEntities()
+        //    : base("Db_BPMSEntities")
+        //{
+        //    Database.SetInitializer(new NullDatabaseInitializer<Db_BPMSEntities>());
+        //}
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            // It must be commented when running add-migration command.
             modelBuilder.Conventions.Add(new FunctionsConvention<Db_BPMSEntities>("dbo"));
+
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
             //throw new UnintentionalCodeFirstException(); 

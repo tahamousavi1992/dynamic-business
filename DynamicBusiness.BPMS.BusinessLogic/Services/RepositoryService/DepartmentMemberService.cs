@@ -49,6 +49,21 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             return resultOperation;
         }
 
+        public ResultOperation Delete(Guid userId, Guid departmentId)
+        {
+            ResultOperation resultOperation = new ResultOperation();
+            if (resultOperation.IsSuccess)
+            {
+                var list = this.UnitOfWork.Repository<IDepartmentMemberRepository>().GetList(departmentId, null, userId);
+                foreach (var item in list)
+                {
+                    this.UnitOfWork.Repository<IDepartmentMemberRepository>().Delete(item.ID);
+                }
+                this.UnitOfWork.Save();
+            }
+            return resultOperation;
+        }
+
         public sysBpmsDepartmentMember GetInfo(Guid ID)
         {
             return this.UnitOfWork.Repository<IDepartmentMemberRepository>().GetInfo(ID);

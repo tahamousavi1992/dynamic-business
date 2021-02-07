@@ -167,17 +167,9 @@ namespace DynamicBusiness.BPMS.Domain
         private static string ConnectionString { get; set; }
         public static string GetConnectionName()
         {
-            //if (DomainUtility.IsTestEnvironment())
-            //    return "Db_BPMSEntities";
             if (string.IsNullOrWhiteSpace(ConnectionString))
             {
-                string connection = System.Configuration.ConfigurationManager.ConnectionStrings["SiteSqlServer"].ConnectionString;
-                System.Data.SqlClient.SqlConnectionStringBuilder scsb = new System.Data.SqlClient.SqlConnectionStringBuilder(connection);
-
-                EntityConnectionStringBuilder ecb = new EntityConnectionStringBuilder();
-                ecb.Provider = "System.Data.SqlClient";
-                ecb.ProviderConnectionString = scsb.ConnectionString;
-                ConnectionString = ecb.ConnectionString;
+                ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["SiteSqlServer"].ConnectionString;
             }
             return ConnectionString;
         }

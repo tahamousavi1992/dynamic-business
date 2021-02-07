@@ -10,8 +10,8 @@ namespace DynamicBusiness.BPMS.Controllers
 {
     public class BpmsDepartmentMemberController : BpmsAdminApiControlBase
     {
-        public object GetList([System.Web.Http.FromUri]DepartmentMemberIndexSearchDTO indexSearchVM)
-        { 
+        public object GetList([System.Web.Http.FromUri] DepartmentMemberIndexSearchDTO indexSearchVM)
+        {
             using (DepartmentMemberService departmentMemberService = new DepartmentMemberService())
             {
                 indexSearchVM.Update(departmentMemberService.GetList(indexSearchVM.DepartmentID, null, null, indexSearchVM.GetPagingProperties).Select(c => new DepartmentMemberListDTO(c)).ToList());
@@ -68,11 +68,11 @@ namespace DynamicBusiness.BPMS.Controllers
         }
 
         [HttpDelete]
-        public object Delete(Guid ID)
+        public object Delete(Guid UserID, Guid DepartmentID)
         {
             using (DepartmentMemberService departmentMemberService = new DepartmentMemberService())
             {
-                ResultOperation resultOperation = departmentMemberService.Delete(ID);
+                ResultOperation resultOperation = departmentMemberService.Delete(UserID, DepartmentID);
                 if (resultOperation.IsSuccess)
                     return new PostMethodMessage(SharedLang.Get("Success.Text"), DisplayMessageType.success);
                 else

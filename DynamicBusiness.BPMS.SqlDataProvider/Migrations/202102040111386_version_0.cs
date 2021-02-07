@@ -578,15 +578,6 @@
                     })
                 .PrimaryKey(t => t.ID);
             
-            CreateTable(
-                "dbo.sysBpmsSplit_Result",
-                c => new
-                    {
-                        ID = c.Int(nullable: false, identity: true),
-                        Data = c.String(),
-                    })
-                .PrimaryKey(t => t.ID);
-            
         }
         
         public override void Down()
@@ -695,7 +686,6 @@
             DropIndex("dbo.sysBpmsApplicationPageAccess", new[] { "UserID" });
             DropIndex("dbo.sysBpmsApplicationPageAccess", new[] { "DepartmentID" });
             DropIndex("dbo.sysBpmsApplicationPageAccess", new[] { "ApplicationPageID" });
-            DropTable("dbo.sysBpmsSplit_Result");
             DropTable("dbo.sysBpmsLUTable");
             DropTable("dbo.sysBpmsLURow");
             DropTable("dbo.sysBpmsEmailAccount");

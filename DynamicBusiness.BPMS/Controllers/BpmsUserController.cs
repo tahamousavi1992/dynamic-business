@@ -13,13 +13,13 @@ using DynamicBusiness.BPMS.SharedPresentation;
 using DotNetNuke.Entities.Users;
 
 namespace DynamicBusiness.BPMS.Controllers
-{ 
+{
     public class BpmsUserController : BpmsAdminApiControlBase
     {
         // GET: BPMSUser
         [HttpGet]
         public object GetList([System.Web.Http.FromUri] UserIndexSearchDTO indexSearchVM)
-        { 
+        {
             using (UserService userService = new UserService())
             {
                 List<sysBpmsUser> list = userService.GetList(
@@ -67,18 +67,46 @@ namespace DynamicBusiness.BPMS.Controllers
             if (!string.IsNullOrWhiteSpace(user.Username))
             {
                 UserCodeHelper userCodeHelper = new UserCodeHelper(null, null);
-                if (userCodeHelper.GetSiteUser(user.Username) == null)
+                UserInfo userInfo = userCodeHelper.GetSiteUser(user.Username);
+                if (userInfo == null)
                 {
                     bool createResult = userCodeHelper.CreateSiteUser(user.Username, user.FirstName, user.LastName, user.Email, (string.IsNullOrWhiteSpace(UserDTO.Password) ? UserController.GeneratePassword() : UserDTO.Password), false);
                     if (!createResult)
                         return new PostMethodMessage(SharedLang.Get("CreateUserError.Text"), DisplayMessageType.error);
+                }
+                else
+                {
+                    //if user exists and some inputs are null, it fills those with userInfo.
+                    if (string.IsNullOrWhiteSpace(user.FirstName))
+                        user.FirstName = userInfo.FirstName.ToStringObj().Trim();
+                    if (string.IsNullOrWhiteSpace(user.LastName))
+                        user.LastName = userInfo.LastName.ToStringObj().Trim();
+                    if (string.IsNullOrWhiteSpace(user.Tel))
+                        user.Tel = userInfo.Profile.Telephone.ToStringObj().Trim();
+                    if (string.IsNullOrWhiteSpace(user.Mobile))
+                        user.Mobile = userInfo.Profile.Cell.ToStringObj().Trim();
+                    if (string.IsNullOrWhiteSpace(user.Email))
+                        user.Email = userInfo.Email.ToStringObj().Trim();
                 }
             }
 
             using (UserService userService = new UserService())
             {
                 if (user.ID != Guid.Empty)
+                {
                     resultOperation = userService.Update(user, emailAccount);
+                    //It deletes EmailAccount's record from database if user sends all emailAccount's inputs null.
+                    if (resultOperation.IsSuccess && emailAccount == null)
+                    {
+                        using (EmailAccountService emailAccountService = new EmailAccountService())
+                        {
+                            emailAccount = emailAccountService.GetList((int)sysBpmsEmailAccount.e_ObjectTypeLU.User, user.ID, null).LastOrDefault();
+                            if (emailAccount != null)
+                                resultOperation = emailAccountService.Delete(emailAccount.ID);
+                        }
+
+                    }
+                }
                 else
                     resultOperation = userService.Add(user, emailAccount);
             }
