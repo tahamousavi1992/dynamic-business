@@ -22,10 +22,10 @@ namespace DynamicBusiness.BPMS.Domain
         [ForeignKey(nameof(Process))]
         public System.Guid ProcessID { get; set; }
         [MaxLength(500)]
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         public string Name { get; set; }
         [MaxLength(100)]
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         public string SourceElementID { get; set; }
         [MaxLength(100)]
         public string TargetElementID { get; set; }

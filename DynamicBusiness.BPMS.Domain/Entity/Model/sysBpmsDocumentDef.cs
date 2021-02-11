@@ -16,12 +16,12 @@ namespace DynamicBusiness.BPMS.Domain
         public System.Guid ID { get; set; }
         [ForeignKey(nameof(DocumentFolder))]
         public System.Guid DocumentFolderID { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         public string NameOf { get; set; }
         [Required]
         public string DisplayName { get; set; }
         public Nullable<int> MaxSize { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         public string ValidExtentions { get; set; }
         public bool IsMandatory { get; set; }
         public string Description { get; set; }

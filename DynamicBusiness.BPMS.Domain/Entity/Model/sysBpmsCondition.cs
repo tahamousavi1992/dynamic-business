@@ -13,7 +13,7 @@ namespace DynamicBusiness.BPMS.Domain
         public System.Guid GatewayID { get; set; }
         [ForeignKey(nameof(SequenceFlow))]
         public Nullable<System.Guid> SequenceFlowID { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         public string Code { get; set; }
     
         public virtual sysBpmsGateway Gateway { get; set; }

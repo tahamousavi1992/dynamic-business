@@ -12,7 +12,7 @@ namespace DynamicBusiness.BPMS.Domain
         [ForeignKey(nameof(Task))]
         public System.Guid TaskID { get; set; }
         public int Position { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         [MaxLength(500)]
         public string Name { get; set; }
         [ForeignKey(nameof(DynamicForm))]

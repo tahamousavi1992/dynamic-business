@@ -25,7 +25,7 @@ namespace DynamicBusiness.BPMS.Domain
         public System.Guid ID { get; set; }
         public string FormattedNumber { get; set; }
         public Nullable<int> Number { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         [MaxLength(500)]
         public string Name { get; set; }
         public string Description { get; set; }

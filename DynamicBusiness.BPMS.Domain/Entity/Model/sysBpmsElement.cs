@@ -18,7 +18,7 @@ namespace DynamicBusiness.BPMS.Domain
         }
         [MaxLength(100)]
         public string ID { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         [MaxLength(500)]
         public string Name { get; set; }
         public int TypeLU { get; set; }

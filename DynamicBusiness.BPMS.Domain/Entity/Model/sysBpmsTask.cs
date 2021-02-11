@@ -17,11 +17,11 @@ namespace DynamicBusiness.BPMS.Domain
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public System.Guid ID { get; set; }
         [ForeignKey(nameof(Element))]
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         [MaxLength(100)]
         public string ElementID { get; set; }
         public int TypeLU { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         public string Code { get; set; }
         public Nullable<int> MarkerTypeLU { get; set; }
         public Nullable<int> OwnerTypeLU { get; set; }

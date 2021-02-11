@@ -25,10 +25,10 @@ namespace DynamicBusiness.BPMS.Domain
         public Nullable<System.Guid> ThreadID { get; set; }
 
         public System.DateTime AtachDateOf { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         [MaxLength(10)]
         public string FileExtention { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         [MaxLength(1000)]
         public string CaptionOf { get; set; }
     

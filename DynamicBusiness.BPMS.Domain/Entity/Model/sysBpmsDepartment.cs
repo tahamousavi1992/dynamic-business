@@ -18,7 +18,7 @@ namespace DynamicBusiness.BPMS.Domain
         public System.Guid ID { get; set; }
         [ForeignKey(nameof(ParentDepartment))]
         public Nullable<System.Guid> DepartmentID { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         [MaxLength(500)]
         public string Name { get; set; }
         public bool IsActive { get; set; }

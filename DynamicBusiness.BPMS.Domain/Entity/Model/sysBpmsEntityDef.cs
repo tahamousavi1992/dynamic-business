@@ -15,13 +15,13 @@ namespace DynamicBusiness.BPMS.Domain
         }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public System.Guid ID { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         [MaxLength(500)]
         public string DisplayName { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         [MaxLength(500)]
         public string Name { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         public string DesignXML { get; set; }
         public bool IsActive { get; set; }
     

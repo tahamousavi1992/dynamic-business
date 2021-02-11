@@ -9,15 +9,15 @@ namespace DynamicBusiness.BPMS.Domain
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public System.Guid ID { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         [MaxLength(500)]
         public string Name { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         [MaxLength(500)]
         public string Label { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         public string DefaultValue { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         public string Value { get; set; }
         public Nullable<System.DateTime> LastUpdateOn { get; set; }
     }

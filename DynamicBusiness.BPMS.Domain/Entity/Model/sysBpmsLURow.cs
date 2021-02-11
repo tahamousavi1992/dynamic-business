@@ -11,10 +11,10 @@ namespace DynamicBusiness.BPMS.Domain
         public System.Guid ID { get; set; }
         [ForeignKey(nameof(LUTable))]
         public System.Guid LUTableID { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         [MaxLength(500)]
         public string NameOf { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         [MaxLength(500)]
         public string CodeOf { get; set; }
         public int DisplayOrder { get; set; }

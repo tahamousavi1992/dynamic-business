@@ -24,7 +24,7 @@ namespace DynamicBusiness.BPMS.Domain
         public Nullable<System.Guid> EntityDefID { get; set; }
         [ForeignKey(nameof(DBConnection))]
         public Nullable<System.Guid> DBConnectionID { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         [MaxLength(500)]
         public string Name { get; set; }
         public int VarTypeLU { get; set; }

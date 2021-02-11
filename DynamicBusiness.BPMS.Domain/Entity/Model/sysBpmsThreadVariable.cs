@@ -13,7 +13,7 @@ namespace DynamicBusiness.BPMS.Domain
         public System.Guid ThreadID { get; set; }
         [ForeignKey(nameof(Variable))]
         public System.Guid VariableID { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         public string Value { get; set; }
     
         public virtual sysBpmsThread Thread { get; set; }

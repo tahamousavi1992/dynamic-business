@@ -21,12 +21,13 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             return resultOperation;
         }
 
-        public ResultOperation Update(sysBpmsElement Element)
+        public ResultOperation Update(sysBpmsElement element)
         {
             ResultOperation resultOperation = new ResultOperation();
             if (resultOperation.IsSuccess)
             {
-                this.UnitOfWork.Repository<IElementRepository>().Update(Element);
+                element.Name = element.Name.ToStringObj().Trim();
+                this.UnitOfWork.Repository<IElementRepository>().Update(element);
                 this.UnitOfWork.Save();
             }
             return resultOperation;

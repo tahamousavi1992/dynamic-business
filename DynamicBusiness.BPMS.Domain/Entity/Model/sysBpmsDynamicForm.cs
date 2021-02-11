@@ -18,7 +18,7 @@ namespace DynamicBusiness.BPMS.Domain
         public Nullable<System.Guid> ProcessId { get; set; }
         [ForeignKey(nameof(ApplicationPage))]
         public Nullable<System.Guid> ApplicationPageID { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         [MaxLength(500)]
         public string Name { get; set; }
         public string DesignJson { get; set; }
@@ -28,11 +28,11 @@ namespace DynamicBusiness.BPMS.Domain
         public string ConfigXML { get; set; }
         public Nullable<bool> ShowInOverview { get; set; }
         public string SourceCode { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         [MaxLength(500)]
         public string CreatedBy { get; set; }
         public System.DateTime CreatedDate { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         [MaxLength(500)]
         public string UpdatedBy { get; set; }
         public System.DateTime UpdatedDate { get; set; }

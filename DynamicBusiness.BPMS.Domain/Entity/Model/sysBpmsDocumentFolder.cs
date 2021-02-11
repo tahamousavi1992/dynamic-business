@@ -15,10 +15,10 @@ namespace DynamicBusiness.BPMS.Domain
         }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public System.Guid ID { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         [MaxLength(500)]
         public string NameOf { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         [MaxLength(500)]
         public string DisplayName { get; set; }
         [ForeignKey(nameof(ParentFolder))]

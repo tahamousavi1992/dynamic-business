@@ -11,12 +11,12 @@ namespace DynamicBusiness.BPMS.Domain
         public System.Guid ID { get; set; }
         [ForeignKey(nameof(DependentVariable))]
         public System.Guid DependentVariableID { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         [MaxLength(250)]
         public string DependentPropertyName { get; set; }
         [ForeignKey(nameof(ToVariable))]
         public Nullable<System.Guid> ToVariableID { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         [MaxLength(250)]
         public string ToPropertyName { get; set; }
         public string Description { get; set; }
