@@ -55,12 +55,11 @@ namespace DynamicBusiness.BPMS.Controllers
             ResultOperation resultOperation = new ResultOperation();
             sysBpmsEmailAccount emailAccount = null;
             if (!string.IsNullOrWhiteSpace(UserDTO.EmailAccountDTO?.Email) ||
-                !string.IsNullOrWhiteSpace(UserDTO.EmailAccountDTO?.SMTP) ||
-                 !string.IsNullOrWhiteSpace(UserDTO.EmailAccountDTO?.MailUserName))
+                !string.IsNullOrWhiteSpace(UserDTO.EmailAccountDTO?.SMTP))
             {
                 emailAccount = new sysBpmsEmailAccount();
                 resultOperation = emailAccount.Update((int)sysBpmsEmailAccount.e_ObjectTypeLU.User, user.ID, UserDTO.EmailAccountDTO?.SMTP, UserDTO.EmailAccountDTO?.Port,
-                  UserDTO.EmailAccountDTO?.MailUserName, UserDTO.EmailAccountDTO?.MailPassword, UserDTO.EmailAccountDTO?.Email);
+                   UserDTO.EmailAccountDTO?.MailPassword, UserDTO.EmailAccountDTO?.Email);
                 if (!resultOperation.IsSuccess)
                     return new PostMethodMessage(resultOperation.GetErrors(), DisplayMessageType.error);
             }

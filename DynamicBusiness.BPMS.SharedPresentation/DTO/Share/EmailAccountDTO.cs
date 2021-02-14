@@ -23,7 +23,6 @@ namespace DynamicBusiness.BPMS.SharedPresentation
                 this.Email = emailAccount.Email;
                 this.SMTP = emailAccount.SMTP;
                 this.Port = emailAccount.Port;
-                this.MailUserName = emailAccount.MailUserName;
                 this.MailPassword = emailAccount.MailPassword;
             }
         }
@@ -39,10 +38,7 @@ namespace DynamicBusiness.BPMS.SharedPresentation
          
         [DataMember]
         public string Port { get; set; }
-         
-        [DataMember]
-        public string MailUserName { get; set; }
-         
+
         [DataType(DataType.Password)]
         [DataMember]
         public string MailPassword { get; set; }

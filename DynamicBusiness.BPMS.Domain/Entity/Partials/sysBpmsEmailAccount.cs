@@ -19,17 +19,16 @@ namespace DynamicBusiness.BPMS.Domain
             Department = 2,
             User = 3,
         }
-        public ResultOperation Update(int ObjectTypeLU, Guid? ObjectID, string smtp, string port, string mailUserName, string mailPassword, string email)
+        public ResultOperation Update(int ObjectTypeLU, Guid? ObjectID, string smtp, string port, string mailPassword, string email)
         {
             this.ObjectTypeLU = ObjectTypeLU;
             this.ObjectID = ObjectID;
             this.SMTP = smtp;
-            this.Port = port;
-            this.MailUserName = mailUserName;
+            this.Port = port; 
             this.MailPassword = mailPassword;
             this.Email = email;
             ResultOperation resultOperation = new ResultOperation(this);
-            if (!string.IsNullOrWhiteSpace(this.Email + this.MailPassword + this.MailUserName + this.SMTP))
+            if (!string.IsNullOrWhiteSpace(this.Email + this.MailPassword  + this.SMTP))
             { 
                 if (string.IsNullOrWhiteSpace(this.Email))
                     resultOperation.AddError(SharedLang.GetReuired(nameof(sysBpmsEmailAccount.Email), nameof(sysBpmsEmailAccount)));
@@ -37,8 +36,6 @@ namespace DynamicBusiness.BPMS.Domain
                     resultOperation.AddError(SharedLang.GetReuired(nameof(sysBpmsEmailAccount.SMTP), nameof(sysBpmsEmailAccount)));
                 if (string.IsNullOrWhiteSpace(this.Port))
                     resultOperation.AddError(SharedLang.GetReuired(nameof(sysBpmsEmailAccount.Port), nameof(sysBpmsEmailAccount)));
-                if (string.IsNullOrWhiteSpace(this.MailUserName))
-                    resultOperation.AddError(SharedLang.GetReuired(nameof(sysBpmsEmailAccount.MailUserName), nameof(sysBpmsEmailAccount)));
                 if (string.IsNullOrWhiteSpace(this.MailPassword))
                     resultOperation.AddError(SharedLang.GetReuired(nameof(sysBpmsEmailAccount.MailPassword), nameof(sysBpmsEmailAccount)));
             }
@@ -52,7 +49,6 @@ namespace DynamicBusiness.BPMS.Domain
             this.ObjectID = emailAccount.ObjectID;
             this.SMTP = emailAccount.SMTP;
             this.Port = emailAccount.Port;
-            this.MailUserName = emailAccount.MailUserName;
             this.MailPassword = emailAccount.MailPassword;
             this.Email = emailAccount.Email;
         }

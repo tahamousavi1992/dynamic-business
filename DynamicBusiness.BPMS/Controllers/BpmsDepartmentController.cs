@@ -61,7 +61,7 @@ namespace DynamicBusiness.BPMS.Controllers
 
                 sysBpmsEmailAccount emailAccount = new sysBpmsEmailAccount();
 
-                ResultOperation resultOperation = emailAccount.Update((int)sysBpmsEmailAccount.e_ObjectTypeLU.Department, department.ID, departmentDTO.SMTP, departmentDTO.Port, departmentDTO.MailUserName, departmentDTO.MailPassword, departmentDTO.WorkEmail);
+                ResultOperation resultOperation = emailAccount.Update((int)sysBpmsEmailAccount.e_ObjectTypeLU.Department, department.ID, departmentDTO.SMTP, departmentDTO.Port, departmentDTO.MailPassword, departmentDTO.WorkEmail);
                 if (!resultOperation.IsSuccess)
                     return new PostMethodMessage(resultOperation.GetErrors(), DisplayMessageType.error);
                 if (departmentDTO.ID != Guid.Empty)

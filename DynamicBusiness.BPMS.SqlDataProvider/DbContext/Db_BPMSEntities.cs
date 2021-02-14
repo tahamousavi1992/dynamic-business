@@ -72,6 +72,9 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         /// </summary>
         public virtual DbSet<sysBpmsSplit_Result> sysBpmsSplit_Results { get; set; }
 
+        /// <summary>
+        /// DbFunction attribute must be removed or commented when running add-migration command
+        /// </summary>
         [DbFunction(nameof(Db_BPMSEntities), "sysBpmsSplit")]
         public virtual IQueryable<sysBpmsSplit_Result> sysBpmsSplit(string rowData, string delimeter)
         {

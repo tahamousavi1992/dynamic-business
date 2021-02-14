@@ -544,7 +544,6 @@
                         ObjectID = c.Guid(),
                         SMTP = c.String(nullable: false, maxLength: 500),
                         Port = c.String(nullable: false, maxLength: 10),
-                        MailUserName = c.String(nullable: false, maxLength: 500),
                         MailPassword = c.String(nullable: false, maxLength: 500),
                         Email = c.String(nullable: false, maxLength: 500),
                     })

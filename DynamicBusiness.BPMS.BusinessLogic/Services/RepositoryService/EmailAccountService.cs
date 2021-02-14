@@ -15,7 +15,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         {
             sysBpmsEmailAccount current = emailAccount.ObjectID == null ? null :
                 this.GetList(emailAccount.ObjectTypeLU, emailAccount.ObjectID, null).LastOrDefault();
-            if (!string.IsNullOrWhiteSpace(emailAccount.Email + emailAccount.MailPassword + emailAccount.MailUserName + emailAccount.SMTP))
+            if (!string.IsNullOrWhiteSpace(emailAccount.Email + emailAccount.MailPassword + emailAccount.SMTP))
             {
                 if (current == null)
                     return this.Add(emailAccount);

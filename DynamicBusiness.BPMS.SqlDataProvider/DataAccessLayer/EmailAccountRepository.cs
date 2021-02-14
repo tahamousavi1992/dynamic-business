@@ -25,8 +25,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         public void Update(sysBpmsEmailAccount emailAccount)
         {
             sysBpmsEmailAccount retVal = (from p in this.Context.sysBpmsEmailAccounts
-                                      where p.ID == emailAccount.ID
-                                   select p).FirstOrDefault();
+                                          where p.ID == emailAccount.ID
+                                          select p).FirstOrDefault();
             retVal.Load(emailAccount);
         }
 
@@ -59,9 +59,9 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 if (Math.Ceiling(Convert.ToDecimal(currentPaging.RowsCount) / Convert.ToDecimal(currentPaging.PageSize)) < currentPaging.PageIndex)
                     currentPaging.PageIndex = 1;
 
-                rettVal = query.OrderByDescending(p => p.MailUserName).Skip((currentPaging.PageIndex - 1) * currentPaging.PageSize).Take(currentPaging.PageSize).AsNoTracking().ToList();
+                rettVal = query.OrderByDescending(p => p.Email).Skip((currentPaging.PageIndex - 1) * currentPaging.PageSize).Take(currentPaging.PageSize).AsNoTracking().ToList();
             }
-            else rettVal = query.OrderByDescending(p => p.MailUserName).ToList();
+            else rettVal = query.OrderByDescending(p => p.Email).ToList();
 
             return rettVal;
         }

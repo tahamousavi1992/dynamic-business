@@ -123,9 +123,6 @@
   <data name="MailPassword.Text" xml:space="preserve">
     <value>Email Password</value>
   </data>
-  <data name="MailUserName.Text" xml:space="preserve">
-    <value>Email User Name</value>
-  </data>
   <data name="Port.Text" xml:space="preserve">
     <value>Port</value>
   </data>

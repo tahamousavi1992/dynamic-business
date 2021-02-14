@@ -19,9 +19,6 @@ namespace DynamicBusiness.BPMS.Domain
         public string Port { get; set; }
         [Required(AllowEmptyStrings = true)]
         [MaxLength(500)]
-        public string MailUserName { get; set; }
-        [Required(AllowEmptyStrings = true)]
-        [MaxLength(500)]
         public string MailPassword { get; set; }
         [Required(AllowEmptyStrings = true)]
         [MaxLength(500)]

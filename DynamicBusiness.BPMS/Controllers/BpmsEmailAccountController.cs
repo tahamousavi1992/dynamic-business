@@ -40,7 +40,7 @@ namespace DynamicBusiness.BPMS.Controllers
             {
                 sysBpmsEmailAccount emailAccount = new sysBpmsEmailAccount();
                 ResultOperation resultOperation = emailAccount.Update((int)sysBpmsEmailAccount.e_ObjectTypeLU.Systemic, null, EmailAccountDTO.SMTP, EmailAccountDTO.Port,
-                    EmailAccountDTO.MailUserName, EmailAccountDTO.MailPassword, EmailAccountDTO.Email);
+                   EmailAccountDTO.MailPassword, EmailAccountDTO.Email);
 
                 if (!resultOperation.IsSuccess)
                     return new PostMethodMessage(resultOperation.GetErrors(), DisplayMessageType.error);
