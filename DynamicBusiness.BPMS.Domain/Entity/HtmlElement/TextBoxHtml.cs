@@ -82,7 +82,7 @@ namespace DynamicBusiness.BPMS.Domain
             justPersianCharacter,
             symbol,
             characterAndNumber,
-            sepratorNumber,
+            money,
             phone,
             enCharacterAndNumber,
             allExceptInPersian,
