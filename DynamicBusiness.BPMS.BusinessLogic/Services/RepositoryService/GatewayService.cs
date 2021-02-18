@@ -121,6 +121,13 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                             SourceElementID = _WorkflowSequenceFlow.SourceRef,
                             Name = _WorkflowSequenceFlow.Name,
                             ElementID = _WorkflowSequenceFlow.ID,
+                            Element = new sysBpmsElement()
+                            {
+                                ID = _WorkflowSequenceFlow.ID,
+                                Name = _WorkflowSequenceFlow.Name,
+                                ProcessID = processID,
+                                TypeLU = (int)sysBpmsElement.e_TypeLU.Sequence,
+                            },
                             ID = Guid.NewGuid(),
                             ProcessID = processID,
                         };
@@ -180,6 +187,13 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                             SourceElementID = _WorkflowSequenceFlow.SourceRef,
                             Name = _WorkflowSequenceFlow.Name,
                             ElementID = _WorkflowSequenceFlow.ID,
+                            Element = new sysBpmsElement()
+                            {
+                                ID = _WorkflowSequenceFlow.ID,
+                                Name = _WorkflowSequenceFlow.Name,
+                                ProcessID = processID,
+                                TypeLU = (int)sysBpmsElement.e_TypeLU.Sequence,
+                            },
                             ID = Guid.NewGuid(),
                             ProcessID = processID,
                         };

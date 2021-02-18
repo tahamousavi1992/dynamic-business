@@ -22,6 +22,13 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public void Update(sysBpmsSequenceFlow sequenceFlow)
         {
+            //To fix 'Attaching an entity failed' error.
+            var local = this.Context.Set<sysBpmsSequenceFlow>().Local.FirstOrDefault(f => f.ID == sequenceFlow.ID);
+            if (local != null)
+            {
+                this.Context.Entry(local).State = EntityState.Detached;
+                local = null;
+            }
             this.Context.Entry(sequenceFlow).State = EntityState.Modified;
         }
 

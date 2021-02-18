@@ -101,11 +101,10 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             ResultOperation resultOperation = new ResultOperation();
             try
             {
-                List<Domain.sysBpmsTask> Tasks = this.GetList(null, processID);
-                List<WorkflowLane> WorkflowLanes = WorkflowLane.GetAllLanes(_WorkflowProcess.LaneSet);
+                List<Domain.sysBpmsTask> tasks = this.GetList(null, processID);
                 List<Guid> listDeleted = new List<Guid>();
                 //delete userTask
-                foreach (Domain.sysBpmsTask item in Tasks.Where(c => c.TypeLU == (int)Domain.sysBpmsTask.e_TypeLU.UserTask && !_WorkflowProcess.UserTasks.Any(d => d.ID == c.ElementID)))
+                foreach (Domain.sysBpmsTask item in tasks.Where(c => c.TypeLU == (int)Domain.sysBpmsTask.e_TypeLU.UserTask && !_WorkflowProcess.UserTasks.Any(d => d.ID == c.ElementID)))
                 {
                     resultOperation = this.Delete(item.ID);
                     listDeleted.Add(item.ID);
@@ -114,7 +113,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 }
 
                 //delete serviceTask
-                foreach (Domain.sysBpmsTask item in Tasks.Where(c => c.TypeLU == (int)Domain.sysBpmsTask.e_TypeLU.ServiceTask && !_WorkflowProcess.ServiceTasks.Any(d => d.ID == c.ElementID)))
+                foreach (Domain.sysBpmsTask item in tasks.Where(c => c.TypeLU == (int)Domain.sysBpmsTask.e_TypeLU.ServiceTask && !_WorkflowProcess.ServiceTasks.Any(d => d.ID == c.ElementID)))
                 {
                     resultOperation = this.Delete(item.ID);
                     listDeleted.Add(item.ID);
@@ -123,7 +122,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 }
 
                 //delete scriptTask
-                foreach (Domain.sysBpmsTask item in Tasks.Where(c => c.TypeLU == (int)Domain.sysBpmsTask.e_TypeLU.ScriptTask && !_WorkflowProcess.ScriptTasks.Any(d => d.ID == c.ElementID)))
+                foreach (Domain.sysBpmsTask item in tasks.Where(c => c.TypeLU == (int)Domain.sysBpmsTask.e_TypeLU.ScriptTask && !_WorkflowProcess.ScriptTasks.Any(d => d.ID == c.ElementID)))
                 {
                     resultOperation = this.Delete(item.ID);
                     listDeleted.Add(item.ID);
@@ -132,27 +131,27 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 }
 
                 //delete task
-                foreach (Domain.sysBpmsTask item in Tasks.Where(c => c.TypeLU == (int)Domain.sysBpmsTask.e_TypeLU.Task && !_WorkflowProcess.Tasks.Any(d => d.ID == c.ElementID)))
+                foreach (Domain.sysBpmsTask item in tasks.Where(c => c.TypeLU == (int)Domain.sysBpmsTask.e_TypeLU.Task && !_WorkflowProcess.Tasks.Any(d => d.ID == c.ElementID)))
                 {
                     resultOperation = this.Delete(item.ID);
                     listDeleted.Add(item.ID);
                     if (!resultOperation.IsSuccess)
                         return resultOperation;
                 }
-                Tasks = Tasks.Where(c => !listDeleted.Contains(c.ID)).ToList();
+                tasks = tasks.Where(c => !listDeleted.Contains(c.ID)).ToList();
                 //userTask
                 foreach (WorkflowUserTask item in _WorkflowProcess.UserTasks)
                 {
-                    Domain.sysBpmsTask task = Tasks.FirstOrDefault(c => c.ElementID == item.ID);
+                    Domain.sysBpmsTask task = tasks.FirstOrDefault(c => c.ElementID == item.ID);
                     if (task != null)
                     {
-                        resultOperation = this.UpdateTask(task, WorkflowLanes, item.ID, item.Name, item.MarkerTypeLU);
+                        resultOperation = this.UpdateTask(task, item.Name, item.MarkerTypeLU);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
                     }
                     else
                     {
-                        task = this.InitTask(Domain.sysBpmsTask.e_TypeLU.UserTask, item.ID, item.MarkerTypeLU, WorkflowLanes, item.Name, processID);
+                        task = this.InitTask(Domain.sysBpmsTask.e_TypeLU.UserTask, item.ID, item.MarkerTypeLU, item.Name, processID);
                         resultOperation = this.Add(task);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
@@ -165,16 +164,16 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 //serviceTask
                 foreach (WorkflowServiceTask item in _WorkflowProcess.ServiceTasks)
                 {
-                    Domain.sysBpmsTask task = Tasks.FirstOrDefault(c => c.ElementID == item.ID);
+                    Domain.sysBpmsTask task = tasks.FirstOrDefault(c => c.ElementID == item.ID);
                     if (task != null)
                     {
-                        resultOperation = this.UpdateTask(task, WorkflowLanes, item.ID, item.Name, item.MarkerTypeLU);
+                        resultOperation = this.UpdateTask(task, item.Name, item.MarkerTypeLU);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
                     }
                     else
                     {
-                        task = this.InitTask(Domain.sysBpmsTask.e_TypeLU.ServiceTask, item.ID, item.MarkerTypeLU, WorkflowLanes, item.Name, processID);
+                        task = this.InitTask(Domain.sysBpmsTask.e_TypeLU.ServiceTask, item.ID, item.MarkerTypeLU, item.Name, processID);
                         resultOperation = this.Add(task);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
@@ -187,16 +186,16 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 //scriptTask
                 foreach (WorkflowScriptTask item in _WorkflowProcess.ScriptTasks)
                 {
-                    Domain.sysBpmsTask _Task = Tasks.FirstOrDefault(c => c.ElementID == item.ID);
+                    Domain.sysBpmsTask _Task = tasks.FirstOrDefault(c => c.ElementID == item.ID);
                     if (_Task != null)
                     {
-                        resultOperation = this.UpdateTask(_Task, WorkflowLanes, item.ID, item.Name, item.MarkerTypeLU);
+                        resultOperation = this.UpdateTask(_Task, item.Name, item.MarkerTypeLU);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
                     }
                     else
                     {
-                        _Task = this.InitTask(Domain.sysBpmsTask.e_TypeLU.ScriptTask, item.ID, item.MarkerTypeLU, WorkflowLanes, item.Name, processID);
+                        _Task = this.InitTask(Domain.sysBpmsTask.e_TypeLU.ScriptTask, item.ID, item.MarkerTypeLU, item.Name, processID);
                         resultOperation = this.Add(_Task);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
@@ -209,16 +208,16 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 //Task
                 foreach (WorkflowTask item in _WorkflowProcess.Tasks)
                 {
-                    Domain.sysBpmsTask _Task = Tasks.FirstOrDefault(c => c.ElementID == item.ID);
+                    Domain.sysBpmsTask _Task = tasks.FirstOrDefault(c => c.ElementID == item.ID);
                     if (_Task != null)
                     {
-                        resultOperation = this.UpdateTask(_Task, WorkflowLanes, item.ID, item.Name, item.MarkerTypeLU);
+                        resultOperation = this.UpdateTask(_Task, item.Name, item.MarkerTypeLU);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
                     }
                     else
                     {
-                        _Task = this.InitTask(Domain.sysBpmsTask.e_TypeLU.Task, item.ID, item.MarkerTypeLU, WorkflowLanes, item.Name, processID);
+                        _Task = this.InitTask(Domain.sysBpmsTask.e_TypeLU.Task, item.ID, item.MarkerTypeLU, item.Name, processID);
                         resultOperation = this.Add(_Task);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
@@ -239,20 +238,27 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             return resultOperation;
         }
 
-        private ResultOperation UpdateTask(Domain.sysBpmsTask task, List<WorkflowLane> workflowLanes, string id, string name, Domain.sysBpmsTask.e_MarkerTypeLU? markerTypeLU)
+        private ResultOperation UpdateTask(Domain.sysBpmsTask task, string name, Domain.sysBpmsTask.e_MarkerTypeLU? markerTypeLU)
         {
             ResultOperation resultOperation = new ResultOperation();
-            task.MarkerTypeLU = markerTypeLU.HasValue ? (int)markerTypeLU : (int?)null;
-            resultOperation = this.Update(task);
-            if (!resultOperation.IsSuccess)
-                return resultOperation;
-            //Element
-            task.Element.Name = name;
-            resultOperation = new ElementService(this.UnitOfWork).Update(task.Element);
+            //if task.MarkerTypeLU was changed, it updates task.
+            if (task.MarkerTypeLU != (markerTypeLU.HasValue ? (int)markerTypeLU : (int?)null))
+            {
+                task.MarkerTypeLU = markerTypeLU.HasValue ? (int)markerTypeLU : (int?)null;
+                resultOperation = this.Update(task);
+                if (!resultOperation.IsSuccess)
+                    return resultOperation;
+            }
+            //if Element.Name was changed, it updates Element.
+            if (task.Element.Name != name)
+            {
+                task.Element.Name = name;
+                resultOperation = new ElementService(this.UnitOfWork).Update(task.Element);
+            }
             return resultOperation;
         }
 
-        private Domain.sysBpmsTask InitTask(Domain.sysBpmsTask.e_TypeLU e_TypeLU, string id, Domain.sysBpmsTask.e_MarkerTypeLU? markerTypeLU, List<WorkflowLane> workflowLanes, string name, Guid processId)
+        private Domain.sysBpmsTask InitTask(Domain.sysBpmsTask.e_TypeLU e_TypeLU, string id, Domain.sysBpmsTask.e_MarkerTypeLU? markerTypeLU, string name, Guid processId)
         {
             return new Domain.sysBpmsTask()
             {

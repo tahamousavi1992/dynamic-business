@@ -23,14 +23,22 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public void Update(sysBpmsGateway gateway)
         {
-            this.Context.Entry(gateway).State = EntityState.Modified;
-            if (gateway.SequenceFlow != null)
+            //SequenceFlow is new and must be added alongside Gateway update.
+            //mostly in this situation gateway.DefaultSequenceFlowID is null.
+            if (gateway.SequenceFlow != null && gateway.SequenceFlow.ID != gateway.DefaultSequenceFlowID)
             {
-                if (gateway.SequenceFlow.ID != gateway.DefaultSequenceFlowID)
-                    this.Context.Entry(gateway.SequenceFlow).State = EntityState.Modified;
-                else
+                gateway.DefaultSequenceFlowID = gateway.SequenceFlow.ID;
+                this.Context.Entry(gateway).State = EntityState.Modified;
+                this.Context.Entry(gateway.SequenceFlow).State = EntityState.Added;
+                this.Context.Entry(gateway.SequenceFlow.Element).State = EntityState.Added;
+            }
+            else
+            {
+                this.Context.Entry(gateway).State = EntityState.Modified;
+                if (gateway.SequenceFlow != null)
                     this.Context.Entry(gateway.SequenceFlow).State = EntityState.Detached;
             }
+            
         }
 
         public void Delete(Guid id)

@@ -80,8 +80,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             {
                 List<Guid> listDeleted = new List<Guid>();
                 ElementService elementService = new ElementService(this.UnitOfWork);
-                List<sysBpmsEvent> Events = this.GetList(null, processID, string.Empty, null);
-                foreach (sysBpmsEvent item in Events.Where(c => c.TypeLU == (int)sysBpmsEvent.e_TypeLU.StartEvent && !_WorkflowProcess.StartEvents.Any(d => d.ID == c.ElementID)))
+                List<sysBpmsEvent> events = this.GetList(null, processID, string.Empty, null);
+                foreach (sysBpmsEvent item in events.Where(c => c.TypeLU == (int)sysBpmsEvent.e_TypeLU.StartEvent && !_WorkflowProcess.StartEvents.Any(d => d.ID == c.ElementID)))
                 {
                     resultOperation = this.Delete(item.ID);
                     listDeleted.Add(item.ID);
@@ -89,7 +89,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                         return resultOperation;
                 }
 
-                foreach (sysBpmsEvent item in Events.Where(c => c.TypeLU == (int)sysBpmsEvent.e_TypeLU.EndEvent && !_WorkflowProcess.EndEvents.Any(d => d.ID == c.ElementID)))
+                foreach (sysBpmsEvent item in events.Where(c => c.TypeLU == (int)sysBpmsEvent.e_TypeLU.EndEvent && !_WorkflowProcess.EndEvents.Any(d => d.ID == c.ElementID)))
                 {
                     resultOperation = this.Delete(item.ID);
                     listDeleted.Add(item.ID);
@@ -97,7 +97,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                         return resultOperation;
                 }
 
-                foreach (sysBpmsEvent item in Events.Where(c => c.TypeLU == (int)sysBpmsEvent.e_TypeLU.IntermediateThrow && !_WorkflowProcess.IntermediateThrowEvents.Any(d => d.ID == c.ElementID)))
+                foreach (sysBpmsEvent item in events.Where(c => c.TypeLU == (int)sysBpmsEvent.e_TypeLU.IntermediateThrow && !_WorkflowProcess.IntermediateThrowEvents.Any(d => d.ID == c.ElementID)))
                 {
                     resultOperation = this.Delete(item.ID);
                     listDeleted.Add(item.ID);
@@ -105,7 +105,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                         return resultOperation;
                 }
 
-                foreach (sysBpmsEvent item in Events.Where(c => c.TypeLU == (int)sysBpmsEvent.e_TypeLU.IntermediateCatch && !_WorkflowProcess.IntermediateCatchEvents.Any(d => d.ID == c.ElementID)))
+                foreach (sysBpmsEvent item in events.Where(c => c.TypeLU == (int)sysBpmsEvent.e_TypeLU.IntermediateCatch && !_WorkflowProcess.IntermediateCatchEvents.Any(d => d.ID == c.ElementID)))
                 {
                     resultOperation = this.Delete(item.ID);
                     listDeleted.Add(item.ID);
@@ -113,33 +113,37 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                         return resultOperation;
                 }
 
-                foreach (sysBpmsEvent item in Events.Where(c => c.TypeLU == (int)sysBpmsEvent.e_TypeLU.boundary && !_WorkflowProcess.BoundaryEvents.Any(d => d.ID == c.ElementID)))
+                foreach (sysBpmsEvent item in events.Where(c => c.TypeLU == (int)sysBpmsEvent.e_TypeLU.boundary && !_WorkflowProcess.BoundaryEvents.Any(d => d.ID == c.ElementID)))
                 {
                     resultOperation = this.Delete(item.ID);
                     listDeleted.Add(item.ID);
                     if (!resultOperation.IsSuccess)
                         return resultOperation;
                 }
-                Events = Events.Where(c => !listDeleted.Contains(c.ID)).ToList();
+                events = events.Where(c => !listDeleted.Contains(c.ID)).ToList();
                 //StartEvents
                 foreach (WorkflowStartEvent item in _WorkflowProcess.StartEvents)
                 {
-                    sysBpmsEvent _Event = Events.FirstOrDefault(c => c.ElementID == item.ID);
-                    if (_Event != null)
+                    sysBpmsEvent _event = events.FirstOrDefault(c => c.ElementID == item.ID);
+                    if (_event != null)
                     {
-                        _Event.SubType = (int)item.StartEventType;
-                        resultOperation = this.Update(_Event);
-                        if (!resultOperation.IsSuccess)
-                            return resultOperation;
+                        //If _event.SubType was changed, It updates _event.
+                        if (_event.SubType != (int)item.StartEventType)
+                        {
+                            _event.SubType = (int)item.StartEventType;
+                            resultOperation = this.Update(_event);
+                            if (!resultOperation.IsSuccess)
+                                return resultOperation;
+                        }
                         //Element
-                        _Event.Element.Name = item.Name;
-                        resultOperation = elementService.Update(_Event.Element);
+                        _event.Element.Name = item.Name;
+                        resultOperation = elementService.Update(_event.Element);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
                     }
                     else
                     {
-                        _Event = new sysBpmsEvent()
+                        _event = new sysBpmsEvent()
                         {
                             TypeLU = (int)sysBpmsEvent.e_TypeLU.StartEvent,
                             ElementID = item.ID,
@@ -155,11 +159,11 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                                 TypeLU = (int)sysBpmsElement.e_TypeLU.Event,
                             }
                         };
-                        resultOperation = this.Add(_Event);
+                        resultOperation = this.Add(_event);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
 
-                        resultOperation = elementService.Update(_Event.Element);
+                        resultOperation = elementService.Update(_event.Element);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
                     }
@@ -167,22 +171,29 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 //EndEvents
                 foreach (WorkflowEndEvent item in _WorkflowProcess.EndEvents)
                 {
-                    sysBpmsEvent _Event = Events.FirstOrDefault(c => c.ElementID == item.ID);
-                    if (_Event != null)
+                    sysBpmsEvent _event = events.FirstOrDefault(c => c.ElementID == item.ID);
+                    if (_event != null)
                     {
-                        _Event.SubType = (int)item.EndEventType;
-                        resultOperation = this.Update(_Event);
-                        if (!resultOperation.IsSuccess)
-                            return resultOperation;
-                        //Element
-                        _Event.Element.Name = item.Name;
-                        resultOperation = elementService.Update(_Event.Element);
-                        if (!resultOperation.IsSuccess)
-                            return resultOperation;
+                        //If _event.SubType was changed, It updates _event.
+                        if (_event.SubType != (int)item.EndEventType)
+                        {
+                            _event.SubType = (int)item.EndEventType;
+                            resultOperation = this.Update(_event);
+                            if (!resultOperation.IsSuccess)
+                                return resultOperation;
+                        }
+                        //If _event.Element was changed, It updates Element.
+                        if (_event.Element.Name != item.Name)
+                        {
+                            _event.Element.Name = item.Name;
+                            resultOperation = elementService.Update(_event.Element);
+                            if (!resultOperation.IsSuccess)
+                                return resultOperation;
+                        }
                     }
                     else
                     {
-                        _Event = new sysBpmsEvent()
+                        _event = new sysBpmsEvent()
                         {
                             TypeLU = (int)sysBpmsEvent.e_TypeLU.EndEvent,
                             ElementID = item.ID,
@@ -198,7 +209,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                                 TypeLU = (int)sysBpmsElement.e_TypeLU.Event,
                             }
                         };
-                        resultOperation = this.Add(_Event);
+                        resultOperation = this.Add(_event);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
                     }
@@ -206,22 +217,29 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 //IntermediateThrow
                 foreach (WorkflowIntermediateThrowEvent item in _WorkflowProcess.IntermediateThrowEvents)
                 {
-                    sysBpmsEvent _Event = Events.FirstOrDefault(c => c.ElementID == item.ID);
-                    if (_Event != null)
+                    sysBpmsEvent _event = events.FirstOrDefault(c => c.ElementID == item.ID);
+                    if (_event != null)
                     {
-                        _Event.SubType = (int)item.IntermediateThrowType;
-                        resultOperation = this.Update(_Event);
-                        if (!resultOperation.IsSuccess)
-                            return resultOperation;
-                        //Element
-                        _Event.Element.Name = item.Name;
-                        resultOperation = elementService.Update(_Event.Element);
-                        if (!resultOperation.IsSuccess)
-                            return resultOperation;
+                        //If _event.SubType was changed, It updates _event.
+                        if (_event.SubType != (int)item.IntermediateThrowType)
+                        {
+                            _event.SubType = (int)item.IntermediateThrowType;
+                            resultOperation = this.Update(_event);
+                            if (!resultOperation.IsSuccess)
+                                return resultOperation;
+                        }
+                        //If _event.Element was changed, It updates Element.
+                        if (_event.Element.Name != item.Name)
+                        {
+                            _event.Element.Name = item.Name;
+                            resultOperation = elementService.Update(_event.Element);
+                            if (!resultOperation.IsSuccess)
+                                return resultOperation;
+                        }
                     }
                     else
                     {
-                        _Event = new sysBpmsEvent()
+                        _event = new sysBpmsEvent()
                         {
                             TypeLU = (int)sysBpmsEvent.e_TypeLU.IntermediateThrow,
                             ElementID = item.ID,
@@ -237,7 +255,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                                 TypeLU = (int)sysBpmsElement.e_TypeLU.Event,
                             }
                         };
-                        resultOperation = this.Add(_Event);
+                        resultOperation = this.Add(_event);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
                     }
@@ -246,22 +264,29 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 //IntermediateCatch
                 foreach (WorkflowIntermediateCatchEvent item in _WorkflowProcess.IntermediateCatchEvents)
                 {
-                    sysBpmsEvent _Event = Events.FirstOrDefault(c => c.ElementID == item.ID);
-                    if (_Event != null)
+                    sysBpmsEvent _event = events.FirstOrDefault(c => c.ElementID == item.ID);
+                    if (_event != null)
                     {
-                        _Event.SubType = (int)item.IntermediateCatchType;
-                        resultOperation = this.Update(_Event);
-                        if (!resultOperation.IsSuccess)
-                            return resultOperation;
-                        //Element
-                        _Event.Element.Name = item.Name;
-                        resultOperation = elementService.Update(_Event.Element);
-                        if (!resultOperation.IsSuccess)
-                            return resultOperation;
+                        //If _event.SubType was changed, It updates _event.
+                        if (_event.SubType != (int)item.IntermediateCatchType)
+                        {
+                            _event.SubType = (int)item.IntermediateCatchType;
+                            resultOperation = this.Update(_event);
+                            if (!resultOperation.IsSuccess)
+                                return resultOperation;
+                        }
+                        //If _event.Element was changed, It updates Element.
+                        if (_event.Element.Name != item.Name)
+                        {
+                            _event.Element.Name = item.Name;
+                            resultOperation = elementService.Update(_event.Element);
+                            if (!resultOperation.IsSuccess)
+                                return resultOperation;
+                        }
                     }
                     else
                     {
-                        _Event = new sysBpmsEvent()
+                        _event = new sysBpmsEvent()
                         {
                             TypeLU = (int)sysBpmsEvent.e_TypeLU.IntermediateCatch,
                             ElementID = item.ID,
@@ -277,7 +302,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                                 TypeLU = (int)sysBpmsElement.e_TypeLU.Event,
                             }
                         };
-                        resultOperation = this.Add(_Event);
+                        resultOperation = this.Add(_event);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
                     }
@@ -286,24 +311,33 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 //Boundary
                 foreach (WorkflowBoundaryEvent item in _WorkflowProcess.BoundaryEvents)
                 {
-                    sysBpmsEvent _Event = Events.FirstOrDefault(c => c.ElementID == item.ID);
-                    if (_Event != null)
+                    sysBpmsEvent _event = events.FirstOrDefault(c => c.ElementID == item.ID);
+                    if (_event != null)
                     {
-                        _Event.SubType = (int)item.BoundaryType;
-                        _Event.RefElementID = item.AttachedToRef;
-                        _Event.CancelActivity = item.CancelActivity;
-                        resultOperation = this.Update(_Event);
-                        if (!resultOperation.IsSuccess)
-                            return resultOperation;
-                        //Element
-                        _Event.Element.Name = item.Name;
-                        resultOperation = elementService.Update(_Event.Element);
-                        if (!resultOperation.IsSuccess)
-                            return resultOperation;
+                        //If _event's properties were changed, It updates _event.
+                        if (_event.SubType != (int)item.BoundaryType ||
+                            _event.RefElementID != item.AttachedToRef ||
+                            _event.CancelActivity != item.CancelActivity)
+                        {
+                            _event.SubType = (int)item.BoundaryType;
+                            _event.RefElementID = item.AttachedToRef;
+                            _event.CancelActivity = item.CancelActivity;
+                            resultOperation = this.Update(_event);
+                            if (!resultOperation.IsSuccess)
+                                return resultOperation;
+                        }
+                        //If _event.Element was changed, It updates Element.
+                        if (_event.Element.Name != item.Name)
+                        {
+                            _event.Element.Name = item.Name;
+                            resultOperation = elementService.Update(_event.Element);
+                            if (!resultOperation.IsSuccess)
+                                return resultOperation;
+                        }
                     }
                     else
                     {
-                        _Event = new sysBpmsEvent()
+                        _event = new sysBpmsEvent()
                         {
                             TypeLU = (int)sysBpmsEvent.e_TypeLU.boundary,
                             ElementID = item.ID,
@@ -321,7 +355,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                                 TypeLU = (int)sysBpmsElement.e_TypeLU.Event,
                             }
                         };
-                        resultOperation = this.Add(_Event);
+                        resultOperation = this.Add(_event);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
                     }

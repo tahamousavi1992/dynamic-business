@@ -22,6 +22,14 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public void Update(sysBpmsElement element)
         {
+            //To fix 'Attaching an entity failed' error.
+            var local = this.Context.Set<sysBpmsElement>().Local.FirstOrDefault(f => f.ID == element.ID);
+            if (local != null)
+            {
+                this.Context.Entry(local).State = EntityState.Detached;
+                local = null;
+            }
+
             this.Context.Entry(element).State = EntityState.Modified;
         }
 

@@ -93,41 +93,48 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             return this.UnitOfWork.Repository<ISequenceFlowRepository>().GetList(ProcessID);
         }
 
-        public ResultOperation Update(Guid processID, WorkflowProcess _WorkflowProcess)
+        public ResultOperation Update(Guid processID, WorkflowProcess workflowProcess)
         {
             ResultOperation resultOperation = new ResultOperation();
             try
             {
                 this.BeginTransaction();
                 List<sysBpmsSequenceFlow> SequenceFlows = this.GetList(processID);
-                foreach (sysBpmsSequenceFlow item in SequenceFlows.Where(c => !_WorkflowProcess.SequenceFlows.Any(d => d.ID == c.ElementID)))
+                foreach (sysBpmsSequenceFlow item in SequenceFlows.Where(c => !workflowProcess.SequenceFlows.Any(d => d.ID == c.ElementID)))
                 {
                     resultOperation = this.Delete(item.ID);
                     if (!resultOperation.IsSuccess)
                         return resultOperation;
                 }
 
-                //StartEvents
-                foreach (WorkflowSequenceFlow item in _WorkflowProcess.SequenceFlows)
+                //save all SequenceFlows.
+                foreach (WorkflowSequenceFlow item in workflowProcess.SequenceFlows)
                 {
-                    sysBpmsSequenceFlow _SequenceFlow = SequenceFlows.FirstOrDefault(c => c.ElementID == item.ID);
-                    if (_SequenceFlow != null)
+                    sysBpmsSequenceFlow sequenceFlow = SequenceFlows.FirstOrDefault(c => c.ElementID == item.ID);
+                    if (sequenceFlow != null)
                     {
-                        _SequenceFlow.Name = item.Name;
-                        _SequenceFlow.SourceElementID = item.SourceRef;
-                        _SequenceFlow.TargetElementID = item.TargetRef;
-                        resultOperation = this.Update(_SequenceFlow);
-                        if (!resultOperation.IsSuccess)
-                            return resultOperation;
-                        //Element
-                        _SequenceFlow.Element.Name = item.Name;
-                        resultOperation = new ElementService(this.UnitOfWork).Update(_SequenceFlow.Element);
-                        if (!resultOperation.IsSuccess)
-                            return resultOperation;
+                        if (sequenceFlow.Name != item.Name ||
+                            sequenceFlow.SourceElementID != item.SourceRef ||
+                            sequenceFlow.TargetElementID != item.TargetRef)
+                        {
+                            sequenceFlow.Name = item.Name;
+                            sequenceFlow.SourceElementID = item.SourceRef;
+                            sequenceFlow.TargetElementID = item.TargetRef;
+                            resultOperation = this.Update(sequenceFlow);
+
+                            if (!resultOperation.IsSuccess)
+                                return resultOperation;
+                            //Element
+                            sequenceFlow.Element.Name = item.Name;
+                            resultOperation = new ElementService(this.UnitOfWork).Update(sequenceFlow.Element);
+                            if (!resultOperation.IsSuccess)
+                                return resultOperation;
+                        }
+
                     }
                     else
                     {
-                        _SequenceFlow = new sysBpmsSequenceFlow()
+                        sequenceFlow = new sysBpmsSequenceFlow()
                         {
                             ID = Guid.NewGuid(),
                             ElementID = item.ID,
@@ -144,7 +151,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                                 TypeLU = (int)sysBpmsElement.e_TypeLU.Sequence,
                             }
                         };
-                        resultOperation = this.Add(_SequenceFlow);
+                        resultOperation = this.Add(sequenceFlow);
                         if (!resultOperation.IsSuccess)
                             return resultOperation;
                     }
