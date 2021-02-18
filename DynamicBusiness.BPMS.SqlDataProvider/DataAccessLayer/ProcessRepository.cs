@@ -24,12 +24,9 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             this.Context.sysBpmsProcesses.Add(Process);
         }
 
-        public void Update(sysBpmsProcess Process)
+        public void Update(sysBpmsProcess process)
         {
-            sysBpmsProcess retVal = (from p in this.Context.sysBpmsProcesses
-                                 where p.ID == Process.ID
-                                 select p).FirstOrDefault();
-            retVal.Load(Process);
+            this.Context.Entry(process).State = EntityState.Modified;
         }
 
         public void Delete(Guid ID)

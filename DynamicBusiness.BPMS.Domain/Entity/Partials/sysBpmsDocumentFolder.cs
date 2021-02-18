@@ -20,15 +20,6 @@ namespace DynamicBusiness.BPMS.Domain
         public void InActive()
         {
             this.IsActive = false;
-        }
-
-        public void Load(sysBpmsDocumentFolder documentFolder)
-        {
-            this.ID = documentFolder.ID;
-            this.DocumentFolderID = documentFolder.DocumentFolderID;
-            this.NameOf = documentFolder.NameOf;
-            this.DisplayName = documentFolder.DisplayName;
-            this.IsActive = documentFolder.IsActive;
-        }
+        } 
     }
 }

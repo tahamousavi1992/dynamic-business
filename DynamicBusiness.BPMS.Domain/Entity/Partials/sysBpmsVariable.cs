@@ -62,23 +62,6 @@ namespace DynamicBusiness.BPMS.Domain
             return resultOperation;
         }
 
-        public void Load(sysBpmsVariable Variable)
-        {
-            this.ID = Variable.ID;
-            this.ProcessID = Variable.ProcessID;
-            this.ApplicationPageID = Variable.ApplicationPageID;
-            this.Name = Variable.Name;
-            this.VarTypeLU = Variable.VarTypeLU;
-            this.EntityDefID = Variable.EntityDefID;
-            this.FieldName = Variable.FieldName;
-            this.Query = Variable.Query;
-            this.FilterTypeLU = Variable.FilterTypeLU;
-            this.DBConnectionID = Variable.DBConnectionID;
-            this.Collection = Variable.Collection;
-            this.DefaultValue = Variable.DefaultValue;
-            this.WhereClause = Variable.WhereClause;
-            this.OrderByClause = Variable.OrderByClause;
-        }
         [NotMapped]
         public int RelationTypeLU
         {

@@ -24,10 +24,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public void Update(sysBpmsDocumentDef documentDef)
         {
-            sysBpmsDocumentDef retVal = (from p in this.Context.sysBpmsDocumentDefs
-                                     where p.ID == documentDef.ID
-                                  select p).FirstOrDefault();
-            retVal.Load(documentDef);
+            this.Context.Entry(documentDef).State = EntityState.Modified;
         }
 
         public void Delete(Guid DocumentDefId)

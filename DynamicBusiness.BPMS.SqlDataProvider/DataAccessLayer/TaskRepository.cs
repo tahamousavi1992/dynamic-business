@@ -20,12 +20,9 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             this.Context.sysBpmsTasks.Add(Task);
         }
 
-        public void Update(Domain.sysBpmsTask Task)
+        public void Update(Domain.sysBpmsTask task)
         {
-            Domain.sysBpmsTask retVal = (from p in this.Context.sysBpmsTasks
-                                     where p.ID == Task.ID
-                                     select p).FirstOrDefault();
-            retVal.Load(Task);
+            this.Context.Entry(task).State = EntityState.Modified;
         }
 
         public void Delete(Guid id)

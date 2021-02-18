@@ -195,11 +195,9 @@
     <Compile Include="Entity\Partials\sysBpmsApplicationPage.cs" />
     <Compile Include="Entity\Partials\sysBpmsApplicationPageAccess.cs" />
     <Compile Include="Entity\Partials\sysBpmsConfiguration.cs" />
-    <Compile Include="Entity\Partials\sysBpmsDocument.cs" />
     <Compile Include="Entity\Partials\sysBpmsDocumentDef.cs" />
     <Compile Include="Entity\Partials\sysBpmsDocumentFolder.cs" />
     <Compile Include="Entity\Partials\sysBpmsEmailAccount.cs" />
-    <Compile Include="Entity\Partials\sysBpmsLane.cs" />
     <Compile Include="Entity\Partials\sysBpmsLUTable.cs" />
     <Compile Include="Entity\Partials\sysBpmsMessageType.cs" />
     <Compile Include="Entity\Partials\sysBpmsProcessGroup.cs" />
@@ -280,12 +278,10 @@
     <Compile Include="Entity\Partials\sysBpmsGateway.cs" />
     <Compile Include="Entity\Partials\sysBpmsLURow.cs" />
     <Compile Include="Entity\Partials\sysBpmsProcess.cs" />
-    <Compile Include="Entity\Partials\sysBpmsSequenceFlow.cs" />
     <Compile Include="Entity\Partials\sysBpmsStep.cs" />
     <Compile Include="Entity\Partials\sysBpmsTask.cs" />
     <Compile Include="Entity\Partials\sysBpmsThread.cs" />
     <Compile Include="Entity\Partials\sysBpmsThreadTask.cs" />
-    <Compile Include="Entity\Partials\sysBpmsThreadVariable.cs" />
     <Compile Include="Entity\Partials\sysBpmsUser.cs" />
     <Compile Include="Entity\Partials\sysBpmsVariable.cs" />
     <Compile Include="Entity\Partials\XML_Schema.cs" />

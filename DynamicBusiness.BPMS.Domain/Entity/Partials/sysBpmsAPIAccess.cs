@@ -22,13 +22,6 @@ namespace DynamicBusiness.BPMS.Domain
             this.IsActive = isActive;
             return this;
         }
-        public void Load(sysBpmsAPIAccess aPIAccess)
-        {
-            this.ID = aPIAccess.ID;
-            this.Name = aPIAccess.Name;
-            this.IPAddress = aPIAccess.IPAddress;
-            this.AccessKey = aPIAccess.AccessKey;
-            this.IsActive = aPIAccess.IsActive;
-        }
+        
     }
 }

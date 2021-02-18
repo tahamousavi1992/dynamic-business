@@ -29,16 +29,7 @@ namespace DynamicBusiness.BPMS.Domain
             return this;
         }
 
-        public void Load(sysBpmsThreadEvent threadEvent)
-        {
-            this.ID = threadEvent.ID;
-            this.ThreadID = threadEvent.ThreadID;
-            this.EventID = threadEvent.EventID;
-            this.StartDate = threadEvent.StartDate;
-            this.ExecuteDate = threadEvent.ExecuteDate;
-            this.StatusLU = threadEvent.StatusLU;
-            this.ThreadTaskID = threadEvent.ThreadTaskID;
-        }
+      
 
         public enum e_StatusLU
         {

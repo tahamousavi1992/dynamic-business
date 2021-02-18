@@ -54,21 +54,7 @@ namespace DynamicBusiness.BPMS.Domain
                 this.OwnerRole = string.Join(",", ownerRole.Select(c => (c.Item1?.ToString() ?? "0") + ":" + c.Item2));
             else
                 this.OwnerRole = string.Empty;
-        }
-         
-        public void Load(sysBpmsThreadTask ThreadTask)
-        {
-            this.ID = ThreadTask.ID;
-            this.ThreadID = ThreadTask.ThreadID;
-            this.TaskID = ThreadTask.TaskID;
-            this.StartDate = ThreadTask.StartDate;
-            this.EndDate = ThreadTask.EndDate;
-            this.Description = ThreadTask.Description;
-            this.OwnerUserID = ThreadTask.OwnerUserID;
-            this.OwnerRole = ThreadTask.OwnerRole;
-            this.PriorityLU = ThreadTask.PriorityLU;
-            this.StatusLU = ThreadTask.StatusLU;
-        }
+        } 
         /// <param name="roleLU">DepartmentMember.e_RoleLU</param>
         public bool IsInRole(Guid? departmentId, int roleLU)
         {

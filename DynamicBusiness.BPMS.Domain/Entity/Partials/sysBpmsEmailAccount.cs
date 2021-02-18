@@ -42,15 +42,6 @@ namespace DynamicBusiness.BPMS.Domain
             return resultOperation;
         }
 
-        public void Load(sysBpmsEmailAccount emailAccount)
-        {
-            this.ID = emailAccount.ID;
-            this.ObjectTypeLU = emailAccount.ObjectTypeLU;
-            this.ObjectID = emailAccount.ObjectID;
-            this.SMTP = emailAccount.SMTP;
-            this.Port = emailAccount.Port;
-            this.MailPassword = emailAccount.MailPassword;
-            this.Email = emailAccount.Email;
-        }
+        
     }
 }

@@ -23,10 +23,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public void Update(sysBpmsDocument document)
         {
-            sysBpmsDocument retVal = (from p in this.Context.sysBpmsDocuments
-                                  where p.GUID == document.GUID
-                               select p).FirstOrDefault();
-            retVal.Load(document);
+            this.Context.Entry(document).State = EntityState.Modified;
         }
 
         public void Delete(Guid Guid)

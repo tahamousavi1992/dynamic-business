@@ -24,10 +24,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public void Update(sysBpmsEmailAccount emailAccount)
         {
-            sysBpmsEmailAccount retVal = (from p in this.Context.sysBpmsEmailAccounts
-                                          where p.ID == emailAccount.ID
-                                          select p).FirstOrDefault();
-            retVal.Load(emailAccount);
+            this.Context.Entry(emailAccount).State = EntityState.Modified;
         }
 
         public void Delete(Guid emailAccountId)

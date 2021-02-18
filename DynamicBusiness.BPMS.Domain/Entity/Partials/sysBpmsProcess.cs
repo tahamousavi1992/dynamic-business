@@ -19,29 +19,7 @@ namespace DynamicBusiness.BPMS.Domain
             this.TypeLU = typeLU;
             return this;
         }
-
-        public void Load(sysBpmsProcess process)
-        {
-            this.ID = process.ID;
-            this.Number = process.Number;
-            this.FormattedNumber = process.FormattedNumber;
-            this.Name = process.Name;
-            this.Description = process.Description;
-            this.DiagramXML = process.DiagramXML;
-            this.ProcessVersion = process.ProcessVersion;
-            this.StatusLU = process.StatusLU;
-            this.CreatorUsername = process.CreatorUsername;
-            this.ParentProcessID = process.ParentProcessID;
-            this.CreateDate = process.CreateDate;
-            this.UpdateDate = process.UpdateDate;
-            this.WorkflowXML = process.WorkflowXML;
-            this.SourceCode = process.SourceCode;
-            this.BeginTasks = process.BeginTasks;
-            this.ParallelCountPerUser = process.ParallelCountPerUser;
-            this.ProcessGroupID = process.ProcessGroupID;
-            this.TypeLU = process.TypeLU;
-        }
-
+ 
         public bool AllowEdit()
         {
             return this.StatusLU == (int)sysBpmsProcess.Enum_StatusLU.Draft || this.StatusLU == (int)sysBpmsProcess.Enum_StatusLU.Inactive;

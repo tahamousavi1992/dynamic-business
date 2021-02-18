@@ -21,12 +21,9 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             this.Context.sysBpmsDepartments.Add(Department);
         }
 
-        public void Update(sysBpmsDepartment Department)
+        public void Update(sysBpmsDepartment department)
         {
-            sysBpmsDepartment retVal = (from p in this.Context.sysBpmsDepartments
-                                    where p.ID == Department.ID
-                                 select p).FirstOrDefault();
-            retVal.Load(Department);
+            this.Context.Entry(department).State = EntityState.Modified;
         }
 
         public void Delete(Guid DepartmentId)

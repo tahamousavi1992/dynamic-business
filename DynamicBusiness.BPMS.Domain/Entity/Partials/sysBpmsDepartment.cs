@@ -17,12 +17,6 @@ namespace DynamicBusiness.BPMS.Domain
                 this.IsActive = true;
         }
 
-        public void Load(sysBpmsDepartment Department)
-        {
-            this.ID = Department.ID;
-            this.DepartmentID = Department.DepartmentID;
-            this.Name = Department.Name;
-            this.IsActive = Department.IsActive;
-        }
+        
     }
 }

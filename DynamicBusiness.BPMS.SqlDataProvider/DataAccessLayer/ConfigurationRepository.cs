@@ -55,10 +55,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public void Update(sysBpmsConfiguration SettingValue)
         {
-            sysBpmsConfiguration retVal = (from p in this.Context.sysBpmsConfigurations
-                                           where p.ID == SettingValue.ID
-                                           select p).FirstOrDefault();
-            retVal.Load(SettingValue);
+            this.Context.Entry(SettingValue).State = EntityState.Modified;
         }
 
     }

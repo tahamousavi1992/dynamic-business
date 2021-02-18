@@ -39,18 +39,7 @@ namespace DynamicBusiness.BPMS.Domain
         {
             this.UserID = userID;
         }
-        public void Load(sysBpmsThread Thread)
-        {
-            this.ID = Thread.ID;
-            this.ProcessID = Thread.ProcessID;
-            this.UserID = Thread.UserID;
-            this.StartDate = Thread.StartDate;
-            this.EndDate = Thread.EndDate;
-            this.Number = Thread.Number;
-            this.FormattedNumber = Thread.FormattedNumber;
-            this.StatusLU = Thread.StatusLU;
-            this.GatewayStatusXml = Thread.GatewayStatusXml;
-        }
+       
         [NotMapped]
         private List<ThreadGatewayStatusXmlModel> gatewayStatus { get; set; }
         [NotMapped]

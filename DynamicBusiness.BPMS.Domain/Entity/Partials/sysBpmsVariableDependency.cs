@@ -29,14 +29,6 @@ namespace DynamicBusiness.BPMS.Domain
             }
             return resultOperation;
         }
-        public void Load(sysBpmsVariableDependency variableDependency)
-        {
-            this.ID = variableDependency.ID;
-            this.DependentVariableID = variableDependency.DependentVariableID;
-            this.DependentPropertyName = variableDependency.DependentPropertyName;
-            this.ToVariableID = variableDependency.ToVariableID;
-            this.ToPropertyName = variableDependency.ToPropertyName;
-            this.Description = variableDependency.Description;
-        }
+        
     }
 }

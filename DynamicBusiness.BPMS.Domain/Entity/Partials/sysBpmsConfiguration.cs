@@ -33,14 +33,6 @@ namespace DynamicBusiness.BPMS.Domain
             this.LastUpdateOn = lastUpdateOn;
         } 
 
-        public void Load(sysBpmsConfiguration sysBpmsConfiguration)
-        {
-            this.ID = sysBpmsConfiguration.ID;
-            this.Name = sysBpmsConfiguration.Name;
-            this.Label = sysBpmsConfiguration.Label;
-            this.DefaultValue = sysBpmsConfiguration.DefaultValue;
-            this.Value = sysBpmsConfiguration.Value;
-            this.LastUpdateOn = sysBpmsConfiguration.LastUpdateOn;
-        }
+        
     }
 }

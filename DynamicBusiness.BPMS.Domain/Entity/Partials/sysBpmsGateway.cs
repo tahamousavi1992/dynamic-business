@@ -26,13 +26,6 @@ namespace DynamicBusiness.BPMS.Domain
             this.TraceToStart = traceToStart;
         }
 
-        public void Load(sysBpmsGateway Gateway)
-        {
-            this.ID = Gateway.ID;
-            this.ElementID = Gateway.ElementID;
-            this.DefaultSequenceFlowID = Gateway.DefaultSequenceFlowID;
-            this.TypeLU = Gateway.TypeLU;
-            this.TraceToStart = Gateway.TraceToStart;
-        }
+        
     }
 }

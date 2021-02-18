@@ -21,12 +21,9 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             this.Context.sysBpmsSteps.Add(Step);
         }
 
-        public void Update(sysBpmsStep Step)
+        public void Update(sysBpmsStep step)
         {
-            sysBpmsStep retVal = (from p in this.Context.sysBpmsSteps
-                              where p.ID == Step.ID
-                           select p).FirstOrDefault();
-            retVal.Load(Step);
+            this.Context.Entry(step).State = EntityState.Modified;
         }
 
         public void Delete(Guid StepId)

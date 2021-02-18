@@ -15,17 +15,14 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             this.Context = context;
         }
 
-        public void Add(sysBpmsSequenceFlow SequenceFlow)
+        public void Add(sysBpmsSequenceFlow sequenceFlow)
         {
-            this.Context.sysBpmsSequenceFlows.Add(SequenceFlow);
+            this.Context.sysBpmsSequenceFlows.Add(sequenceFlow);
         }
 
-        public void Update(sysBpmsSequenceFlow SequenceFlow)
+        public void Update(sysBpmsSequenceFlow sequenceFlow)
         {
-            sysBpmsSequenceFlow retVal = (from p in this.Context.sysBpmsSequenceFlows
-                                      where p.ID == SequenceFlow.ID
-                                      select p).FirstOrDefault();
-            retVal.Load(SequenceFlow);
+            this.Context.Entry(sequenceFlow).State = EntityState.Modified;
         }
 
         public void Delete(Guid id)

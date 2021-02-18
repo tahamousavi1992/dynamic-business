@@ -24,10 +24,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public void Update(sysBpmsDocumentFolder documentFolder)
         {
-            sysBpmsDocumentFolder retVal = (from p in this.Context.sysBpmsDocumentFolders
-                                        where p.ID == documentFolder.ID
-                                        select p).FirstOrDefault();
-            retVal.Load(documentFolder);
+            this.Context.Entry(documentFolder).State = EntityState.Modified;
         }
 
         public void Delete(Guid DocumentFolderId)

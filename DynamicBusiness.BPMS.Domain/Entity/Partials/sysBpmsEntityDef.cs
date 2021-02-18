@@ -63,15 +63,7 @@ namespace DynamicBusiness.BPMS.Domain
 
             return resultOperation;
         }
-
-        public void Load(sysBpmsEntityDef EntityDef)
-        {
-            this.ID = EntityDef.ID;
-            this.Name = EntityDef.Name;
-            this.DisplayName = EntityDef.DisplayName;
-            this.DesignXML = EntityDef.DesignXML;
-            this.IsActive = EntityDef.IsActive;
-        }
+         
         [NotMapped]
         private List<EntityPropertyModel> properties { get; set; }
         [NotMapped]

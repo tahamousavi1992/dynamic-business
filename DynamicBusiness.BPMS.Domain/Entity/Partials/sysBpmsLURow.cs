@@ -26,17 +26,6 @@ namespace DynamicBusiness.BPMS.Domain
             this.IsActive = isActive;
             return this;
         }
-
-        public void Load(sysBpmsLURow LURow)
-        {
-            this.ID = LURow.ID;
-            this.LUTableID = LURow.LUTableID;
-            this.NameOf = LURow.NameOf;
-            this.CodeOf = LURow.CodeOf;
-            this.DisplayOrder = LURow.DisplayOrder;
-            this.IsSystemic = LURow.IsSystemic;
-            this.IsActive = LURow.IsActive;
-        }
  
     }
 }

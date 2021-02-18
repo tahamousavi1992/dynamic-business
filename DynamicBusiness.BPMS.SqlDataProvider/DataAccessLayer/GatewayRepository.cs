@@ -23,13 +23,13 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public void Update(sysBpmsGateway gateway)
         {
-            sysBpmsGateway retVal = (from p in this.Context.sysBpmsGateways
-                                 where p.ID == gateway.ID
-                                 select p).FirstOrDefault();
-            retVal.Load(gateway);
-            if (gateway.SequenceFlow != null && gateway.SequenceFlow.ID != gateway.DefaultSequenceFlowID)
+            this.Context.Entry(gateway).State = EntityState.Modified;
+            if (gateway.SequenceFlow != null)
             {
-                retVal.SequenceFlow = gateway.SequenceFlow;
+                if (gateway.SequenceFlow.ID != gateway.DefaultSequenceFlowID)
+                    this.Context.Entry(gateway.SequenceFlow).State = EntityState.Modified;
+                else
+                    this.Context.Entry(gateway.SequenceFlow).State = EntityState.Detached;
             }
         }
 
@@ -64,7 +64,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public List<sysBpmsGateway> GetListByDefaultSequence(Guid defaultSequenceFlowID)
         {
- 
+
             return this.Context.sysBpmsGateways.Include(c => c.Element).Where(d =>
               (d.DefaultSequenceFlowID == defaultSequenceFlowID)).OrderBy(c => c.Element.Name).AsNoTracking().ToList();
         }

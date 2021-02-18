@@ -16,12 +16,9 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             this.Context = context;
         }
 
-        public void Update(sysBpmsAPIAccess APIAccess)
+        public void Update(sysBpmsAPIAccess apiAccess)
         {
-            sysBpmsAPIAccess retVal = (from P in this.Context.sysBpmsAPIAccesses
-                                       where P.ID == APIAccess.ID
-                                       select P).FirstOrDefault();
-            retVal.Load(APIAccess);
+            this.Context.Entry(apiAccess).State = EntityState.Modified;
         }
 
         public void Add(sysBpmsAPIAccess APIAccess)

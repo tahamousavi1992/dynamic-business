@@ -28,18 +28,7 @@ namespace DynamicBusiness.BPMS.Domain
 
             return resultOperation;
 
-        }
-
-        public void Load(sysBpmsDBConnection DBConnection)
-        {
-            this.ID = DBConnection.ID;
-            this.Name = DBConnection.Name;
-            this.DataSource = DBConnection.DataSource;
-            this.InitialCatalog = DBConnection.InitialCatalog;
-            this.UserID = DBConnection.UserID;
-            this.Password = DBConnection.Password;
-            this.IntegratedSecurity = DBConnection.IntegratedSecurity;
-        }
+        } 
         [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         public string GetConnection
         {

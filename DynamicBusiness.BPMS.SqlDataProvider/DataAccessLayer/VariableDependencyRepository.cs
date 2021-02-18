@@ -22,12 +22,9 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             this.Context.sysBpmsVariableDependencies.Add(variableDependency);
         }
 
-        public void Update(sysBpmsVariableDependency VariableDependency)
+        public void Update(sysBpmsVariableDependency variableDependency)
         {
-            sysBpmsVariableDependency retVal = (from p in this.Context.sysBpmsVariableDependencies
-                                            where p.ID == VariableDependency.ID
-                                            select p).FirstOrDefault();
-            retVal.Load(VariableDependency);
+            this.Context.Entry(variableDependency).State = EntityState.Modified;
         }
 
         public void Delete(Guid VariableDependencyId)

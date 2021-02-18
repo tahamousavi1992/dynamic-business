@@ -21,12 +21,9 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             this.Context.sysBpmsDBConnections.Add(DBConnection);
         }
 
-        public void Update(sysBpmsDBConnection DBConnection)
+        public void Update(sysBpmsDBConnection dbConnection)
         {
-            sysBpmsDBConnection retVal = (from p in this.Context.sysBpmsDBConnections
-                                      where p.ID == DBConnection.ID
-                                   select p).FirstOrDefault();
-            retVal.Load(DBConnection);
+            this.Context.Entry(dbConnection).State = EntityState.Modified;
         }
 
         public void Delete(Guid DBConnectionId)

@@ -21,12 +21,9 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             this.Context.sysBpmsThreadVariables.Add(ThreadVariable);
         }
 
-        public void Update(sysBpmsThreadVariable ThreadVariable)
+        public void Update(sysBpmsThreadVariable threadVariable)
         {
-            sysBpmsThreadVariable retVal = (from p in this.Context.sysBpmsThreadVariables
-                                        where p.ID == ThreadVariable.ID
-                                     select p).FirstOrDefault();
-            retVal.Load(ThreadVariable);
+            this.Context.Entry(threadVariable).State = EntityState.Modified;
         }
 
         public void Delete(Guid ID)

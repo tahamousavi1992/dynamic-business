@@ -23,10 +23,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public void Update(sysBpmsCondition Condition)
         {
-            sysBpmsCondition retVal = (from p in this.Context.sysBpmsConditions
-                                   where p.ID == Condition.ID
-                                   select p).FirstOrDefault();
-            retVal.Load(Condition);
+            this.Context.Entry(Condition).State = EntityState.Modified;
         }
 
         public void Delete(Guid ConditionId)

@@ -23,10 +23,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public void Update(sysBpmsLane lane)
         {
-            sysBpmsLane retVal = (from p in this.Context.sysBpmsLanes
-                              where p.ID == lane.ID
-                              select p).FirstOrDefault();
-            retVal.Load(lane);
+            this.Context.Entry(lane).State = EntityState.Modified;
         }
 
         public void Delete(Guid id)

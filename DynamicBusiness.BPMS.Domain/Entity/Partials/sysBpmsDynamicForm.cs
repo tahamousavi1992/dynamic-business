@@ -49,22 +49,7 @@ namespace DynamicBusiness.BPMS.Domain
         {
             this.OnEntryFormCode = onEntryFormCode;
         }
-
-        public void Load(sysBpmsDynamicForm dynamicForm)
-        {
-            this.ID = dynamicForm.ID;
-            this.ProcessId = dynamicForm.ProcessId;
-            this.ApplicationPageID = dynamicForm.ApplicationPageID;
-            this.Name = dynamicForm.Name;
-            this.DesignJson = dynamicForm.DesignJson;
-            this.ConfigXML = dynamicForm.ConfigXML;
-            this.Version = dynamicForm.Version;
-            this.OnEntryFormCode = dynamicForm.OnEntryFormCode;
-            this.OnExitFormCode = dynamicForm.OnExitFormCode;
-            this.ShowInOverview = dynamicForm.ShowInOverview;
-            this.SourceCode = dynamicForm.SourceCode;
-        }
-
+         
         public object FindControl(string controlID)
         {
             return ElementBase.GetElement(this.GetControls().FirstOrDefault(c => c["id"].ToStringObj() == controlID), null, this.ID, false);

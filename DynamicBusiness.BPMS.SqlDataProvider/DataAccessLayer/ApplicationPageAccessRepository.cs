@@ -61,10 +61,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public void Update(sysBpmsApplicationPageAccess applicationPageAccess)
         {
-            sysBpmsApplicationPageAccess retVal = (from p in this.Context.sysBpmsApplicationPageAccesses
-                                               where p.ID == applicationPageAccess.ID
-                                            select p).FirstOrDefault();
-            retVal.Load(applicationPageAccess);
+            this.Context.Entry(applicationPageAccess).State = EntityState.Modified;
         }
 
         public bool GetUserAccess(Guid? userID, Guid applicationPageID, ElementBase.e_AccessType e_AccessType)

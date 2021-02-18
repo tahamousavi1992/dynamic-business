@@ -24,10 +24,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public void Update(sysBpmsUser user)
         {
-            sysBpmsUser retVal = (from p in this.Context.sysBpmsUsers
-                              where p.ID == user.ID
-                              select p).FirstOrDefault();
-            retVal.Load(user);
+            this.Context.Entry(user).State = EntityState.Modified;
         }
 
         public void Delete(Guid UserId)

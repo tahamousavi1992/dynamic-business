@@ -19,13 +19,6 @@ namespace DynamicBusiness.BPMS.Domain
             this.DynamicFormID = dynamicFormID;
             this.Name = name;
         }
-        public void Load(sysBpmsStep Step)
-        {
-            this.ID = Step.ID;
-            this.TaskID = Step.TaskID;
-            this.DynamicFormID = Step.DynamicFormID;
-            this.Position = Step.Position;
-            this.Name = Step.Name;
-        }
+        
     }
 }

@@ -24,10 +24,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public void Update(sysBpmsApplicationPage applicationPage)
         {
-            Domain.sysBpmsApplicationPage retVal = (from p in this.Context.sysBpmsApplicationPages
-                                                where p.ID == applicationPage.ID
-                                             select p).FirstOrDefault();
-            retVal.Load(applicationPage);
+            this.Context.Entry(applicationPage).State = EntityState.Modified;
         }
 
         public void Delete(Guid applicationPageId)

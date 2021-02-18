@@ -53,19 +53,7 @@ namespace DynamicBusiness.BPMS.Domain
             return resultOperation;
         }
 
-        public void Load(sysBpmsEvent Event)
-        {
-            this.ID = Event.ID;
-            this.ProcessID = Event.ProcessID;
-            this.ElementID = Event.ElementID;
-            this.TypeLU = Event.TypeLU;
-            this.ConfigurationXML = Event.ConfigurationXML;
-            this.SubType = Event.SubType;
-            this.RefElementID = Event.RefElementID;
-            this.CancelActivity = Event.CancelActivity;
-            this.MessageTypeID = Event.MessageTypeID;
-        }
-
+      
         public enum e_TypeLU
         {
             StartEvent = 1,

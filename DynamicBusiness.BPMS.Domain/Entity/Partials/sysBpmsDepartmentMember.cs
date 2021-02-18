@@ -22,12 +22,6 @@ namespace DynamicBusiness.BPMS.Domain
             this.RoleLU = RoleLU;
         }
 
-        public void Load(sysBpmsDepartmentMember DepartmentMember)
-        {
-            this.ID = DepartmentMember.ID;
-            this.DepartmentID = DepartmentMember.DepartmentID;
-            this.UserID = DepartmentMember.UserID;
-            this.RoleLU = DepartmentMember.RoleLU;
-        }
+      
     }
 }

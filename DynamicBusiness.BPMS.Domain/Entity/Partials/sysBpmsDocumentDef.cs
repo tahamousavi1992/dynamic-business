@@ -23,18 +23,6 @@ namespace DynamicBusiness.BPMS.Domain
             this.IsActive = isActive;
 
         }
-        public void Load(sysBpmsDocumentDef DocumentDef)
-        {
-            this.ID = DocumentDef.ID;
-            this.DocumentFolderID = DocumentDef.DocumentFolderID;
-            this.NameOf = DocumentDef.NameOf;
-            this.DisplayName = DocumentDef.DisplayName;
-            this.MaxSize = DocumentDef.MaxSize;
-            this.ValidExtentions = DocumentDef.ValidExtentions;
-            this.IsMandatory = DocumentDef.IsMandatory;
-            this.Description = DocumentDef.Description;
-            this.IsSystemic = DocumentDef.IsSystemic;
-            this.IsActive = DocumentDef.IsActive;
-        }
+       
     }
 }

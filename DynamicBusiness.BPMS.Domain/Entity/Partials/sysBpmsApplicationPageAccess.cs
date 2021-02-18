@@ -25,19 +25,6 @@ namespace DynamicBusiness.BPMS.Domain
             this.AllowDelete = allowDelete;
             this.AllowView = allowView;
             return this;
-        }
-
-        public void Load(sysBpmsApplicationPageAccess applicationPageAccess)
-        {
-            this.ID = applicationPageAccess.ID;
-            this.ApplicationPageID = applicationPageAccess.ApplicationPageID;
-            this.DepartmentID = applicationPageAccess.DepartmentID;
-            this.RoleLU = applicationPageAccess.RoleLU;
-            this.UserID = applicationPageAccess.UserID;
-            this.AllowAdd = applicationPageAccess.AllowAdd;
-            this.AllowEdit = applicationPageAccess.AllowEdit;
-            this.AllowDelete = applicationPageAccess.AllowDelete;
-            this.AllowView = applicationPageAccess.AllowView;
-        }
+        } 
     }
 }

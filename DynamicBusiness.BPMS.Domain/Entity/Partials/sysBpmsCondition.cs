@@ -23,15 +23,7 @@ namespace DynamicBusiness.BPMS.Domain
             if (!this.SequenceFlowID.HasValue)
                 resultOperation.AddError(SharedLang.GetReuired(nameof(sysBpmsCondition.SequenceFlowID), nameof(sysBpmsCondition)));
             return resultOperation;
-        }
-
-        public void Load(sysBpmsCondition Condition)
-        {
-            this.ID = Condition.ID;
-            this.GatewayID = Condition.GatewayID;
-            this.SequenceFlowID = Condition.SequenceFlowID;
-            this.Code = Condition.Code;
-        }
+        } 
     }
 
 }

@@ -24,10 +24,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public void Update(sysBpmsThreadEvent threadEvent)
         {
-            sysBpmsThreadEvent retVal = (from p in this.Context.sysBpmsThreadEvents
-                                         where p.ID == threadEvent.ID
-                                         select p).FirstOrDefault();
-            retVal.Load(threadEvent);
+            this.Context.Entry(threadEvent).State = EntityState.Modified;
         }
 
         public void Delete(Guid threadEventId)

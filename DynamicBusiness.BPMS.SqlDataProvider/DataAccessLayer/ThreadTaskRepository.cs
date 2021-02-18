@@ -25,10 +25,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public void Update(sysBpmsThreadTask ThreadTask)
         {
-            sysBpmsThreadTask retVal = (from p in this.Context.sysBpmsThreadTasks
-                                    where p.ID == ThreadTask.ID
-                                    select p).FirstOrDefault();
-            retVal.Load(ThreadTask);
+            this.Context.Entry(ThreadTask).State = EntityState.Modified;
         }
 
         public sysBpmsThreadTask GetInfo(Guid ID, string[] Includes)

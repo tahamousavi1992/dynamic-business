@@ -23,11 +23,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public void Update(sysBpmsDynamicForm dynamicForm)
         {
-            sysBpmsDynamicForm retVal = (from p in this.Context.sysBpmsDynamicForms
-                                     where p.ID == dynamicForm.ID
-                                     select p).FirstOrDefault();
-            retVal.Load(dynamicForm);
-
+            this.Context.Entry(dynamicForm).State = EntityState.Modified;
         }
 
         public void Delete(Guid dynamicFormId)

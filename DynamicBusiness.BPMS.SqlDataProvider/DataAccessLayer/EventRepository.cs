@@ -23,10 +23,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public void Update(sysBpmsEvent Event)
         {
-            sysBpmsEvent retVal = (from p in this.Context.sysBpmsEvents
-                               where p.ID == Event.ID
-                               select p).FirstOrDefault();
-            retVal.Load(Event);
+            this.Context.Entry(Event).State = EntityState.Modified;
         }
 
         public void Delete(Guid id)

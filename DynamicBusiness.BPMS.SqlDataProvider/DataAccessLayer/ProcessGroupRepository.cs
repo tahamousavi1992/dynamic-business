@@ -24,10 +24,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public void Update(sysBpmsProcessGroup processGroup)
         {
-            sysBpmsProcessGroup retVal = (from p in this.Context.sysBpmsProcessGroups
-                                    where p.ID == processGroup.ID
-                                    select p).FirstOrDefault();
-            retVal.Load(processGroup);
+            this.Context.Entry(processGroup).State = EntityState.Modified;
         }
 
         public void Delete(Guid processGroupId)

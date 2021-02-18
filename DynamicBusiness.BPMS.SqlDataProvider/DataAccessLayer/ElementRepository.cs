@@ -22,10 +22,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public void Update(sysBpmsElement element)
         {
-            sysBpmsElement retVal = (from p in this.Context.sysBpmsElements
-                                 where p.ID == element.ID && p.ProcessID == element.ProcessID
-                                 select p).FirstOrDefault();
-            retVal.Load(element);
+            this.Context.Entry(element).State = EntityState.Modified;
         }
 
         public void Delete(string elementId, Guid processId)

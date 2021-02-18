@@ -23,10 +23,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public void Update(sysBpmsMessageType messageType)
         {
-            sysBpmsMessageType retVal = (from p in this.Context.sysBpmsMessageTypes
-                                     where p.ID == messageType.ID
-                                     select p).FirstOrDefault();
-            retVal.Load(messageType);
+            this.Context.Entry(messageType).State = EntityState.Modified;
         }
 
         public void Delete(Guid messageTypeId)

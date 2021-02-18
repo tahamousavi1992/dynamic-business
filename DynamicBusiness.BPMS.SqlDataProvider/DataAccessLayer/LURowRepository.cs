@@ -127,12 +127,9 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             return retVal != null ? retVal : "";
         }
 
-        public void Update(sysBpmsLURow LURow)
+        public void Update(sysBpmsLURow lurow)
         {
-            sysBpmsLURow retVal = (from P in this.Context.sysBpmsLURows
-                               where P.ID == LURow.ID
-                            select P).FirstOrDefault();
-            retVal.Load(LURow);
+            this.Context.Entry(lurow).State = EntityState.Modified;
         }
 
         public void Delete(Guid processGroupId)

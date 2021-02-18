@@ -20,12 +20,9 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             this.Context.sysBpmsDepartmentMembers.Add(DepartmentMember);
         }
 
-        public void Update(sysBpmsDepartmentMember DepartmentMember)
+        public void Update(sysBpmsDepartmentMember departmentMember)
         {
-            sysBpmsDepartmentMember retVal = (from p in this.Context.sysBpmsDepartmentMembers
-                                          where p.ID == DepartmentMember.ID
-                                          select p).FirstOrDefault();
-            retVal.Load(DepartmentMember);
+            this.Context.Entry(departmentMember).State = EntityState.Modified;
         }
 
         public void Delete(Guid DepartmentMemberId)

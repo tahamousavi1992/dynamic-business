@@ -16,13 +16,6 @@ namespace DynamicBusiness.BPMS.Domain
             this.Description = description;
             return new ResultOperation();
         }
-
-        public void Load(sysBpmsProcessGroup sysBpmsProcessGroup)
-        {
-            this.ID = sysBpmsProcessGroup.ID;
-            this.ProcessGroupID = sysBpmsProcessGroup.ProcessGroupID;
-            this.Name = sysBpmsProcessGroup.Name;
-            this.Description = sysBpmsProcessGroup.Description;
-        }
+ 
     }
 }

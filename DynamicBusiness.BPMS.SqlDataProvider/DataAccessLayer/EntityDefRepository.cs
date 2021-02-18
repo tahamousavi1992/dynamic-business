@@ -25,10 +25,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public void Update(sysBpmsEntityDef entityDef)
         {
-            sysBpmsEntityDef retVal = (from p in this.Context.sysBpmsEntityDefs
-                                       where p.ID == entityDef.ID
-                                       select p).FirstOrDefault();
-            retVal.Load(entityDef);
+            this.Context.Entry(entityDef).State = EntityState.Modified;
         }
 
         public void Delete(Guid entityDefId)

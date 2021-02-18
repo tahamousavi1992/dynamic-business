@@ -21,14 +21,7 @@ namespace DynamicBusiness.BPMS.Domain
                 resultOperation.AddError(LangUtility.Get("SameName.Text", nameof(sysBpmsMessageType)));
             return resultOperation;
         }
-
-        public void Load(sysBpmsMessageType messageType)
-        {
-            this.ID = messageType.ID;
-            this.Name = messageType.Name;
-            this.ParamsXML = messageType.ParamsXML;
-            this.IsActive = messageType.IsActive;
-        }
+ 
         [NotMapped]
         public List<MessageTypeParamsModel> ParamsXmlModel
         {

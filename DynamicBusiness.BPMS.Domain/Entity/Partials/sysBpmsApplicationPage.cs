@@ -17,14 +17,7 @@ namespace DynamicBusiness.BPMS.Domain
             return this;
         }
 
-        public void Load(sysBpmsApplicationPage applicationPage)
-        {
-            this.ID = applicationPage.ID;
-            this.GroupLU = applicationPage.GroupLU;
-            this.Description = applicationPage.Description;
-            this.ShowInMenu = applicationPage.ShowInMenu;
-        }
-
+       
         public enum e_OwnerTypeLU
         {
             User = 1,
