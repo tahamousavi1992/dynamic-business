@@ -192,6 +192,19 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         private static void CompileAssemblies(string sourceScript, string assemblyID)
         {
+            string compiled = BPMSResources.FilesRoot + BPMSResources.AssemblyRoot + "\\" + BPMSResources.AssemblyCompiledRoot;
+            string compiledFile = compiled + "\\" + assemblyID;
+            //if sourceScript is empty, do nothing and delete dll file in case it is existed.
+            if (string.IsNullOrWhiteSpace(sourceScript))
+            {
+                try
+                {
+                    if (File.Exists(compiledFile))
+                        File.Delete(compiledFile);
+                }
+                catch { }
+                return;
+            }
             sourceScript = @"using System;
                             using System.Linq;
                             using System.Collections.Generic;
@@ -200,8 +213,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                             using DotNetNuke.Security.Membership;
                             using DynamicBusiness.BPMS.CodePanel;
                              " + Environment.NewLine + sourceScript;
-            string compiled = BPMSResources.FilesRoot + BPMSResources.AssemblyRoot + "\\" + BPMSResources.AssemblyCompiledRoot;
-            string compiledFile = compiled + "\\" + assemblyID;
+
             List<string> allAssembly = new List<string>();
             System.CodeDom.Compiler.CompilerParameters dynamicParams =
                           new System.CodeDom.Compiler.CompilerParameters();

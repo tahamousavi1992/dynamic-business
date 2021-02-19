@@ -40,10 +40,14 @@ namespace DynamicBusiness.BPMS.Controllers
         }
 
         [HttpGet]
-        public object GetAddEdit(Guid ID)
+        public object GetAddEdit(Guid? ID = null)
         {
-            sysBpmsEmailAccount emailAccount = ID == Guid.Empty ? null : new EmailAccountService().GetList((int)sysBpmsEmailAccount.e_ObjectTypeLU.User, ID, null).LastOrDefault();
-            return (new UserDTO(new UserService().GetInfo(ID) ?? new sysBpmsUser(), emailAccount));
+            using (EmailAccountService emailAccountService = new EmailAccountService())
+            {
+                sysBpmsEmailAccount emailAccount = !ID.HasValue ? null : emailAccountService.GetList((int)sysBpmsEmailAccount.e_ObjectTypeLU.User, ID, null).LastOrDefault();
+                using (UserService userService = new UserService())
+                    return (new UserDTO((ID.HasValue ? userService.GetInfo(ID.Value) : new sysBpmsUser()), emailAccount));
+            }
         }
 
         [HttpPost]
@@ -69,7 +73,7 @@ namespace DynamicBusiness.BPMS.Controllers
                 UserInfo userInfo = userCodeHelper.GetSiteUser(user.Username);
                 if (userInfo == null)
                 {
-                    bool createResult = userCodeHelper.CreateSiteUser(user.Username, user.FirstName, user.LastName, user.Email, (string.IsNullOrWhiteSpace(UserDTO.Password) ? UserController.GeneratePassword() : UserDTO.Password), false);
+                    bool createResult = userCodeHelper.CreateSiteUser(user.Username, user.FirstName, user.LastName, user.Email, (string.IsNullOrWhiteSpace(UserDTO.Password) ? UserController.GeneratePassword() : UserDTO.Password), false, createBpms: false);
                     if (!createResult)
                         return new PostMethodMessage(SharedLang.Get("CreateUserError.Text"), DisplayMessageType.error);
                 }
@@ -119,10 +123,13 @@ namespace DynamicBusiness.BPMS.Controllers
         [HttpDelete]
         public object Delete(Guid ID)
         {
-            ResultOperation resultOperation = new UserService().Delete(ID);
-            if (resultOperation.IsSuccess)
-                return new PostMethodMessage(SharedLang.Get("Success.Text"), DisplayMessageType.success);
-            return new PostMethodMessage(resultOperation.GetErrors(), DisplayMessageType.error);
+            using (UserService userService = new UserService())
+            {
+                ResultOperation resultOperation = userService.Delete(ID);
+                if (resultOperation.IsSuccess)
+                    return new PostMethodMessage(SharedLang.Get("Success.Text"), DisplayMessageType.success);
+                return new PostMethodMessage(resultOperation.GetErrors(), DisplayMessageType.error);
+            }
         }
     }
 }

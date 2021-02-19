@@ -95,7 +95,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public bool CreateSiteUser(UserInfo userInfo, string password, bool doLogin = true)
         {
-            userInfo.Membership.Approved = DotNetNuke.Entities.Portals.PortalSettings.Current.UserRegistration == (int)Globals.PortalRegistrationType.PublicRegistration;
+            userInfo.Membership.Approved = true;
             userInfo.Membership.CreatedDate = System.DateTime.Now;
             userInfo.Membership.Password = password;
             userInfo.IsDeleted = false;
@@ -116,23 +116,21 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                     Mail.SendMail(userInfo, DotNetNuke.Services.Mail.MessageType.UserRegistrationAdmin, portalSettings);
                     SendAdminNotification(userInfo, portalSettings);
                 }
-                var loginStatus = UserLoginStatus.LOGIN_FAILURE;
-                switch (portalSettings.UserRegistration)
+                //because of some bugs in dnn, sometimes it must be approved after getting it from dnn. 
+                if (!userInfo.Membership.Approved)
                 {
-                    case (int)Globals.PortalRegistrationType.PrivateRegistration:
-                        string msg = Mail.SendMail(userInfo, DotNetNuke.Services.Mail.MessageType.UserRegistrationPrivate, portalSettings);
-                        break;
-                    case (int)Globals.PortalRegistrationType.PublicRegistration:
-                        Mail.SendMail(userInfo, DotNetNuke.Services.Mail.MessageType.UserRegistrationPublic, portalSettings);
-                        if (doLogin)
-                            UserController.UserLogin(portalSettings.PortalId, userInfo.Username, userInfo.Membership.Password, "", portalSettings.PortalName, "", ref loginStatus, false);
-                        break;
-                    case (int)Globals.PortalRegistrationType.VerifiedRegistration:
-                        Mail.SendMail(userInfo, DotNetNuke.Services.Mail.MessageType.UserRegistrationVerified, portalSettings);
-                        if (doLogin)
-                            UserController.UserLogin(portalSettings.PortalId, userInfo.Username, userInfo.Membership.Password, "", portalSettings.PortalName, "", ref loginStatus, false);
-                        break;
+                    userInfo = UserController.GetUserByName(userInfo.Username);
+                    userInfo.Membership.Approved = true;
+                    UserController.UpdateUser(userInfo.PortalID, userInfo);
+                    UserController.ApproveUser(userInfo);
                 }
+                if (doLogin)
+                {
+                    UserLoginStatus loginStatus = UserLoginStatus.LOGIN_FAILURE;
+                    UserController.UserLogin(portalSettings.PortalId, userInfo.Username, userInfo.Membership.Password, "", portalSettings.PortalName, "", ref loginStatus, false);
+                }
+                Mail.SendMail(userInfo, DotNetNuke.Services.Mail.MessageType.UserRegistrationPublic, portalSettings);
+
                 return true;
             }
             else
