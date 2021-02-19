@@ -113,11 +113,11 @@
                 c => new
                     {
                         ID = c.String(nullable: false, maxLength: 100),
+                        ProcessID = c.Guid(nullable: false),
                         Name = c.String(nullable: false, maxLength: 500),
                         TypeLU = c.Int(nullable: false),
-                        ProcessID = c.Guid(nullable: false),
                     })
-                .PrimaryKey(t => t.ID)
+                .PrimaryKey(t => new { t.ID, t.ProcessID })
                 .ForeignKey("dbo.sysBpmsProcess", t => t.ProcessID)
                 .Index(t => t.ProcessID);
             
@@ -136,11 +136,10 @@
                         MessageTypeID = c.Guid(),
                     })
                 .PrimaryKey(t => t.ID)
-                .ForeignKey("dbo.sysBpmsElement", t => t.ElementID)
+                .ForeignKey("dbo.sysBpmsElement", t => new { t.ElementID, t.ProcessID })
                 .ForeignKey("dbo.sysBpmsMessageType", t => t.MessageTypeID)
                 .ForeignKey("dbo.sysBpmsProcess", t => t.ProcessID)
-                .Index(t => t.ElementID)
-                .Index(t => t.ProcessID)
+                .Index(t => new { t.ElementID, t.ProcessID })
                 .Index(t => t.MessageTypeID);
             
             CreateTable(
@@ -381,10 +380,9 @@
                         ProcessID = c.Guid(nullable: false),
                     })
                 .PrimaryKey(t => t.ID)
-                .ForeignKey("dbo.sysBpmsElement", t => t.ElementID)
+                .ForeignKey("dbo.sysBpmsElement", t => new { t.ElementID, t.ProcessID })
                 .ForeignKey("dbo.sysBpmsProcess", t => t.ProcessID)
-                .Index(t => t.ElementID)
-                .Index(t => t.ProcessID);
+                .Index(t => new { t.ElementID, t.ProcessID });
             
             CreateTable(
                 "dbo.sysBpmsStep",
@@ -456,12 +454,11 @@
                         ProcessID = c.Guid(nullable: false),
                     })
                 .PrimaryKey(t => t.ID)
-                .ForeignKey("dbo.sysBpmsElement", t => t.ElementID)
+                .ForeignKey("dbo.sysBpmsElement", t => new { t.ElementID, t.ProcessID })
                 .ForeignKey("dbo.sysBpmsProcess", t => t.ProcessID)
                 .ForeignKey("dbo.sysBpmsSequenceFlow", t => t.DefaultSequenceFlowID)
-                .Index(t => t.ElementID)
-                .Index(t => t.DefaultSequenceFlowID)
-                .Index(t => t.ProcessID);
+                .Index(t => new { t.ElementID, t.ProcessID })
+                .Index(t => t.DefaultSequenceFlowID);
             
             CreateTable(
                 "dbo.sysBpmsCondition",
@@ -490,10 +487,9 @@
                         TargetElementID = c.String(maxLength: 100),
                     })
                 .PrimaryKey(t => t.ID)
-                .ForeignKey("dbo.sysBpmsElement", t => t.ElementID)
+                .ForeignKey("dbo.sysBpmsElement", t => new { t.ElementID, t.ProcessID })
                 .ForeignKey("dbo.sysBpmsProcess", t => t.ProcessID)
-                .Index(t => t.ElementID)
-                .Index(t => t.ProcessID);
+                .Index(t => new { t.ElementID, t.ProcessID });
             
             CreateTable(
                 "dbo.sysBpmsLane",
@@ -504,10 +500,9 @@
                         ProcessID = c.Guid(nullable: false),
                     })
                 .PrimaryKey(t => t.ID)
-                .ForeignKey("dbo.sysBpmsElement", t => t.ElementID)
+                .ForeignKey("dbo.sysBpmsElement", t => new { t.ElementID, t.ProcessID })
                 .ForeignKey("dbo.sysBpmsProcess", t => t.ProcessID)
-                .Index(t => t.ElementID)
-                .Index(t => t.ProcessID);
+                .Index(t => new { t.ElementID, t.ProcessID });
             
             CreateTable(
                 "dbo.sysBpmsProcessGroup",
@@ -591,13 +586,13 @@
             DropForeignKey("dbo.sysBpmsProcess", "ParentProcessID", "dbo.sysBpmsProcess");
             DropForeignKey("dbo.sysBpmsElement", "ProcessID", "dbo.sysBpmsProcess");
             DropForeignKey("dbo.sysBpmsLane", "ProcessID", "dbo.sysBpmsProcess");
-            DropForeignKey("dbo.sysBpmsLane", "ElementID", "dbo.sysBpmsElement");
+            DropForeignKey("dbo.sysBpmsLane", new[] { "ElementID", "ProcessID" }, "dbo.sysBpmsElement");
             DropForeignKey("dbo.sysBpmsGateway", "DefaultSequenceFlowID", "dbo.sysBpmsSequenceFlow");
             DropForeignKey("dbo.sysBpmsGateway", "ProcessID", "dbo.sysBpmsProcess");
-            DropForeignKey("dbo.sysBpmsGateway", "ElementID", "dbo.sysBpmsElement");
+            DropForeignKey("dbo.sysBpmsGateway", new[] { "ElementID", "ProcessID" }, "dbo.sysBpmsElement");
             DropForeignKey("dbo.sysBpmsCondition", "SequenceFlowID", "dbo.sysBpmsSequenceFlow");
             DropForeignKey("dbo.sysBpmsSequenceFlow", "ProcessID", "dbo.sysBpmsProcess");
-            DropForeignKey("dbo.sysBpmsSequenceFlow", "ElementID", "dbo.sysBpmsElement");
+            DropForeignKey("dbo.sysBpmsSequenceFlow", new[] { "ElementID", "ProcessID" }, "dbo.sysBpmsElement");
             DropForeignKey("dbo.sysBpmsCondition", "GatewayID", "dbo.sysBpmsGateway");
             DropForeignKey("dbo.sysBpmsThreadEvent", "ThreadTaskID", "dbo.sysBpmsThreadTask");
             DropForeignKey("dbo.sysBpmsThreadEvent", "ThreadID", "dbo.sysBpmsThread");
@@ -611,7 +606,7 @@
             DropForeignKey("dbo.sysBpmsStep", "TaskID", "dbo.sysBpmsTask");
             DropForeignKey("dbo.sysBpmsStep", "DynamicFormID", "dbo.sysBpmsDynamicForm");
             DropForeignKey("dbo.sysBpmsTask", "ProcessID", "dbo.sysBpmsProcess");
-            DropForeignKey("dbo.sysBpmsTask", "ElementID", "dbo.sysBpmsElement");
+            DropForeignKey("dbo.sysBpmsTask", new[] { "ElementID", "ProcessID" }, "dbo.sysBpmsElement");
             DropForeignKey("dbo.sysBpmsThread", "ProcessID", "dbo.sysBpmsProcess");
             DropForeignKey("dbo.sysBpmsDocument", "ThreadID", "dbo.sysBpmsThread");
             DropForeignKey("dbo.sysBpmsDocument", "EntityDefID", "dbo.sysBpmsEntityDef");
@@ -631,26 +626,22 @@
             DropForeignKey("dbo.sysBpmsThreadEvent", "EventID", "dbo.sysBpmsEvent");
             DropForeignKey("dbo.sysBpmsEvent", "ProcessID", "dbo.sysBpmsProcess");
             DropForeignKey("dbo.sysBpmsEvent", "MessageTypeID", "dbo.sysBpmsMessageType");
-            DropForeignKey("dbo.sysBpmsEvent", "ElementID", "dbo.sysBpmsElement");
+            DropForeignKey("dbo.sysBpmsEvent", new[] { "ElementID", "ProcessID" }, "dbo.sysBpmsElement");
             DropForeignKey("dbo.sysBpmsDynamicForm", "ApplicationPageID", "dbo.sysBpmsApplicationPage");
             DropIndex("dbo.sysBpmsLURow", new[] { "LUTableID" });
             DropIndex("dbo.sysBpmsProcessGroup", new[] { "ProcessGroupID" });
-            DropIndex("dbo.sysBpmsLane", new[] { "ProcessID" });
-            DropIndex("dbo.sysBpmsLane", new[] { "ElementID" });
-            DropIndex("dbo.sysBpmsSequenceFlow", new[] { "ProcessID" });
-            DropIndex("dbo.sysBpmsSequenceFlow", new[] { "ElementID" });
+            DropIndex("dbo.sysBpmsLane", new[] { "ElementID", "ProcessID" });
+            DropIndex("dbo.sysBpmsSequenceFlow", new[] { "ElementID", "ProcessID" });
             DropIndex("dbo.sysBpmsCondition", new[] { "SequenceFlowID" });
             DropIndex("dbo.sysBpmsCondition", new[] { "GatewayID" });
-            DropIndex("dbo.sysBpmsGateway", new[] { "ProcessID" });
             DropIndex("dbo.sysBpmsGateway", new[] { "DefaultSequenceFlowID" });
-            DropIndex("dbo.sysBpmsGateway", new[] { "ElementID" });
+            DropIndex("dbo.sysBpmsGateway", new[] { "ElementID", "ProcessID" });
             DropIndex("dbo.sysBpmsDepartment", new[] { "DepartmentID" });
             DropIndex("dbo.sysBpmsDepartmentMember", new[] { "UserID" });
             DropIndex("dbo.sysBpmsDepartmentMember", new[] { "DepartmentID" });
             DropIndex("dbo.sysBpmsStep", new[] { "DynamicFormID" });
             DropIndex("dbo.sysBpmsStep", new[] { "TaskID" });
-            DropIndex("dbo.sysBpmsTask", new[] { "ProcessID" });
-            DropIndex("dbo.sysBpmsTask", new[] { "ElementID" });
+            DropIndex("dbo.sysBpmsTask", new[] { "ElementID", "ProcessID" });
             DropIndex("dbo.sysBpmsThreadTask", new[] { "OwnerUserID" });
             DropIndex("dbo.sysBpmsThreadTask", new[] { "TaskID" });
             DropIndex("dbo.sysBpmsThreadTask", new[] { "ThreadID" });
@@ -675,8 +666,7 @@
             DropIndex("dbo.sysBpmsThreadEvent", new[] { "EventID" });
             DropIndex("dbo.sysBpmsThreadEvent", new[] { "ThreadID" });
             DropIndex("dbo.sysBpmsEvent", new[] { "MessageTypeID" });
-            DropIndex("dbo.sysBpmsEvent", new[] { "ProcessID" });
-            DropIndex("dbo.sysBpmsEvent", new[] { "ElementID" });
+            DropIndex("dbo.sysBpmsEvent", new[] { "ElementID", "ProcessID" });
             DropIndex("dbo.sysBpmsElement", new[] { "ProcessID" });
             DropIndex("dbo.sysBpmsProcess", new[] { "ProcessGroupID" });
             DropIndex("dbo.sysBpmsProcess", new[] { "ParentProcessID" });

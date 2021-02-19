@@ -7,14 +7,13 @@ namespace DynamicBusiness.BPMS.Domain
     using System.ComponentModel.DataAnnotations;
     public partial class sysBpmsGateway
     {
-        
+
         public sysBpmsGateway()
         {
             this.Conditions = new HashSet<sysBpmsCondition>();
         }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public System.Guid ID { get; set; }
-        [ForeignKey(nameof(Element))]
         [Required(AllowEmptyStrings = true)]
         [MaxLength(100)]
         public string ElementID { get; set; }
@@ -24,8 +23,8 @@ namespace DynamicBusiness.BPMS.Domain
         public string TraceToStart { get; set; }
         [ForeignKey(nameof(Process))]
         public System.Guid ProcessID { get; set; }
-    
-        
+
+
         public virtual ICollection<sysBpmsCondition> Conditions { get; set; }
         public virtual sysBpmsElement Element { get; set; }
         public virtual sysBpmsProcess Process { get; set; }

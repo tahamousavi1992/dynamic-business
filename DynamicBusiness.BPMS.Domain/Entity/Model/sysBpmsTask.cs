@@ -16,7 +16,6 @@ namespace DynamicBusiness.BPMS.Domain
         }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public System.Guid ID { get; set; }
-        [ForeignKey(nameof(Element))]
         [Required(AllowEmptyStrings = true)]
         [MaxLength(100)]
         public string ElementID { get; set; }

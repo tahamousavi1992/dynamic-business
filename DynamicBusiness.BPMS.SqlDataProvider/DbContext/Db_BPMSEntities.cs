@@ -31,7 +31,24 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
-            //throw new UnintentionalCodeFirstException(); 
+            //for one to one: HasRequired -> WithOptional
+            //Configure primary key
+
+            modelBuilder.Entity<sysBpmsGateway>().HasRequired(c => c.Element).WithMany(c => c.Gateways).
+                HasForeignKey(c => new { c.ElementID, c.ProcessID });
+
+            modelBuilder.Entity<sysBpmsEvent>().HasRequired(c => c.Element).WithMany(c => c.Events).
+       HasForeignKey(c => new { c.ElementID, c.ProcessID });
+
+            modelBuilder.Entity<sysBpmsTask>().HasRequired(c => c.Element).WithMany(c => c.Tasks).
+       HasForeignKey(c => new { c.ElementID, c.ProcessID });
+
+            modelBuilder.Entity<sysBpmsSequenceFlow>().HasRequired(c => c.Element).WithMany(c => c.SequenceFlows).
+      HasForeignKey(c => new { c.ElementID, c.ProcessID });
+
+            modelBuilder.Entity<sysBpmsLane>().HasRequired(c => c.Element).WithMany(c => c.Lanes).
+    HasForeignKey(c => new { c.ElementID, c.ProcessID });
+
         }
 
         public virtual DbSet<sysBpmsAPIAccess> sysBpmsAPIAccesses { get; set; }

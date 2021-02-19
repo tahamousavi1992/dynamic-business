@@ -11,20 +11,7 @@ namespace DynamicBusiness.BPMS.Domain
     [Serializable]
     public partial class sysBpmsTask
     {
-        public void Load(sysBpmsTask Task)
-        {
-            this.ID = Task.ID;
-            this.ElementID = Task.ElementID;
-            this.ProcessID = Task.ProcessID;
-            this.TypeLU = Task.TypeLU;
-            this.Code = Task.Code;
-            this.RoleName = DomainUtility.toString(Task.RoleName);
-            this.OwnerTypeLU = Task.OwnerTypeLU;
-            this.UserID = Task.UserID;
-            this.Rule = Task.Rule;
-            this.MarkerTypeLU = Task.MarkerTypeLU;
-        }
-
+       
         public ResultOperation Update(string roleName, Guid? specificDepartmentId, int? ownerTypeLU, string userID, string rule)
         {
             ResultOperation resultOperation = new ResultOperation();
