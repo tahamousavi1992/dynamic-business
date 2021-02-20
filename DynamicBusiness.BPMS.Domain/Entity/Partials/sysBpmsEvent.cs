@@ -62,6 +62,7 @@ namespace DynamicBusiness.BPMS.Domain
             boundary = 4,
             IntermediateCatch = 5,
         }
+
         [NotMapped]
         private SubTypeMessageEventModel subTypeMessageEventModel { get; set; }
         [NotMapped]
@@ -93,6 +94,22 @@ namespace DynamicBusiness.BPMS.Domain
             {
                 subTypeTimerEventModel = value;
             }
+        }
+
+        public sysBpmsEvent Clone()
+        {
+            return new sysBpmsEvent
+            {
+                ID = this.ID,
+                ElementID = this.ElementID,
+                TypeLU = this.TypeLU,
+                ConfigurationXML = this.ConfigurationXML,
+                SubType = this.SubType,
+                RefElementID = this.RefElementID,
+                CancelActivity = this.CancelActivity,
+                ProcessID = this.ProcessID,
+                MessageTypeID = this.MessageTypeID,
+            };
         }
     }
 }

@@ -35,5 +35,18 @@ namespace DynamicBusiness.BPMS.Domain
         
         public virtual ICollection<sysBpmsGateway> Gateways { get; set; }
         public virtual sysBpmsProcess Process { get; set; }
+
+        public sysBpmsSequenceFlow Clone()
+        {
+            return new sysBpmsSequenceFlow
+            {
+                ID = this.ID,
+                ElementID = this.ElementID,
+                ProcessID = this.ProcessID,
+                Name = this.Name,
+                SourceElementID = this.SourceElementID,
+                TargetElementID = this.TargetElementID,
+            };
+        }
     }
 }

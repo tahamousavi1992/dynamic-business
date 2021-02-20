@@ -29,7 +29,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 this.Context.Entry(local).State = EntityState.Detached;
                 local = null;
             }
-            this.Context.Entry(sequenceFlow).State = EntityState.Modified;
+            this.Context.Entry(sequenceFlow.Clone()).State = EntityState.Modified;
         }
 
         public void Delete(Guid id)

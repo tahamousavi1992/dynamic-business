@@ -8,19 +8,17 @@ namespace DynamicBusiness.BPMS.Domain
     public partial class sysBpmsVariableDependency
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public System.Guid ID { get; set; }
-        [ForeignKey(nameof(DependentVariable))]
-        public System.Guid DependentVariableID { get; set; }
+        public Guid ID { get; set; }
+        public Guid DependentVariableID { get; set; }
         [Required(AllowEmptyStrings = true)]
         [MaxLength(250)]
         public string DependentPropertyName { get; set; }
-        [ForeignKey(nameof(ToVariable))]
-        public Nullable<System.Guid> ToVariableID { get; set; }
+        public Guid? ToVariableID { get; set; }
         [Required(AllowEmptyStrings = true)]
         [MaxLength(250)]
         public string ToPropertyName { get; set; }
         public string Description { get; set; }
-    
+
         public virtual sysBpmsVariable DependentVariable { get; set; }
         public virtual sysBpmsVariable ToVariable { get; set; }
     }

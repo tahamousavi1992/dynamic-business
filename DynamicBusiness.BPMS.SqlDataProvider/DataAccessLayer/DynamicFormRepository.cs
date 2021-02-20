@@ -22,8 +22,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         }
 
         public void Update(sysBpmsDynamicForm dynamicForm)
-        {
-            this.Context.Entry(dynamicForm).State = EntityState.Modified;
+        { 
+            this.Context.Entry(dynamicForm.Clone()).State = EntityState.Modified;
         }
 
         public void Delete(Guid dynamicFormId)

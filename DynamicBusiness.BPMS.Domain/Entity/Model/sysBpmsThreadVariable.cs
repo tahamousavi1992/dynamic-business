@@ -18,5 +18,16 @@ namespace DynamicBusiness.BPMS.Domain
     
         public virtual sysBpmsThread Thread { get; set; }
         public virtual sysBpmsVariable Variable { get; set; }
+
+        public sysBpmsThreadVariable Clone()
+        {
+            return new sysBpmsThreadVariable
+            {
+                ID = this.ID,
+                ThreadID = this.ThreadID,
+                VariableID = this.VariableID,
+                Value = this.Value, 
+            };
+        }
     }
 }

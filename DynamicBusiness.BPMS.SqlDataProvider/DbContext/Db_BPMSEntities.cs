@@ -34,21 +34,28 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             //for one to one: HasRequired -> WithOptional
             //Configure primary key
 
+            //Process Models
             modelBuilder.Entity<sysBpmsGateway>().HasRequired(c => c.Element).WithMany(c => c.Gateways).
                 HasForeignKey(c => new { c.ElementID, c.ProcessID });
 
             modelBuilder.Entity<sysBpmsEvent>().HasRequired(c => c.Element).WithMany(c => c.Events).
-       HasForeignKey(c => new { c.ElementID, c.ProcessID });
+                HasForeignKey(c => new { c.ElementID, c.ProcessID });
 
             modelBuilder.Entity<sysBpmsTask>().HasRequired(c => c.Element).WithMany(c => c.Tasks).
-       HasForeignKey(c => new { c.ElementID, c.ProcessID });
+                HasForeignKey(c => new { c.ElementID, c.ProcessID });
 
             modelBuilder.Entity<sysBpmsSequenceFlow>().HasRequired(c => c.Element).WithMany(c => c.SequenceFlows).
-      HasForeignKey(c => new { c.ElementID, c.ProcessID });
+                HasForeignKey(c => new { c.ElementID, c.ProcessID });
 
             modelBuilder.Entity<sysBpmsLane>().HasRequired(c => c.Element).WithMany(c => c.Lanes).
-    HasForeignKey(c => new { c.ElementID, c.ProcessID });
+                HasForeignKey(c => new { c.ElementID, c.ProcessID });
 
+            //sysBpmsVariableDependency
+            modelBuilder.Entity<sysBpmsVariableDependency>().HasRequired(c => c.DependentVariable).WithMany(c => c.DependentVariableDependencies).
+                HasForeignKey(c => c.DependentVariableID);
+
+            modelBuilder.Entity<sysBpmsVariableDependency>().HasOptional(c => c.ToVariable).WithMany(c => c.ToVariableDependencies).
+                HasForeignKey(c => c.ToVariableID);
         }
 
         public virtual DbSet<sysBpmsAPIAccess> sysBpmsAPIAccesses { get; set; }

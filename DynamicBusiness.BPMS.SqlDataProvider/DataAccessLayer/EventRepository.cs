@@ -16,22 +16,29 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             this.Context = context;
         }
 
-        public void Add(sysBpmsEvent Event)
+        public void Add(sysBpmsEvent _event)
         {
-            this.Context.sysBpmsEvents.Add(Event);
+            this.Context.sysBpmsEvents.Add(_event);
         }
 
-        public void Update(sysBpmsEvent Event)
+        public void Update(sysBpmsEvent _event)
         {
-            this.Context.Entry(Event).State = EntityState.Modified;
+            //To fix 'Attaching an entity failed' error.
+            var local = this.Context.Set<sysBpmsEvent>().Local.FirstOrDefault(f => f.ID == _event.ID);
+            if (local != null)
+            {
+                this.Context.Entry(local).State = EntityState.Detached;
+                local = null;
+            }
+            this.Context.Entry(_event.Clone()).State = EntityState.Modified;
         }
 
         public void Delete(Guid id)
         {
-            sysBpmsEvent Event = this.Context.sysBpmsEvents.FirstOrDefault(d => d.ID == id);
-            if (Event != null)
+            sysBpmsEvent _event = this.Context.sysBpmsEvents.FirstOrDefault(d => d.ID == id);
+            if (_event != null)
             {
-                this.Context.sysBpmsEvents.Remove(Event);
+                this.Context.sysBpmsEvents.Remove(_event);
             }
         }
 
@@ -39,14 +46,14 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         {
             return (from P in this.Context.sysBpmsEvents
                     where P.ID == id
-                    select P).AsNoTracking().FirstOrDefault(); ;
+                    select P).AsNoTracking().FirstOrDefault();
         }
 
         public sysBpmsEvent GetInfo(string elementId, Guid processId)
         {
             return (from P in this.Context.sysBpmsEvents
                     where P.ElementID == elementId && P.ProcessID == processId
-                    select P).AsNoTracking().FirstOrDefault(); ;
+                    select P).AsNoTracking().FirstOrDefault();
         }
 
         public List<sysBpmsEvent> GetList(int? TypeLU, Guid? ProcessID, string RefElementID, int? SubType, string[] Includes)

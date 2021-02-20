@@ -35,7 +35,7 @@ namespace DynamicBusiness.BPMS.Cartable.Controllers
                         MessageList = responseVM?.ListMessageModel.Select(c => new PostMethodMessage(c.Message, c.DisplayMessageType)),
                         RedirectUrl = base.GetRedirectUrl(responseVM?.RedirectUrlModel),
                         Result = true,
-                        ThreadTasks = threadTaskService.GetList(threadTask.ThreadID, (int)sysBpmsTask.e_TypeLU.UserTask, null, null, new string[] { "sysBpmsTask.sysBpmsElement", nameof(sysBpmsThreadTask.User) }).Select(c => new ThreadHistoryDTO(c)).ToList()
+                        ThreadTasks = threadTaskService.GetList(threadTask.ThreadID, (int)sysBpmsTask.e_TypeLU.UserTask, null, null, new string[] { $"{nameof(sysBpmsThreadTask.Task)}.{nameof(sysBpmsThreadTask.Task.Element)}", nameof(sysBpmsThreadTask.User) }).Select(c => new ThreadHistoryDTO(c)).ToList()
                     };
 
                 }

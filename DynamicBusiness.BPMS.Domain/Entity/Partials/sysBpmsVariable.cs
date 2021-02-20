@@ -138,5 +138,26 @@ namespace DynamicBusiness.BPMS.Domain
                 }
             }
         }
+         
+        public sysBpmsVariable Clone()
+        {
+            return new sysBpmsVariable
+            {
+                ID = this.ID,
+                ProcessID = this.ProcessID,
+                ApplicationPageID = this.ApplicationPageID,
+                EntityDefID = this.EntityDefID,
+                DBConnectionID = this.DBConnectionID,
+                Name = this.Name,
+                VarTypeLU = this.VarTypeLU,
+                FieldName = this.FieldName,
+                Query = this.Query,
+                FilterTypeLU = this.FilterTypeLU,
+                Collection = this.Collection,
+                DefaultValue = this.DefaultValue,
+                WhereClause = this.WhereClause,
+                OrderByClause = this.OrderByClause, 
+            }; 
+        }
     }
 }

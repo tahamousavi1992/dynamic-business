@@ -110,7 +110,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                             sysBpmsVariable variable = item.VariableId.ToGuidObjNull() == null ? null :
                                 new VariableService(base.UnitOfWork).GetInfo(item.VariableId.ToGuidObj());
 
-                            Guid? entityId = this.SetDataList.ContainsKey(variable.Name) ? this.SetDataList[variable.Name].GetValue<Guid>("ID") : (Guid?)null;
+                            Guid? entityId = (variable != null && this.SetDataList.ContainsKey(variable.Name)) ? this.SetDataList[variable?.Name].GetValue<Guid>("ID") : (Guid?)null;
                             Guid? entityDefId = variable?.EntityDefID;
                             resultOperation = documentEngine.IsValid(item, variable, entityId, entityDefId, base.EngineSharedModel.CurrentUserName);
                             if (resultOperation.IsSuccess)
@@ -173,8 +173,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             for (int i = 0; i < listSetDataList.Count; i++)
             {
                 var item = listSetDataList[i];
-                sysBpmsVariable variable = variableService.GetInfo(base.EngineSharedModel?.CurrentProcessID, base.EngineSharedModel?.CurrentApplicationPageID, item.Key, new string[] { "sysBpmsVariableDependencies.sysBpmsVariable1" });
-                foreach (sysBpmsVariableDependency vDependency in variable.VariableDependencies)
+                sysBpmsVariable variable = variableService.GetInfo(base.EngineSharedModel?.CurrentProcessID, base.EngineSharedModel?.CurrentApplicationPageID, item.Key, new string[] { $"{nameof(sysBpmsVariable.DependentVariableDependencies)}.{nameof(sysBpmsVariableDependency.ToVariable)}" });
+                foreach (sysBpmsVariableDependency vDependency in variable.DependentVariableDependencies)
                 {
                     var parentVariable = listSetDataList.Select((c, index) => new { item = c, index }).FirstOrDefault(c => c.item.Key != item.Key && c.item.Key == vDependency.ToVariable.Name && i < c.index);
                     //if variable has a dependency which has higher index ,this code block replace both of them.
@@ -193,7 +193,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             {
                 if (resultOperation.IsSuccess)
                 {
-                    sysBpmsVariable variable = variableService.GetInfo(base.EngineSharedModel?.CurrentProcessID, base.EngineSharedModel?.CurrentApplicationPageID, item.Key, new string[] { nameof(sysBpmsVariable.VariableDependencies) });
+                    sysBpmsVariable variable = variableService.GetInfo(base.EngineSharedModel?.CurrentProcessID, base.EngineSharedModel?.CurrentApplicationPageID, item.Key, new string[] { nameof(sysBpmsVariable.DependentVariableDependencies) });
                     if (variable != null)
                     {
                         switch ((sysBpmsVariable.e_RelationTypeLU)variable.RelationTypeLU)
@@ -288,7 +288,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
             if (!this.GetDataList.Any(c => c.Name == VarName))
             {
-                sysBpmsVariable _Variable = new VariableService(base.UnitOfWork).GetInfo(base.EngineSharedModel?.CurrentProcessID, base.EngineSharedModel?.CurrentApplicationPageID, VarName, new string[] { nameof(sysBpmsVariable.VariableDependencies) });
+                sysBpmsVariable _Variable = new VariableService(base.UnitOfWork).GetInfo(base.EngineSharedModel?.CurrentProcessID, base.EngineSharedModel?.CurrentApplicationPageID, VarName, new string[] { nameof(sysBpmsVariable.DependentVariableDependencies) });
                 List<DataModel> _DataModel = new List<DataModel>();
                 if (_Variable != null)
                 {
@@ -320,7 +320,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         public VariableModel GetEntityWithKeyValue(string variableName, Dictionary<string, object> dictionary)
         {
             string whereClause = string.Empty;
-            sysBpmsVariable variable = new VariableService(base.UnitOfWork).GetInfo(base.EngineSharedModel?.CurrentProcessID, base.EngineSharedModel?.CurrentApplicationPageID, variableName, new string[] { nameof(sysBpmsVariable.VariableDependencies), nameof(sysBpmsVariable.EntityDef) });
+            sysBpmsVariable variable = new VariableService(base.UnitOfWork).GetInfo(base.EngineSharedModel?.CurrentProcessID, base.EngineSharedModel?.CurrentApplicationPageID, variableName, new string[] { nameof(sysBpmsVariable.DependentVariableDependencies), nameof(sysBpmsVariable.EntityDef) });
             VariableModel variableModel = null;
             if (variable != null)
             {

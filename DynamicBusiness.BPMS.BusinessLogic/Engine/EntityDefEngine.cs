@@ -26,7 +26,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             //get sql query parameter from additionalParams
             List<SqlParameter> queryParams = QueryModel.GetSqlParameter(base.GetAllQueryModels(additionalParams) ?? new List<QueryModel>()).ToList();
             //variable.VariableDependencies is null retrieve it from database
-            variable.VariableDependencies = variable.VariableDependencies ?? new VariableDependencyService(base.UnitOfWork).GetList(variable.ID, null);
+            variable.DependentVariableDependencies = variable.DependentVariableDependencies ?? new VariableDependencyService(base.UnitOfWork).GetList(variable.ID, null);
 
             //add variable dependies to whereclause which have relation with current variable.
             this.AddDependencyClause(variable, queryParams, columnParams, ref whereClause, additionalParams, allSavedEntities);
@@ -196,9 +196,9 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         private void AddDependencyClause(sysBpmsVariable variable, List<SqlParameter> queryParams, List<SqlParameter> insertColumnParams, ref string whereClause, List<QueryModel> additionalParams, Dictionary<string, DataModel> allSavedEntities = null)
         {
             //add variable dependies where clause which have relation with current variable
-            if (variable.VariableDependencies.Any())
+            if (variable.DependentVariableDependencies.Any())
             {
-                foreach (sysBpmsVariableDependency item in variable.VariableDependencies)
+                foreach (sysBpmsVariableDependency item in variable.DependentVariableDependencies)
                 {
                     object value = null;
                     var toVariable = new VariableService(base.UnitOfWork).GetInfo(item.ToVariableID.Value);

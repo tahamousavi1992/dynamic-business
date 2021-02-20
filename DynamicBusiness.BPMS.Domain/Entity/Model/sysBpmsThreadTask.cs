@@ -33,5 +33,7 @@ namespace DynamicBusiness.BPMS.Domain
         
         public virtual ICollection<sysBpmsThreadEvent> ThreadEvents { get; set; }
         public virtual sysBpmsUser User { get; set; }
+
+
     }
 }

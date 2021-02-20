@@ -26,7 +26,14 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public void Update(sysBpmsProcess process)
         {
-            this.Context.Entry(process).State = EntityState.Modified;
+            //To fix 'Attaching an entity failed' error.
+            var local = this.Context.Set<sysBpmsProcess>().Local.FirstOrDefault(f => f.ID == process.ID);
+            if (local != null)
+            {
+                this.Context.Entry(local).State = EntityState.Detached;
+                local = null;
+            }
+            this.Context.Entry(process.Clone()).State = EntityState.Modified;
         }
 
         public void Delete(Guid ID)
@@ -37,7 +44,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 this.Context.sysBpmsProcesses.Remove(process);
             }
         }
-         
+
         public sysBpmsProcess GetInfo(Guid ID)
         {
             return (from P in this.Context.sysBpmsProcesses
@@ -93,8 +100,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         {
             List<sysBpmsTask> list = new List<sysBpmsTask>();
             List<sysBpmsEvent> startEvents = (from P in this.Context.sysBpmsEvents
-                                          where P.Element.ProcessID == ID && P.TypeLU == (int)sysBpmsEvent.e_TypeLU.StartEvent
-                                          select P).AsNoTracking().ToList();
+                                              where P.Element.ProcessID == ID && P.TypeLU == (int)sysBpmsEvent.e_TypeLU.StartEvent
+                                              select P).AsNoTracking().ToList();
             foreach (sysBpmsEvent startEvent in startEvents)
             {
                 this.GetRecursiveBeginElements(startEvent.ElementID, startEvent.ProcessID, list);
@@ -107,23 +114,23 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             string staticAccessType = $"<AccessType>{(int)UserTaskRuleModel.e_UserAccessType.Static}</AccessType>";
             string userIdString = UserID.ToString();
             List<sysBpmsTask> items = (from T in this.Context.sysBpmsTasks
-                                   join P in this.Context.sysBpmsProcesses on T.ProcessID equals P.ID
-                                   join D in this.Context.sysBpmsDepartmentMembers on UserID equals D.UserID into Dlist
-                                   join E in this.Context.sysBpmsEvents on P.ID equals E.ProcessID into Elist
-                                   where
-                                   (P.TypeLU == (int)sysBpmsProcess.e_TypeLU.General) &&
-                                   (P.StatusLU == (int)sysBpmsProcess.Enum_StatusLU.Published) &&
-                                   (Elist.Count(c => c.TypeLU == (int)sysBpmsEvent.e_TypeLU.StartEvent && c.SubType == (int)WorkflowStartEvent.BPMNStartEventType.None) > 0) &&
-                                   (this.Context.sysBpmsSplit(P.BeginTasks, ",").Any(c => c.Data == T.ElementID)) &&
-                                   (
-                                   (T.OwnerTypeLU == (int)Domain.sysBpmsTask.e_OwnerTypeLU.User && T.UserID.Contains(userIdString)) ||
-                                   (T.OwnerTypeLU == (int)Domain.sysBpmsTask.e_OwnerTypeLU.Role &&
-                                   (T.RoleName == string.Empty
-                                   || T.RoleName == (",0:" + (int)sysBpmsDepartmentMember.e_RoleLU.Requester + ",")//it means that everyone can start this proccess.
-                                   || Dlist.Count(c => this.Context.sysBpmsSplit(T.RoleName, ",").Any(f => f.Data == ("0:" + c.RoleLU.ToString().Trim()) || f.Data == (c.DepartmentID.ToString() + ":" + c.RoleLU.ToString().Trim()))) > 0)
-                                   ) ||
-                                   (!T.Rule.Contains(staticAccessType)))//it will be calculated in engine.
-                                   select T).OrderBy(d => d.Element.Process.Name).Include(c => c.Element.Process).AsNoTracking().ToList();
+                                       join P in this.Context.sysBpmsProcesses on T.ProcessID equals P.ID
+                                       join D in this.Context.sysBpmsDepartmentMembers on UserID equals D.UserID into Dlist
+                                       join E in this.Context.sysBpmsEvents on P.ID equals E.ProcessID into Elist
+                                       where
+                                       (P.TypeLU == (int)sysBpmsProcess.e_TypeLU.General) &&
+                                       (P.StatusLU == (int)sysBpmsProcess.Enum_StatusLU.Published) &&
+                                       (Elist.Count(c => c.TypeLU == (int)sysBpmsEvent.e_TypeLU.StartEvent && c.SubType == (int)WorkflowStartEvent.BPMNStartEventType.None) > 0) &&
+                                       (this.Context.sysBpmsSplit(P.BeginTasks, ",").Any(c => c.Data == T.ElementID)) &&
+                                       (
+                                       (T.OwnerTypeLU == (int)Domain.sysBpmsTask.e_OwnerTypeLU.User && T.UserID.Contains(userIdString)) ||
+                                       (T.OwnerTypeLU == (int)Domain.sysBpmsTask.e_OwnerTypeLU.Role &&
+                                       (T.RoleName == string.Empty
+                                       || T.RoleName == (",0:" + (int)sysBpmsDepartmentMember.e_RoleLU.Requester + ",")//it means that everyone can start this proccess.
+                                       || Dlist.Count(c => this.Context.sysBpmsSplit(T.RoleName, ",").Any(f => f.Data == ("0:" + c.RoleLU.ToString().Trim()) || f.Data == (c.DepartmentID.ToString() + ":" + c.RoleLU.ToString().Trim()))) > 0)
+                                       ) ||
+                                       (!T.Rule.Contains(staticAccessType)))//it will be calculated in engine.
+                                       select T).OrderBy(d => d.Element.Process.Name).Include(c => c.Element.Process).AsNoTracking().ToList();
             return items;
         }
 

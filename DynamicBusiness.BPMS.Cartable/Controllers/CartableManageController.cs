@@ -30,7 +30,7 @@ namespace DynamicBusiness.BPMS.Cartable.Controllers
         {
             //base.SetMenuIndex(3);
             using (ThreadService threadService = new ThreadService())
-            { 
+            {
 
                 Guid? ProcessID = indexSearchVM.IsAdvSearch ? indexSearchVM.AdvProcessID : indexSearchVM.ProcessID;
 
@@ -70,7 +70,7 @@ namespace DynamicBusiness.BPMS.Cartable.Controllers
                         ThreadDetailDTO threadDetailDTO = new ThreadDetailDTO(
                           threadService.GetInfo(ThreadID,
                           new string[] { nameof(sysBpmsThread.User), nameof(sysBpmsThread.Process) }),
-                          threadTaskService.GetList(ThreadID, (int)sysBpmsTask.e_TypeLU.UserTask, null, null, new string[] { "sysBpmsTask.sysBpmsElement", nameof(sysBpmsThreadTask.User) }).Select(c => new ThreadHistoryDTO(c)).ToList());
+                          threadTaskService.GetList(ThreadID, (int)sysBpmsTask.e_TypeLU.UserTask, null, null, new string[] { $"{nameof(sysBpmsThreadTask.Task)}.{nameof(sysBpmsThreadTask.Task.Element)}", nameof(sysBpmsThreadTask.User) }).Select(c => new ThreadHistoryDTO(c)).ToList());
 
                         List<sysBpmsDynamicForm> listForms = dynamicFormService.GetList(threadDetailDTO.ProcessID, null, null, "", true, null);
                         using (ProcessEngine processEngine = new ProcessEngine(new EngineSharedModel(ThreadID, threadDetailDTO.ProcessID, this.MyRequest.GetList(false, base.ApiSessionId).ToList(), base.ClientUserName, base.ApiSessionId)))
@@ -92,7 +92,7 @@ namespace DynamicBusiness.BPMS.Cartable.Controllers
         [HttpGet]
         public object GetListProcess([System.Web.Http.FromUri] GetListProcessSearchDTO indexSearchVM)
         {
- 
+
             using (ProcessEngine processEngine = new ProcessEngine(new EngineSharedModel(currentThread: null, currentProcessID: Guid.Empty, baseQueryModel: base.MyRequest.GetList(false, base.ApiSessionId).ToList(), currentUserName: base.ClientUserName, apiSessionId: base.ApiSessionId)))
             {
                 List<KartableProcessDTO> list = processEngine.GetAvailableProccess(this.MyUser.ID).Select(c => new KartableProcessDTO(c)).ToList();

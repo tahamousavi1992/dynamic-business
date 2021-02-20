@@ -102,5 +102,17 @@ namespace DynamicBusiness.BPMS.Domain
         {
             get { return "Bpms_" + this.Name; }
         }
+         
+        public sysBpmsEntityDef Clone()
+        {
+            return new sysBpmsEntityDef
+            {
+                ID = this.ID,
+                DisplayName = this.DisplayName,
+                Name = this.Name,
+                DesignXML = this.DesignXML,
+                IsActive = this.IsActive,
+            };
+        }
     }
 }

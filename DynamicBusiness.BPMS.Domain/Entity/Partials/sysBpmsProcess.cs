@@ -28,6 +28,33 @@ namespace DynamicBusiness.BPMS.Domain
         {
             return this.StatusLU == (int)sysBpmsProcess.Enum_StatusLU.Published || this.StatusLU == (int)sysBpmsProcess.Enum_StatusLU.OldVersion;
         }
+
+        public sysBpmsProcess Clone()
+        {
+            return new sysBpmsProcess
+            {
+                ID = this.ID,
+                FormattedNumber = this.FormattedNumber,
+                Number = this.Number,
+                Name = this.Name,
+                Description = this.Description,
+                ProcessVersion = this.ProcessVersion,
+                StatusLU = this.StatusLU,
+                CreatorUsername = this.CreatorUsername,
+                CreateDate = this.CreateDate,
+                UpdateDate = this.UpdateDate,
+                DiagramXML = this.DiagramXML,
+                WorkflowXML = this.WorkflowXML,
+                BeginTasks = this.BeginTasks,
+                ParentProcessID = this.ParentProcessID,
+                PublishDate = this.PublishDate,
+                ParallelCountPerUser = this.ParallelCountPerUser,
+                SourceCode = this.SourceCode,
+                ProcessGroupID = this.ProcessGroupID,
+                TypeLU = this.TypeLU,  
+            };
+        }
+
         public enum Enum_Version
         {
             startVersion = 1

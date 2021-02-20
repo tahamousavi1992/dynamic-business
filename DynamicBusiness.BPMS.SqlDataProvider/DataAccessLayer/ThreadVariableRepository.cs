@@ -23,7 +23,14 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public void Update(sysBpmsThreadVariable threadVariable)
         {
-            this.Context.Entry(threadVariable).State = EntityState.Modified;
+            //To fix 'Attaching an entity failed' error.
+            var local = this.Context.Set<sysBpmsThreadVariable>().Local.FirstOrDefault(f => f.ID == threadVariable.ID);
+            if (local != null)
+            {
+                this.Context.Entry(local).State = EntityState.Detached;
+                local = null;
+            }
+            this.Context.Entry(threadVariable.Clone()).State = EntityState.Modified;
         }
 
         public void Delete(Guid ID)

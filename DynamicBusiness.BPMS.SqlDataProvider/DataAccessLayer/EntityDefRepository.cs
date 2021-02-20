@@ -25,7 +25,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public void Update(sysBpmsEntityDef entityDef)
         {
-            this.Context.Entry(entityDef).State = EntityState.Modified;
+            this.Context.Entry(entityDef.Clone()).State = EntityState.Modified;
         }
 
         public void Delete(Guid entityDefId)

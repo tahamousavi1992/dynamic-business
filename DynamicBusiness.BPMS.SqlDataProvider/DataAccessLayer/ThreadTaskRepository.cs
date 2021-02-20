@@ -23,9 +23,17 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             this.Context.sysBpmsThreadTasks.Add(ThreadTask);
         }
 
-        public void Update(sysBpmsThreadTask ThreadTask)
+        public void Update(sysBpmsThreadTask threadTask)
         {
-            this.Context.Entry(ThreadTask).State = EntityState.Modified;
+            //To fix 'Attaching an entity failed' error.
+            var local = this.Context.Set<sysBpmsThreadTask>().Local.FirstOrDefault(f => f.ID == threadTask.ID);
+            if (local != null)
+            {
+                this.Context.Entry(local).State = EntityState.Detached;
+                local = null;
+            }
+
+            this.Context.Entry(threadTask.Clone()).State = EntityState.Modified;
         }
 
         public sysBpmsThreadTask GetInfo(Guid ID, string[] Includes)

@@ -74,6 +74,28 @@ namespace DynamicBusiness.BPMS.Domain
                 return this.ConfigXML.ToStringObj().ParseXML<DynamicFormConfigXmlModel>() ?? new DynamicFormConfigXmlModel();
             }
         }
+         
+        public sysBpmsDynamicForm Clone()
+        {
+            return new sysBpmsDynamicForm
+            {
+                ID = this.ID,
+                ProcessId = this.ProcessId,
+                ApplicationPageID = this.ApplicationPageID,
+                Name = this.Name,
+                DesignJson = this.DesignJson,
+                OnExitFormCode = this.OnExitFormCode,
+                OnEntryFormCode = this.OnEntryFormCode,
+                Version = this.Version,
+                ConfigXML = this.ConfigXML,
+                ShowInOverview = this.ShowInOverview,
+                SourceCode = this.SourceCode,
+                CreatedBy = this.CreatedBy,
+                CreatedDate = this.CreatedDate,
+                UpdatedBy = this.UpdatedBy,
+                UpdatedDate = this.UpdatedDate, 
+            };
+        }
 
     }
 }

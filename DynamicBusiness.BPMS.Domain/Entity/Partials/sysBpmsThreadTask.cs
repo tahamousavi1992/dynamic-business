@@ -46,7 +46,7 @@ namespace DynamicBusiness.BPMS.Domain
             this.EndDate = endDate;
             this.StatusLU = statusLU;
         }
- 
+
         public void UpdateAccessInfo(Guid? ownerUserID, List<Tuple<Guid?, string>> ownerRole)
         {
             this.OwnerUserID = ownerUserID;
@@ -54,12 +54,13 @@ namespace DynamicBusiness.BPMS.Domain
                 this.OwnerRole = string.Join(",", ownerRole.Select(c => (c.Item1?.ToString() ?? "0") + ":" + c.Item2));
             else
                 this.OwnerRole = string.Empty;
-        } 
+        }
         /// <param name="roleLU">DepartmentMember.e_RoleLU</param>
         public bool IsInRole(Guid? departmentId, int roleLU)
         {
             return this.GetDepartmentRoles.Any(c => (!departmentId.HasValue || c.Item1 == departmentId) && c.Item2.ToIntObj() == roleLU);
         }
+
         [NotMapped]
         public List<Tuple<Guid?, string>> GetDepartmentRoles
         {
@@ -69,5 +70,23 @@ namespace DynamicBusiness.BPMS.Domain
                 new Tuple<Guid?, string>(c.Split(':').FirstOrDefault().ToGuidObjNull(), c.Split(':').LastOrDefault())).ToList();
             }
         }
+
+        public sysBpmsThreadTask Clone()
+        {
+            return new sysBpmsThreadTask
+            {
+                ID = this.ID,
+                Description = this.Description,
+                OwnerUserID = this.OwnerUserID,
+                TaskID = this.TaskID,
+                ThreadID = this.ThreadID,
+                EndDate = this.EndDate,
+                OwnerRole = this.OwnerRole,
+                StartDate = this.StartDate,
+                StatusLU = this.StatusLU,
+                PriorityLU = this.PriorityLU,
+            };
+        }
+
     }
 }

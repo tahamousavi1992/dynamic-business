@@ -7,12 +7,12 @@ namespace DynamicBusiness.BPMS.Domain
     using System.ComponentModel.DataAnnotations;
     public partial class sysBpmsVariable
     {
-        
+
         public sysBpmsVariable()
         {
             this.ThreadVariables = new HashSet<sysBpmsThreadVariable>();
-            this.VariableDependencies = new HashSet<sysBpmsVariableDependency>();
-            this.VariableDependencies1 = new HashSet<sysBpmsVariableDependency>();
+            this.DependentVariableDependencies = new HashSet<sysBpmsVariableDependency>();
+            this.ToVariableDependencies = new HashSet<sysBpmsVariableDependency>();
         }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public System.Guid ID { get; set; }
@@ -36,16 +36,15 @@ namespace DynamicBusiness.BPMS.Domain
         public string DefaultValue { get; set; }
         public string WhereClause { get; set; }
         public string OrderByClause { get; set; }
-    
+
         public virtual sysBpmsApplicationPage ApplicationPage { get; set; }
         public virtual sysBpmsDBConnection DBConnection { get; set; }
         public virtual sysBpmsEntityDef EntityDef { get; set; }
         public virtual sysBpmsProcess Process { get; set; }
-        
+
         public virtual ICollection<sysBpmsThreadVariable> ThreadVariables { get; set; }
-        
-        public virtual ICollection<sysBpmsVariableDependency> VariableDependencies { get; set; }
-        
-        public virtual ICollection<sysBpmsVariableDependency> VariableDependencies1 { get; set; }
+
+        public virtual ICollection<sysBpmsVariableDependency> DependentVariableDependencies { get; set; }
+        public virtual ICollection<sysBpmsVariableDependency> ToVariableDependencies { get; set; }
     }
 }

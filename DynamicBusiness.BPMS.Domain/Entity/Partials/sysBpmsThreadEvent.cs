@@ -29,8 +29,20 @@ namespace DynamicBusiness.BPMS.Domain
             return this;
         }
 
-      
-
+        public sysBpmsThreadEvent Clone()
+        {
+            return new sysBpmsThreadEvent
+            {
+                ID = this.ID,
+                ThreadID = this.ThreadID,
+                EventID = this.EventID,
+                StartDate = this.StartDate,
+                ExecuteDate = this.ExecuteDate,
+                StatusLU = this.StatusLU,
+                ThreadTaskID = this.ThreadTaskID,
+            };
+        }
+         
         public enum e_StatusLU
         {
             [Description("In Progress")]

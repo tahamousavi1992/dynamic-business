@@ -7,7 +7,7 @@ namespace DynamicBusiness.BPMS.Domain
     using System.ComponentModel.DataAnnotations;
     public partial class sysBpmsThread
     {
-        
+
         public sysBpmsThread()
         {
             this.Documents = new HashSet<sysBpmsDocument>();
@@ -28,16 +28,15 @@ namespace DynamicBusiness.BPMS.Domain
         [MaxLength(50)]
         public string FormattedNumber { get; set; }
         public Nullable<int> Number { get; set; }
-    
-        
+
+
         public virtual ICollection<sysBpmsDocument> Documents { get; set; }
         public virtual sysBpmsProcess Process { get; set; }
         public virtual sysBpmsUser User { get; set; }
-        
+
         public virtual ICollection<sysBpmsThreadEvent> ThreadEvents { get; set; }
-        
         public virtual ICollection<sysBpmsThreadTask> ThreadTasks { get; set; }
-        
         public virtual ICollection<sysBpmsThreadVariable> ThreadVariables { get; set; }
+
     }
 }

@@ -30,7 +30,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 local = null;
             }
 
-            this.Context.Entry(element).State = EntityState.Modified;
+            this.Context.Entry(element.Clone()).State = EntityState.Modified;
         }
 
         public void Delete(string elementId, Guid processId)

@@ -23,7 +23,15 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public void Update(sysBpmsVariable variable)
         {
-            this.Context.Entry(variable).State = EntityState.Modified;
+            //To fix 'Attaching an entity failed' error.
+            var local = this.Context.Set<sysBpmsVariable>().Local.FirstOrDefault(f => f.ID == variable.ID);
+            if (local != null)
+            {
+                this.Context.Entry(local).State = EntityState.Detached;
+                local = null;
+            }
+
+            this.Context.Entry(variable.Clone()).State = EntityState.Modified;
         }
 
         public void Delete(Guid VariableId)

@@ -56,5 +56,21 @@ namespace DynamicBusiness.BPMS.Domain
                 gatewayStatus = value;
             }
         }
+         
+        public sysBpmsThread Clone()
+        {
+            return new sysBpmsThread
+            {
+                ID = this.ID,
+                StartDate = this.StartDate,
+                EndDate = this.EndDate,
+                StatusLU = this.StatusLU,
+                GatewayStatusXml = this.GatewayStatusXml,
+                ProcessID = this.ProcessID,
+                UserID = this.UserID,
+                FormattedNumber = this.FormattedNumber,
+                Number = this.Number,
+            };
+        }
     }
 }

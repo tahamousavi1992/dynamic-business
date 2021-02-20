@@ -304,6 +304,23 @@
                 .PrimaryKey(t => t.ID);
             
             CreateTable(
+                "dbo.sysBpmsVariableDependency",
+                c => new
+                    {
+                        ID = c.Guid(nullable: false, identity: true),
+                        DependentVariableID = c.Guid(nullable: false),
+                        DependentPropertyName = c.String(nullable: false, maxLength: 250),
+                        ToVariableID = c.Guid(),
+                        ToPropertyName = c.String(nullable: false, maxLength: 250),
+                        Description = c.String(),
+                    })
+                .PrimaryKey(t => t.ID)
+                .ForeignKey("dbo.sysBpmsVariable", t => t.DependentVariableID)
+                .ForeignKey("dbo.sysBpmsVariable", t => t.ToVariableID)
+                .Index(t => t.DependentVariableID)
+                .Index(t => t.ToVariableID);
+            
+            CreateTable(
                 "dbo.sysBpmsThreadVariable",
                 c => new
                     {
@@ -317,29 +334,6 @@
                 .ForeignKey("dbo.sysBpmsVariable", t => t.VariableID)
                 .Index(t => t.ThreadID)
                 .Index(t => t.VariableID);
-            
-            CreateTable(
-                "dbo.sysBpmsVariableDependency",
-                c => new
-                    {
-                        ID = c.Guid(nullable: false, identity: true),
-                        DependentVariableID = c.Guid(nullable: false),
-                        DependentPropertyName = c.String(nullable: false, maxLength: 250),
-                        ToVariableID = c.Guid(),
-                        ToPropertyName = c.String(nullable: false, maxLength: 250),
-                        Description = c.String(),
-                        sysBpmsVariable_ID = c.Guid(),
-                        sysBpmsVariable_ID1 = c.Guid(),
-                    })
-                .PrimaryKey(t => t.ID)
-                .ForeignKey("dbo.sysBpmsVariable", t => t.DependentVariableID)
-                .ForeignKey("dbo.sysBpmsVariable", t => t.ToVariableID)
-                .ForeignKey("dbo.sysBpmsVariable", t => t.sysBpmsVariable_ID)
-                .ForeignKey("dbo.sysBpmsVariable", t => t.sysBpmsVariable_ID1)
-                .Index(t => t.DependentVariableID)
-                .Index(t => t.ToVariableID)
-                .Index(t => t.sysBpmsVariable_ID)
-                .Index(t => t.sysBpmsVariable_ID1);
             
             CreateTable(
                 "dbo.sysBpmsThreadTask",
@@ -610,14 +604,12 @@
             DropForeignKey("dbo.sysBpmsThread", "ProcessID", "dbo.sysBpmsProcess");
             DropForeignKey("dbo.sysBpmsDocument", "ThreadID", "dbo.sysBpmsThread");
             DropForeignKey("dbo.sysBpmsDocument", "EntityDefID", "dbo.sysBpmsEntityDef");
-            DropForeignKey("dbo.sysBpmsVariableDependency", "sysBpmsVariable_ID1", "dbo.sysBpmsVariable");
-            DropForeignKey("dbo.sysBpmsVariableDependency", "sysBpmsVariable_ID", "dbo.sysBpmsVariable");
-            DropForeignKey("dbo.sysBpmsVariableDependency", "ToVariableID", "dbo.sysBpmsVariable");
-            DropForeignKey("dbo.sysBpmsVariableDependency", "DependentVariableID", "dbo.sysBpmsVariable");
             DropForeignKey("dbo.sysBpmsThreadVariable", "VariableID", "dbo.sysBpmsVariable");
             DropForeignKey("dbo.sysBpmsThreadVariable", "ThreadID", "dbo.sysBpmsThread");
             DropForeignKey("dbo.sysBpmsVariable", "ProcessID", "dbo.sysBpmsProcess");
             DropForeignKey("dbo.sysBpmsVariable", "EntityDefID", "dbo.sysBpmsEntityDef");
+            DropForeignKey("dbo.sysBpmsVariableDependency", "ToVariableID", "dbo.sysBpmsVariable");
+            DropForeignKey("dbo.sysBpmsVariableDependency", "DependentVariableID", "dbo.sysBpmsVariable");
             DropForeignKey("dbo.sysBpmsVariable", "DBConnectionID", "dbo.sysBpmsDBConnection");
             DropForeignKey("dbo.sysBpmsVariable", "ApplicationPageID", "dbo.sysBpmsApplicationPage");
             DropForeignKey("dbo.sysBpmsDocument", "DocumentDefID", "dbo.sysBpmsDocumentDef");
@@ -645,12 +637,10 @@
             DropIndex("dbo.sysBpmsThreadTask", new[] { "OwnerUserID" });
             DropIndex("dbo.sysBpmsThreadTask", new[] { "TaskID" });
             DropIndex("dbo.sysBpmsThreadTask", new[] { "ThreadID" });
-            DropIndex("dbo.sysBpmsVariableDependency", new[] { "sysBpmsVariable_ID1" });
-            DropIndex("dbo.sysBpmsVariableDependency", new[] { "sysBpmsVariable_ID" });
-            DropIndex("dbo.sysBpmsVariableDependency", new[] { "ToVariableID" });
-            DropIndex("dbo.sysBpmsVariableDependency", new[] { "DependentVariableID" });
             DropIndex("dbo.sysBpmsThreadVariable", new[] { "VariableID" });
             DropIndex("dbo.sysBpmsThreadVariable", new[] { "ThreadID" });
+            DropIndex("dbo.sysBpmsVariableDependency", new[] { "ToVariableID" });
+            DropIndex("dbo.sysBpmsVariableDependency", new[] { "DependentVariableID" });
             DropIndex("dbo.sysBpmsVariable", new[] { "DBConnectionID" });
             DropIndex("dbo.sysBpmsVariable", new[] { "EntityDefID" });
             DropIndex("dbo.sysBpmsVariable", new[] { "ApplicationPageID" });
@@ -690,8 +680,8 @@
             DropTable("dbo.sysBpmsStep");
             DropTable("dbo.sysBpmsTask");
             DropTable("dbo.sysBpmsThreadTask");
-            DropTable("dbo.sysBpmsVariableDependency");
             DropTable("dbo.sysBpmsThreadVariable");
+            DropTable("dbo.sysBpmsVariableDependency");
             DropTable("dbo.sysBpmsDBConnection");
             DropTable("dbo.sysBpmsVariable");
             DropTable("dbo.sysBpmsEntityDef");

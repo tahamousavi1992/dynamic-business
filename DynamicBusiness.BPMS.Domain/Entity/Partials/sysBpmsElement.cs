@@ -17,5 +17,16 @@ namespace DynamicBusiness.BPMS.Domain
             Lane = 4,
             Sequence = 5,
         }
+
+        public sysBpmsElement Clone()
+        {
+            return new sysBpmsElement
+            {
+                ID = this.ID,
+                ProcessID = this.ProcessID,
+                Name = this.Name,
+                TypeLU = this.TypeLU,
+            };
+        }
     }
 }

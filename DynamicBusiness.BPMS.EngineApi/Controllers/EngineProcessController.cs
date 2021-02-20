@@ -154,7 +154,7 @@ namespace DynamicBusiness.BPMS.EngineApi.Controllers
                         ThreadDetailDTO threadDetailDTO = new ThreadDetailDTO(
                           threadService.GetInfo(threadId,
                           new string[] { nameof(sysBpmsThread.User), nameof(sysBpmsThread.Process) }),
-                          threadTaskService.GetList(threadId, (int)sysBpmsTask.e_TypeLU.UserTask, null, null, new string[] { "sysBpmsTask.sysBpmsElement", nameof(sysBpmsThreadTask.User) }).Select(c => new ThreadHistoryDTO(c)).ToList());
+                          threadTaskService.GetList(threadId, (int)sysBpmsTask.e_TypeLU.UserTask, null, null, new string[] { $"{nameof(sysBpmsThreadTask.Task)}.{nameof(sysBpmsThreadTask.Task.Element)}", nameof(sysBpmsThreadTask.User) }).Select(c => new ThreadHistoryDTO(c)).ToList());
 
                         List<sysBpmsDynamicForm> listForms = dynamicFormService.GetList(threadDetailDTO.ProcessID, null, null, "", true, null);
                         using (ProcessEngine processEngine = new ProcessEngine(new EngineSharedModel(threadId, threadDetailDTO.ProcessID, this.MyRequest.GetList(false, base.ApiSessionId).ToList(), base.ClientUserName, base.ApiSessionId)))

@@ -31,7 +31,7 @@ namespace DynamicBusiness.BPMS.SharedPresentation
             this.DefaultValue = variable.DefaultValue;
             this.WhereClause = variable.WhereClause;
             this.OrderByClause = variable.OrderByClause;
-            this.ListVariableDependencyDTO = variable.VariableDependencies?.Select(c => new VariableDependencyDTO(c)).ToList();
+            this.ListVariableDependencyDTO = variable.DependentVariableDependencies?.Select(c => new VariableDependencyDTO(c)).ToList();
         }
         [DataMember]
         public Guid ID { get; set; }
