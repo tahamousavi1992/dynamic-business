@@ -7,7 +7,7 @@ namespace DynamicBusiness.BPMS.Domain
 
     public partial class sysBpmsApplicationPageAccess
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        
         public System.Guid ID { get; set; }
         [ForeignKey(nameof(ApplicationPage))]
         public System.Guid ApplicationPageID { get; set; }

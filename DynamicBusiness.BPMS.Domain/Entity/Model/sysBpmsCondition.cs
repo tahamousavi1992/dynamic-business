@@ -7,7 +7,7 @@ namespace DynamicBusiness.BPMS.Domain
     using System.ComponentModel.DataAnnotations;
     public partial class sysBpmsCondition
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        
         public System.Guid ID { get; set; }
         [ForeignKey(nameof(Gateway))]
         public System.Guid GatewayID { get; set; }

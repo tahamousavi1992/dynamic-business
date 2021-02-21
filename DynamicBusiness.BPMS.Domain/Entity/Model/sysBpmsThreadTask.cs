@@ -12,7 +12,7 @@ namespace DynamicBusiness.BPMS.Domain
         {
             this.ThreadEvents = new HashSet<sysBpmsThreadEvent>();
         }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        
         public System.Guid ID { get; set; }
         [ForeignKey(nameof(Thread))]
         public System.Guid ThreadID { get; set; }

@@ -7,7 +7,7 @@ namespace DynamicBusiness.BPMS.Domain
 
     public partial class sysBpmsDepartmentMember
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        
         public System.Guid ID { get; set; }
         [ForeignKey(nameof(Department))]
         public System.Guid DepartmentID { get; set; }

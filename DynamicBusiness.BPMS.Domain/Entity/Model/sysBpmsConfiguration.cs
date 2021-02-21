@@ -7,7 +7,7 @@ namespace DynamicBusiness.BPMS.Domain
     using System.ComponentModel.DataAnnotations;
     public partial class sysBpmsConfiguration
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        
         public System.Guid ID { get; set; }
         [Required(AllowEmptyStrings = true)]
         [MaxLength(500)]

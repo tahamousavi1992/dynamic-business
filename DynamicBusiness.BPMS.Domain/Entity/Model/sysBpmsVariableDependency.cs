@@ -7,7 +7,7 @@ namespace DynamicBusiness.BPMS.Domain
     using System.ComponentModel.DataAnnotations;
     public partial class sysBpmsVariableDependency
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        
         public Guid ID { get; set; }
         public Guid DependentVariableID { get; set; }
         [Required(AllowEmptyStrings = true)]

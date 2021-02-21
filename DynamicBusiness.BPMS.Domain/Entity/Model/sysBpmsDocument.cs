@@ -8,7 +8,6 @@ namespace DynamicBusiness.BPMS.Domain
 
     public partial class sysBpmsDocument
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public System.Guid GUID { get; set; }
         public bool IsDeleted { get; set; }

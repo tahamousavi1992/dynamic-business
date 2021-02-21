@@ -12,7 +12,7 @@ namespace DynamicBusiness.BPMS.Domain
         {
             this.Documents = new HashSet<sysBpmsDocument>();
         }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        
         public System.Guid ID { get; set; }
         [ForeignKey(nameof(DocumentFolder))]
         public System.Guid DocumentFolderID { get; set; }

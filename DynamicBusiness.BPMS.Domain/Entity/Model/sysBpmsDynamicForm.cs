@@ -12,7 +12,7 @@ namespace DynamicBusiness.BPMS.Domain
         {
             this.Steps = new HashSet<sysBpmsStep>();
         }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        
         public System.Guid ID { get; set; }
         [ForeignKey(nameof(Process))]
         public Nullable<System.Guid> ProcessId { get; set; }

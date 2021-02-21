@@ -12,7 +12,7 @@ namespace DynamicBusiness.BPMS.Domain
         {
             this.LURows = new HashSet<sysBpmsLURow>();
         }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        
         public System.Guid ID { get; set; }
         [Required(AllowEmptyStrings = true)]
         [MaxLength(500)]

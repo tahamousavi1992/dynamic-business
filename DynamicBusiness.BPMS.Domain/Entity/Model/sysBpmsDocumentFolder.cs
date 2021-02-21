@@ -13,7 +13,7 @@ namespace DynamicBusiness.BPMS.Domain
             this.DocumentDefs = new HashSet<sysBpmsDocumentDef>();
             this.ChildrenFolders = new HashSet<sysBpmsDocumentFolder>();
         }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        
         public System.Guid ID { get; set; }
         [Required(AllowEmptyStrings = true)]
         [MaxLength(500)]

@@ -15,7 +15,7 @@ namespace DynamicBusiness.BPMS.Domain
             this.ThreadTasks = new HashSet<sysBpmsThreadTask>();
             this.ThreadVariables = new HashSet<sysBpmsThreadVariable>();
         }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        
         public System.Guid ID { get; set; }
         public System.DateTime StartDate { get; set; }
         public Nullable<System.DateTime> EndDate { get; set; }

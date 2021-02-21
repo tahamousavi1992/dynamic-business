@@ -13,7 +13,7 @@ namespace DynamicBusiness.BPMS.Domain
             this.Processes = new HashSet<sysBpmsProcess>();
             this.ChildrenProcessGroup = new HashSet<sysBpmsProcessGroup>();
         }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        
         public System.Guid ID { get; set; }
         [ForeignKey(nameof(ProcessGroup))]
         public Nullable<System.Guid> ProcessGroupID { get; set; }

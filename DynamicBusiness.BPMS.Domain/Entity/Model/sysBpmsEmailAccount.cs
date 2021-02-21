@@ -7,7 +7,7 @@ namespace DynamicBusiness.BPMS.Domain
     using System.ComponentModel.DataAnnotations;
     public partial class sysBpmsEmailAccount
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        
         public System.Guid ID { get; set; }
         public int ObjectTypeLU { get; set; }
         public Nullable<System.Guid> ObjectID { get; set; }

@@ -13,7 +13,7 @@ namespace DynamicBusiness.BPMS.Domain
             this.DynamicForms = new HashSet<sysBpmsDynamicForm>();
             this.Variables = new HashSet<sysBpmsVariable>();
         }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        
         public System.Guid ID { get; set; }
         public int GroupLU { get; set; }
         public string Description { get; set; }

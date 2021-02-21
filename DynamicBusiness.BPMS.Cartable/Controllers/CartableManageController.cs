@@ -79,7 +79,8 @@ namespace DynamicBusiness.BPMS.Cartable.Controllers
                             {
                                 var result = processEngine.GetContentHtmlByFormID(item.ID, true);
                                 EngineFormModel engineFormModel = new EngineFormModel(result.FormModel, ThreadID, null, threadDetailDTO.ProcessID);
-                                engineFormModel.GetPopUpUrl = UrlUtility.GetCartableApiUrl(base.MyRequest, base.PortalSettings.DefaultPortalAlias, nameof(CartableThreadController.GetPopUp), nameof(CartableThreadController), "");
+                                string popUpUrl = UrlUtility.GetCartableApiUrl(base.MyRequest, base.PortalSettings.DefaultPortalAlias, nameof(CartableThreadController.GetPopUp), nameof(CartableThreadController), "");
+                                engineFormModel.SetReadOnlyUrls(popUpUrl, new HttpRequestWrapper(base.MyRequest), base.PortalSettings.DefaultPortalAlias, FormTokenUtility.GetFormToken(base.ApiSessionId, engineFormModel?.FormModel?.ContentHtml?.DynamicFormID ?? Guid.Empty, engineFormModel?.FormModel?.IsEncrypted ?? false));
                                 threadDetailDTO.ListOverviewForms.Add(engineFormModel);
                             }
                         }

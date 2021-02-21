@@ -25,11 +25,13 @@ namespace DynamicBusiness.BPMS.SharedPresentation
                         form.Add(new StringContent(item.Value.ToString()), item.Key);
                     else
                     {
-                        if (((HttpPostedFileBase)item.Value).InputStream != null)
+                        HttpPostedFileBase postedFile = (item.Value is HttpPostedFile)?
+                            new HttpPostedFileWrapper((HttpPostedFile)item.Value): ((HttpPostedFileBase)item.Value);
+                        if (postedFile.InputStream != null)
                         {
-                            var byteArrayContent = new StreamContent(((HttpPostedFileBase)item.Value).InputStream);
-                            byteArrayContent.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment") { FileName = ((HttpPostedFileBase)item.Value).FileName, Name = item.Key };
-                            byteArrayContent.Headers.ContentType = MediaTypeHeaderValue.Parse(((HttpPostedFileBase)item.Value).ContentType);
+                            var byteArrayContent = new StreamContent(postedFile.InputStream);
+                            byteArrayContent.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment") { FileName = postedFile.FileName, Name = item.Key };
+                            byteArrayContent.Headers.ContentType = MediaTypeHeaderValue.Parse(postedFile.ContentType);
                             form.Add(byteArrayContent);
                         }
                     }

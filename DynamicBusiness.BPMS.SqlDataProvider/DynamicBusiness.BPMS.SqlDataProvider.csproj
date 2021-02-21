@@ -96,9 +96,9 @@
     <Compile Include="DataAccessLayer\VariableDependencyRepository.cs" />
     <Compile Include="DataAccessLayer\VariableRepository.cs" />
     <Compile Include="DbContext\Db_BPMSEntities.cs" />
-    <Compile Include="Migrations\202102201313345_version_0.cs" />
-    <Compile Include="Migrations\202102201313345_version_0.designer.cs">
-      <DependentUpon>202102201313345_version_0.cs</DependentUpon>
+    <Compile Include="Migrations\202102202021525_version_0.cs" />
+    <Compile Include="Migrations\202102202021525_version_0.designer.cs">
+      <DependentUpon>202102202021525_version_0.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -115,8 +115,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202102201313345_version_0.resx">
-      <DependentUpon>202102201313345_version_0.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202102202021525_version_0.resx">
+      <DependentUpon>202102202021525_version_0.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

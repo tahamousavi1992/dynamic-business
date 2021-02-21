@@ -14,7 +14,7 @@ namespace DynamicBusiness.BPMS.Domain
             this.ChildrenDepartments = new HashSet<sysBpmsDepartment>();
             this.DepartmentMembers = new HashSet<sysBpmsDepartmentMember>();
         }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        
         public System.Guid ID { get; set; }
         [ForeignKey(nameof(ParentDepartment))]
         public Nullable<System.Guid> DepartmentID { get; set; }

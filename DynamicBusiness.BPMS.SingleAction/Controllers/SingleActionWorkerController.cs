@@ -225,7 +225,7 @@ namespace DynamicBusiness.BPMS.SingleAction.Controllers
                                        )
                             {
                                 EndAppPageID = SingleActionHomeController.Setting.ProcessEndFormID,
-                                StepID = responseVM.StepID.Value,
+                                StepID = responseVM?.StepID,
                             };
                     }
                     else

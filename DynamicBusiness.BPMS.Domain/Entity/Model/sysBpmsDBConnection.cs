@@ -12,7 +12,7 @@ namespace DynamicBusiness.BPMS.Domain
         {
             this.Variables = new HashSet<sysBpmsVariable>();
         }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        
         public System.Guid ID { get; set; }
         [Required(AllowEmptyStrings = true)]
         [MaxLength(500)]

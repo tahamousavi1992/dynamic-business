@@ -144,6 +144,29 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             }
         }
 
+        public void SetReadOnlyUrls(string getPopUpUrl, HttpRequestBase request, string portalAlias, string formToken)
+        {
+            this.GetPopUpUrl = string.IsNullOrWhiteSpace(getPopUpUrl) ? string.Empty : UrlUtility.AddParamsToUrl(getPopUpUrl, "formToken", formToken);
+
+            this.PageParams = UrlUtility.GetParams(request);
+            string[] arrayParams = UrlUtility.GetParamsAsArray(request,
+             string.Format("threadTaskID={0}", this.ThreadTaskID),
+             string.Format("threadId={0}", this.ThreadID),
+             string.Format("applicationPageId={0}", this.ApplicationID)).ToArray();
+            using (ConfigurationService configurationService = new ConfigurationService())
+            {
+                this.DownloadFileUrl = UrlUtility.GetApiUrl(request, portalAlias, "GetDownload", "EngineDocument", formToken);
+                this.GetDataGridElementUrl = UrlUtility.GetApiUrl(request, portalAlias, "GetDataGridElement", "EngineHtmlElement", formToken, arrayParams);
+                this.GetControlValueUrl = UrlUtility.GetApiUrl(request, portalAlias, "GetValue", "EngineHtmlElement", formToken, arrayParams);
+                this.GetListElementUrl = UrlUtility.GetApiUrl(request, portalAlias, "GetListElement", "EngineVariable", formToken, arrayParams);
+                this.GetChartElementUrl = UrlUtility.GetApiUrl(request, portalAlias, "GetChartElement", "EngineHtmlElement", formToken, arrayParams);
+                //GetDataGridReport
+                this.GetDataGridReport = UrlUtility.GetApiUrl(request, portalAlias, "GetDataGridReport", "EngineReport", formToken, arrayParams);
+                this.GetDataGridPagingUrl = UrlUtility.GetApiUrl(request, portalAlias, "GetDataGridElement", "EngineHtmlElement", formToken);
+            }
+        }
+
+
         private List<string> LoadScriptFiles()
         {
             string directoryFolder = (BPMSResources.FilesRoot + BPMSResources.JavaScriptRoot);

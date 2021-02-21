@@ -15,7 +15,7 @@ namespace DynamicBusiness.BPMS.Domain
             this.Threads = new HashSet<sysBpmsThread>();
             this.ThreadTasks = new HashSet<sysBpmsThreadTask>();
         }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        
         public System.Guid ID { get; set; }
         [Required(AllowEmptyStrings = true)]
         [MaxLength(500)]

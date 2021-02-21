@@ -14,7 +14,7 @@ namespace DynamicBusiness.BPMS.Domain
             this.DependentVariableDependencies = new HashSet<sysBpmsVariableDependency>();
             this.ToVariableDependencies = new HashSet<sysBpmsVariableDependency>();
         }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        
         public System.Guid ID { get; set; }
         [ForeignKey(nameof(Process))]
         public Nullable<System.Guid> ProcessID { get; set; }

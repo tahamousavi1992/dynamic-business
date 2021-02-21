@@ -21,7 +21,7 @@ namespace DynamicBusiness.BPMS.Domain
             this.Threads = new HashSet<sysBpmsThread>();
             this.Variables = new HashSet<sysBpmsVariable>();
         }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        
         public System.Guid ID { get; set; }
         public string FormattedNumber { get; set; }
         public Nullable<int> Number { get; set; }

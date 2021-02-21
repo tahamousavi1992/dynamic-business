@@ -13,7 +13,7 @@ namespace DynamicBusiness.BPMS.Domain
             this.Conditions = new HashSet<sysBpmsCondition>();
             this.Gateways = new HashSet<sysBpmsGateway>();
         }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        
         public System.Guid ID { get; set; }
         [Required]
         [MaxLength(100)]

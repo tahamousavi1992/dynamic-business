@@ -7,7 +7,7 @@ namespace DynamicBusiness.BPMS.Domain
    
     public partial class sysBpmsThreadEvent
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        
         public System.Guid ID { get; set; }
         [ForeignKey(nameof(Thread))]
         public System.Guid ThreadID { get; set; }
