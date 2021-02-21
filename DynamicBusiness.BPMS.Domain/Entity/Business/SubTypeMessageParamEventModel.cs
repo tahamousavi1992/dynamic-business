@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace DynamicBusiness.BPMS.Domain
 {
+    [Serializable]
     [DataContract]
     public class SubTypeMessageParamEventModel
     {

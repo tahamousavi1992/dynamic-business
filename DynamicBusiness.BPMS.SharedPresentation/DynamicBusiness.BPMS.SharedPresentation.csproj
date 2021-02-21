@@ -289,16 +289,10 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\HtmlElement\_UserTaskContent.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Shared\_ShowDataMessage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_LocalResources\Shared.resx" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\HtmlElement\_ModalForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_LocalResources\DCBaseModel.resx">
