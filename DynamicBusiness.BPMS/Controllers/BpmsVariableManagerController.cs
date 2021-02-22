@@ -178,11 +178,14 @@ namespace DynamicBusiness.BPMS.Controllers
                 var list = variableService.GetList(base.ProcessId, base.ApplicationPageId, null, searchVariable, null, null).Where(c =>
                   (isListVariable && c.VarTypeLU == (int)sysBpmsVariable.e_VarTypeLU.List) ||
                   (!isListVariable && c.VarTypeLU != (int)sysBpmsVariable.e_VarTypeLU.List)).Select(c => new SelectVariableDTO(c)).ToList();
-                if (!string.IsNullOrWhiteSpace(selectedVariable))
+                if (!string.IsNullOrWhiteSpace(selectedVariable)&& list.Any())
                 {
                     var sV = list.FirstOrDefault(c => c.Name == selectedVariable);
-                    list.Remove(sV);
-                    list.Insert(0, sV);
+                    if (sV != null)
+                    {
+                        list.Remove(sV);
+                        list.Insert(0, sV);
+                    }
                 }
                 return list;
             }

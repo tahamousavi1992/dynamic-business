@@ -29,19 +29,19 @@ namespace DynamicBusiness.BPMS.Domain
 
         public enum e_ToType
         {
-            [Description("مقدار ثابت")]
+            [Description("Constant")]
             Static = 1,//write email address.
-            [Description("متغیر")]
+            [Description("Variable")]
             Variable = 2,//use variable.
-            [Description("کاربر متناظر")]
+            [Description("Corresponding user")]
             Systemic = 3,//use current user or current department
         }
 
         public enum e_ToSystemicType
         {
-            [Description("کاربر فعلی")]
+            [Description("Current User")]
             CurrentUser = 1,
-            [Description("کاربر درخواست کننده")]
+            [Description("Requester User")]
             CurrentThreadUser = 2,
         }
 
