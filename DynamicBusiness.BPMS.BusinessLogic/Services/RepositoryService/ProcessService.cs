@@ -66,7 +66,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             {
                 resultOperation = new ResultOperation();
                 if (!process.AllowEdit() &&
-                    process.WorkflowXML.Replace("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n", "").Replace("\r\n", "").Replace(" ", "") != this.GetInfo(process.ID).WorkflowXML.Replace(" ", ""))
+                    process.WorkflowXML.Replace("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n", "").Replace("\r\n", "").Replace(" ", "") != this.GetInfo(process.ID).WorkflowXML.Replace("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n", "").Replace("\r\n", "").Replace(" ", ""))
                 {
                     resultOperation.AddError(LangUtility.Get("NotAllowEdit.Text", nameof(sysBpmsProcess)));
                 }
