@@ -78,7 +78,8 @@ namespace DynamicBusiness.BPMS.Controllers
             }
         }
 
-        public object ExecuteQuery(Guid entityId, string query = "")
+        [HttpPost]
+        public object ExecuteQuery(ExecuteQueryDTO model)
         {
             using (EntityDefService entityDefService = new EntityDefService())
             {
@@ -86,11 +87,11 @@ namespace DynamicBusiness.BPMS.Controllers
                 {
                     try
                     {
-                        sysBpmsEntityDef entityDef = entityDefService.GetInfo(entityId);
-                        query = string.IsNullOrWhiteSpace(query) ? $" select top(200) * from {entityDef.FormattedTableName} " : query;
-                        DataTable data = dataBaseQueryService.GetBySqlQuery(query, true, null);
+                        sysBpmsEntityDef entityDef = entityDefService.GetInfo(model.EntityId);
+                        model.Query = string.IsNullOrWhiteSpace(model.Query) ? $" select top(200) * from {entityDef.FormattedTableName} " : model.Query;
+                        DataTable data = dataBaseQueryService.GetBySqlQuery(model.Query, true, null);
 
-                        return Json(new { Data = data, EntityId = entityId, Query = query });
+                        return Json(new { Data = data, Columns = data.Columns, EntityId = model.EntityId, Query = model.Query });
                     }
                     catch (Exception ex)
                     {
@@ -145,4 +146,5 @@ namespace DynamicBusiness.BPMS.Controllers
 
 
     }
+
 }

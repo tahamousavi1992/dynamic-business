@@ -168,6 +168,7 @@
     <Compile Include="Authentication\BpmsCartableAuth.cs" />
     <Compile Include="Authentication\BpmsAdminAuth.cs" />
     <Compile Include="DTO\Admin\APIAccessIndexSearchDTO.cs" />
+    <Compile Include="DTO\Admin\ExecuteQueryDTO.cs" />
     <Compile Include="DTO\Admin\PostAddEditGatewayDTO.cs" />
     <Compile Include="DTO\Admin\PostLoadSqlFunctionFormDTO.cs" />
     <Compile Include="DTO\Admin\PostSaveSubTypeMessageDTO.cs" />

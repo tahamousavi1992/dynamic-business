@@ -121,6 +121,7 @@ namespace DynamicBusiness.BPMS.Domain
                 {
                     //c is like variableList:FieldName:Color:Label
                     //label is a text not a field.
+                    //Replace(".", "__") is used because entity relation will be returned by GetEntityByBinding as student__Name.
                     string item = $@"{{
                     {(this.ChartType == e_ChartType.Pie ? "" : $"\"label\": \"{c.Split(':')[3]}\",")}
                     {(this.IsSmooth ? "\"lineTension\": \"0.000001\"," : "")}
