@@ -205,6 +205,10 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 catch { }
                 return;
             }
+ 
+            if (!Directory.Exists(BPMSResources.FilesRoot + BPMSResources.AssemblyRoot + "\\" + BPMSResources.AssemblyCompiledRoot))
+                Directory.CreateDirectory(BPMSResources.FilesRoot + BPMSResources.AssemblyRoot + "\\" + BPMSResources.AssemblyCompiledRoot);
+
             sourceScript = @"using System;
                             using System.Linq;
                             using System.Collections.Generic;
