@@ -10,7 +10,6 @@ using System.Data;
 using System.Drawing;
 using System.Web.UI.WebControls;
 using System.IO;
-using Microsoft.Reporting.WinForms;
 using Microsoft.Reporting.WebForms;
 
 namespace DynamicBusiness.BPMS.BusinessLogic

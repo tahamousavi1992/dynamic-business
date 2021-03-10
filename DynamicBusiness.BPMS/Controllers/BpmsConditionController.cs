@@ -13,7 +13,7 @@ namespace DynamicBusiness.BPMS.Controllers
     public class BpmsConditionController : BpmsAdminApiControlBase
     {
         public object GetConditions(string ElementId, Guid ProcessId)
-        {
+        { 
             using (GatewayService gatewayService = new GatewayService())
             {
                 sysBpmsGateway sysBpmsGateway = gatewayService.GetInfo(ElementId, ProcessId);

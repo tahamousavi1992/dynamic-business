@@ -1,5 +1,7 @@
 ﻿using DotNetNuke.Entities.Tabs;
+using DotNetNuke.Security;
 using DotNetNuke.Services.Authentication;
+using DotNetNuke.Web.Api;
 using DynamicBusiness.BPMS.BusinessLogic;
 using DynamicBusiness.BPMS.Domain;
 using System;
@@ -10,6 +12,7 @@ using System.Web.Mvc;
 
 namespace DynamicBusiness.BPMS.Controllers
 {
+    [DnnModuleAuthorize(AccessLevel = SecurityAccessLevel.ViewPermissions)]
     public class BPMSHomeController : BpmsControllerBase
     {
         //

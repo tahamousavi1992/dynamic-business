@@ -1,5 +1,7 @@
 ﻿using DotNetNuke.Entities.Tabs;
+using DotNetNuke.Security;
 using DotNetNuke.Services.Authentication;
+using DotNetNuke.Web.Api;
 using DynamicBusiness.BPMS.BusinessLogic;
 using DynamicBusiness.BPMS.Domain;
 using DynamicBusiness.BPMS.SharedPresentation;
@@ -10,6 +12,7 @@ using System.Web.Mvc;
 
 namespace DynamicBusiness.BPMS.Cartable.Controllers
 {
+    [DnnModuleAuthorize(AccessLevel = SecurityAccessLevel.ViewPermissions)]
     public class CartableHomeController : KartableControllerBase
     {
         //It retrieves open threads which are in person kartable or step.
