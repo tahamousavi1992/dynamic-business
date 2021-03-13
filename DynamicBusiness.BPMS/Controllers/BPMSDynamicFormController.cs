@@ -178,11 +178,11 @@ namespace DynamicBusiness.BPMS.Controllers
                         return Json(new
                         {
                             //it is used in dataGrid seting for binging form to openForm Column Item Type.
-                            ProcessForms = dynamicFormService.GetList(base.ProcessId, null, base.ApplicationPageId.HasValue, string.Empty, null, null).Select(c => new { value = c.ID, text = c.Name }).ToList(),
+                            ProcessForms = dynamicFormService.GetList(dynamicFormDTO.ProcessId, null, base.ApplicationPageId.HasValue, string.Empty, null, null).Select(c => new { value = c.ID, text = c.Name }).ToList(),
                             //it is used for binding variable of entity type to fileupload controls.
-                            EntityVariables = variableService.GetList(base.ProcessId, base.ApplicationPageId, (int)sysBpmsVariable.e_VarTypeLU.Object, "", null, true).Select(c => new { text = c.Name, value = c.ID }).ToList(),
-                            //it is used for binding variable of list type to list controls like dropdownlist or checkboxlist.
-                            ListVariables = variableService.GetList(base.ProcessId, base.ApplicationPageId, (int)sysBpmsVariable.e_VarTypeLU.List, "", null, true).Select(c => new { text = c.Name, value = c.Name }).ToList(),
+                            EntityVariables = variableService.GetList(dynamicFormDTO.ProcessId, base.ApplicationPageId, (int)sysBpmsVariable.e_VarTypeLU.Object, "", null, true).Select(c => new { text = c.Name, value = c.ID }).ToList(),
+                            //it is used for binding variable of list type to list controls like dropdownlist or checkboxlist and uploader.
+                            ListVariables = variableService.GetList(dynamicFormDTO.ProcessId, base.ApplicationPageId, (int)sysBpmsVariable.e_VarTypeLU.List, "", null, true).Select(c => new { text = c.Name, value = c.Name }).ToList(),
                             Model = dynamicFormDTO
                         });
                 }
