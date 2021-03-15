@@ -131,5 +131,34 @@ namespace DynamicBusiness.BPMS.Controllers
                 return new PostMethodMessage(resultOperation.GetErrors(), DisplayMessageType.error);
             }
         }
+
+        [HttpPost]
+        public object PostSyncUserFromDnn()
+        {
+            int count = 0;
+            using (UserService userService = new UserService())
+            {
+                List<sysBpmsUser> users = userService.GetList("", null);
+                foreach (var item in UserController.GetUsers(base.PortalSettings.PortalId))
+                {
+                    UserInfo dnnUser = (UserInfo)item;
+                    //if dnn user is not exist, add it to bpms user.
+                    if (!users.Any(c => c.Username == dnnUser.Username))
+                    {
+                        ResultOperation resultOperation = userService.Add(new sysBpmsUser(Guid.Empty, dnnUser.Username,
+                            dnnUser.FirstName, dnnUser.LastName,
+                            dnnUser.Email, dnnUser.Profile.Telephone,
+                            dnnUser.Profile.Cell), null);
+
+                        if (!resultOperation.IsSuccess)
+                            return new PostMethodMessage(resultOperation.GetErrors(), DisplayMessageType.error);
+                        count++;
+                    }
+                }
+            }
+
+            return new PostMethodMessage($"The amount of {count} users were added to easy-bpm.", DisplayMessageType.success);
+
+        }
     }
 }

@@ -62,7 +62,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             return resultOperation;
         }
 
-        public ResultOperation Delete(Guid UserId)
+        public ResultOperation Delete(Guid userId)
         {
             ResultOperation resultOperation = new ResultOperation();
             if (resultOperation.IsSuccess)
@@ -72,15 +72,24 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                     this.BeginTransaction();
                     //delete email accounts
                     EmailAccountService emailAccountService = new EmailAccountService(base.UnitOfWork);
-                    var emailList = emailAccountService.GetList((int)sysBpmsEmailAccount.e_ObjectTypeLU.User, UserId, null);
+                    var emailList = emailAccountService.GetList((int)sysBpmsEmailAccount.e_ObjectTypeLU.User, userId, null);
                     foreach (var item in emailList)
                     {
                         emailAccountService.Delete(item.ID);
                     }
-                    this.UnitOfWork.Repository<IUserRepository>().Delete(UserId);
+
+                    //delete department member.
+                    DepartmentMemberService departmentMemberService = new DepartmentMemberService(base.UnitOfWork);
+                    var members = departmentMemberService.GetList(null, null, userId);
+                    foreach (var item in members)
+                    {
+                        departmentMemberService.Delete(item.ID);
+                    }
+
+                    this.UnitOfWork.Repository<IUserRepository>().Delete(userId);
                     this.UnitOfWork.Save();
                 }
-                catch
+                catch (Exception ex)
                 {
                     resultOperation.AddError(LangUtility.Get("UserUsedError.Text", nameof(sysBpmsUser)));
                     return base.ExceptionHandler(new Exception(LangUtility.Get("UserUsedError.Text", nameof(sysBpmsUser))));

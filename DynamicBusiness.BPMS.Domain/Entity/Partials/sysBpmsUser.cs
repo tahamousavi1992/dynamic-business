@@ -15,16 +15,16 @@ namespace DynamicBusiness.BPMS.Domain
         {
             get { return this.FirstName + " " + this.LastName; }
         }
-        public sysBpmsUser(Guid ID, string Username, string FirstName,
-            string LastName, string Email, string Tel, string Mobile)
+        public sysBpmsUser(Guid ID, string username, string firstName,
+            string lastName, string email, string tel, string mobile)
         {
             this.ID = ID;
-            this.Username = Username;
-            this.FirstName = FirstName;
-            this.LastName = LastName;
-            this.Email = Email;
-            this.Tel = Tel;
-            this.Mobile = Mobile;
+            this.Username = username;
+            this.FirstName = firstName.ToStringObj().Trim();
+            this.LastName = lastName.ToStringObj().Trim();
+            this.Email = email;
+            this.Tel = tel;
+            this.Mobile = mobile;
         }
         
     }
