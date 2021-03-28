@@ -275,7 +275,7 @@ namespace DynamicBusiness.BPMS.Domain
         {
             if (httpRequest != null)
             {
-                foreach (string key in httpRequest.QueryString.AllKeys.Where(c => !QueryModel.ForbidenList.Contains(c.ToLower())))
+                foreach (string key in httpRequest.QueryString.AllKeys.Where(c => c != null && !QueryModel.ForbidenList.Contains(c.ToLower())))
                     yield return new QueryModel() { Key = key.TrimStart('@'), Value = StringCipher.DecryptFormValues(httpRequest.QueryString[key], apiSessionId, isEncrypted) };
                 foreach (string key in httpRequest.Form.AllKeys.Where(c => !QueryModel.ForbidenList.Contains(c.ToLower())))
                     yield return new QueryModel() { Key = key.TrimStart('@'), Value = StringCipher.DecryptFormValues(httpRequest.Form[key], apiSessionId, isEncrypted) };

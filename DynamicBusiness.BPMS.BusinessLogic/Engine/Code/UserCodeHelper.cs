@@ -118,11 +118,15 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 }
                 //because of some bugs in dnn, sometimes it must be approved after getting it from dnn. 
                 if (!userInfo.Membership.Approved)
-                {
-                    userInfo = UserController.GetUserByName(userInfo.Username);
-                    userInfo.Membership.Approved = true;
-                    UserController.UpdateUser(userInfo.PortalID, userInfo);
-                    UserController.ApproveUser(userInfo);
+                { 
+                    var current = UserController.GetUserByName(userInfo.Username);
+                    //due to dnn bug I have to update user again.
+                    current.FirstName = userInfo.FirstName.ToStringObj().Trim();
+                    current.LastName = userInfo.LastName.ToStringObj().Trim();
+
+                    current.Membership.Approved = true;
+                    UserController.UpdateUser(userInfo.PortalID, current);
+                    UserController.ApproveUser(current);
                 }
                 if (doLogin)
                 {
