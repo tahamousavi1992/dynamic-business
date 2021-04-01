@@ -88,7 +88,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 //First set variable according to elements.
                 resultOperation = this.SetValuesToElements(contentHtml);
 
-                //Then set external variable 
+                //Then set external variables, filled by user defined actions.
                 if (setExternalVariable != null)
                 {
                     foreach (var item in setExternalVariable)

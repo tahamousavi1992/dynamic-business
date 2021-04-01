@@ -68,7 +68,7 @@ namespace DynamicBusiness.BPMS.Controllers
         {
             if (ModelState.IsValid)
             {
-                ResultOperation resultOperation = new EmailService().SendEmail(EmailAccountDTO.Email, EmailAccountDTO.MailPassword, EmailAccountDTO.SMTP, EmailAccountDTO.Port.ToIntObj(), new List<string>() { EmailAccountDTO.Email }, "", "", "تست ایمیل", "فراید تست ایمیل");
+                ResultOperation resultOperation = new EmailService().SendEmail(EmailAccountDTO.Email, EmailAccountDTO.MailPassword, EmailAccountDTO.SMTP, EmailAccountDTO.Port.ToIntObj(), new List<string>() { EmailAccountDTO.Email }, "", "", "Test Email", "This is a test");
                 if (resultOperation.IsSuccess)
                     return new PostMethodMessage(SharedLang.Get("Success.Text"), DisplayMessageType.success);
                 else
