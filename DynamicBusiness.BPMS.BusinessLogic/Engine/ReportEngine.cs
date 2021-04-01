@@ -10,7 +10,7 @@ using System.Data;
 using System.Drawing;
 using System.Web.UI.WebControls;
 using System.IO;
-using Microsoft.Reporting.WebForms;
+using Microsoft.Reporting.WebForms; 
 
 namespace DynamicBusiness.BPMS.BusinessLogic
 {
@@ -143,7 +143,10 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             }
 
             httpResponse.BinaryWrite(bytes); // create the file
+
+         
             httpResponse.Flush(); // send it to the client to download
+            //httpResponse.End();
         }
 
     }

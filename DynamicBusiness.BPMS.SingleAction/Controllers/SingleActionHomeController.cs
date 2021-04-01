@@ -15,21 +15,19 @@ using DotNetNuke.Entities.Portals;
 namespace DynamicBusiness.BPMS.SingleAction.Controllers
 {
     public class SingleActionHomeController : SingleActionControllerBase
-    {
-        public static SingleActionSettingDTO Setting { get; set; }
+    { 
         public ActionResult Index()
         {
-            Setting = new SingleActionSettingDTO();
-            Setting.GetFromModule(Request, base.PortalSettings.PortalId, ModuleContext.Configuration.ModuleSettings);
+            SingleActionSettingDTO setting = new SingleActionSettingDTO(Request, base.PortalSettings.PortalId, ModuleContext.Configuration.ModuleSettings);
             DomainUtility.SingleActionHomeUr = base.ActivePage.FullUrl;
 
-            ViewBag.LoadUserPanelJquery = Setting.LoadjQuery;
-            ViewBag.LoadUserPanelBootstrap = Setting.LoadBootstrap;
+            ViewBag.LoadUserPanelJquery = setting.LoadjQuery;
+            ViewBag.LoadUserPanelBootstrap = setting.LoadBootstrap;
 
-            ViewBag.SingleActionUrl = UrlUtility.GetApiBase(base.Request, base.PortalSettings.DefaultPortalAlias, "BpmsSingleActionApi").TrimEnd('/') + "/";
+            ViewBag.SingleActionUrl = UrlUtility.GetApiBase(base.Request, base.PortalSettings.DefaultPortalAlias, "BpmsSingleActionApi").TrimEnd('/') + $"/{base.ModuleContext.TabModuleId}/";
             ViewBag.rootPage = this.Request.RawUrl.Substring(0, this.Request.RawUrl.IndexOf("/" + this.ActivePage.TabName) + this.ActivePage.TabName.Length + 1);
 
-            if ((!Setting.ProcessID.HasValue && !Setting.ApplicationPageID.HasValue))
+            if ((!setting.ProcessID.HasValue && !setting.ApplicationPageID.HasValue))
             {
                 ViewBag.Message = "Setting is not complete";
                 return View();

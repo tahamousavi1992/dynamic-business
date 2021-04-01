@@ -1,8 +1,10 @@
-﻿using DotNetNuke.Services.Exceptions;
+﻿using DotNetNuke.Entities.Modules;
+using DotNetNuke.Services.Exceptions;
 using DotNetNuke.Web.Api;
 using DotNetNuke.Web.Mvc.Framework.Controllers;
 using DynamicBusiness.BPMS.BusinessLogic;
 using DynamicBusiness.BPMS.Domain;
+using DynamicBusiness.BPMS.SharedPresentation;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -40,6 +42,15 @@ namespace DynamicBusiness.BPMS.SingleAction
             }
             else
                 return null;
+        }
+
+        protected int TabModuleID { get { return base.RequestContext.RouteData.Values["tabmid"].ToIntObj(); } }
+
+        protected ModuleInfo ModuleInfo { get { return ModuleController.Instance.GetTabModule(this.TabModuleID); } }
+
+        protected SingleActionSettingDTO GetSetting()
+        {
+            return new SingleActionSettingDTO(new HttpRequestWrapper(this.MyRequest), base.PortalSettings.PortalId, ModuleInfo.ModuleSettings);
         }
     }
 }

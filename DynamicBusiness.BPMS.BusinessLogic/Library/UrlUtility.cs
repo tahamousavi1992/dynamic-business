@@ -33,11 +33,11 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             return baseUrl + (parameters == null || parameters.Count() == 0 ? "" : ((baseUrl.Contains("?") ? "&" : "?") + string.Join("&", parameters.Select(c => c))));
         }
 
-        public static string GetSingleActionApiUrl(HttpRequest request, string PortalAlias, string actionName, string controllerName, string formToken, params string[] parameters)
+        public static string GetSingleActionApiUrl(HttpRequest request, int tabmid, string PortalAlias, string actionName, string controllerName, string formToken, params string[] parameters)
         {
             string baseUrl = UrlUtility.GetApiBase(new HttpRequestWrapper(request), PortalAlias, "BpmsSingleActionApi");
 
-            baseUrl += "/" + controllerName.TrimStringEnd("Controller");
+            baseUrl += $"/{tabmid}/" + controllerName.TrimStringEnd("Controller");
             baseUrl += string.IsNullOrWhiteSpace(formToken) ? $"/{actionName}" : $"/{actionName}?formToken={formToken}";
             if (parameters != null)
             {

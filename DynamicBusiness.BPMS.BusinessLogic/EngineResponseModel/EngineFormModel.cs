@@ -87,11 +87,11 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         /// It is used to set required url.
         /// </summary>
         /// <param name="apiBaseUrl">It contains base address with portal alias.</param>
-        public void SetUrlsFromOtherSite(string PortalAlias, HttpRequestBase request, string getPopUpUrl, string getPostUrl, string formToken)
+        public void SetUrlsForSingleAction(string PortalAlias, HttpRequestBase request, string getPopUpUrl, string getPostUrl, string formToken, int tabmid)
         {
             string apiBaseUrl = request.Url.Scheme + "://" + request.Url.Authority + request.ApplicationPath.TrimEnd('/');
             PortalAlias = PortalAlias.Replace("http://", "").Replace("https://", "");
-            apiBaseUrl = apiBaseUrl + (PortalAlias.Split('/').Length == 2 ? ("/" + PortalAlias.Split('/')[1]) : "") + "/API/BpmsSingleActionApi";
+            apiBaseUrl = apiBaseUrl + (PortalAlias.Split('/').Length == 2 ? ("/" + PortalAlias.Split('/')[1]) : "") + $"/API/BpmsSingleActionApi/{tabmid}";
 
             this.GetPopUpUrl = UrlUtility.AddParamsToUrl(getPopUpUrl, "formToken", formToken);
             this.GetPostUrl = string.IsNullOrWhiteSpace(getPostUrl) ? string.Empty : UrlUtility.AddParamsToUrl(getPostUrl, "formToken", formToken);
@@ -165,7 +165,6 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 this.GetDataGridPagingUrl = UrlUtility.GetApiUrl(request, portalAlias, "GetDataGridElement", "EngineHtmlElement", formToken);
             }
         }
-
 
         private List<string> LoadScriptFiles()
         {

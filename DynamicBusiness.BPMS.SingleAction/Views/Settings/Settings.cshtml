@@ -2,6 +2,9 @@
 @using DotNetNuke.Web.Mvc.Helpers
 @using DotNetNuke.Collections
 @{ViewBag.LoadUserPanelBootstrap = true;}
+@{  
+    ViewBag.DontLoadBPMS = true;
+}
 <style>
     .input-group .select2 {
         width: 100% !important;
@@ -64,21 +67,27 @@
     </div>
     <div class="form-group row" style="@(Model.IsProcess?"display:none;":"")" id="divApplicationPageID">
         <div class="col-sm-6">
-            @Html.LabelFor(m => Model.ApplicationPageID)
+            Forms
             <div class="input-group combo-search">
                 @Html.BpmsComboSearchFor(model => model.ApplicationPageID, Model.ApplicationName, (string)ViewBag.ApplicationPageUrl, new { @class = "form-control" })
             </div>
         </div>
+        <div class="col-sm-6">
+            Message After Submitting(if filled, it hides form and shows this message)
+            <div class="input-group combo-search">
+                @Html.TextAreaFor(model => model.AppPageSubmitMessage, new { @class = "form-control", rows = "5" })
+            </div> 
+        </div>
     </div>
     <div class="form-group row" style="@(Model.IsProcess?"":"display:none;")" id="divProcessID">
         <div class="col-sm-6">
-            @Html.LabelFor(m => Model.ProcessID)
+            Processes
             <div class="input-group combo-search">
                 @Html.BpmsComboSearchFor(model => model.ProcessID, Model.ProcessName, (string)ViewBag.ProcessUrl, new { @class = "form-control" })
             </div>
         </div>
         <div class="col-sm-6">
-            @Html.LabelFor(m => Model.ProcessEndFormID)
+            Show This Form After Submitting
             <div class="input-group combo-search">
                 @Html.BpmsComboSearchFor(model => model.ProcessEndFormID, Model.ProcessEndFormName, (string)ViewBag.ProcessFormUrl, new { @class = "form-control" })
             </div>

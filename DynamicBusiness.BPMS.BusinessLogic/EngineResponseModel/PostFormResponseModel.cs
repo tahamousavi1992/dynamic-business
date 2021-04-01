@@ -19,7 +19,9 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             this.IsSubmit = isSubmit;
             this.RedirectUrlModel = redirectUrlModel;
             this.ListDownloadModel = listDownloadModel;
-            if (!string.IsNullOrWhiteSpace(message))
+            if (!string.IsNullOrWhiteSpace(message) &&
+                //If it is a success message and user added at least one success message,this skips default success message.
+                (!isSuccess || !this.ListMessageModel.Any(c => c.DisplayMessageType == DisplayMessageType.success)))
             {
                 this.ListMessageModel = (this.ListMessageModel ?? new List<MessageModel>()).Union(new List<MessageModel>() {
                       new MessageModel(this.IsSuccess ? DisplayMessageType.success : DisplayMessageType.error, message)

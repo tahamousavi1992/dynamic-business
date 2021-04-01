@@ -15,7 +15,7 @@ namespace DynamicBusiness.BPMS.SingleAction
         {
             HttpContext.Current.SetSessionStateBehavior(System.Web.SessionState.SessionStateBehavior.Required);
             //call from client http://localhost/API/BpmsSingleActionApi/controllerName/actionName
-            var route = mapRouteManager.MapHttpRoute("BpmsSingleActionApi", "default", "{controller}/{action}", new { }, new[] { "DynamicBusiness.BPMS.SingleAction.Controllers" });
+            var route = mapRouteManager.MapHttpRoute("BpmsSingleActionApi", "default", "{tabmid}/{controller}/{action}", new { }, new[] { "DynamicBusiness.BPMS.SingleAction.Controllers" });
             foreach (Route r in route)
             {
                 r.RouteHandler = new MyHttpControllerRouteHandler();

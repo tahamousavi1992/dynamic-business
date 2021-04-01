@@ -18,7 +18,7 @@ namespace DynamicBusiness.BPMS.SharedPresentation
 
         }
         public EngineFormResponseDTO(string redirectUrl = null, bool reloadForm = false,
-           List<DownloadModel> listDownloadModel = null, bool isSubmit = false, List<MessageModel> messageList = null, bool result = true)
+           List<DownloadModel> listDownloadModel = null, bool isSubmit = false, List<MessageModel> messageList = null, bool result = true, string submittedHtmlMessage = "")
         {
             this.RedirectUrl = redirectUrl;
             this.ReloadForm = reloadForm;
@@ -26,7 +26,13 @@ namespace DynamicBusiness.BPMS.SharedPresentation
             this.ListDownloadModel = listDownloadModel;
             this.MessageList = messageList?.Select(c => new PostMethodMessage(c.Message, c.DisplayMessageType)).ToList();
             this.Result = result;
+            this.SubmittedHtmlMessage = submittedHtmlMessage;
         }
+        /// <summary>
+        /// It is used for singleAction to show a predefined message if user submit a form.
+        /// </summary>
+        [DataMember]
+        public string SubmittedHtmlMessage { get; set; }
         [DataMember]
         public string RedirectUrl { get; set; }
         [DataMember]

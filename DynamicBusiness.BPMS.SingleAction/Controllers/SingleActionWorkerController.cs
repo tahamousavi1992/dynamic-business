@@ -11,30 +11,31 @@ using DotNetNuke.Collections;
 using DotNetNuke.Security;
 using DotNetNuke.Web.Mvc.Framework.ActionFilters;
 using DotNetNuke.Entities.Portals;
+using DotNetNuke.Entities.Modules;
 
 namespace DynamicBusiness.BPMS.SingleAction.Controllers
 {
     public class SingleActionWorkerController : SingleActionApiControllerBase
     {
-
         public bool IsEncrypted { get { return FormTokenUtility.GetIsEncrypted(base.MyRequest.QueryString[FormTokenUtility.FormToken].ToStringObj(), base.ApiSessionId); } }
-
 
         /// <param name="formId">for calling end process form</param>
         /// <param name="threadId">for calling a thread from other pages</param>
         /// <returns></returns>
+        [HttpGet]
         public object GetIndex(Guid? threadTaskID = null, Guid? stepID = null, Guid? applicationPageId = null, Guid? formId = null, Guid? threadId = null)
         {
+            SingleActionSettingDTO setting = new SingleActionSettingDTO(new HttpRequestWrapper(base.MyRequest), base.PortalSettings.PortalId, ModuleInfo.ModuleSettings);
             try
             {
-                if (SingleActionHomeController.Setting.ProcessID.HasValue)
+                if (setting.ProcessID.HasValue)
                 {
                     #region .:: Thread ::.
-                    EngineProcessProxy engineProcessProxy = new EngineProcessProxy(SingleActionHomeController.Setting.WebApiAddress, SingleActionHomeController.Setting.WebServicePass, base.ClientUserName, ApiUtility.GetIPAddress(), base.ApiSessionId, this.IsEncrypted);
+                    EngineProcessProxy engineProcessProxy = new EngineProcessProxy(setting.WebApiAddress, setting.WebServicePass, base.ClientUserName, ApiUtility.GetIPAddress(), base.ApiSessionId, this.IsEncrypted);
                     if (!threadTaskID.HasValue && !threadId.HasValue)
                     {
                         //begin Process
-                        BeginTaskResponseModel beginTaskResponseVM = engineProcessProxy.BeginTask(SingleActionHomeController.Setting.ProcessID.Value, this.MyRequest.GetList(false, string.Empty).ToList());
+                        BeginTaskResponseModel beginTaskResponseVM = engineProcessProxy.BeginTask(setting.ProcessID.Value, this.MyRequest.GetList(false, string.Empty).ToList());
                         threadTaskID = beginTaskResponseVM.ThreadTaskID;
                         if (!beginTaskResponseVM.Result)
                         {
@@ -42,7 +43,7 @@ namespace DynamicBusiness.BPMS.SingleAction.Controllers
                             {
                                 MessageList = new List<PostMethodMessage>() { new PostMethodMessage(beginTaskResponseVM.Message, DisplayMessageType.error) },
                                 Result = false,
-                                SingleActionHomeController.Setting.ShowCardBody
+                                setting.ShowCardBody
                             };
                         }
                     }
@@ -57,7 +58,7 @@ namespace DynamicBusiness.BPMS.SingleAction.Controllers
                             {
                                 ThreadDetailModel = threadDetailDTO,
                                 Result = true,
-                                SingleActionHomeController.Setting.ShowCardBody
+                                setting.ShowCardBody
                             };
                         }
                     }
@@ -75,10 +76,10 @@ namespace DynamicBusiness.BPMS.SingleAction.Controllers
                     }
                     if (responseVM?.EngineFormModel != null)
                     {
-                        string popUpUrl = UrlUtility.GetSingleActionApiUrl(base.MyRequest, base.PortalSettings.DefaultPortalAlias, nameof(SingleActionWorkerController.GetPopUp), nameof(SingleActionWorkerController), "", "threadTaskID=" + threadTaskID);
-                        string postUrl = UrlUtility.GetSingleActionApiUrl(base.MyRequest, base.PortalSettings.DefaultPortalAlias, nameof(SingleActionWorkerController.PostIndex), nameof(SingleActionWorkerController), "", UrlUtility.GetParamsAsArray(new HttpRequestWrapper(base.MyRequest), new string[] { $"threadTaskID={threadTaskID}", $"stepID={responseVM.EngineFormModel.FormModel.StepID}" }).ToArray());
+                        string popUpUrl = UrlUtility.GetSingleActionApiUrl(base.MyRequest, base.TabModuleID, base.PortalSettings.DefaultPortalAlias, nameof(SingleActionWorkerController.GetPopUp), nameof(SingleActionWorkerController), "", "threadTaskID=" + threadTaskID);
+                        string postUrl = UrlUtility.GetSingleActionApiUrl(base.MyRequest, base.TabModuleID, base.PortalSettings.DefaultPortalAlias, nameof(SingleActionWorkerController.PostIndex), nameof(SingleActionWorkerController), "", UrlUtility.GetParamsAsArray(new HttpRequestWrapper(base.MyRequest), new string[] { $"threadTaskID={threadTaskID}", $"stepID={responseVM.EngineFormModel.FormModel.StepID}" }).ToArray());
 
-                        responseVM.EngineFormModel.SetUrlsFromOtherSite(base.PortalSettings.DefaultPortalAlias, new HttpRequestWrapper(base.MyRequest), popUpUrl, postUrl, FormTokenUtility.GetFormToken(base.ApiSessionId, responseVM?.EngineFormModel?.FormModel?.ContentHtml?.DynamicFormID ?? Guid.Empty, responseVM?.EngineFormModel?.FormModel?.IsEncrypted ?? false));
+                        responseVM.EngineFormModel.SetUrlsForSingleAction(base.PortalSettings.DefaultPortalAlias, new HttpRequestWrapper(base.MyRequest), popUpUrl, postUrl, FormTokenUtility.GetFormToken(base.ApiSessionId, responseVM?.EngineFormModel?.FormModel?.ContentHtml?.DynamicFormID ?? Guid.Empty, responseVM?.EngineFormModel?.FormModel?.IsEncrypted ?? false), base.TabModuleID);
 
                         return new
                         {
@@ -86,7 +87,7 @@ namespace DynamicBusiness.BPMS.SingleAction.Controllers
                             MessageList = responseVM?.ListMessageModel.Select(c => new PostMethodMessage(c.Message, c.DisplayMessageType)),
                             RedirectUrl = base.GetRedirectUrl(responseVM?.RedirectUrlModel),
                             Result = true,
-                            SingleActionHomeController.Setting.ShowCardBody
+                            setting.ShowCardBody
                         };
                     }
                     else
@@ -94,7 +95,7 @@ namespace DynamicBusiness.BPMS.SingleAction.Controllers
                         {
                             MessageList = new List<PostMethodMessage>() { new PostMethodMessage("Error in getting information", DisplayMessageType.error) },
                             Result = false,
-                            SingleActionHomeController.Setting.ShowCardBody
+                            setting.ShowCardBody
                         };
 
                     #endregion
@@ -102,15 +103,15 @@ namespace DynamicBusiness.BPMS.SingleAction.Controllers
                 else
                 {
                     #region .:: Application Page ::.
-                    EngineApplicationProxy engineApplicationProxy = new EngineApplicationProxy(SingleActionHomeController.Setting.WebApiAddress, SingleActionHomeController.Setting.WebServicePass, base.ClientUserName, ApiUtility.GetIPAddress(), base.ApiSessionId, this.IsEncrypted);
-                    applicationPageId = applicationPageId ?? SingleActionHomeController.Setting.ApplicationPageID;
+                    EngineApplicationProxy engineApplicationProxy = new EngineApplicationProxy(setting.WebApiAddress, setting.WebServicePass, base.ClientUserName, ApiUtility.GetIPAddress(), base.ApiSessionId, this.IsEncrypted);
+                    applicationPageId = applicationPageId ?? setting.ApplicationPageID;
                     GetFormResponseModel responseVM = engineApplicationProxy.GetForm(applicationPageId, null, this.MyRequest.GetList(false, string.Empty).ToList());
                     if (responseVM?.EngineFormModel != null)
                     {
-                        string popUpUrl = UrlUtility.GetSingleActionApiUrl(base.MyRequest, base.PortalSettings.DefaultPortalAlias, nameof(SingleActionWorkerController.GetPopUp), nameof(SingleActionWorkerController), "");
-                        string postUrl = UrlUtility.GetSingleActionApiUrl(base.MyRequest, base.PortalSettings.DefaultPortalAlias, nameof(SingleActionWorkerController.PostIndex), nameof(SingleActionWorkerController), "", UrlUtility.GetParamsAsArray(new HttpRequestWrapper(base.MyRequest), new string[] { $"applicationPageId={applicationPageId}" }).ToArray());
+                        string popUpUrl = UrlUtility.GetSingleActionApiUrl(base.MyRequest, base.TabModuleID, base.PortalSettings.DefaultPortalAlias, nameof(SingleActionWorkerController.GetPopUp), nameof(SingleActionWorkerController), "");
+                        string postUrl = UrlUtility.GetSingleActionApiUrl(base.MyRequest, base.TabModuleID, base.PortalSettings.DefaultPortalAlias, nameof(SingleActionWorkerController.PostIndex), nameof(SingleActionWorkerController), "", UrlUtility.GetParamsAsArray(new HttpRequestWrapper(base.MyRequest), new string[] { $"applicationPageId={applicationPageId}" }).ToArray());
 
-                        responseVM.EngineFormModel.SetUrlsFromOtherSite(base.PortalSettings.DefaultPortalAlias, new HttpRequestWrapper(base.MyRequest), popUpUrl, postUrl, FormTokenUtility.GetFormToken(base.ApiSessionId, responseVM?.EngineFormModel?.FormModel?.ContentHtml?.DynamicFormID ?? Guid.Empty, responseVM?.EngineFormModel?.FormModel?.IsEncrypted ?? false));
+                        responseVM.EngineFormModel.SetUrlsForSingleAction(base.PortalSettings.DefaultPortalAlias, new HttpRequestWrapper(base.MyRequest), popUpUrl, postUrl, FormTokenUtility.GetFormToken(base.ApiSessionId, responseVM?.EngineFormModel?.FormModel?.ContentHtml?.DynamicFormID ?? Guid.Empty, responseVM?.EngineFormModel?.FormModel?.IsEncrypted ?? false), base.TabModuleID);
 
                         return new
                         {
@@ -118,7 +119,7 @@ namespace DynamicBusiness.BPMS.SingleAction.Controllers
                             MessageList = responseVM?.ListMessageModel.Select(c => new PostMethodMessage(c.Message, c.DisplayMessageType)),
                             RedirectUrl = base.GetRedirectUrl(responseVM?.RedirectUrlModel),
                             Result = true,
-                            SingleActionHomeController.Setting.ShowCardBody
+                            setting.ShowCardBody
                         };
                     }
                     else
@@ -126,7 +127,7 @@ namespace DynamicBusiness.BPMS.SingleAction.Controllers
                         {
                             MessageList = new List<PostMethodMessage>() { new PostMethodMessage("Error while getting information", DisplayMessageType.error) },
                             Result = false,
-                            SingleActionHomeController.Setting.ShowCardBody
+                            setting.ShowCardBody
                         };
                     #endregion
                 }
@@ -137,7 +138,7 @@ namespace DynamicBusiness.BPMS.SingleAction.Controllers
                 {
                     MessageList = new List<PostMethodMessage>() { new PostMethodMessage("Setting is not complete", DisplayMessageType.error) },
                     Result = false,
-                    SingleActionHomeController.Setting.ShowCardBody
+                    setting.ShowCardBody
                 };
             }
         }
@@ -145,16 +146,17 @@ namespace DynamicBusiness.BPMS.SingleAction.Controllers
         [HttpGet]
         public object GetPopUp(Guid formID, Guid? threadTaskID = null)
         {
-            if (SingleActionHomeController.Setting.ProcessID.HasValue)
+            SingleActionSettingDTO setting = base.GetSetting();
+            if (setting.ProcessID.HasValue)
             {
                 #region .:: Thread ::.
-                GetTaskFormResponseModel responseVM = new EngineProcessProxy(SingleActionHomeController.Setting.WebApiAddress, SingleActionHomeController.Setting.WebServicePass, base.ClientUserName, ApiUtility.GetIPAddress(), base.ApiSessionId, this.IsEncrypted).GetForm(threadTaskID.Value, formID, this.MyRequest.GetList(false, string.Empty).ToList());
+                GetTaskFormResponseModel responseVM = new EngineProcessProxy(setting.WebApiAddress, setting.WebServicePass, base.ClientUserName, ApiUtility.GetIPAddress(), base.ApiSessionId, this.IsEncrypted).GetForm(threadTaskID.Value, formID, this.MyRequest.GetList(false, string.Empty).ToList());
                 if (responseVM.EngineFormModel != null)
                 {
-                    string popUpUrl = UrlUtility.GetSingleActionApiUrl(base.MyRequest, base.PortalSettings.DefaultPortalAlias, nameof(SingleActionWorkerController.GetPopUp), nameof(SingleActionWorkerController), "", "threadTaskID=" + threadTaskID);
-                    string postUrl = UrlUtility.GetSingleActionApiUrl(base.MyRequest, base.PortalSettings.DefaultPortalAlias, nameof(SingleActionWorkerController.PostPopUp), nameof(SingleActionWorkerController), "", UrlUtility.GetParamsAsArray(new HttpRequestWrapper(base.MyRequest), new string[] { $"formID={formID}", $"threadTaskID={threadTaskID}", $"stepID={responseVM.EngineFormModel.FormModel.StepID}" }).ToArray());
+                    string popUpUrl = UrlUtility.GetSingleActionApiUrl(base.MyRequest, base.TabModuleID, base.PortalSettings.DefaultPortalAlias, nameof(SingleActionWorkerController.GetPopUp), nameof(SingleActionWorkerController), "", "threadTaskID=" + threadTaskID);
+                    string postUrl = UrlUtility.GetSingleActionApiUrl(base.MyRequest, base.TabModuleID, base.PortalSettings.DefaultPortalAlias, nameof(SingleActionWorkerController.PostPopUp), nameof(SingleActionWorkerController), "", UrlUtility.GetParamsAsArray(new HttpRequestWrapper(base.MyRequest), new string[] { $"formID={formID}", $"threadTaskID={threadTaskID}", $"stepID={responseVM.EngineFormModel.FormModel.StepID}" }).ToArray());
 
-                    responseVM.EngineFormModel.SetUrlsFromOtherSite(base.PortalSettings.DefaultPortalAlias, new HttpRequestWrapper(base.MyRequest), popUpUrl, postUrl, FormTokenUtility.GetFormToken(base.ApiSessionId, responseVM?.EngineFormModel?.FormModel?.ContentHtml?.DynamicFormID ?? Guid.Empty, responseVM?.EngineFormModel?.FormModel?.IsEncrypted ?? false));
+                    responseVM.EngineFormModel.SetUrlsForSingleAction(base.PortalSettings.DefaultPortalAlias, new HttpRequestWrapper(base.MyRequest), popUpUrl, postUrl, FormTokenUtility.GetFormToken(base.ApiSessionId, responseVM?.EngineFormModel?.FormModel?.ContentHtml?.DynamicFormID ?? Guid.Empty, responseVM?.EngineFormModel?.FormModel?.IsEncrypted ?? false), base.TabModuleID);
                 }
                 return new
                 {
@@ -168,14 +170,14 @@ namespace DynamicBusiness.BPMS.SingleAction.Controllers
             else
             {
                 #region .:: Application ::.
-                EngineApplicationProxy engineApplicationProxy = new EngineApplicationProxy(SingleActionHomeController.Setting.WebApiAddress, SingleActionHomeController.Setting.WebServicePass, base.ClientUserName, ApiUtility.GetIPAddress(), base.ApiSessionId, this.IsEncrypted);
+                EngineApplicationProxy engineApplicationProxy = new EngineApplicationProxy(setting.WebApiAddress, setting.WebServicePass, base.ClientUserName, ApiUtility.GetIPAddress(), base.ApiSessionId, this.IsEncrypted);
                 GetFormResponseModel responseVM = engineApplicationProxy.GetForm(null, formID, new HttpRequestWrapper(base.MyRequest).GetList(false, string.Empty).ToList());
                 if (responseVM.EngineFormModel != null)
                 {
-                    string popUpUrl = UrlUtility.GetSingleActionApiUrl(base.MyRequest, base.PortalSettings.DefaultPortalAlias, nameof(SingleActionWorkerController.GetPopUp), nameof(SingleActionWorkerController), "");
-                    string postUrl = UrlUtility.GetSingleActionApiUrl(base.MyRequest, base.PortalSettings.DefaultPortalAlias, nameof(SingleActionWorkerController.PostPopUp), nameof(SingleActionWorkerController), "", UrlUtility.GetParamsAsArray(new HttpRequestWrapper(base.MyRequest), new string[] { $"applicationPageId={responseVM.EngineFormModel.ApplicationID}" }).ToArray());
+                    string popUpUrl = UrlUtility.GetSingleActionApiUrl(base.MyRequest, base.TabModuleID, base.PortalSettings.DefaultPortalAlias, nameof(SingleActionWorkerController.GetPopUp), nameof(SingleActionWorkerController), "");
+                    string postUrl = UrlUtility.GetSingleActionApiUrl(base.MyRequest, base.TabModuleID, base.PortalSettings.DefaultPortalAlias, nameof(SingleActionWorkerController.PostPopUp), nameof(SingleActionWorkerController), "", UrlUtility.GetParamsAsArray(new HttpRequestWrapper(base.MyRequest), new string[] { $"applicationPageId={responseVM.EngineFormModel.ApplicationID}" }).ToArray());
 
-                    responseVM.EngineFormModel.SetUrlsFromOtherSite(base.PortalSettings.DefaultPortalAlias, new HttpRequestWrapper(base.MyRequest), popUpUrl, postUrl, FormTokenUtility.GetFormToken(base.ApiSessionId, responseVM?.EngineFormModel?.FormModel?.ContentHtml?.DynamicFormID ?? Guid.Empty, responseVM?.EngineFormModel?.FormModel?.IsEncrypted ?? false));
+                    responseVM.EngineFormModel.SetUrlsForSingleAction(base.PortalSettings.DefaultPortalAlias, new HttpRequestWrapper(base.MyRequest), popUpUrl, postUrl, FormTokenUtility.GetFormToken(base.ApiSessionId, responseVM?.EngineFormModel?.FormModel?.ContentHtml?.DynamicFormID ?? Guid.Empty, responseVM?.EngineFormModel?.FormModel?.IsEncrypted ?? false), base.TabModuleID);
                 }
                 return new
                 {
@@ -191,10 +193,11 @@ namespace DynamicBusiness.BPMS.SingleAction.Controllers
         [HttpPost]
         public object PostIndex(Guid? applicationPageId = null, Guid? threadTaskID = null, string controlId = "", Guid? stepID = null, bool? goNext = null)
         {
-            if (SingleActionHomeController.Setting.ProcessID.HasValue)
+            SingleActionSettingDTO setting = base.GetSetting();
+            if (setting.ProcessID.HasValue)
             {
                 #region .:: Thread ::.
-                EngineProcessProxy engineProcessProxy = new EngineProcessProxy(SingleActionHomeController.Setting.WebApiAddress, SingleActionHomeController.Setting.WebServicePass, base.ClientUserName, ApiUtility.GetIPAddress(), base.ApiSessionId, this.IsEncrypted);
+                EngineProcessProxy engineProcessProxy = new EngineProcessProxy(setting.WebApiAddress, setting.WebServicePass, base.ClientUserName, ApiUtility.GetIPAddress(), base.ApiSessionId, this.IsEncrypted);
                 PostTaskFormResponseModel responseVM = engineProcessProxy.PostTaskForm(threadTaskID.Value, controlId, stepID.Value, goNext, this.MyRequest.GetList(false, string.Empty).ToList());
 
                 if (!responseVM.IsSuccess)
@@ -219,12 +222,12 @@ namespace DynamicBusiness.BPMS.SingleAction.Controllers
                         else
                             return new EngineFormResponseDTO(
                                        redirectUrl: string.IsNullOrWhiteSpace(base.GetRedirectUrl(responseVM.RedirectUrlModel)) ? "CartableManage" :
-                                        base.GetRedirectUrl(responseVM.RedirectUrlModel), reloadForm: SingleActionHomeController.Setting.ProcessEndFormID.HasValue,
+                                        base.GetRedirectUrl(responseVM.RedirectUrlModel), reloadForm: setting.ProcessEndFormID.HasValue,
                                        listDownloadModel: responseVM.ListDownloadModel,
                                        messageList: responseVM.ListMessageModel
                                        )
                             {
-                                EndAppPageID = SingleActionHomeController.Setting.ProcessEndFormID,
+                                EndAppPageID = setting.ProcessEndFormID,
                                 StepID = responseVM?.StepID,
                             };
                     }
@@ -244,7 +247,7 @@ namespace DynamicBusiness.BPMS.SingleAction.Controllers
             else
             {
                 #region .:: Application ::.
-                EngineApplicationProxy engineApplicationProxy = new EngineApplicationProxy(SingleActionHomeController.Setting.WebApiAddress, SingleActionHomeController.Setting.WebServicePass, base.ClientUserName, ApiUtility.GetIPAddress(), base.ApiSessionId, this.IsEncrypted);
+                EngineApplicationProxy engineApplicationProxy = new EngineApplicationProxy(setting.WebApiAddress, setting.WebServicePass, base.ClientUserName, ApiUtility.GetIPAddress(), base.ApiSessionId, this.IsEncrypted);
                 PostFormResponseModel responseVM = engineApplicationProxy.PostForm(applicationPageId.Value, controlId, this.MyRequest.GetList(false, string.Empty).ToList());
 
                 if (!responseVM.IsSuccess)
@@ -254,9 +257,9 @@ namespace DynamicBusiness.BPMS.SingleAction.Controllers
                     return
                         new EngineFormResponseDTO(
                         redirectUrl: base.GetRedirectUrl(responseVM.RedirectUrlModel),
-                        true,
-                        listDownloadModel: responseVM.ListDownloadModel, false,
-                        responseVM.ListMessageModel
+                        reloadForm: false,
+                        listDownloadModel: responseVM.ListDownloadModel, isSubmit: responseVM.IsSubmit,
+                        responseVM.ListMessageModel, submittedHtmlMessage: setting.AppPageSubmitMessage
                          );
                 }
                 #endregion
@@ -266,10 +269,11 @@ namespace DynamicBusiness.BPMS.SingleAction.Controllers
         [HttpPost]
         public object PostPopUp(Guid? applicationPageId = null, Guid? threadTaskID = null, Guid? formID = null, string controlId = "")
         {
-            if (SingleActionHomeController.Setting.ProcessID.HasValue)
+            SingleActionSettingDTO setting = base.GetSetting();
+            if (setting.ProcessID.HasValue)
             {
                 #region .:: Thread ::.
-                EngineProcessProxy engineProcessProxy = new EngineProcessProxy(SingleActionHomeController.Setting.WebApiAddress, SingleActionHomeController.Setting.WebServicePass, base.ClientUserName, ApiUtility.GetIPAddress(), base.ApiSessionId, this.IsEncrypted);
+                EngineProcessProxy engineProcessProxy = new EngineProcessProxy(setting.WebApiAddress, setting.WebServicePass, base.ClientUserName, ApiUtility.GetIPAddress(), base.ApiSessionId, this.IsEncrypted);
                 PostTaskFormResponseModel responseVM = engineProcessProxy.PostForm(threadTaskID.Value, formID.Value, controlId, this.MyRequest.GetList(false, string.Empty).ToList());
 
                 if (!responseVM.IsSuccess)
@@ -297,7 +301,7 @@ namespace DynamicBusiness.BPMS.SingleAction.Controllers
             else
             {
                 #region .:: Application ::.
-                EngineApplicationProxy engineApplicationProxy = new EngineApplicationProxy(SingleActionHomeController.Setting.WebApiAddress, SingleActionHomeController.Setting.WebServicePass, base.ClientUserName, ApiUtility.GetIPAddress(), base.ApiSessionId, this.IsEncrypted);
+                EngineApplicationProxy engineApplicationProxy = new EngineApplicationProxy(setting.WebApiAddress, setting.WebServicePass, base.ClientUserName, ApiUtility.GetIPAddress(), base.ApiSessionId, this.IsEncrypted);
                 PostFormResponseModel responseVM = engineApplicationProxy.PostForm(applicationPageId.Value, controlId, this.MyRequest.GetList(false, string.Empty).ToList());
 
                 if (!responseVM.IsSuccess)
