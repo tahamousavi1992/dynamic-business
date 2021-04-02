@@ -68,6 +68,8 @@ namespace DynamicBusiness.BPMS.Domain
             [XmlEnum("8")] Entity = 8,
             [Description("SqlFunction")]
             [XmlEnum("9")] SqlFunction = 9,
+            [Description("Email")]
+            [XmlEnum("10")] Email = 10,
         }
         public virtual object FillData(XElement xElement)
         {

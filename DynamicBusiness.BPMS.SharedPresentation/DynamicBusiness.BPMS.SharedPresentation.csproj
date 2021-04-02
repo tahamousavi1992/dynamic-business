@@ -170,6 +170,7 @@
     <Compile Include="DTO\Admin\APIAccessIndexSearchDTO.cs" />
     <Compile Include="DTO\Admin\ExecuteQueryDTO.cs" />
     <Compile Include="DTO\Admin\PostAddEditGatewayDTO.cs" />
+    <Compile Include="DTO\Admin\PostLoadEmailFormDTO.cs" />
     <Compile Include="DTO\Admin\PostLoadSqlFunctionFormDTO.cs" />
     <Compile Include="DTO\Admin\PostSaveSubTypeMessageDTO.cs" />
     <Compile Include="DTO\Admin\PostSubTypeEmailDTO.cs" />

@@ -190,6 +190,7 @@ namespace DynamicBusiness.BPMS.Domain
                          c.Name == nameof(DCConditionModel) ? new DCConditionModel().FillData(c) :
                          c.Name == nameof(DCWebServiceModel) ? new DCWebServiceModel().FillData(c) :
                          c.Name == nameof(DCSqlFunctionModel) ? new DCSqlFunctionModel().FillData(c) :
+                         c.Name == nameof(DCEmailModel) ? new DCEmailModel().FillData(c) :
                          c.Name == nameof(DCExpressionModel) ? new DCExpressionModel().FillData(c) :
                          c.Name == nameof(DCSetControlModel) ? new DCSetControlModel().FillData(c) :
                          c.Name == nameof(DCEntityModel) ? new DCEntityModel().FillData(c) :
@@ -229,7 +230,9 @@ namespace DynamicBusiness.BPMS.Domain
                     return (T)(object)new DCWebServiceModel().FillData(XElement);
                 if (XElement.Name == nameof(DCSqlFunctionModel))
                     return (T)(object)new DCSqlFunctionModel().FillData(XElement);
-                
+                if (XElement.Name == nameof(DCEmailModel))
+                    return (T)(object)new DCEmailModel().FillData(XElement);
+
                 return default(T);
 
             }

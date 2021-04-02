@@ -10,9 +10,11 @@ namespace DynamicBusiness.BPMS.BusinessLogic
     public class MessageCodeHelper : IMessageCodeHelper
     {
         public CodeBaseSharedModel CodeBaseShared { get; set; }
-        public MessageCodeHelper(CodeBaseSharedModel codeBaseShared)
+        public IUnitOfWork UnitOfWork { get; set; }
+        public MessageCodeHelper(CodeBaseSharedModel codeBaseShared, IUnitOfWork unitOfWork)
         {
             this.CodeBaseShared = codeBaseShared;
+            this.UnitOfWork = unitOfWork;
         }
 
         /// <summary>
@@ -47,5 +49,24 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             this.CodeBaseShared.MessageList.Add(new MessageModel(DisplayMessageType.warning, message));
         }
 
+
+        /// <summary>
+        /// It is used to send an email. 
+        /// </summary>
+        public bool SendEmail(string from, string smtpAddress, string password, int port,
+            List<string> to, string bcc, string cc, string subject, string body)
+        {
+            return new EmailService().SendEmailAsync(from, password, smtpAddress, port, to, bcc, cc, subject, body).IsSuccess;
+        }
+
+        /// <summary>
+        /// It is used to send an email using emailAccountID.
+        /// </summary>
+        public bool SendEmail(Guid emailAccountID,
+            List<string> to, string bcc, string cc, string subject, string body)
+        {
+            sysBpmsEmailAccount account = new EmailAccountService(this.UnitOfWork).GetInfo(emailAccountID);
+            return new EmailService().SendEmailAsync(account.Email, account.MailPassword, account.SMTP, account.Port.ToIntObj(), to, bcc, cc, subject, body).IsSuccess;
+        } 
     }
 }

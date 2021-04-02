@@ -164,19 +164,19 @@ namespace DynamicBusiness.BPMS.Controllers
         public object PostLoadDesignCodeActionList(PostLoadDesignCodeActionListDTO model)
         {
 
-                return new
-                {
-                    ListActionTypes = EnumObjHelper.GetEnumList<DCBaseModel.e_ActionType>().Select(c => new QueryModel(c.Key.ToString(), c.Value)).ToList(),
-                    model.ShapeId,
-                    DynamicFormId = model.DynamicFormId.ToGuidObjNull(),
-                    model.ParentShapeId,
-                    model.IsOutputYes,
-                    Name = model.Name.ToStringObj().Trim(),
-                    model.IsFirst,
-                    Base64Code = model.Action.ToStringObj(),
-                    FuncName = DesignCodeUtility.GetFunctionName(model.ShapeId),
-                    Model = DesignCodeUtility.GetObjectOfDesignCode<object>(model.Action.ToStringObj().FromBase64()),
-                };
+            return new
+            {
+                ListActionTypes = EnumObjHelper.GetEnumList<DCBaseModel.e_ActionType>().Select(c => new QueryModel(c.Key.ToString(), c.Value)).ToList(),
+                model.ShapeId,
+                DynamicFormId = model.DynamicFormId.ToGuidObjNull(),
+                model.ParentShapeId,
+                model.IsOutputYes,
+                Name = model.Name.ToStringObj().Trim(),
+                model.IsFirst,
+                Base64Code = model.Action.ToStringObj(),
+                FuncName = DesignCodeUtility.GetFunctionName(model.ShapeId),
+                Model = DesignCodeUtility.GetObjectOfDesignCode<object>(model.Action.ToStringObj().FromBase64()),
+            };
         }
 
         [HttpPost]
@@ -378,6 +378,33 @@ namespace DynamicBusiness.BPMS.Controllers
                     Model = designCode
                 };
         }
+
+        [HttpPost]
+        public object PostLoadEmailForm(PostLoadEmailFormDTO model)
+        {
+            Guid? dynamicFormId = model.DynamicFormId.ToGuidObjNull();
+            DCEmailModel designCode = null;
+            if (!string.IsNullOrWhiteSpace(model.XmlB64Model))
+            {
+                designCode = DesignCodeUtility.GetObjectOfDesignCode<DCEmailModel>(model.XmlB64Model.ToStringObj().FromBase64());
+                designCode.IsOutputYes = model.IsOutputYes;
+            }
+            else
+                designCode = new DCEmailModel(Guid.NewGuid().ToString(), "Email", model.ShapeId.ToStringObj(),
+                    model.ParentShapeId.ToStringObj(), model.IsOutputYes, model.IsFirst.ToBoolObj(), string.Empty, Guid.Empty, "", "", "");
+
+            using (DynamicFormService dynamicFormService = new DynamicFormService())
+            using (EmailAccountService emailAccountService = new EmailAccountService())
+                return new
+                {
+                    ListEmailAccounts = emailAccountService.GetList((int)sysBpmsEmailAccount.e_ObjectTypeLU.Systemic, null, null).Select(c => new QueryModel(c.ID.ToString(), c.Email)).ToList(),
+                    DynamicFormId = dynamicFormId,
+                    ProcessControls = dynamicFormId != Guid.Empty && dynamicFormId.HasValue ?
+                    dynamicFormService.GetControls(dynamicFormService.GetInfo(dynamicFormId.Value)).Select(c => new QueryModel(c.Key, c.Value)).ToList() : new List<QueryModel>(),
+                    Model = designCode
+                };
+        }
+
 
         [HttpPost]
         public object PostLoadEntityForm(PostLoadEntityFormDTO model)

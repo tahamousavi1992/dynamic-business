@@ -20,5 +20,9 @@ namespace DynamicBusiness.BPMS.Domain
         public List<Domain.MessageModel> MessageList { get; set; }
         public List<Domain.VariableModel> ListSetVariable { get; set; }
         public List<Domain.DownloadModel> ListDownloadModel { get; set; }
+        /// <summary>
+        /// Is filled by form input element.
+        /// </summary>
+        public string ThreadTaskDescription { get; set; }
     }
 }

@@ -78,7 +78,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 return default(T);
         }
 
-        public ResultOperation SaveIntoDataBase(ContentHtml contentHtml, sysBpmsThreadTask threadTask, List<VariableModel> setExternalVariable)
+        public ResultOperation SaveIntoDataBase(ContentHtml contentHtml, sysBpmsThreadTask threadTask, List<VariableModel> setExternalVariable, string threadTaskDescription)
         {
             ResultOperation resultOperation = new ResultOperation();
             try
@@ -86,7 +86,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 base.BeginTransaction();
 
                 //First set variable according to elements.
-                resultOperation = this.SetValuesToElements(contentHtml);
+                //resultOperation = this.SetValuesToElements(contentHtml);
 
                 //Then set external variables, filled by user defined actions.
                 if (setExternalVariable != null)
@@ -160,10 +160,56 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             }
         }
 
+        public static ResultOperation SetVariableByForms(ContentHtml contentHtml, CodeBaseSharedModel codeBaseShared, List<QueryModel> queryModels)
+        {
+            ResultOperation resultOperation = new ResultOperation();
+            foreach (RowHtml row in contentHtml.GetRowHtmls)
+            {
+                foreach (ColumnHtml column in row.Columns)
+                {
+                    foreach (var item in column.children)
+                    {
+                        if (item is FormHtml)
+                        {
+                            SetVariableByForms(((FormHtml)item).ContentHtml, codeBaseShared, queryModels);
+                        }
+                        else
+                        {
+                            if (item is BindingElementBase)
+                            {
+                                BindingElementBase bindingItem = ((BindingElementBase)item);
+                                if (bindingItem.IsInForm(queryModels))
+                                {
+                                    bindingItem.IsValid(resultOperation);
+                                    if (!resultOperation.IsSuccess)
+                                        return resultOperation;
+                                    if (item is TextBoxHtml && ((TextBoxHtml)item).SubType == TextBoxHtml.e_TextBoxType.threadTaskDescription.ToString())
+                                    {
+                                        codeBaseShared.ThreadTaskDescription = bindingItem.Value.ToStringObjNull();
+                                    }
+                                    else
+                                    {
+                                        if (bindingItem.Type != "FILEUPLOAD")
+                                        {
+                                            string variableName = bindingItem.Map.Split('.').FirstOrDefault();
+                                            if (!codeBaseShared.ListSetVariable.Any(c => c.Name == variableName))
+                                                codeBaseShared.ListSetVariable.Add(new VariableModel(variableName, new DataModel()));
+                                            codeBaseShared.ListSetVariable.FirstOrDefault(c => c.Name == variableName)[bindingItem.Map] = bindingItem.Value;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return resultOperation;
+        }
+
         #endregion
 
         #region .:: Private Method ::.
-
+         
         private ResultOperation SaveInto()
         {
             VariableService variableService = new VariableService(base.UnitOfWork);
@@ -208,50 +254,6 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                             case sysBpmsVariable.e_RelationTypeLU.SqlQuery:
                                 resultOperation = new SqlQueryVariableTypeEngine(base.EngineSharedModel, variable, base.EngineSharedModel?.CurrentProcessID, this.ThreadID, this.AdditionalParams, this.UnitOfWork).SaveValues(item.Value);
                                 break;
-                        }
-                    }
-                }
-            }
-            return resultOperation;
-        }
-
-        /// <summary>
-        /// this set form post back element to RowHtmls elements like textbox and dropdown
-        /// </summary>
-        private ResultOperation SetValuesToElements(ContentHtml contentHtml)
-        {
-            ResultOperation resultOperation = new ResultOperation();
-            foreach (RowHtml row in contentHtml.GetRowHtmls)
-            {
-                foreach (ColumnHtml column in row.Columns)
-                {
-                    foreach (var item in column.children)
-                    {
-                        if (item is FormHtml)
-                        {
-                            this.SetValuesToElements(((FormHtml)item).ContentHtml);
-                        }
-                        else
-                        {
-                            if (item is BindingElementBase)
-                            {
-                                BindingElementBase bindingItem = ((BindingElementBase)item);
-                                if (bindingItem.IsInForm(base.GetAllQueryModels(this.AdditionalParams)))
-                                {
-                                    bindingItem.IsValid(resultOperation);
-                                    if (!resultOperation.IsSuccess)
-                                        return resultOperation;
-                                    if (item is TextBoxHtml && ((TextBoxHtml)item).SubType == TextBoxHtml.e_TextBoxType.threadTaskDescription.ToString())
-                                    {
-                                        this.ThreadTaskDescription = bindingItem.Value.ToStringObjNull();
-                                    }
-                                    else
-                                    {
-                                        if (bindingItem.Type != "FILEUPLOAD")
-                                            this.SetValueByBinding(bindingItem.Map, bindingItem.Value);
-                                    }
-                                }
-                            }
                         }
                     }
                 }

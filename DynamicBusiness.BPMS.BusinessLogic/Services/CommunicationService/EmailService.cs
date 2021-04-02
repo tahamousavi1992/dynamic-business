@@ -33,10 +33,10 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             {
                 if (string.IsNullOrWhiteSpace(emailFrom) || string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(smtpAddress))
                 {
-                    resultOperation.AddError("اطلاعات مورد نیاز برای ارسال ایمیل فراهم نبود");
+                    resultOperation.AddError("Email Setting is not completed.");
                     return resultOperation;
                 }
-                bool enableSSL = false;
+                bool enableSSL = true;
                 using (MailMessage mail = new MailMessage())
                 {
                     mail.From = new MailAddress(emailFrom);

@@ -13,7 +13,7 @@ namespace DynamicBusiness.BPMS.Domain
         /// <summary>
         /// It is used for Forms inside forms to change appPageID of parent form for retrieving variables.
         /// </summary>
-        void SetApplicationPageID(Guid appPageID); 
+        void SetApplicationPageID(Guid appPageID);
         Guid? ThreadID { get; set; }
         Dictionary<string, object> FormControlValues { get; set; }
         /// <param name="containerQuery">It is generally used in combosearch which add a parent query that filter table's rows according to query parameter and text field</param>
@@ -28,7 +28,7 @@ namespace DynamicBusiness.BPMS.Domain
         /// </summary>
         /// <param name="setExternalVariable">if in code a user set variable but dont save that these variables save in this part of code</param>
         /// <returns></returns>
-        ResultOperation SaveIntoDataBase(ContentHtml contentHtml, sysBpmsThreadTask threadTasks, List<VariableModel> setExternalVariable);
+        ResultOperation SaveIntoDataBase(ContentHtml contentHtml, sysBpmsThreadTask threadTasks, List<VariableModel> setExternalVariable, string threadTaskDescription);
         void SaveIntoDataBase(VariableModel variableModel, List<QueryModel> listFormQueryModel);
         /// <summary>
         /// it is used by Combo search to get name of entity using text/value field 
@@ -36,5 +36,6 @@ namespace DynamicBusiness.BPMS.Domain
         VariableModel GetEntityWithKeyValue(string variableName, Dictionary<string, object> dictionary);
 
         void ClearVariable(string varName);
+
     }
 }

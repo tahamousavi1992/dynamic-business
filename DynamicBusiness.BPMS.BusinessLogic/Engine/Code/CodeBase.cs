@@ -47,7 +47,7 @@ namespace DynamicBusiness.BPMS.CodePanel
         public Domain.IControlCodeHelper ControlHelper { get { if (this._controlHelper == null) { this._controlHelper = new BusinessLogic.ControlCodeHelper(this.formModel); } return this._controlHelper; } }
         public Domain.IAccessCodeHelper AccessHelper { get { if (this._AsccessHelper == null) { this._AsccessHelper = new BusinessLogic.AccessCodeHelper(UnitOfWork); } return this._AsccessHelper; } }
         public Domain.IProcessCodeHelper ProcessHelper { get { if (this._ProcessHelper == null) { this._ProcessHelper = new BusinessLogic.ProcessCodeHelper(UnitOfWork); } return this._ProcessHelper; } }
-        public Domain.IMessageCodeHelper MessageHelper { get { if (this._messageHelper == null) { this._messageHelper = new BusinessLogic.MessageCodeHelper(this.CodeBaseShared); } return this._messageHelper; } }
+        public Domain.IMessageCodeHelper MessageHelper { get { if (this._messageHelper == null) { this._messageHelper = new BusinessLogic.MessageCodeHelper(this.CodeBaseShared, UnitOfWork); } return this._messageHelper; } }
         public Domain.IUserCodeHelper UserHelper { get { if (this._userHelper == null) { this._userHelper = new BusinessLogic.UserCodeHelper(this.EngineSharedModel, UnitOfWork); } return this._userHelper; } }
         public Domain.IUrlCodeHelper UrlHelper { get { if (this._urlHelper == null) { this._urlHelper = new BusinessLogic.UrlCodeHelper(this.BaseQueryModel); } return this._urlHelper; } }
         public Domain.IDocumentCodeHelper DocumentHelper { get { if (this._documentHelper == null) { this._documentHelper = new BusinessLogic.DocumentCodeHelper(this.EngineSharedModel, UnitOfWork, CodeBaseShared); } return this._documentHelper; } }

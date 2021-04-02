@@ -678,33 +678,38 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                     if (resultOperation.IsSuccess)
                     {
                         CodeResultModel codeResultModel;
-                        //execute form button backend code. 
-                        if (!string.IsNullOrWhiteSpace(buttonControlId))
-                        {
-                            ButtonHtml buttonHtml = (ButtonHtml)formModel.ContentHtml.FindControlByID(buttonControlId);
-                            DynamicCodeEngine dynamicCodeEngine = new DynamicCodeEngine(base.EngineSharedModel, base.UnitOfWork);
-                            codeResultModel = dynamicCodeEngine.SaveButtonCode(buttonHtml, resultOperation, formModel, codeBaseShared);
-                            redirectUrlModel = codeResultModel?.RedirectUrlModel ?? redirectUrlModel;
-                            if (buttonHtml.subtype != ButtonHtml.e_subtype.submit)
-                            {
-                                //If in code any variable is set, it Will save them all at the end
-                                dynamicCodeEngine.SaveExternalVariable(codeResultModel);
-
-                                base.FinalizeService(resultOperation);
-                                return new EngineResponseModel().InitPost(resultOperation, codeBaseShared.MessageList, codeResultModel?.RedirectUrlModel, false, codeBaseShared.ListDownloadModel);
-                            }
-                        }
-
-                        //execute form OnExitFormCode 
-                        if (!string.IsNullOrWhiteSpace(dynamicForm.OnExitFormCode))
-                        {
-                            codeResultModel = new DynamicCodeEngine(base.EngineSharedModel, base.UnitOfWork).ExecuteOnExitFormCode(DesignCodeUtility.GetDesignCodeFromXml(dynamicForm.OnExitFormCode), formModel, codeBaseShared);
-                            DynamicCodeEngine.SetToErrorMessage(codeResultModel, resultOperation);
-                            redirectUrlModel = codeResultModel?.RedirectUrlModel ?? redirectUrlModel;
-                        }
+                        //It sets variables by form's widgets and adds to the codeBaseShared's ListSetVariable.
+                        resultOperation = DataManageEngine.SetVariableByForms(formModel.ContentHtml, codeBaseShared, base.EngineSharedModel.BaseQueryModel);
                         if (resultOperation.IsSuccess)
-                            //save html element values into database.
-                            resultOperation = new DataManageEngine(base.EngineSharedModel, base.UnitOfWork).SaveIntoDataBase(formModel.ContentHtml, threadTask, codeBaseShared.ListSetVariable);
+                        {
+                            //execute form button backend code. 
+                            if (!string.IsNullOrWhiteSpace(buttonControlId))
+                            {
+                                ButtonHtml buttonHtml = (ButtonHtml)formModel.ContentHtml.FindControlByID(buttonControlId);
+                                DynamicCodeEngine dynamicCodeEngine = new DynamicCodeEngine(base.EngineSharedModel, base.UnitOfWork);
+                                codeResultModel = dynamicCodeEngine.SaveButtonCode(buttonHtml, resultOperation, formModel, codeBaseShared);
+                                redirectUrlModel = codeResultModel?.RedirectUrlModel ?? redirectUrlModel;
+                                if (buttonHtml.subtype != ButtonHtml.e_subtype.submit)
+                                {
+                                    //If in code any variable is set, it Will save them all at the end
+                                    dynamicCodeEngine.SaveExternalVariable(codeResultModel);
+
+                                    base.FinalizeService(resultOperation);
+                                    return new EngineResponseModel().InitPost(resultOperation, codeBaseShared.MessageList, codeResultModel?.RedirectUrlModel, false, codeBaseShared.ListDownloadModel);
+                                }
+                            }
+
+                            //execute form OnExitFormCode 
+                            if (!string.IsNullOrWhiteSpace(dynamicForm.OnExitFormCode))
+                            {
+                                codeResultModel = new DynamicCodeEngine(base.EngineSharedModel, base.UnitOfWork).ExecuteOnExitFormCode(DesignCodeUtility.GetDesignCodeFromXml(dynamicForm.OnExitFormCode), formModel, codeBaseShared);
+                                DynamicCodeEngine.SetToErrorMessage(codeResultModel, resultOperation);
+                                redirectUrlModel = codeResultModel?.RedirectUrlModel ?? redirectUrlModel;
+                            }
+                            if (resultOperation.IsSuccess)
+                                //save html element values into database.
+                                resultOperation = new DataManageEngine(base.EngineSharedModel, base.UnitOfWork).SaveIntoDataBase(formModel.ContentHtml, threadTask, codeBaseShared.ListSetVariable, codeBaseShared.ThreadTaskDescription);
+                        }
                     }
                     base.FinalizeService(resultOperation);
 
@@ -750,40 +755,44 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                         this.BeginTransaction();
                         if (resultOperation.IsSuccess)
                         {
-                            //execute form button backend code. 
-                            if (!string.IsNullOrWhiteSpace(buttonControlId))
+                            //It sets variables by form's widgets and adds to the codeBaseShared's ListSetVariable.
+                            resultOperation = DataManageEngine.SetVariableByForms(formModel.ContentHtml, codeBaseShared, base.EngineSharedModel.BaseQueryModel);
+                            if (resultOperation.IsSuccess)
                             {
-                                ButtonHtml buttonHtml = (ButtonHtml)formModel.ContentHtml.FindControlByID(buttonControlId);
-                                if (buttonHtml != null)
+                                //execute form button backend code. 
+                                if (!string.IsNullOrWhiteSpace(buttonControlId))
                                 {
-                                    DynamicCodeEngine dynamicCodeEngine = new DynamicCodeEngine(base.EngineSharedModel, base.UnitOfWork);
-                                    codeResultModel = dynamicCodeEngine.SaveButtonCode(buttonHtml, resultOperation, formModel, codeBaseShared);
-                                    redirectUrlModel = codeResultModel?.RedirectUrlModel ?? redirectUrlModel;
-                                    if (buttonHtml.subtype != ButtonHtml.e_subtype.submit)
+                                    ButtonHtml buttonHtml = (ButtonHtml)formModel.ContentHtml.FindControlByID(buttonControlId);
+                                    if (buttonHtml != null)
                                     {
-                                        //If in code any variable is set, it Will save them all at the end
-                                        dynamicCodeEngine.SaveExternalVariable(codeResultModel);
+                                        DynamicCodeEngine dynamicCodeEngine = new DynamicCodeEngine(base.EngineSharedModel, base.UnitOfWork);
+                                        codeResultModel = dynamicCodeEngine.SaveButtonCode(buttonHtml, resultOperation, formModel, codeBaseShared);
+                                        redirectUrlModel = codeResultModel?.RedirectUrlModel ?? redirectUrlModel;
+                                        if (buttonHtml.subtype != ButtonHtml.e_subtype.submit)
+                                        {
+                                            //If in code any variable is set, it Will save them all at the end
+                                            dynamicCodeEngine.SaveExternalVariable(codeResultModel);
 
-                                        base.FinalizeService(resultOperation);
-                                        return new EngineResponseModel().InitPost(resultOperation, codeBaseShared.MessageList, codeResultModel?.RedirectUrlModel, isSubmit: false, listDownloadModel: codeBaseShared.ListDownloadModel);
+                                            base.FinalizeService(resultOperation);
+                                            return new EngineResponseModel().InitPost(resultOperation, codeBaseShared.MessageList, codeResultModel?.RedirectUrlModel, isSubmit: false, listDownloadModel: codeBaseShared.ListDownloadModel);
+                                        }
                                     }
                                 }
-                            }
-                            if (resultOperation.IsSuccess)
-                            {
-                                //execute form OnExitFormCode 
-                                if (!string.IsNullOrWhiteSpace(step.DynamicForm.OnExitFormCode))
+                                if (resultOperation.IsSuccess)
                                 {
-                                    codeResultModel = new DynamicCodeEngine(base.EngineSharedModel, base.UnitOfWork).ExecuteOnExitFormCode(DesignCodeUtility.GetDesignCodeFromXml(step.DynamicForm.OnExitFormCode), formModel, codeBaseShared);
-                                    DynamicCodeEngine.SetToErrorMessage(codeResultModel, resultOperation);
-                                    redirectUrlModel = codeResultModel?.RedirectUrlModel ?? redirectUrlModel;
+                                    //execute form OnExitFormCode 
+                                    if (!string.IsNullOrWhiteSpace(step.DynamicForm.OnExitFormCode))
+                                    {
+                                        codeResultModel = new DynamicCodeEngine(base.EngineSharedModel, base.UnitOfWork).ExecuteOnExitFormCode(DesignCodeUtility.GetDesignCodeFromXml(step.DynamicForm.OnExitFormCode), formModel, codeBaseShared);
+                                        DynamicCodeEngine.SetToErrorMessage(codeResultModel, resultOperation);
+                                        redirectUrlModel = codeResultModel?.RedirectUrlModel ?? redirectUrlModel;
+                                    }
                                 }
+
+                                if (resultOperation.IsSuccess)
+                                    //save html element values into database.
+                                    resultOperation = new DataManageEngine(base.EngineSharedModel, base.UnitOfWork).SaveIntoDataBase(formModel.ContentHtml, threadTask, codeBaseShared.ListSetVariable, codeBaseShared.ThreadTaskDescription);
                             }
-
-
-                            if (resultOperation.IsSuccess)
-                                //save html element values into database.
-                                resultOperation = new DataManageEngine(base.EngineSharedModel, base.UnitOfWork).SaveIntoDataBase(formModel.ContentHtml, threadTask, codeBaseShared.ListSetVariable);
                         }
                         base.FinalizeService(resultOperation);
 

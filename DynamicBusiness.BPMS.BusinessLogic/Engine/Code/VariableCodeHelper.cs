@@ -89,11 +89,13 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         public object GetValue(string variableTrace, params QueryModel[] queryModel)
         {
-            object data = this.DataManageHelperService.GetValueByBinding(variableTrace, queryModel?.ToList());
+            object data = null;
             //if it was seted before, it will be get from latest value;
             string variableName = variableTrace.Split('.').FirstOrDefault();
-            if (this.CodeBaseShared.ListSetVariable.Any(c => c.Name == variableTrace))
+            if (this.CodeBaseShared.ListSetVariable.Any(c => c.Name == variableName))
                 data = this.CodeBaseShared.ListSetVariable.FirstOrDefault(c => c.Name == variableName)[variableTrace];
+            else
+                data = this.DataManageHelperService.GetValueByBinding(variableTrace, queryModel?.ToList());
             return data;
         }
 
