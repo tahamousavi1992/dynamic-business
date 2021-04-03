@@ -4,3 +4,4 @@ Easy-BPM is a Low-Code/No-Code platform for making business process management s
 is a Form Builder to create custom forms like contact form, etc.
 You can download the released package from the following link. 
 https://store.dnnsoftware.com/home/product-details/easy-bpm-v0003
+and the UI repository is here https://github.com/tahamousavi1992/easy-bpm-ui
