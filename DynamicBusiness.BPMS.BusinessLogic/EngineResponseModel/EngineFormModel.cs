@@ -110,7 +110,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             this.GetControlValueUrl = this.GetGeneralApiUrl(apiBaseUrl, "GetValue", "EngineHtmlElement", formToken, true, arrayParams);
             this.GetListElementUrl = this.GetGeneralApiUrl(apiBaseUrl, "GetListElement", "EngineVariable", formToken, true, arrayParams);
             this.GetChartElementUrl = this.GetGeneralApiUrl(apiBaseUrl, "GetChartElement", "EngineHtmlElement", formToken, true, arrayParams);
-            this.GetCaptchaUrl = this.GetGeneralApiUrl(apiBaseUrl, "Get", "EngineCaptcha", string.Empty, true);
+            this.GetCaptchaUrl = this.GetGeneralApiUrl(apiBaseUrl, "Get", "EngineCaptcha", formToken, true, arrayParams);
             //GetDataGridReport
             this.GetDataGridReport = this.GetGeneralApiUrl(apiBaseUrl, "GetDataGridReport", "EngineReport", formToken, true, arrayParams);
             this.GetDataGridPagingUrl = this.GetGeneralApiUrl(apiBaseUrl, "GetDataGridElement", "EngineHtmlElement", formToken, true);

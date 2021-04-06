@@ -66,7 +66,7 @@ namespace DynamicBusiness.BPMS.Domain
             //replace variable tokens with its values.
             for (int i = 0; i < toEmailList.Count; i++)
             {
-                foreach (string item in DomainUtility.GetRegularValue("[", "]", subject).Distinct())
+                foreach (string item in DomainUtility.GetRegularValue("[", "]", EmailTo).Distinct())
                 {
                     toEmailList[i] = toEmailList[i].Replace("[" + item + "]", codeBase.VariableHelper.GetValue(item.Trim()).ToStringObj());
                 }

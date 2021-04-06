@@ -4,6 +4,7 @@
 <title>@ViewBag.Title</title>
 <!--start::skin css-->
 @{
+    string version = "000003";
     if ((bool?)ViewBag.LoadUserPanelBootstrap == true)
     {
         <link href="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/css/bootstrap/bootstrap.min.css" rel="stylesheet" />
@@ -15,7 +16,7 @@
 <link href="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/css/all.min.css" rel="stylesheet" />
 <link href="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/css/duotone.min.css" rel="stylesheet" />
 <link href="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/css/jquery-ui.min.css" rel="stylesheet" />
-<link href="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/css/App/dynamicBusinessCustom.css" rel="stylesheet" />
+<link href="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/css/App/dynamicBusinessCustom.css?a=@version" rel="stylesheet" />
 <link href="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/css/App/toastr-rtl.min.css" rel="stylesheet" />
 <link href="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/plugins/ComboTreePlugin/style.css" rel="stylesheet" />
 <link href="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/plugins/codemirror/doc/docs.css" rel="stylesheet" />
@@ -24,9 +25,9 @@
 <link href="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/plugins/jstree/jstree.bundle.css" rel="stylesheet" />
 <link href="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/plugins/dtsel/dtsel.css" rel="stylesheet" />
 <link href="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/Form Generator/styles/editor.css" rel="stylesheet" />
-<link href="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/css/bpms-skin.css" rel="stylesheet" />
-<link href="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/plugins/bpmn_io/designer/diagram-js.css" rel="stylesheet" />
-<link href="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/plugins/bpmn_io/designer/bpmn.css" rel="stylesheet" />
+<link href="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/css/bpms-skin.css?a=@version" rel="stylesheet" />
+<link href="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/plugins/bpmn_io/designer/diagram-js.css?a=@version" rel="stylesheet" />
+<link href="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/plugins/bpmn_io/designer/bpmn.css?a=@version" rel="stylesheet" />
 <link href="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/plugins/select2/select2.min.css" rel="stylesheet" />
 <!--end::skin css-->
 @* code designr scripts *@
@@ -44,15 +45,15 @@
 <script src="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/plugins/codemirror/addon/hint/show-hint.js"></script>
 <script src="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/plugins/codemirror/mode/clike/clike.js"></script>
 <script src="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/plugins/codemirror/mode/javascript/javascript.js"></script>
-<script src="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/JS/CodeDesigner/draw2d.js"></script>
+<script src="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/JS/CodeDesigner/draw2d.js?a=@version"></script>
 <script src="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/JS/CodeDesigner/CopyInterceptorPolicy.js"></script>
-<script src="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/JS/CodeDesigner/codeDesigner.js"></script>
+<script src="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/JS/CodeDesigner/codeDesigner.js?a=@version"></script>
 <script src="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/plugins/dtsel/dtsel.js"></script>
 <script src="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/Form Generator/JS/js-yaml.min.js"></script>
 <script src="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/plugins/CKEditor/ckeditor.js"></script>
-<script src="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/JS/App/dynamicBusiness.js"></script>
+<script src="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/JS/App/dynamicBusiness.js?a=@version"></script>
 <script src="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/JS/App/toastr.min.js"></script>
-<script src="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/JS/App/dynamicBusinessCustom.js"></script>
+<script src="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/JS/App/dynamicBusinessCustom.js?a=@version"></script>
 <script src="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/JS/App/jscolor.js"></script>
 <script src="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/plugins/select2/select2.full.min.js"></script>
 <script src="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/JS/App/Chart.min.js"></script>
@@ -60,7 +61,7 @@
 <script type="module" src="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/JS/Languages/lang.js"></script>
 <script type="module" src="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/Form Generator/JS/FG_elements.js"></script>
 <script type="module" src="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/JS/Engine/BPMS.js"></script>
-<script src="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/JS/bpmsValidations.js"></script>
+<script src="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/JS/bpmsValidations.js?a=@version"></script>
 <script src="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/plugins/bpmn_io/designer/bpmn-modeler.development.js"></script>
 <script type="module" src="https://www.google.com/recaptcha/api.js"></script>
 <link rel="manifest" href="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/manifest.json" />
@@ -70,7 +71,7 @@
 <!--start::skin js-->
 <script src="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/JS/popper.min.js" type="text/javascript"></script>
 <script src="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/JS/plugin/perfect-scrollbar.min.js" type="text/javascript"></script>
-<script src="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/JS/custom.js" type="text/javascript"></script>
+<script src="~/DesktopModules/MVC/DynamicBusiness.Bpms/Resources/assets/JS/custom.js?a=@version" type="text/javascript"></script>
 @{
     if ((bool?)ViewBag.LoadUserPanelBootstrap == true)
     {

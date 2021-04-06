@@ -11,7 +11,7 @@ namespace DynamicBusiness.BPMS.Domain
         public sysBpmsElement()
         {
             this.Events = new HashSet<sysBpmsEvent>();
-            //this.Gateways = new HashSet<sysBpmsGateway>();
+            this.Gateways = new HashSet<sysBpmsGateway>();
             this.Lanes = new HashSet<sysBpmsLane>();
             this.SequenceFlows = new HashSet<sysBpmsSequenceFlow>();
             this.Tasks = new HashSet<sysBpmsTask>();
