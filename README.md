@@ -7,3 +7,9 @@ In this repository I have developed the Back-End of this platform base on ASP Ne
 You can download the released package from the following link. 
 https://store.dnnsoftware.com/home/product-details/easy-bpm-v0003
 and the UI repository is here https://github.com/tahamousavi1992/easy-bpm-ui
+
+###### License
+
+COPYRIGHT:
+All title and copyrights in and to the SOFTWARE PRODUCT (including but not limited to any images, photographs, animations, video, audio, music, text, and "applets" incorporated into the SOFTWARE PRODUCT), the accompanying printed materials, and any copies of the SOFTWARE PRODUCT are owned by Easy-Bpm except for certain portions for which we has obtained redistribution rights from the title or copyright holder. You must treat the SOFTWARE PRODUCT like any other copyrighted material.
+You can download the source code as it is public repository but you have not the right for reproduction or redistribution the source code under any other name, product and license.
