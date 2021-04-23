@@ -18,7 +18,7 @@ namespace DynamicBusiness.BPMS.SingleAction.Controllers
     { 
         public ActionResult Index()
         {
-            SingleActionSettingDTO setting = new SingleActionSettingDTO(Request, base.PortalSettings.PortalId, ModuleContext.Configuration.ModuleSettings);
+            SingleActionSettingDTO setting = new SingleActionSettingDTO(base.PortalSettings.PortalId, ModuleContext.Configuration.ModuleSettings);
             DomainUtility.SingleActionHomeUr = base.ActivePage.FullUrl;
 
             ViewBag.LoadUserPanelJquery = setting.LoadjQuery;

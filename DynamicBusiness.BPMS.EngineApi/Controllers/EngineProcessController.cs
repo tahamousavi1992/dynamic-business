@@ -109,20 +109,12 @@ namespace DynamicBusiness.BPMS.EngineApi.Controllers
         {
             using (ProcessService processService = new ProcessService())
             {
-                return processService.GetList(null, null, null, null).Select(c => new ComboSearchItem(c.ID.ToString(), c.Name)).ToList();
+                return processService.GetList(null, null, null, null)
+                    .Where(c => string.IsNullOrWhiteSpace(query) || c.Name.Contains(query))
+                    .Select(c => new ComboSearchItem(c.ID.ToString(), c.Name)).ToList();
             }
         }
-
-        [BpmsAuth]
-        [HttpGet]
-        public List<ComboSearchItem> GetFormList(Guid processId, string query = "")
-        {
-            using (DynamicFormService dynamicFormService = new DynamicFormService())
-            {
-                return dynamicFormService.GetList(processId, null, null, query, null, null).Select(c => new ComboSearchItem(c.ID.ToString(), c.Name)).ToList();
-            }
-        }
-
+ 
         [BpmsAuth]
         [HttpGet]
         public List<Guid> GetAccessibleThreadTasks(Guid threadId)
@@ -173,7 +165,7 @@ namespace DynamicBusiness.BPMS.EngineApi.Controllers
                 }
             }
         }
-         
+
         [BpmsAuth]
         [HttpGet]
         public ProcessDTO GetInfo(Guid processId)

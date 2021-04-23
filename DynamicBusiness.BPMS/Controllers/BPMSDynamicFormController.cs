@@ -57,7 +57,7 @@ namespace DynamicBusiness.BPMS.Controllers
                     configXmlModel.IsEncrypted = dynamicFormDTO.IsEncrypted;
                     dynamicForm.Update(configXmlModel);
 
-                    resultOperation = dynamicFormService.Update(dynamicForm, base.UserInfo?.Username);
+                    resultOperation = dynamicFormService.Update(dynamicForm, base.userName);
                 }
                 else
                 {
@@ -70,7 +70,7 @@ namespace DynamicBusiness.BPMS.Controllers
                     sysBpmsApplicationPage sysAppPage = !dynamicForm.ProcessId.HasValue ?
                         new sysBpmsApplicationPage().Update(dynamicFormDTO.ApplicationPageDTO.GroupLU, string.Empty, dynamicFormDTO.ApplicationPageDTO.ShowInMenu) : null;
 
-                    resultOperation = dynamicFormService.Add(dynamicForm, sysAppPage, base.UserInfo?.Username);
+                    resultOperation = dynamicFormService.Add(dynamicForm, sysAppPage, base.userName);
                     base.ApplicationPageId = dynamicForm.ApplicationPageID;
                 }
             }
@@ -119,7 +119,7 @@ namespace DynamicBusiness.BPMS.Controllers
                 configXmlModel.IsEncrypted = model.DynamicFormDTO.IsEncrypted;
                 dynamicForm.Update(configXmlModel);
 
-                dynamicFormService.Update(dynamicForm, base.UserInfo?.Username);
+                dynamicFormService.Update(dynamicForm, base.userName);
 
                 using (ApplicationPageService applicationPageService = new ApplicationPageService())
                 {
@@ -157,7 +157,7 @@ namespace DynamicBusiness.BPMS.Controllers
         {
             using (DynamicFormService dynamicFormService = new DynamicFormService())
             {
-                ResultOperation resultOperation = dynamicFormService.Copy(ID, base.UserInfo?.Username);
+                ResultOperation resultOperation = dynamicFormService.Copy(ID, base.userName);
                 if (resultOperation.IsSuccess)
                     return new PostMethodMessage(SharedLang.Get("Success.Text"), DisplayMessageType.success);
                 else
@@ -204,7 +204,7 @@ namespace DynamicBusiness.BPMS.Controllers
                     resultOperation = dynamicFormService.GetSourceCode(dynamicForm);
                     if (!resultOperation.IsSuccess)
                         return new PostMethodMessage(resultOperation.GetErrors(), DisplayMessageType.error);
-                    resultOperation = dynamicFormService.Update(dynamicForm, base.UserInfo?.Username);
+                    resultOperation = dynamicFormService.Update(dynamicForm, base.userName);
                     if (resultOperation.IsSuccess)
                         return new PostMethodMessage(SharedLang.Get("Success.Text"), DisplayMessageType.success);
                     else
@@ -225,7 +225,7 @@ namespace DynamicBusiness.BPMS.Controllers
                 ResultOperation resultOperation = dynamicFormService.GetSourceCode(dynamicForm);
                 if (!resultOperation.IsSuccess)
                     return new PostMethodMessage(resultOperation.GetErrors(), DisplayMessageType.error);
-                resultOperation = dynamicFormService.Update(dynamicForm, base.UserInfo?.Username);
+                resultOperation = dynamicFormService.Update(dynamicForm, base.userName);
 
                 if (!resultOperation.IsSuccess)
                     return new PostMethodMessage(resultOperation.GetErrors(), DisplayMessageType.error);
@@ -244,7 +244,7 @@ namespace DynamicBusiness.BPMS.Controllers
                 ResultOperation resultOperation = dynamicFormService.GetSourceCode(dynamicForm);
                 if (!resultOperation.IsSuccess)
                     return new PostMethodMessage(resultOperation.GetErrors(), DisplayMessageType.error);
-                resultOperation = dynamicFormService.Update(dynamicForm, base.UserInfo?.Username);
+                resultOperation = dynamicFormService.Update(dynamicForm, base.userName);
 
                 if (!resultOperation.IsSuccess)
                     return new PostMethodMessage(resultOperation.GetErrors(), DisplayMessageType.error);
@@ -263,7 +263,7 @@ namespace DynamicBusiness.BPMS.Controllers
                 DynamicFormConfigXmlModel configXmlModel = dynamicForm.ConfigXmlModel;
                 configXmlModel.OnLoadFunctionBody = model.FunctionCode;
                 dynamicForm.Update(configXmlModel);
-                ResultOperation resultOperation = dynamicFormService.Update(dynamicForm, base.UserInfo?.Username);
+                ResultOperation resultOperation = dynamicFormService.Update(dynamicForm, base.userName);
 
                 if (!resultOperation.IsSuccess)
                     return new PostMethodMessage(resultOperation.GetErrors(), DisplayMessageType.error);
@@ -290,7 +290,7 @@ namespace DynamicBusiness.BPMS.Controllers
             {
                 try
                 {
-                    EngineFormModel engineForm = dynamicFormService.PreviewForm(FormId, base.UserInfo?.Username);
+                    EngineFormModel engineForm = dynamicFormService.PreviewForm(FormId, base.userName);
                     engineForm.SetUrls(string.Empty, string.Empty, new HttpRequestWrapper(base.MyRequest), base.PortalSettings.DefaultPortalAlias, FormTokenUtility.GetFormToken(HttpContext.Current.Session.SessionID, engineForm?.FormModel?.ContentHtml?.DynamicFormID ?? Guid.Empty, engineForm?.FormModel?.IsEncrypted ?? false));
                     return new
                     {
@@ -339,7 +339,7 @@ namespace DynamicBusiness.BPMS.Controllers
                 DynamicFormConfigXmlModel configXmlModel = dynamicForm.ConfigXmlModel;
                 configXmlModel.StyleSheetCode = model.StyleCode;
                 dynamicForm.Update(configXmlModel);
-                ResultOperation resultOperation = dynamicFormService.Update(dynamicForm, base.UserInfo?.Username);
+                ResultOperation resultOperation = dynamicFormService.Update(dynamicForm, base.userName);
 
                 if (!resultOperation.IsSuccess)
                     return new PostMethodMessage(resultOperation.GetErrors(), DisplayMessageType.error);

@@ -14,6 +14,10 @@ namespace DynamicBusiness.BPMS.SharedPresentation
             return StringCipher.Encrypt(mainDynamicFormID.ToString() + "_" + (isEncrypted ? "1" : "0"), sessionId);
         }
 
+        /// <summary>
+        /// It validates whether formToken is valid for this sessionId or not.
+        /// It must change in future to validate formId alongside checking sessionId.
+        /// </summary>
         public static bool ValidateFormToken(string formToken, string sessionId)
         {
             return !string.IsNullOrWhiteSpace(StringCipher.Decrypt(formToken, sessionId));

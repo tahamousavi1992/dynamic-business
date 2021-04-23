@@ -59,8 +59,8 @@
             Forms/Processess
             <div class="input-group ">
                 <select name="ddlType" id="ddlType" class="form-control" onchange="ddlType_change(this)">
-                    <option value="1" @(Model.IsProcess ? "selected" : "")>Workflows</option>
-                    <option value="2" @(Model.IsProcess ? "" : "selected")>Application Pages</option>
+                    <option value="2" @(Model.IsProcess ? "" : "selected")>Application Pages/Forms</option>
+                    <option value="1" @(Model.IsProcess ? "selected" : "")>Processes</option>
                 </select>
             </div>
         </div>
@@ -105,9 +105,13 @@
         document.getElementById('divApplicationPageID').style.display = 'none';
         if (target.value == "1") {
             document.getElementById('divProcessID').style.display = '';
+            document.getElementById('ApplicationPageID').value = ''; 
+            document.getElementById('ApplicationPageID').innerHTML = '';
         }
         else {
             document.getElementById('divApplicationPageID').style.display = '';
+            document.getElementById('ProcessID').value = '';
+            document.getElementById('ProcessID').innerHTML = '';
         }
     }
     function on_changePass() {

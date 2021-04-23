@@ -21,6 +21,7 @@ namespace DynamicBusiness.BPMS
     [BpmsAdminAuth]
     public class BpmsAdminApiControlBase : DnnApiController
     {
+        public string userName { get { return DomainUtility.IsTestEnvironment() ? "bpms_expert" : base.UserInfo?.Username; } }
         public BpmsAdminApiControlBase()
         {
         }

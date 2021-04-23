@@ -8,6 +8,8 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.SessionState;
+
 namespace DynamicBusiness.BPMS.EngineApi.Controllers
 {
     public class EngineCaptchaController : BpmsEngineApiControlBase
@@ -16,6 +18,11 @@ namespace DynamicBusiness.BPMS.EngineApi.Controllers
         [HttpGet]
         public void Get(string key, Guid? formId = null)
         {
+            //SessionIDManager Manager = new SessionIDManager();
+            ////HttpContext.Current.Response.Cookies.Add(new HttpCookie("ASP.NET_SessionId", base.ClientId));
+            //Manager.SaveSessionID(HttpContext.Current, this.ClientId, out bool redirected, out bool IsAdded);
+
+
             if (formId.HasValue)
             {
                 sysBpmsDynamicForm dynamicForm = new DynamicFormService().GetInfo(formId.Value);
@@ -46,7 +53,6 @@ namespace DynamicBusiness.BPMS.EngineApi.Controllers
 
             HttpContext.Current.Response.BinaryWrite(oBytes);
             HttpContext.Current.Response.Flush();
-            HttpContext.Current.Response.End();
         }
 
         private string RandomString(int length)
