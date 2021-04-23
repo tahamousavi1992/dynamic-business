@@ -22,7 +22,7 @@ namespace DynamicBusiness.BPMS.SingleAction.Controllers
         [HttpGet]
         public ActionResult Settings()
         {
-            var settings = new SingleActionSettingDTO(null, base.PortalSettings.PortalId, ModuleContext.Configuration.ModuleSettings);
+            var settings = new SingleActionSettingDTO(base.PortalSettings.PortalId, ModuleContext.Configuration.ModuleSettings);
             try
             {
                 string webApiAddress = settings.WebApiAddress;

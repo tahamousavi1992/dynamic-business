@@ -23,7 +23,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             this.ThreadTaskID = threadTaskID;
             this.ProcessID = processID;
             this.CssFiles = string.Join(" ", ViewUtility.LoadStyleFiles().Select(c => $"<link href='{c}' rel='stylesheet'/>"));
-            this.ScriptFiles = string.Join(" ", this.LoadScriptFiles().Select(c => $"<script src='{c}'></script>"));
+            this.ScriptFiles = this.LoadScriptFiles();
+            //this.ScriptFiles = string.Join(" ", this.LoadScriptFiles().Select(c => $"<script src='{c}'></script>"));
         }
 
         public EngineFormModel(FormModel formModel, Guid? applicationID)
@@ -31,7 +32,8 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             this.FormModel = formModel;
             this.ApplicationID = applicationID;
             this.CssFiles = string.Join(" ", ViewUtility.LoadStyleFiles().Select(c => $"<link href='{c}' rel='stylesheet'>"));
-            this.ScriptFiles = string.Join(" ", this.LoadScriptFiles().Select(c => $"<script src='{c}'></script>"));
+            this.ScriptFiles = this.LoadScriptFiles();
+            //this.ScriptFiles = string.Join(" ", this.LoadScriptFiles().Select(c => $"<script src='{c}'></script>"));
         }
 
         [DataMember]
@@ -78,7 +80,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         [DataMember]
         public string CssFiles { get; set; }
         [DataMember]
-        public string ScriptFiles { get; set; }
+        public List<string> ScriptFiles { get; set; }
         [DataMember]
         public string PageParams { get; set; }
         #endregion

@@ -50,7 +50,7 @@ namespace DynamicBusiness.BPMS.SingleAction
 
         protected SingleActionSettingDTO GetSetting()
         {
-            return new SingleActionSettingDTO(new HttpRequestWrapper(this.MyRequest), base.PortalSettings.PortalId, ModuleInfo.ModuleSettings);
+            return new SingleActionSettingDTO(base.PortalSettings.PortalId, ModuleInfo.ModuleSettings);
         }
     }
 }

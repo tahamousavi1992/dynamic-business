@@ -379,7 +379,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 }
             }
         }
-
+         
         #region .:: private methods ::.
 
         private ResultOperation GetRecursiveElement(sysBpmsEvent _event, bool isFirstTask, sysBpmsThreadTask currentThreadTask)

@@ -31,10 +31,10 @@ namespace DynamicBusiness.BPMS.SharedPresentation
                 this.WebApiAddress = request.Url.Scheme + "://" + request.Url.Authority + request.ApplicationPath.TrimEnd('/');
             }
         }
-        /// <summary>
+        /// <summary>IsProcess
         /// It fills all properties.
         /// </summary>
-        public SingleActionSettingDTO(HttpRequestBase request, int portalId, System.Collections.Hashtable moduleSettings)
+        public SingleActionSettingDTO(int portalId, System.Collections.Hashtable moduleSettings)
         {
             this.WebApiAddress = PortalController.GetPortalSetting(SingleActionSettingDTO.e_SettingType.SingleAction_WebApiAddress.ToString(), portalId, string.Empty);
             this.WebServicePass = PortalController.GetPortalSetting(SingleActionSettingDTO.e_SettingType.SingleAction_WebServicePass.ToString(), portalId, string.Empty);
@@ -45,10 +45,10 @@ namespace DynamicBusiness.BPMS.SharedPresentation
             this.ProcessEndFormID = moduleSettings.GetValueOrDefault(SingleActionSettingDTO.e_SettingType.SingleAction_ProcessEndFormID.ToString(), string.Empty).ToGuidObjNull();
             this.LoadjQuery = moduleSettings.GetValueOrDefault(SingleActionSettingDTO.e_SettingType.SingleAction_Jquery.ToString(), string.Empty).ToStringObj().ToLower() == "true"; ;
             this.LoadBootstrap = moduleSettings.GetValueOrDefault(SingleActionSettingDTO.e_SettingType.SingleAction_Bootstrap.ToString(), string.Empty).ToStringObj().ToLower() == "true";
-            if (string.IsNullOrWhiteSpace(this.WebApiAddress) && request != null)
-            {
-                this.WebApiAddress = request.Url.Scheme + "://" + request.Url.Authority + request.ApplicationPath.TrimEnd('/');
-            }
+            //if (string.IsNullOrWhiteSpace(this.WebApiAddress) && request != null)
+            //{
+            //    this.WebApiAddress = request.Url.Scheme + "://" + request.Url.Authority + request.ApplicationPath.TrimEnd('/');
+            //}
         }
         [DataMember]
         public string WebApiAddress { get; set; }
@@ -66,7 +66,7 @@ namespace DynamicBusiness.BPMS.SharedPresentation
         [DataMember]
         public string WebServicePass { get; set; }
         [DataMember]
-        public bool IsProcess { get { return this.ProcessID.HasValue || !this.ApplicationPageID.HasValue; } private set { } }
+        public bool IsProcess { get { return this.ProcessID.HasValue; } private set { } }
         [DataMember]
         public string ApplicationName { get; set; }
         [DataMember]
@@ -91,6 +91,6 @@ namespace DynamicBusiness.BPMS.SharedPresentation
             SingleAction_Bootstrap,
             SingleAction_AppPageSubmitMessage
         }
-       
+
     }
 }

@@ -15,38 +15,45 @@ namespace DynamicBusiness.BPMS.SharedPresentation
         /// <param name="userName">it is current user name</param>
         public static T PostData<T>(string url, List<QueryModel> values, string token = "", string userName = "", string clientIP = "", string clientId = "", bool isEncrypted = false)
         {
-            HttpClient client = new HttpClient();
-            AddDefaultHeader(client, token, userName, clientIP, clientId, isEncrypted);
-            using (var form = new MultipartFormDataContent())
+            var cookieContainer = new System.Net.CookieContainer();
+            using (var handler = new HttpClientHandler() { CookieContainer = cookieContainer })
             {
-                foreach (var item in values)
+                using (var client = new HttpClient(handler))
                 {
-                    if (item.Value is string)
-                        form.Add(new StringContent(item.Value.ToString()), item.Key);
-                    else
+                    //cookieContainer.Add(new Uri("http://localhost:83/"), new System.Net.Cookie("ASP.NET_SessionId", clientId));
+ 
+                    AddDefaultHeader(client, token, userName, clientIP, clientId, isEncrypted);
+                    using (var form = new MultipartFormDataContent())
                     {
-                        HttpPostedFileBase postedFile = (item.Value is HttpPostedFile) ?
-                            new HttpPostedFileWrapper((HttpPostedFile)item.Value) : ((HttpPostedFileBase)item.Value);
-                        if (postedFile.InputStream != null)
+                        foreach (var item in values)
                         {
-                            var byteArrayContent = new StreamContent(postedFile.InputStream);
-                            byteArrayContent.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment") { FileName = postedFile.FileName, Name = item.Key };
-                            byteArrayContent.Headers.ContentType = MediaTypeHeaderValue.Parse(postedFile.ContentType);
-                            form.Add(byteArrayContent);
+                            if (item.Value is string)
+                                form.Add(new StringContent(item.Value.ToString()), item.Key);
+                            else
+                            {
+                                HttpPostedFileBase postedFile = (item.Value is HttpPostedFile) ?
+                                    new HttpPostedFileWrapper((HttpPostedFile)item.Value) : ((HttpPostedFileBase)item.Value);
+                                if (postedFile.InputStream != null)
+                                {
+                                    var byteArrayContent = new StreamContent(postedFile.InputStream);
+                                    byteArrayContent.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment") { FileName = postedFile.FileName, Name = item.Key };
+                                    byteArrayContent.Headers.ContentType = MediaTypeHeaderValue.Parse(postedFile.ContentType);
+                                    form.Add(byteArrayContent);
+                                }
+                            }
+                        }
+                        System.Net.ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+                        //The content type sent in the request header that tells the server what kind of response it will accept in return.
+                        client.DefaultRequestHeaders.Accept.Add(
+                        new MediaTypeWithQualityHeaderValue("application/json"));
+                        HttpResponseMessage response = client.PostAsync(url, form).Result;
+                        if (response.IsSuccessStatusCode)
+                        {
+                            return response.Content.ReadAsAsync<T>().Result;
                         }
                     }
                 }
-                System.Net.ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
-                //The content type sent in the request header that tells the server what kind of response it will accept in return.
-                client.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/json"));
-                HttpResponseMessage response = client.PostAsync(url, form).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    return response.Content.ReadAsAsync<T>().Result;
-                }
             }
-
             return default(T);
         }
 
@@ -99,10 +106,18 @@ namespace DynamicBusiness.BPMS.SharedPresentation
         /// <param name="userName">it is current user name</param>
         public static HttpResponseMessage GetData(string url, string token = "", string userName = "", string clientIP = "", string clientId = "", bool isEncrypted = false)
         {
-            HttpClient client = new HttpClient();
-            System.Net.ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
-            AddDefaultHeader(client, token, userName, clientIP, clientId, isEncrypted);
-            return client.GetAsync(url).Result;
+            var cookieContainer = new System.Net.CookieContainer();
+            using (var handler = new HttpClientHandler() { CookieContainer = cookieContainer, UseCookies=true })
+            {
+                using (var client = new HttpClient(handler))
+                {
+                    //cookieContainer.Add(new Uri("https://www.instagram.com/"), new System.Net.Cookie("ASP.NET_SessionId", clientId));
+                    
+                    System.Net.ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+                    AddDefaultHeader(client, token, userName, clientIP, clientId, isEncrypted);
+                    return client.GetAsync(url).Result;
+                }
+            }
         }
 
         private static void AddDefaultHeader(HttpClient client, string token = "", string userName = "", string clientIP = "", string clientId = "", bool isEncrypted = false)

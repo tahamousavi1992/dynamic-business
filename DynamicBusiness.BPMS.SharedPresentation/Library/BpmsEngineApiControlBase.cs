@@ -13,6 +13,7 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
+using System.Web.SessionState;
 using System.Web.UI;
 
 namespace DynamicBusiness.BPMS.SharedPresentation
@@ -43,10 +44,12 @@ namespace DynamicBusiness.BPMS.SharedPresentation
                 }
                 else
                 {
+                  
                     if (this.MyRequest.Headers.AllKeys.Contains("userName"))
                         this.ClientUserName = this.MyRequest.Headers["userName"].ToStringObj();
 
                     this.ClientId = this.MyRequest.Headers["clientId"].ToStringObj();
+    
                     this.ApiSessionId = DomainUtility.CreateApiSessionID(this.ClientId, this.ClientIp); ;
                     //check api access.
                     if (!AccessUtility.CalledByLocalSA(HttpContext.Current.Request))

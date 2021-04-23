@@ -39,7 +39,7 @@ namespace DynamicBusiness.BPMS.Domain
         {
             if (!this.Validate())
             {
-                resultOperation.AddError("کاربر گرامی کد امنیتی نا معتبر میباشد.");
+                resultOperation.AddError("Incorrect CAPTCHA");
             }
         }
 
