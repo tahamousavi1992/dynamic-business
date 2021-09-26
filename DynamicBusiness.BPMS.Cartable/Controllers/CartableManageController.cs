@@ -107,13 +107,13 @@ namespace DynamicBusiness.BPMS.Cartable.Controllers
         {
             using (ThreadTaskService threadTaskService = new ThreadTaskService())
             {
-                var result = new ProcessEngine(new EngineSharedModel(currentThread: null, currentProcessID: ProcessID, baseQueryModel: base.MyRequest.GetList(false, base.ApiSessionId).ToList(), currentUserName: base.ClientUserName, apiSessionId: base.ApiSessionId)).BegingProcess(base.MyUser.ID);
-                if (result.Item1.IsSuccess)
+                (ResultOperation result, List<MessageModel> msgModel) = new ProcessEngine(new EngineSharedModel(currentThread: null, currentProcessID: ProcessID, baseQueryModel: base.MyRequest.GetList(false, base.ApiSessionId).ToList(), currentUserName: base.ClientUserName, apiSessionId: base.ApiSessionId)).BegingProcess(base.MyUser.ID);
+                if (result.IsSuccess)
                 {
-                    sysBpmsThreadTask threadTask = threadTaskService.GetList(((sysBpmsThread)result.Item1.CurrentObject).ID, (int)sysBpmsTask.e_TypeLU.UserTask, null, (int)sysBpmsThreadTask.e_StatusLU.New).LastOrDefault();
+                    sysBpmsThreadTask threadTask = threadTaskService.GetList(((sysBpmsThread)result.CurrentObject).ID, (int)sysBpmsTask.e_TypeLU.UserTask, null, (int)sysBpmsThreadTask.e_StatusLU.New).LastOrDefault();
                     return new
                     {
-                        MessageList = result.Item2,
+                        MessageList = msgModel,
                         ThreadTaskID = threadTask.ID,
                         Result = true,
                     };
@@ -122,7 +122,7 @@ namespace DynamicBusiness.BPMS.Cartable.Controllers
                 {
                     return new
                     {
-                        MessageList = new List<MessageModel>() { new MessageModel(DisplayMessageType.error, result.Item1.GetErrors()) },
+                        MessageList = new List<MessageModel>() { new MessageModel(DisplayMessageType.error, result.GetErrors()) },
                         Result = false,
                     };
                 }
