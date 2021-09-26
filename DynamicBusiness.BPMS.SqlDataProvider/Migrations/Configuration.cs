@@ -8,7 +8,7 @@
     using System.Data.Entity.Migrations.Utilities;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<DynamicBusiness.BPMS.BusinessLogic.Db_BPMSEntities>
+    public sealed class Configuration : DbMigrationsConfiguration<DynamicBusiness.BPMS.BusinessLogic.Db_BPMSEntities>
     {
         public Configuration()
         {
@@ -18,7 +18,7 @@
         protected override void Seed(DynamicBusiness.BPMS.BusinessLogic.Db_BPMSEntities context)
         {
             //  This method will be called after migrating to the latest version.
-
+ 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method
             //  to avoid creating duplicate seed data.
         }

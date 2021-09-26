@@ -91,7 +91,7 @@ namespace DynamicBusiness.BPMS.Domain
         {
             int OutInt = 0;
             if (!string.IsNullOrEmpty(obj.ToStringObj()))
-                if (!int.TryParse(DomainUtility.enNumbers(DomainUtility.toString(obj)), out OutInt))
+                if (!int.TryParse(DomainUtility.toString(obj), out OutInt))
                     OutInt = 0;
             return OutInt;
         }
@@ -101,7 +101,7 @@ namespace DynamicBusiness.BPMS.Domain
             Guid OutInt = Guid.Empty;
             if (!string.IsNullOrEmpty(obj.ToStringObj()))
             {
-                if (!Guid.TryParse(DomainUtility.enNumbers(DomainUtility.toString(obj)), out OutInt))
+                if (!Guid.TryParse(DomainUtility.toString(obj), out OutInt))
                     return Guid.Empty;
             }
             else
@@ -119,7 +119,7 @@ namespace DynamicBusiness.BPMS.Domain
             int OutInt = 0;
             if (!string.IsNullOrEmpty(obj.ToStringObj()))
             {
-                if (!int.TryParse(DomainUtility.enNumbers(DomainUtility.toString(obj)), out OutInt))
+                if (!int.TryParse(DomainUtility.toString(obj), out OutInt))
                     return null;
             }
             else
@@ -132,7 +132,7 @@ namespace DynamicBusiness.BPMS.Domain
             Guid OutInt = Guid.Empty;
             if (!string.IsNullOrEmpty(obj.ToStringObj()))
             {
-                if (!Guid.TryParse(DomainUtility.enNumbers(DomainUtility.toString(obj)), out OutInt))
+                if (!Guid.TryParse(DomainUtility.toString(obj), out OutInt))
                     return null;
             }
             else

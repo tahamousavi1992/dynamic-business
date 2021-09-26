@@ -7,6 +7,46 @@
     {
         public override void Up()
         {
+            Sql(@"CREATE FUNCTION [sysBpmsSplit]
+(    
+    @RowData NVARCHAR(MAX),
+    @Delimeter NVARCHAR(MAX)
+)
+RETURNS @RtnValue TABLE 
+(
+    ID INT IDENTITY(1,1),
+    Data NVARCHAR(MAX)
+) 
+AS
+BEGIN 
+    DECLARE @Iterator INT
+    SET @Iterator = 1
+
+    DECLARE @FoundIndex INT
+    SET @FoundIndex = CHARINDEX(@Delimeter,@RowData)
+
+    WHILE (@FoundIndex>0)
+    BEGIN
+        INSERT INTO @RtnValue (data)
+        SELECT 
+            Data = LTRIM(RTRIM(SUBSTRING(@RowData, 1, @FoundIndex - 1)))
+
+        SET @RowData = SUBSTRING(@RowData,
+                @FoundIndex + DATALENGTH(@Delimeter) / 2,
+                LEN(@RowData))
+
+        SET @Iterator = @Iterator + 1
+        SET @FoundIndex = CHARINDEX(@Delimeter, @RowData)
+    END
+    
+    INSERT INTO @RtnValue (Data)
+    SELECT Data = LTRIM(RTRIM(@RowData))
+
+    RETURN
+END
+
+GO
+");
             CreateTable(
                 "dbo.sysBpmsAPIAccess",
                 c => new
@@ -566,6 +606,55 @@
                 })
                 .PrimaryKey(t => t.ID);
 
+            //Seed
+            Sql(@"INSERT [sysBpmsConfiguration] ([ID], [Name], [Label], [DefaultValue], [Value], [LastUpdateOn]) VALUES (N'bad77f76-c7b3-4fb1-b668-05cc1e27a5ef', N'ProcessFormatSerlialNumber', N'Workflow Serlial number format', N'yyyy/mm/dd_#####', N'', NULL)
+GO
+INSERT [sysBpmsConfiguration] ([ID], [Name], [Label], [DefaultValue], [Value], [LastUpdateOn]) VALUES (N'eb1fc836-518a-41d4-a6ea-0a6141b9da81', N'LastSqlUpdatedVersion', N'Last sql version executed ', N'00.00.00', N' ', NULL)
+GO
+INSERT [sysBpmsConfiguration] ([ID], [Name], [Label], [DefaultValue], [Value], [LastUpdateOn]) VALUES (N'e473816a-de0c-4128-951c-32e0cd2e850b', N'NoSkinPath', N'No Skin Path', N'SkinSrc=desktopmodules/MVC/DynamicBusiness.Bpms/noskin', N'SkinSrc=desktopmodules/MVC/DynamicBusiness.Bpms/noskin', NULL)
+GO
+INSERT [sysBpmsConfiguration] ([ID], [Name], [Label], [DefaultValue], [Value], [LastUpdateOn]) VALUES (N'1e3dca37-e40d-41cb-9ff6-66941aa5309b', N'LoadUserPanelJquery', N'Load User Panel Jquery', N'true', N'true', NULL)
+GO
+INSERT [sysBpmsConfiguration] ([ID], [Name], [Label], [DefaultValue], [Value], [LastUpdateOn]) VALUES (N'c9bb66bb-7eb6-43a8-8eb7-6ca983de4221', N'ThreadFormatSerlialNumber', N'Request Serlial number format', N'yyyy/mm/dd_#####', N'', NULL)
+GO
+INSERT [sysBpmsConfiguration] ([ID], [Name], [Label], [DefaultValue], [Value], [LastUpdateOn]) VALUES (N'43e3c96c-a1c6-4c0a-9a4f-70d6b2f7d047', N'DefaultReportFontFamily', N'Report Default Font', N'Times New Roman', N'Times New Roman', NULL)
+GO
+INSERT [sysBpmsConfiguration] ([ID], [Name], [Label], [DefaultValue], [Value], [LastUpdateOn]) VALUES (N'cebe0666-76f4-4a7e-97ec-80634fa6628b', N'ShowUserPanelWithNoSkin', N'Show User Panel With NoSkin', N'true', N'true', NULL)
+GO
+INSERT [sysBpmsConfiguration] ([ID], [Name], [Label], [DefaultValue], [Value], [LastUpdateOn]) VALUES (N'df7f94b6-1a66-472e-b20f-9e5870a8e74e', N'ThreadStartPointSerlialNumber', N'Thread Start Point Serlial Number', N'1', N'1', NULL)
+GO
+INSERT [sysBpmsConfiguration] ([ID], [Name], [Label], [DefaultValue], [Value], [LastUpdateOn]) VALUES (N'65b7a7de-0ba8-4dfe-abb0-b936b20d2d2c', N'WebServicePass', N'WebService Password', N' ', N' ', NULL)
+GO
+INSERT [sysBpmsConfiguration] ([ID], [Name], [Label], [DefaultValue], [Value], [LastUpdateOn]) VALUES (N'fae48efb-b810-4db9-bad0-dd74e4ef69e4', N'AddUserAutomatically', N'Add User Automatically', N'true', N'true', NULL)
+GO
+INSERT [sysBpmsConfiguration] ([ID], [Name], [Label], [DefaultValue], [Value], [LastUpdateOn]) VALUES (N'fae48efb-b810-4db9-bad0-dd78e4ee69e4', N'ProcessStartPointSerlialNumber', N'Workflow StartPoint Serlial Number', N'1', N'1', NULL)
+GO
+INSERT [sysBpmsConfiguration] ([ID], [Name], [Label], [DefaultValue], [Value], [LastUpdateOn]) VALUES (N'a0fc45ad-4ed4-468b-8cbe-eccc2f6643b1', N'LoadUserPanelBootstrap', N'Load User Panel Bootstrap', N'true', N'true', NULL)
+GO
+INSERT [sysBpmsLURow] ([ID], [LUTableID], [NameOf], [CodeOf], [DisplayOrder], [IsSystemic], [IsActive]) VALUES (N'b975200a-2bbb-4aa3-9153-221ed49b9af0', N'4ba48a03-422c-43cb-a5e0-8df77f869edf', N'Draft', N'1', 1, 1, 1)
+GO
+INSERT [sysBpmsLURow] ([ID], [LUTableID], [NameOf], [CodeOf], [DisplayOrder], [IsSystemic], [IsActive]) VALUES (N'64f971f8-0796-4a2c-b362-22e136b49907', N'd26ef8e8-5fe3-41fc-9f77-2126fb38b3f9', N'Requester', N'1', 1, 1, 1)
+GO
+INSERT [sysBpmsLURow] ([ID], [LUTableID], [NameOf], [CodeOf], [DisplayOrder], [IsSystemic], [IsActive]) VALUES (N'b0a928c2-9592-4487-b89a-44e157cf590f', N'f62945c4-ffcc-47f3-a295-77fc8b7b7cb8', N'User', N'1', 1, 1, 1)
+GO
+INSERT [sysBpmsLURow] ([ID], [LUTableID], [NameOf], [CodeOf], [DisplayOrder], [IsSystemic], [IsActive]) VALUES (N'579b616b-056b-4898-a21e-54396b05b171', N'4ba48a03-422c-43cb-a5e0-8df77f869edf', N'Published', N'2', 2, 1, 1)
+GO
+INSERT [sysBpmsLURow] ([ID], [LUTableID], [NameOf], [CodeOf], [DisplayOrder], [IsSystemic], [IsActive]) VALUES (N'aa704084-a7d4-40f1-b1c2-708f7da9e53b', N'4ba48a03-422c-43cb-a5e0-8df77f869edf', N'InActive', N'3', 3, 1, 1)
+GO
+INSERT [sysBpmsLURow] ([ID], [LUTableID], [NameOf], [CodeOf], [DisplayOrder], [IsSystemic], [IsActive]) VALUES (N'3015e3ec-1c39-4092-9f80-86c1d40cbc40', N'f62945c4-ffcc-47f3-a295-77fc8b7b7cb8', N'Role', N'2', 2, 1, 1)
+GO
+INSERT [sysBpmsLURow] ([ID], [LUTableID], [NameOf], [CodeOf], [DisplayOrder], [IsSystemic], [IsActive]) VALUES (N'b71f886e-95f7-427f-9728-ad73907af2b8', N'4ba48a03-422c-43cb-a5e0-8df77f869edf', N'Finished', N'4', 4, 1, 1)
+GO
+INSERT [sysBpmsLURow] ([ID], [LUTableID], [NameOf], [CodeOf], [DisplayOrder], [IsSystemic], [IsActive]) VALUES (N'0336f54c-afc9-44d0-b12e-f62f6581f8ef', N'393529c0-e96c-4cf4-92fd-c83efe7ce0b9', N'General', N'1', 1, 1, 1)
+GO
+INSERT [sysBpmsLUTable] ([ID], [NameOf], [Alias], [IsSystemic], [IsActive]) VALUES (N'd26ef8e8-5fe3-41fc-9f77-2126fb38b3f9', N'Organization Role', N'DepartmentRoleLU', 0, 1)
+GO
+INSERT [sysBpmsLUTable] ([ID], [NameOf], [Alias], [IsSystemic], [IsActive]) VALUES (N'f62945c4-ffcc-47f3-a295-77fc8b7b7cb8', N'Owner Access Type', N'LaneOwnerTypeLU', 1, 1)
+GO
+INSERT [sysBpmsLUTable] ([ID], [NameOf], [Alias], [IsSystemic], [IsActive]) VALUES (N'4ba48a03-422c-43cb-a5e0-8df77f869edf', N'Workflow Status', N'ProcessStatusLU', 1, 1)
+GO
+INSERT [sysBpmsLUTable] ([ID], [NameOf], [Alias], [IsSystemic], [IsActive]) VALUES (N'393529c0-e96c-4cf4-92fd-c83efe7ce0b9', N'Application Page Group', N'ApplicationPageGroupLU', 0, 1)
+GO");
         }
 
         public override void Down()

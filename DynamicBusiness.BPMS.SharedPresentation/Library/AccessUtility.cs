@@ -14,7 +14,7 @@ namespace DynamicBusiness.BPMS.SharedPresentation
         /// <returns></returns>
         public static bool CalledByLocalSA(HttpRequest request)
         {
-            return request.IsLocal && request.Headers.AllKeys.Contains("clientId");
+            return DomainUtility.IsTestEnvironment || (request.IsLocal && request.Headers.AllKeys.Contains("clientId"));
         }
     }
 }

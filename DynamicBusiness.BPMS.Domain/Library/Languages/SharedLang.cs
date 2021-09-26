@@ -11,7 +11,7 @@ namespace DynamicBusiness.BPMS.Domain
     public class SharedLang
     {
         public const string root = "~/DesktopModules/MVC/DynamicBusiness.Bpms/SharedPresentation/";
-        public static string Get(string name) { return Localization.GetString(name, SharedLang.GetResx()); }
+        public static string Get(string name) { return DomainUtility.IsTestEnvironment ? name : Localization.GetString(name, SharedLang.GetResx()); }
         public static string GetReuired(string name, string modelName) { return string.Format(SharedLang.Get("FormatRequired.Text"), LangUtility.Get(name, modelName)); }
         private static string GetResx()
         {

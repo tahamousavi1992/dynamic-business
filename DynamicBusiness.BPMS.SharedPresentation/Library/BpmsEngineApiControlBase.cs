@@ -30,13 +30,12 @@ namespace DynamicBusiness.BPMS.SharedPresentation
                     this.ClientIp = this.MyRequest.Headers["clientIp"].ToStringObj();
                 else
                     this.ClientIp = ApiUtility.GetIPAddress();
-
-
+                 
                 //If it is called by bpms user panel module. 
                 if (!this.MyRequest.Headers.AllKeys.Contains("token") &&
                     !this.MyRequest.Headers.AllKeys.Contains("clientId"))
                 {
-                    this.ClientUserName = DomainUtility.IsTestEnvironment() ? "bpms_expert" : base.UserInfo.Username;
+                    this.ClientUserName = DomainUtility.IsTestEnvironment ? "bpms_expert" : base.UserInfo.Username;
                     this.ClientFormToken = this.MyRequest.QueryString[FormTokenUtility.FormToken].ToStringObj();
                     this.ClientId = HttpContext.Current.Session.SessionID;
                     this.ApiSessionId = DomainUtility.CreateApiSessionID(this.ClientId, this.ClientIp);
@@ -70,7 +69,7 @@ namespace DynamicBusiness.BPMS.SharedPresentation
         {
             get
             {
-                return HttpContext.Current.Request;
+                return HttpContext.Current?.Request;
             }
         }
         private sysBpmsUser myUser { get; set; }

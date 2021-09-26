@@ -1,0 +1,1037 @@
+﻿
+/****** Object:  UserDefinedFunction [sysBpmsSplit]    Script Date: 3/16/2021 11:55:57 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE FUNCTION [sysBpmsSplit]
+(    
+    @RowData NVARCHAR(MAX),
+    @Delimeter NVARCHAR(MAX)
+)
+RETURNS @RtnValue TABLE 
+(
+    ID INT IDENTITY(1,1),
+    Data NVARCHAR(MAX)
+) 
+AS
+BEGIN 
+    DECLARE @Iterator INT
+    SET @Iterator = 1
+
+    DECLARE @FoundIndex INT
+    SET @FoundIndex = CHARINDEX(@Delimeter,@RowData)
+
+    WHILE (@FoundIndex>0)
+    BEGIN
+        INSERT INTO @RtnValue (data)
+        SELECT 
+            Data = LTRIM(RTRIM(SUBSTRING(@RowData, 1, @FoundIndex - 1)))
+
+        SET @RowData = SUBSTRING(@RowData,
+                @FoundIndex + DATALENGTH(@Delimeter) / 2,
+                LEN(@RowData))
+
+        SET @Iterator = @Iterator + 1
+        SET @FoundIndex = CHARINDEX(@Delimeter, @RowData)
+    END
+    
+    INSERT INTO @RtnValue (Data)
+    SELECT Data = LTRIM(RTRIM(@RowData))
+
+    RETURN
+END
+
+GO
+/****** Object:  Table [sysBpmsAPIAccess]    Script Date: 3/16/2021 11:55:57 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsAPIAccess](
+	[ID] [uniqueidentifier] NOT NULL,
+	[Name] [nvarchar](500) NOT NULL,
+	[IPAddress] [nvarchar](50) NOT NULL,
+	[AccessKey] [nvarchar](500) NOT NULL,
+	[IsActive] [bit] NOT NULL,
+ CONSTRAINT [PK_dbo.sysBpmsAPIAccess] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsApplicationPage]    Script Date: 3/16/2021 11:55:57 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsApplicationPage](
+	[ID] [uniqueidentifier] NOT NULL,
+	[GroupLU] [int] NOT NULL,
+	[Description] [nvarchar](max) NULL,
+	[ShowInMenu] [bit] NOT NULL,
+ CONSTRAINT [PK_dbo.sysBpmsApplicationPage] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsApplicationPageAccess]    Script Date: 3/16/2021 11:55:57 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsApplicationPageAccess](
+	[ID] [uniqueidentifier] NOT NULL,
+	[ApplicationPageID] [uniqueidentifier] NOT NULL,
+	[DepartmentID] [uniqueidentifier] NULL,
+	[RoleLU] [int] NULL,
+	[UserID] [uniqueidentifier] NULL,
+	[AllowAdd] [bit] NOT NULL,
+	[AllowEdit] [bit] NOT NULL,
+	[AllowDelete] [bit] NOT NULL,
+	[AllowView] [bit] NOT NULL,
+ CONSTRAINT [PK_dbo.sysBpmsApplicationPageAccess] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsCondition]    Script Date: 3/16/2021 11:55:57 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsCondition](
+	[ID] [uniqueidentifier] NOT NULL,
+	[GatewayID] [uniqueidentifier] NOT NULL,
+	[SequenceFlowID] [uniqueidentifier] NULL,
+	[Code] [nvarchar](max) NOT NULL,
+ CONSTRAINT [PK_dbo.sysBpmsCondition] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsConfiguration]    Script Date: 3/16/2021 11:55:57 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsConfiguration](
+	[ID] [uniqueidentifier] NOT NULL,
+	[Name] [nvarchar](500) NOT NULL,
+	[Label] [nvarchar](500) NOT NULL,
+	[DefaultValue] [nvarchar](max) NOT NULL,
+	[Value] [nvarchar](max) NOT NULL,
+	[LastUpdateOn] [datetime] NULL,
+ CONSTRAINT [PK_dbo.sysBpmsConfiguration] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsDBConnection]    Script Date: 3/16/2021 11:55:58 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsDBConnection](
+	[ID] [uniqueidentifier] NOT NULL,
+	[Name] [nvarchar](500) NOT NULL,
+	[DataSource] [nvarchar](500) NOT NULL,
+	[InitialCatalog] [nvarchar](500) NOT NULL,
+	[UserID] [nvarchar](500) NOT NULL,
+	[Password] [nvarchar](500) NOT NULL,
+	[IntegratedSecurity] [bit] NOT NULL,
+ CONSTRAINT [PK_dbo.sysBpmsDBConnection] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsDepartment]    Script Date: 3/16/2021 11:55:58 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsDepartment](
+	[ID] [uniqueidentifier] NOT NULL,
+	[DepartmentID] [uniqueidentifier] NULL,
+	[Name] [nvarchar](500) NOT NULL,
+	[IsActive] [bit] NOT NULL,
+ CONSTRAINT [PK_dbo.sysBpmsDepartment] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsDepartmentMember]    Script Date: 3/16/2021 11:55:58 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsDepartmentMember](
+	[ID] [uniqueidentifier] NOT NULL,
+	[DepartmentID] [uniqueidentifier] NOT NULL,
+	[RoleLU] [int] NOT NULL,
+	[UserID] [uniqueidentifier] NOT NULL,
+ CONSTRAINT [PK_dbo.sysBpmsDepartmentMember] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsDocument]    Script Date: 3/16/2021 11:55:58 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsDocument](
+	[GUID] [uniqueidentifier] NOT NULL,
+	[IsDeleted] [bit] NOT NULL,
+	[DocumentDefID] [uniqueidentifier] NOT NULL,
+	[EntityDefID] [uniqueidentifier] NULL,
+	[EntityID] [uniqueidentifier] NULL,
+	[ThreadID] [uniqueidentifier] NULL,
+	[AtachDateOf] [datetime] NOT NULL,
+	[FileExtention] [nvarchar](10) NOT NULL,
+	[CaptionOf] [nvarchar](1000) NOT NULL,
+ CONSTRAINT [PK_dbo.sysBpmsDocument] PRIMARY KEY CLUSTERED 
+(
+	[GUID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsDocumentDef]    Script Date: 3/16/2021 11:55:58 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsDocumentDef](
+	[ID] [uniqueidentifier] NOT NULL,
+	[DocumentFolderID] [uniqueidentifier] NOT NULL,
+	[NameOf] [nvarchar](max) NOT NULL,
+	[DisplayName] [nvarchar](max) NOT NULL,
+	[MaxSize] [int] NULL,
+	[ValidExtentions] [nvarchar](max) NOT NULL,
+	[IsMandatory] [bit] NOT NULL,
+	[Description] [nvarchar](max) NULL,
+	[IsSystemic] [bit] NOT NULL,
+	[IsActive] [bit] NOT NULL,
+ CONSTRAINT [PK_dbo.sysBpmsDocumentDef] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsDocumentFolder]    Script Date: 3/16/2021 11:55:58 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsDocumentFolder](
+	[ID] [uniqueidentifier] NOT NULL,
+	[NameOf] [nvarchar](500) NOT NULL,
+	[DisplayName] [nvarchar](500) NOT NULL,
+	[DocumentFolderID] [uniqueidentifier] NULL,
+	[IsActive] [bit] NOT NULL,
+ CONSTRAINT [PK_dbo.sysBpmsDocumentFolder] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsDynamicForm]    Script Date: 3/16/2021 11:55:58 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsDynamicForm](
+	[ID] [uniqueidentifier] NOT NULL,
+	[ProcessId] [uniqueidentifier] NULL,
+	[ApplicationPageID] [uniqueidentifier] NULL,
+	[Name] [nvarchar](500) NOT NULL,
+	[DesignJson] [nvarchar](max) NULL,
+	[OnExitFormCode] [nvarchar](max) NULL,
+	[OnEntryFormCode] [nvarchar](max) NULL,
+	[Version] [int] NULL,
+	[ConfigXML] [nvarchar](max) NULL,
+	[ShowInOverview] [bit] NULL,
+	[SourceCode] [nvarchar](max) NULL,
+	[CreatedBy] [nvarchar](500) NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+	[UpdatedBy] [nvarchar](500) NOT NULL,
+	[UpdatedDate] [datetime] NOT NULL,
+ CONSTRAINT [PK_dbo.sysBpmsDynamicForm] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsElement]    Script Date: 3/16/2021 11:55:58 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsElement](
+	[ID] [nvarchar](100) NOT NULL,
+	[ProcessID] [uniqueidentifier] NOT NULL,
+	[Name] [nvarchar](500) NOT NULL,
+	[TypeLU] [int] NOT NULL,
+ CONSTRAINT [PK_dbo.sysBpmsElement] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC,
+	[ProcessID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsEmailAccount]    Script Date: 3/16/2021 11:55:58 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsEmailAccount](
+	[ID] [uniqueidentifier] NOT NULL,
+	[ObjectTypeLU] [int] NOT NULL,
+	[ObjectID] [uniqueidentifier] NULL,
+	[SMTP] [nvarchar](500) NOT NULL,
+	[Port] [nvarchar](10) NOT NULL,
+	[MailPassword] [nvarchar](500) NOT NULL,
+	[Email] [nvarchar](500) NOT NULL,
+ CONSTRAINT [PK_dbo.sysBpmsEmailAccount] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsEntityDef]    Script Date: 3/16/2021 11:55:58 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsEntityDef](
+	[ID] [uniqueidentifier] NOT NULL,
+	[DisplayName] [nvarchar](500) NOT NULL,
+	[Name] [nvarchar](500) NOT NULL,
+	[DesignXML] [nvarchar](max) NOT NULL,
+	[IsActive] [bit] NOT NULL,
+ CONSTRAINT [PK_dbo.sysBpmsEntityDef] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsEvent]    Script Date: 3/16/2021 11:55:58 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsEvent](
+	[ID] [uniqueidentifier] NOT NULL,
+	[ElementID] [nvarchar](100) NOT NULL,
+	[TypeLU] [int] NOT NULL,
+	[ConfigurationXML] [nvarchar](max) NULL,
+	[SubType] [int] NULL,
+	[RefElementID] [nvarchar](100) NULL,
+	[CancelActivity] [bit] NULL,
+	[ProcessID] [uniqueidentifier] NOT NULL,
+	[MessageTypeID] [uniqueidentifier] NULL,
+ CONSTRAINT [PK_dbo.sysBpmsEvent] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsGateway]    Script Date: 3/16/2021 11:55:58 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsGateway](
+	[ID] [uniqueidentifier] NOT NULL,
+	[ElementID] [nvarchar](100) NOT NULL,
+	[DefaultSequenceFlowID] [uniqueidentifier] NULL,
+	[TypeLU] [int] NULL,
+	[TraceToStart] [nvarchar](max) NULL,
+	[ProcessID] [uniqueidentifier] NOT NULL,
+ CONSTRAINT [PK_dbo.sysBpmsGateway] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsLane]    Script Date: 3/16/2021 11:55:58 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsLane](
+	[ID] [uniqueidentifier] NOT NULL,
+	[ElementID] [nvarchar](100) NOT NULL,
+	[ProcessID] [uniqueidentifier] NOT NULL,
+ CONSTRAINT [PK_dbo.sysBpmsLane] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsLURow]    Script Date: 3/16/2021 11:55:58 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsLURow](
+	[ID] [uniqueidentifier] NOT NULL,
+	[LUTableID] [uniqueidentifier] NOT NULL,
+	[NameOf] [nvarchar](500) NOT NULL,
+	[CodeOf] [nvarchar](500) NOT NULL,
+	[DisplayOrder] [int] NOT NULL,
+	[IsSystemic] [bit] NOT NULL,
+	[IsActive] [bit] NOT NULL,
+ CONSTRAINT [PK_dbo.sysBpmsLURow] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsLUTable]    Script Date: 3/16/2021 11:55:58 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsLUTable](
+	[ID] [uniqueidentifier] NOT NULL,
+	[NameOf] [nvarchar](500) NOT NULL,
+	[Alias] [nvarchar](500) NOT NULL,
+	[IsSystemic] [bit] NOT NULL,
+	[IsActive] [bit] NOT NULL,
+ CONSTRAINT [PK_dbo.sysBpmsLUTable] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsMessageType]    Script Date: 3/16/2021 11:55:58 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsMessageType](
+	[ID] [uniqueidentifier] NOT NULL,
+	[Name] [nvarchar](500) NOT NULL,
+	[ParamsXML] [nvarchar](max) NOT NULL,
+	[IsActive] [bit] NOT NULL,
+ CONSTRAINT [PK_dbo.sysBpmsMessageType] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsProcess]    Script Date: 3/16/2021 11:55:58 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsProcess](
+	[ID] [uniqueidentifier] NOT NULL,
+	[FormattedNumber] [nvarchar](max) NULL,
+	[Number] [int] NULL,
+	[Name] [nvarchar](500) NOT NULL,
+	[Description] [nvarchar](max) NULL,
+	[ProcessVersion] [int] NULL,
+	[StatusLU] [int] NULL,
+	[CreatorUsername] [nvarchar](500) NULL,
+	[CreateDate] [datetime] NULL,
+	[UpdateDate] [datetime] NULL,
+	[DiagramXML] [nvarchar](max) NULL,
+	[WorkflowXML] [nvarchar](max) NULL,
+	[BeginTasks] [nvarchar](max) NULL,
+	[ParentProcessID] [uniqueidentifier] NULL,
+	[PublishDate] [datetime] NULL,
+	[ParallelCountPerUser] [int] NULL,
+	[SourceCode] [nvarchar](max) NULL,
+	[ProcessGroupID] [uniqueidentifier] NOT NULL,
+	[TypeLU] [int] NOT NULL,
+ CONSTRAINT [PK_dbo.sysBpmsProcess] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsProcessGroup]    Script Date: 3/16/2021 11:55:58 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsProcessGroup](
+	[ID] [uniqueidentifier] NOT NULL,
+	[ProcessGroupID] [uniqueidentifier] NULL,
+	[Name] [nvarchar](500) NOT NULL,
+	[Description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.sysBpmsProcessGroup] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsSequenceFlow]    Script Date: 3/16/2021 11:55:58 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsSequenceFlow](
+	[ID] [uniqueidentifier] NOT NULL,
+	[ElementID] [nvarchar](100) NOT NULL,
+	[ProcessID] [uniqueidentifier] NOT NULL,
+	[Name] [nvarchar](500) NOT NULL,
+	[SourceElementID] [nvarchar](100) NOT NULL,
+	[TargetElementID] [nvarchar](100) NULL,
+ CONSTRAINT [PK_dbo.sysBpmsSequenceFlow] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsStep]    Script Date: 3/16/2021 11:55:58 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsStep](
+	[ID] [uniqueidentifier] NOT NULL,
+	[TaskID] [uniqueidentifier] NOT NULL,
+	[Position] [int] NOT NULL,
+	[Name] [nvarchar](500) NOT NULL,
+	[DynamicFormID] [uniqueidentifier] NULL,
+ CONSTRAINT [PK_dbo.sysBpmsStep] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsTask]    Script Date: 3/16/2021 11:55:58 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsTask](
+	[ID] [uniqueidentifier] NOT NULL,
+	[ElementID] [nvarchar](100) NOT NULL,
+	[TypeLU] [int] NOT NULL,
+	[Code] [nvarchar](max) NOT NULL,
+	[MarkerTypeLU] [int] NULL,
+	[OwnerTypeLU] [int] NULL,
+	[RoleName] [nvarchar](max) NULL,
+	[Rule] [nvarchar](max) NULL,
+	[UserID] [nvarchar](max) NULL,
+	[ProcessID] [uniqueidentifier] NOT NULL,
+ CONSTRAINT [PK_dbo.sysBpmsTask] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsThread]    Script Date: 3/16/2021 11:55:58 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsThread](
+	[ID] [uniqueidentifier] NOT NULL,
+	[StartDate] [datetime] NOT NULL,
+	[EndDate] [datetime] NULL,
+	[StatusLU] [int] NOT NULL,
+	[GatewayStatusXml] [nvarchar](max) NULL,
+	[ProcessID] [uniqueidentifier] NOT NULL,
+	[UserID] [uniqueidentifier] NULL,
+	[FormattedNumber] [nvarchar](50) NULL,
+	[Number] [int] NULL,
+ CONSTRAINT [PK_dbo.sysBpmsThread] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsThreadEvent]    Script Date: 3/16/2021 11:55:58 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsThreadEvent](
+	[ID] [uniqueidentifier] NOT NULL,
+	[ThreadID] [uniqueidentifier] NOT NULL,
+	[EventID] [uniqueidentifier] NOT NULL,
+	[StartDate] [datetime] NOT NULL,
+	[ExecuteDate] [datetime] NOT NULL,
+	[StatusLU] [int] NOT NULL,
+	[ThreadTaskID] [uniqueidentifier] NULL,
+ CONSTRAINT [PK_dbo.sysBpmsThreadEvent] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsThreadTask]    Script Date: 3/16/2021 11:55:58 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsThreadTask](
+	[ID] [uniqueidentifier] NOT NULL,
+	[ThreadID] [uniqueidentifier] NOT NULL,
+	[TaskID] [uniqueidentifier] NOT NULL,
+	[OwnerUserID] [uniqueidentifier] NULL,
+	[StartDate] [datetime] NOT NULL,
+	[EndDate] [datetime] NULL,
+	[Description] [nvarchar](max) NOT NULL,
+	[OwnerRole] [nvarchar](max) NULL,
+	[PriorityLU] [int] NULL,
+	[StatusLU] [int] NOT NULL,
+ CONSTRAINT [PK_dbo.sysBpmsThreadTask] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsThreadVariable]    Script Date: 3/16/2021 11:55:58 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsThreadVariable](
+	[ID] [uniqueidentifier] NOT NULL,
+	[ThreadID] [uniqueidentifier] NOT NULL,
+	[VariableID] [uniqueidentifier] NOT NULL,
+	[Value] [nvarchar](max) NOT NULL,
+ CONSTRAINT [PK_dbo.sysBpmsThreadVariable] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsUser]    Script Date: 3/16/2021 11:55:58 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsUser](
+	[ID] [uniqueidentifier] NOT NULL,
+	[Username] [nvarchar](500) NOT NULL,
+	[FirstName] [nvarchar](500) NULL,
+	[LastName] [nvarchar](500) NULL,
+	[Email] [nvarchar](500) NULL,
+	[Tel] [nvarchar](30) NULL,
+	[Mobile] [nvarchar](30) NULL,
+ CONSTRAINT [PK_dbo.sysBpmsUser] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsVariable]    Script Date: 3/16/2021 11:55:58 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsVariable](
+	[ID] [uniqueidentifier] NOT NULL,
+	[ProcessID] [uniqueidentifier] NULL,
+	[ApplicationPageID] [uniqueidentifier] NULL,
+	[EntityDefID] [uniqueidentifier] NULL,
+	[DBConnectionID] [uniqueidentifier] NULL,
+	[Name] [nvarchar](500) NOT NULL,
+	[VarTypeLU] [int] NOT NULL,
+	[FieldName] [nvarchar](250) NULL,
+	[Query] [nvarchar](max) NULL,
+	[FilterTypeLU] [int] NULL,
+	[Collection] [nvarchar](max) NULL,
+	[DefaultValue] [nvarchar](max) NULL,
+	[WhereClause] [nvarchar](max) NULL,
+	[OrderByClause] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.sysBpmsVariable] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [sysBpmsVariableDependency]    Script Date: 3/16/2021 11:55:58 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [sysBpmsVariableDependency](
+	[ID] [uniqueidentifier] NOT NULL,
+	[DependentVariableID] [uniqueidentifier] NOT NULL,
+	[DependentPropertyName] [nvarchar](250) NOT NULL,
+	[ToVariableID] [uniqueidentifier] NULL,
+	[ToPropertyName] [nvarchar](250) NOT NULL,
+	[Description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.sysBpmsVariableDependency] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+INSERT [sysBpmsConfiguration] ([ID], [Name], [Label], [DefaultValue], [Value], [LastUpdateOn]) VALUES (N'bad77f76-c7b3-4fb1-b668-05cc1e27a5ef', N'ProcessFormatSerlialNumber', N'Workflow Serlial number format', N'yyyy/mm/dd_#####', N'', NULL)
+GO
+INSERT [sysBpmsConfiguration] ([ID], [Name], [Label], [DefaultValue], [Value], [LastUpdateOn]) VALUES (N'eb1fc836-518a-41d4-a6ea-0a6141b9da81', N'LastSqlUpdatedVersion', N'Last sql version executed ', N'00.00.00', N' ', NULL)
+GO
+INSERT [sysBpmsConfiguration] ([ID], [Name], [Label], [DefaultValue], [Value], [LastUpdateOn]) VALUES (N'e473816a-de0c-4128-951c-32e0cd2e850b', N'NoSkinPath', N'No Skin Path', N'SkinSrc=desktopmodules/MVC/DynamicBusiness.Bpms/noskin', N'SkinSrc=desktopmodules/MVC/DynamicBusiness.Bpms/noskin', NULL)
+GO
+INSERT [sysBpmsConfiguration] ([ID], [Name], [Label], [DefaultValue], [Value], [LastUpdateOn]) VALUES (N'1e3dca37-e40d-41cb-9ff6-66941aa5309b', N'LoadUserPanelJquery', N'Load User Panel Jquery', N'true', N'true', NULL)
+GO
+INSERT [sysBpmsConfiguration] ([ID], [Name], [Label], [DefaultValue], [Value], [LastUpdateOn]) VALUES (N'c9bb66bb-7eb6-43a8-8eb7-6ca983de4221', N'ThreadFormatSerlialNumber', N'Request Serlial number format', N'yyyy/mm/dd_#####', N'', NULL)
+GO
+INSERT [sysBpmsConfiguration] ([ID], [Name], [Label], [DefaultValue], [Value], [LastUpdateOn]) VALUES (N'43e3c96c-a1c6-4c0a-9a4f-70d6b2f7d047', N'DefaultReportFontFamily', N'Report Default Font', N'Times New Roman', N'Times New Roman', NULL)
+GO
+INSERT [sysBpmsConfiguration] ([ID], [Name], [Label], [DefaultValue], [Value], [LastUpdateOn]) VALUES (N'cebe0666-76f4-4a7e-97ec-80634fa6628b', N'ShowUserPanelWithNoSkin', N'Show User Panel With NoSkin', N'true', N'true', NULL)
+GO
+INSERT [sysBpmsConfiguration] ([ID], [Name], [Label], [DefaultValue], [Value], [LastUpdateOn]) VALUES (N'df7f94b6-1a66-472e-b20f-9e5870a8e74e', N'ThreadStartPointSerlialNumber', N'Thread Start Point Serlial Number', N'1', N'1', NULL)
+GO
+INSERT [sysBpmsConfiguration] ([ID], [Name], [Label], [DefaultValue], [Value], [LastUpdateOn]) VALUES (N'65b7a7de-0ba8-4dfe-abb0-b936b20d2d2c', N'WebServicePass', N'WebService Password', N' ', N' ', NULL)
+GO
+INSERT [sysBpmsConfiguration] ([ID], [Name], [Label], [DefaultValue], [Value], [LastUpdateOn]) VALUES (N'fae48efb-b810-4db9-bad0-dd74e4ef69e4', N'AddUserAutomatically', N'Add User Automatically', N'true', N'true', NULL)
+GO
+INSERT [sysBpmsConfiguration] ([ID], [Name], [Label], [DefaultValue], [Value], [LastUpdateOn]) VALUES (N'fae48efb-b810-4db9-bad0-dd78e4ee69e4', N'ProcessStartPointSerlialNumber', N'Workflow StartPoint Serlial Number', N'1', N'1', NULL)
+GO
+INSERT [sysBpmsConfiguration] ([ID], [Name], [Label], [DefaultValue], [Value], [LastUpdateOn]) VALUES (N'a0fc45ad-4ed4-468b-8cbe-eccc2f6643b1', N'LoadUserPanelBootstrap', N'Load User Panel Bootstrap', N'true', N'true', NULL)
+GO
+INSERT [sysBpmsLURow] ([ID], [LUTableID], [NameOf], [CodeOf], [DisplayOrder], [IsSystemic], [IsActive]) VALUES (N'b975200a-2bbb-4aa3-9153-221ed49b9af0', N'4ba48a03-422c-43cb-a5e0-8df77f869edf', N'Draft', N'1', 1, 1, 1)
+GO
+INSERT [sysBpmsLURow] ([ID], [LUTableID], [NameOf], [CodeOf], [DisplayOrder], [IsSystemic], [IsActive]) VALUES (N'64f971f8-0796-4a2c-b362-22e136b49907', N'd26ef8e8-5fe3-41fc-9f77-2126fb38b3f9', N'Requester', N'1', 1, 1, 1)
+GO
+INSERT [sysBpmsLURow] ([ID], [LUTableID], [NameOf], [CodeOf], [DisplayOrder], [IsSystemic], [IsActive]) VALUES (N'b0a928c2-9592-4487-b89a-44e157cf590f', N'f62945c4-ffcc-47f3-a295-77fc8b7b7cb8', N'User', N'1', 1, 1, 1)
+GO
+INSERT [sysBpmsLURow] ([ID], [LUTableID], [NameOf], [CodeOf], [DisplayOrder], [IsSystemic], [IsActive]) VALUES (N'579b616b-056b-4898-a21e-54396b05b171', N'4ba48a03-422c-43cb-a5e0-8df77f869edf', N'Published', N'2', 2, 1, 1)
+GO
+INSERT [sysBpmsLURow] ([ID], [LUTableID], [NameOf], [CodeOf], [DisplayOrder], [IsSystemic], [IsActive]) VALUES (N'aa704084-a7d4-40f1-b1c2-708f7da9e53b', N'4ba48a03-422c-43cb-a5e0-8df77f869edf', N'InActive', N'3', 3, 1, 1)
+GO
+INSERT [sysBpmsLURow] ([ID], [LUTableID], [NameOf], [CodeOf], [DisplayOrder], [IsSystemic], [IsActive]) VALUES (N'3015e3ec-1c39-4092-9f80-86c1d40cbc40', N'f62945c4-ffcc-47f3-a295-77fc8b7b7cb8', N'Role', N'2', 2, 1, 1)
+GO
+INSERT [sysBpmsLURow] ([ID], [LUTableID], [NameOf], [CodeOf], [DisplayOrder], [IsSystemic], [IsActive]) VALUES (N'b71f886e-95f7-427f-9728-ad73907af2b8', N'4ba48a03-422c-43cb-a5e0-8df77f869edf', N'Finished', N'4', 4, 1, 1)
+GO
+INSERT [sysBpmsLURow] ([ID], [LUTableID], [NameOf], [CodeOf], [DisplayOrder], [IsSystemic], [IsActive]) VALUES (N'0336f54c-afc9-44d0-b12e-f62f6581f8ef', N'393529c0-e96c-4cf4-92fd-c83efe7ce0b9', N'General', N'1', 1, 1, 1)
+GO
+INSERT [sysBpmsLUTable] ([ID], [NameOf], [Alias], [IsSystemic], [IsActive]) VALUES (N'd26ef8e8-5fe3-41fc-9f77-2126fb38b3f9', N'Organization Role', N'DepartmentRoleLU', 0, 1)
+GO
+INSERT [sysBpmsLUTable] ([ID], [NameOf], [Alias], [IsSystemic], [IsActive]) VALUES (N'f62945c4-ffcc-47f3-a295-77fc8b7b7cb8', N'Owner Access Type', N'LaneOwnerTypeLU', 1, 1)
+GO
+INSERT [sysBpmsLUTable] ([ID], [NameOf], [Alias], [IsSystemic], [IsActive]) VALUES (N'4ba48a03-422c-43cb-a5e0-8df77f869edf', N'Workflow Status', N'ProcessStatusLU', 1, 1)
+GO
+INSERT [sysBpmsLUTable] ([ID], [NameOf], [Alias], [IsSystemic], [IsActive]) VALUES (N'393529c0-e96c-4cf4-92fd-c83efe7ce0b9', N'Application Page Group', N'ApplicationPageGroupLU', 0, 1)
+GO
+ALTER TABLE [sysBpmsAPIAccess] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsApplicationPage] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsApplicationPageAccess] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsCondition] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsConfiguration] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsDBConnection] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsDepartment] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsDepartmentMember] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsDocument] ADD  DEFAULT (newid()) FOR [GUID]
+GO
+ALTER TABLE [sysBpmsDocumentDef] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsDocumentFolder] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsDynamicForm] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsEmailAccount] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsEntityDef] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsEvent] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsGateway] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsLane] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsLURow] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsLUTable] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsMessageType] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsProcess] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsProcessGroup] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsSequenceFlow] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsStep] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsTask] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsThread] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsThreadEvent] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsThreadTask] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsThreadVariable] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsUser] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsVariable] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsVariableDependency] ADD  DEFAULT (newid()) FOR [ID]
+GO
+ALTER TABLE [sysBpmsApplicationPageAccess]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsApplicationPageAccess_dbo.sysBpmsApplicationPage_ApplicationPageID] FOREIGN KEY([ApplicationPageID])
+REFERENCES [sysBpmsApplicationPage] ([ID])
+GO
+ALTER TABLE [sysBpmsApplicationPageAccess] CHECK CONSTRAINT [FK_dbo.sysBpmsApplicationPageAccess_dbo.sysBpmsApplicationPage_ApplicationPageID]
+GO
+ALTER TABLE [sysBpmsApplicationPageAccess]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsApplicationPageAccess_dbo.sysBpmsDepartment_DepartmentID] FOREIGN KEY([DepartmentID])
+REFERENCES [sysBpmsDepartment] ([ID])
+GO
+ALTER TABLE [sysBpmsApplicationPageAccess] CHECK CONSTRAINT [FK_dbo.sysBpmsApplicationPageAccess_dbo.sysBpmsDepartment_DepartmentID]
+GO
+ALTER TABLE [sysBpmsApplicationPageAccess]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsApplicationPageAccess_dbo.sysBpmsUser_UserID] FOREIGN KEY([UserID])
+REFERENCES [sysBpmsUser] ([ID])
+GO
+ALTER TABLE [sysBpmsApplicationPageAccess] CHECK CONSTRAINT [FK_dbo.sysBpmsApplicationPageAccess_dbo.sysBpmsUser_UserID]
+GO
+ALTER TABLE [sysBpmsCondition]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsCondition_dbo.sysBpmsGateway_GatewayID] FOREIGN KEY([GatewayID])
+REFERENCES [sysBpmsGateway] ([ID])
+GO
+ALTER TABLE [sysBpmsCondition] CHECK CONSTRAINT [FK_dbo.sysBpmsCondition_dbo.sysBpmsGateway_GatewayID]
+GO
+ALTER TABLE [sysBpmsCondition]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsCondition_dbo.sysBpmsSequenceFlow_SequenceFlowID] FOREIGN KEY([SequenceFlowID])
+REFERENCES [sysBpmsSequenceFlow] ([ID])
+GO
+ALTER TABLE [sysBpmsCondition] CHECK CONSTRAINT [FK_dbo.sysBpmsCondition_dbo.sysBpmsSequenceFlow_SequenceFlowID]
+GO
+ALTER TABLE [sysBpmsDepartment]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsDepartment_dbo.sysBpmsDepartment_DepartmentID] FOREIGN KEY([DepartmentID])
+REFERENCES [sysBpmsDepartment] ([ID])
+GO
+ALTER TABLE [sysBpmsDepartment] CHECK CONSTRAINT [FK_dbo.sysBpmsDepartment_dbo.sysBpmsDepartment_DepartmentID]
+GO
+ALTER TABLE [sysBpmsDepartmentMember]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsDepartmentMember_dbo.sysBpmsDepartment_DepartmentID] FOREIGN KEY([DepartmentID])
+REFERENCES [sysBpmsDepartment] ([ID])
+GO
+ALTER TABLE [sysBpmsDepartmentMember] CHECK CONSTRAINT [FK_dbo.sysBpmsDepartmentMember_dbo.sysBpmsDepartment_DepartmentID]
+GO
+ALTER TABLE [sysBpmsDepartmentMember]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsDepartmentMember_dbo.sysBpmsUser_UserID] FOREIGN KEY([UserID])
+REFERENCES [sysBpmsUser] ([ID])
+GO
+ALTER TABLE [sysBpmsDepartmentMember] CHECK CONSTRAINT [FK_dbo.sysBpmsDepartmentMember_dbo.sysBpmsUser_UserID]
+GO
+ALTER TABLE [sysBpmsDocument]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsDocument_dbo.sysBpmsDocumentDef_DocumentDefID] FOREIGN KEY([DocumentDefID])
+REFERENCES [sysBpmsDocumentDef] ([ID])
+GO
+ALTER TABLE [sysBpmsDocument] CHECK CONSTRAINT [FK_dbo.sysBpmsDocument_dbo.sysBpmsDocumentDef_DocumentDefID]
+GO
+ALTER TABLE [sysBpmsDocument]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsDocument_dbo.sysBpmsEntityDef_EntityDefID] FOREIGN KEY([EntityDefID])
+REFERENCES [sysBpmsEntityDef] ([ID])
+GO
+ALTER TABLE [sysBpmsDocument] CHECK CONSTRAINT [FK_dbo.sysBpmsDocument_dbo.sysBpmsEntityDef_EntityDefID]
+GO
+ALTER TABLE [sysBpmsDocument]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsDocument_dbo.sysBpmsThread_ThreadID] FOREIGN KEY([ThreadID])
+REFERENCES [sysBpmsThread] ([ID])
+GO
+ALTER TABLE [sysBpmsDocument] CHECK CONSTRAINT [FK_dbo.sysBpmsDocument_dbo.sysBpmsThread_ThreadID]
+GO
+ALTER TABLE [sysBpmsDocumentDef]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsDocumentDef_dbo.sysBpmsDocumentFolder_DocumentFolderID] FOREIGN KEY([DocumentFolderID])
+REFERENCES [sysBpmsDocumentFolder] ([ID])
+GO
+ALTER TABLE [sysBpmsDocumentDef] CHECK CONSTRAINT [FK_dbo.sysBpmsDocumentDef_dbo.sysBpmsDocumentFolder_DocumentFolderID]
+GO
+ALTER TABLE [sysBpmsDocumentFolder]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsDocumentFolder_dbo.sysBpmsDocumentFolder_DocumentFolderID] FOREIGN KEY([DocumentFolderID])
+REFERENCES [sysBpmsDocumentFolder] ([ID])
+GO
+ALTER TABLE [sysBpmsDocumentFolder] CHECK CONSTRAINT [FK_dbo.sysBpmsDocumentFolder_dbo.sysBpmsDocumentFolder_DocumentFolderID]
+GO
+ALTER TABLE [sysBpmsDynamicForm]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsDynamicForm_dbo.sysBpmsApplicationPage_ApplicationPageID] FOREIGN KEY([ApplicationPageID])
+REFERENCES [sysBpmsApplicationPage] ([ID])
+GO
+ALTER TABLE [sysBpmsDynamicForm] CHECK CONSTRAINT [FK_dbo.sysBpmsDynamicForm_dbo.sysBpmsApplicationPage_ApplicationPageID]
+GO
+ALTER TABLE [sysBpmsDynamicForm]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsDynamicForm_dbo.sysBpmsProcess_ProcessId] FOREIGN KEY([ProcessId])
+REFERENCES [sysBpmsProcess] ([ID])
+GO
+ALTER TABLE [sysBpmsDynamicForm] CHECK CONSTRAINT [FK_dbo.sysBpmsDynamicForm_dbo.sysBpmsProcess_ProcessId]
+GO
+ALTER TABLE [sysBpmsElement]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsElement_dbo.sysBpmsProcess_ProcessID] FOREIGN KEY([ProcessID])
+REFERENCES [sysBpmsProcess] ([ID])
+GO
+ALTER TABLE [sysBpmsElement] CHECK CONSTRAINT [FK_dbo.sysBpmsElement_dbo.sysBpmsProcess_ProcessID]
+GO
+ALTER TABLE [sysBpmsEvent]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsEvent_dbo.sysBpmsElement_ElementID_ProcessID] FOREIGN KEY([ElementID], [ProcessID])
+REFERENCES [sysBpmsElement] ([ID], [ProcessID])
+GO
+ALTER TABLE [sysBpmsEvent] CHECK CONSTRAINT [FK_dbo.sysBpmsEvent_dbo.sysBpmsElement_ElementID_ProcessID]
+GO
+ALTER TABLE [sysBpmsEvent]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsEvent_dbo.sysBpmsMessageType_MessageTypeID] FOREIGN KEY([MessageTypeID])
+REFERENCES [sysBpmsMessageType] ([ID])
+GO
+ALTER TABLE [sysBpmsEvent] CHECK CONSTRAINT [FK_dbo.sysBpmsEvent_dbo.sysBpmsMessageType_MessageTypeID]
+GO
+ALTER TABLE [sysBpmsEvent]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsEvent_dbo.sysBpmsProcess_ProcessID] FOREIGN KEY([ProcessID])
+REFERENCES [sysBpmsProcess] ([ID])
+GO
+ALTER TABLE [sysBpmsEvent] CHECK CONSTRAINT [FK_dbo.sysBpmsEvent_dbo.sysBpmsProcess_ProcessID]
+GO
+ALTER TABLE [sysBpmsGateway]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsGateway_dbo.sysBpmsElement_ElementID_ProcessID] FOREIGN KEY([ElementID], [ProcessID])
+REFERENCES [sysBpmsElement] ([ID], [ProcessID])
+GO
+ALTER TABLE [sysBpmsGateway] CHECK CONSTRAINT [FK_dbo.sysBpmsGateway_dbo.sysBpmsElement_ElementID_ProcessID]
+GO
+ALTER TABLE [sysBpmsGateway]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsGateway_dbo.sysBpmsProcess_ProcessID] FOREIGN KEY([ProcessID])
+REFERENCES [sysBpmsProcess] ([ID])
+GO
+ALTER TABLE [sysBpmsGateway] CHECK CONSTRAINT [FK_dbo.sysBpmsGateway_dbo.sysBpmsProcess_ProcessID]
+GO
+ALTER TABLE [sysBpmsGateway]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsGateway_dbo.sysBpmsSequenceFlow_DefaultSequenceFlowID] FOREIGN KEY([DefaultSequenceFlowID])
+REFERENCES [sysBpmsSequenceFlow] ([ID])
+GO
+ALTER TABLE [sysBpmsGateway] CHECK CONSTRAINT [FK_dbo.sysBpmsGateway_dbo.sysBpmsSequenceFlow_DefaultSequenceFlowID]
+GO
+ALTER TABLE [sysBpmsLane]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsLane_dbo.sysBpmsElement_ElementID_ProcessID] FOREIGN KEY([ElementID], [ProcessID])
+REFERENCES [sysBpmsElement] ([ID], [ProcessID])
+GO
+ALTER TABLE [sysBpmsLane] CHECK CONSTRAINT [FK_dbo.sysBpmsLane_dbo.sysBpmsElement_ElementID_ProcessID]
+GO
+ALTER TABLE [sysBpmsLane]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsLane_dbo.sysBpmsProcess_ProcessID] FOREIGN KEY([ProcessID])
+REFERENCES [sysBpmsProcess] ([ID])
+GO
+ALTER TABLE [sysBpmsLane] CHECK CONSTRAINT [FK_dbo.sysBpmsLane_dbo.sysBpmsProcess_ProcessID]
+GO
+ALTER TABLE [sysBpmsLURow]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsLURow_dbo.sysBpmsLUTable_LUTableID] FOREIGN KEY([LUTableID])
+REFERENCES [sysBpmsLUTable] ([ID])
+GO
+ALTER TABLE [sysBpmsLURow] CHECK CONSTRAINT [FK_dbo.sysBpmsLURow_dbo.sysBpmsLUTable_LUTableID]
+GO
+ALTER TABLE [sysBpmsProcess]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsProcess_dbo.sysBpmsProcess_ParentProcessID] FOREIGN KEY([ParentProcessID])
+REFERENCES [sysBpmsProcess] ([ID])
+GO
+ALTER TABLE [sysBpmsProcess] CHECK CONSTRAINT [FK_dbo.sysBpmsProcess_dbo.sysBpmsProcess_ParentProcessID]
+GO
+ALTER TABLE [sysBpmsProcess]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsProcess_dbo.sysBpmsProcessGroup_ProcessGroupID] FOREIGN KEY([ProcessGroupID])
+REFERENCES [sysBpmsProcessGroup] ([ID])
+GO
+ALTER TABLE [sysBpmsProcess] CHECK CONSTRAINT [FK_dbo.sysBpmsProcess_dbo.sysBpmsProcessGroup_ProcessGroupID]
+GO
+ALTER TABLE [sysBpmsProcessGroup]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsProcessGroup_dbo.sysBpmsProcessGroup_ProcessGroupID] FOREIGN KEY([ProcessGroupID])
+REFERENCES [sysBpmsProcessGroup] ([ID])
+GO
+ALTER TABLE [sysBpmsProcessGroup] CHECK CONSTRAINT [FK_dbo.sysBpmsProcessGroup_dbo.sysBpmsProcessGroup_ProcessGroupID]
+GO
+ALTER TABLE [sysBpmsSequenceFlow]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsSequenceFlow_dbo.sysBpmsElement_ElementID_ProcessID] FOREIGN KEY([ElementID], [ProcessID])
+REFERENCES [sysBpmsElement] ([ID], [ProcessID])
+GO
+ALTER TABLE [sysBpmsSequenceFlow] CHECK CONSTRAINT [FK_dbo.sysBpmsSequenceFlow_dbo.sysBpmsElement_ElementID_ProcessID]
+GO
+ALTER TABLE [sysBpmsSequenceFlow]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsSequenceFlow_dbo.sysBpmsProcess_ProcessID] FOREIGN KEY([ProcessID])
+REFERENCES [sysBpmsProcess] ([ID])
+GO
+ALTER TABLE [sysBpmsSequenceFlow] CHECK CONSTRAINT [FK_dbo.sysBpmsSequenceFlow_dbo.sysBpmsProcess_ProcessID]
+GO
+ALTER TABLE [sysBpmsStep]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsStep_dbo.sysBpmsDynamicForm_DynamicFormID] FOREIGN KEY([DynamicFormID])
+REFERENCES [sysBpmsDynamicForm] ([ID])
+GO
+ALTER TABLE [sysBpmsStep] CHECK CONSTRAINT [FK_dbo.sysBpmsStep_dbo.sysBpmsDynamicForm_DynamicFormID]
+GO
+ALTER TABLE [sysBpmsStep]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsStep_dbo.sysBpmsTask_TaskID] FOREIGN KEY([TaskID])
+REFERENCES [sysBpmsTask] ([ID])
+GO
+ALTER TABLE [sysBpmsStep] CHECK CONSTRAINT [FK_dbo.sysBpmsStep_dbo.sysBpmsTask_TaskID]
+GO
+ALTER TABLE [sysBpmsTask]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsTask_dbo.sysBpmsElement_ElementID_ProcessID] FOREIGN KEY([ElementID], [ProcessID])
+REFERENCES [sysBpmsElement] ([ID], [ProcessID])
+GO
+ALTER TABLE [sysBpmsTask] CHECK CONSTRAINT [FK_dbo.sysBpmsTask_dbo.sysBpmsElement_ElementID_ProcessID]
+GO
+ALTER TABLE [sysBpmsTask]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsTask_dbo.sysBpmsProcess_ProcessID] FOREIGN KEY([ProcessID])
+REFERENCES [sysBpmsProcess] ([ID])
+GO
+ALTER TABLE [sysBpmsTask] CHECK CONSTRAINT [FK_dbo.sysBpmsTask_dbo.sysBpmsProcess_ProcessID]
+GO
+ALTER TABLE [sysBpmsThread]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsThread_dbo.sysBpmsProcess_ProcessID] FOREIGN KEY([ProcessID])
+REFERENCES [sysBpmsProcess] ([ID])
+GO
+ALTER TABLE [sysBpmsThread] CHECK CONSTRAINT [FK_dbo.sysBpmsThread_dbo.sysBpmsProcess_ProcessID]
+GO
+ALTER TABLE [sysBpmsThread]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsThread_dbo.sysBpmsUser_UserID] FOREIGN KEY([UserID])
+REFERENCES [sysBpmsUser] ([ID])
+GO
+ALTER TABLE [sysBpmsThread] CHECK CONSTRAINT [FK_dbo.sysBpmsThread_dbo.sysBpmsUser_UserID]
+GO
+ALTER TABLE [sysBpmsThreadEvent]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsThreadEvent_dbo.sysBpmsEvent_EventID] FOREIGN KEY([EventID])
+REFERENCES [sysBpmsEvent] ([ID])
+GO
+ALTER TABLE [sysBpmsThreadEvent] CHECK CONSTRAINT [FK_dbo.sysBpmsThreadEvent_dbo.sysBpmsEvent_EventID]
+GO
+ALTER TABLE [sysBpmsThreadEvent]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsThreadEvent_dbo.sysBpmsThread_ThreadID] FOREIGN KEY([ThreadID])
+REFERENCES [sysBpmsThread] ([ID])
+GO
+ALTER TABLE [sysBpmsThreadEvent] CHECK CONSTRAINT [FK_dbo.sysBpmsThreadEvent_dbo.sysBpmsThread_ThreadID]
+GO
+ALTER TABLE [sysBpmsThreadEvent]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsThreadEvent_dbo.sysBpmsThreadTask_ThreadTaskID] FOREIGN KEY([ThreadTaskID])
+REFERENCES [sysBpmsThreadTask] ([ID])
+GO
+ALTER TABLE [sysBpmsThreadEvent] CHECK CONSTRAINT [FK_dbo.sysBpmsThreadEvent_dbo.sysBpmsThreadTask_ThreadTaskID]
+GO
+ALTER TABLE [sysBpmsThreadTask]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsThreadTask_dbo.sysBpmsTask_TaskID] FOREIGN KEY([TaskID])
+REFERENCES [sysBpmsTask] ([ID])
+GO
+ALTER TABLE [sysBpmsThreadTask] CHECK CONSTRAINT [FK_dbo.sysBpmsThreadTask_dbo.sysBpmsTask_TaskID]
+GO
+ALTER TABLE [sysBpmsThreadTask]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsThreadTask_dbo.sysBpmsThread_ThreadID] FOREIGN KEY([ThreadID])
+REFERENCES [sysBpmsThread] ([ID])
+GO
+ALTER TABLE [sysBpmsThreadTask] CHECK CONSTRAINT [FK_dbo.sysBpmsThreadTask_dbo.sysBpmsThread_ThreadID]
+GO
+ALTER TABLE [sysBpmsThreadTask]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsThreadTask_dbo.sysBpmsUser_OwnerUserID] FOREIGN KEY([OwnerUserID])
+REFERENCES [sysBpmsUser] ([ID])
+GO
+ALTER TABLE [sysBpmsThreadTask] CHECK CONSTRAINT [FK_dbo.sysBpmsThreadTask_dbo.sysBpmsUser_OwnerUserID]
+GO
+ALTER TABLE [sysBpmsThreadVariable]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsThreadVariable_dbo.sysBpmsThread_ThreadID] FOREIGN KEY([ThreadID])
+REFERENCES [sysBpmsThread] ([ID])
+GO
+ALTER TABLE [sysBpmsThreadVariable] CHECK CONSTRAINT [FK_dbo.sysBpmsThreadVariable_dbo.sysBpmsThread_ThreadID]
+GO
+ALTER TABLE [sysBpmsThreadVariable]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsThreadVariable_dbo.sysBpmsVariable_VariableID] FOREIGN KEY([VariableID])
+REFERENCES [sysBpmsVariable] ([ID])
+GO
+ALTER TABLE [sysBpmsThreadVariable] CHECK CONSTRAINT [FK_dbo.sysBpmsThreadVariable_dbo.sysBpmsVariable_VariableID]
+GO
+ALTER TABLE [sysBpmsVariable]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsVariable_dbo.sysBpmsApplicationPage_ApplicationPageID] FOREIGN KEY([ApplicationPageID])
+REFERENCES [sysBpmsApplicationPage] ([ID])
+GO
+ALTER TABLE [sysBpmsVariable] CHECK CONSTRAINT [FK_dbo.sysBpmsVariable_dbo.sysBpmsApplicationPage_ApplicationPageID]
+GO
+ALTER TABLE [sysBpmsVariable]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsVariable_dbo.sysBpmsDBConnection_DBConnectionID] FOREIGN KEY([DBConnectionID])
+REFERENCES [sysBpmsDBConnection] ([ID])
+GO
+ALTER TABLE [sysBpmsVariable] CHECK CONSTRAINT [FK_dbo.sysBpmsVariable_dbo.sysBpmsDBConnection_DBConnectionID]
+GO
+ALTER TABLE [sysBpmsVariable]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsVariable_dbo.sysBpmsEntityDef_EntityDefID] FOREIGN KEY([EntityDefID])
+REFERENCES [sysBpmsEntityDef] ([ID])
+GO
+ALTER TABLE [sysBpmsVariable] CHECK CONSTRAINT [FK_dbo.sysBpmsVariable_dbo.sysBpmsEntityDef_EntityDefID]
+GO
+ALTER TABLE [sysBpmsVariable]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsVariable_dbo.sysBpmsProcess_ProcessID] FOREIGN KEY([ProcessID])
+REFERENCES [sysBpmsProcess] ([ID])
+GO
+ALTER TABLE [sysBpmsVariable] CHECK CONSTRAINT [FK_dbo.sysBpmsVariable_dbo.sysBpmsProcess_ProcessID]
+GO
+ALTER TABLE [sysBpmsVariableDependency]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsVariableDependency_dbo.sysBpmsVariable_DependentVariableID] FOREIGN KEY([DependentVariableID])
+REFERENCES [sysBpmsVariable] ([ID])
+GO
+ALTER TABLE [sysBpmsVariableDependency] CHECK CONSTRAINT [FK_dbo.sysBpmsVariableDependency_dbo.sysBpmsVariable_DependentVariableID]
+GO
+ALTER TABLE [sysBpmsVariableDependency]  WITH CHECK ADD  CONSTRAINT [FK_dbo.sysBpmsVariableDependency_dbo.sysBpmsVariable_ToVariableID] FOREIGN KEY([ToVariableID])
+REFERENCES [sysBpmsVariable] ([ID])
+GO
+ALTER TABLE [sysBpmsVariableDependency] CHECK CONSTRAINT [FK_dbo.sysBpmsVariableDependency_dbo.sysBpmsVariable_ToVariableID]
+GO

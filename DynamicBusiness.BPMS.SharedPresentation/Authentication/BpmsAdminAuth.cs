@@ -27,7 +27,7 @@ namespace DynamicBusiness.BPMS.SharedPresentation
         {
             using (APIAccessService apiAccessService = new APIAccessService())
             {
-                if (DomainUtility.IsTestEnvironment())
+                if (DomainUtility.IsTestEnvironment)
                     return true;
                 else
                 {

@@ -113,6 +113,8 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="Scripts\00.00.01.SqlDataProvider" />
+    <None Include="Scripts\Uninstall.SqlDataProvider" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202102202021525_version_0.resx">

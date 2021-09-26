@@ -31,7 +31,6 @@ namespace DynamicBusiness.BPMS.Domain
                 return attrElement.Value;
             else
                 return string.Empty;
-            //throw new Exception("There isn't any " + attrTagName + " for element");
         }
 
         public static T To<T>(this IConvertible obj)
@@ -68,26 +67,11 @@ namespace DynamicBusiness.BPMS.Domain
         {
             int OutInt = 0;
             if (!string.IsNullOrEmpty(DomainUtility.toString(obj)))
-                if (!int.TryParse(DomainUtility.enNumbers(DomainUtility.toString(obj)), out OutInt))
+                if (!int.TryParse(DomainUtility.toString(obj), out OutInt))
                     OutInt = 0;
             return OutInt;
         }
-
-        public static string enNumbers(string faNumbers)
-        {
-            return faNumbers
-                .Replace("۰", "0")
-                .Replace("۱", "1")
-                .Replace("۲", "2")
-                .Replace("۳", "3")
-                .Replace("۴", "4")
-                .Replace("۵", "5")
-                .Replace("۶", "6")
-                .Replace("۷", "7")
-                .Replace("۸", "8")
-                .Replace("۹", "9");
-        }
-
+         
         public static decimal toDecimal(object obj)
         {
             decimal OutDecimal = 0;
@@ -96,7 +80,7 @@ namespace DynamicBusiness.BPMS.Domain
             {
                 obj = obj.ToString().Replace(",", "").Replace("،", "").Replace("/", ".");
                 System.Globalization.CultureInfo culInfo = new System.Globalization.CultureInfo("en-GB", true);
-                if (!decimal.TryParse(DomainUtility.enNumbers(DomainUtility.toString(obj)), NumberStyles.AllowDecimalPoint, culInfo, out OutDecimal))
+                if (!decimal.TryParse(DomainUtility.toString(obj), NumberStyles.AllowDecimalPoint, culInfo, out OutDecimal))
                     return 0;
             }
             else
@@ -117,11 +101,8 @@ namespace DynamicBusiness.BPMS.Domain
             return strLang;
         }
 
-        public static bool IsTestEnvironment()
-        {
-            return false;
-        }
-
+        public static bool IsTestEnvironment = false;
+         
         public static string[] GetRegularValue(string Start, string End, string Value)
         {
             Value = Value ?? string.Empty;
@@ -143,19 +124,13 @@ namespace DynamicBusiness.BPMS.Domain
             return Regex.Replace(value, Start + "(.*?)" + End, newVal);
         }
 
-        public static object GetPropValue(object src, string propName)
-        {
-            return src.GetType().GetProperty(propName)?.GetValue(src, null);
-        }
+        public static object GetPropValue(object src, string propName) => src.GetType().GetProperty(propName)?.GetValue(src, null);
 
-        public static List<string> GetParameters(string sqlQuery)
-        {
-            return Regex.Matches(sqlQuery, @"\@[\w.]+").Cast<Match>().Select(m => m.Value).ToList();
-        }
+        public static List<string> GetParameters(string sqlQuery) => Regex.Matches(sqlQuery, @"\@[\w.]+").Cast<Match>().Select(m => m.Value).ToList();
 
         public static string CreateApiSessionID(string sessionId, string ipAddress)
         {
-            //it may change and use ipAddress as well
+            //It may change and use ipAddress as well
             return sessionId;
         }
 
@@ -173,5 +148,6 @@ namespace DynamicBusiness.BPMS.Domain
             }
             return ConnectionString;
         }
+        public static void SetConnectionString(string value) => ConnectionString = value;
     }
 }

@@ -15,22 +15,22 @@ namespace DynamicBusiness.BPMS.EngineApi.Controllers
         [HttpPost]
         public BeginTaskResponseModel BeginTask(Guid processID)
         {
-            List<QueryModel> baseQueryModel = base.MyRequest.GetList(base.IsEncrypted, base.ApiSessionId).ToList();
+            List<QueryModel> baseQueryModel = base.MyRequest?.GetList(base.IsEncrypted, base.ApiSessionId).ToList();
             using (ProcessEngine processEngine = new ProcessEngine(new EngineSharedModel(currentThread: null, currentProcessID: processID, baseQueryModel: baseQueryModel, currentUserName: base.ClientUserName, apiSessionId: base.ApiSessionId)))
             {
                 using (ThreadTaskService threadTaskService = new ThreadTaskService())
                 {
                     using (UserService userService = new UserService())
                     {
-                        var result = processEngine.BegingProcess(userService.GetInfo(base.ClientUserName)?.ID);
-                        if (result.Item1.IsSuccess)
+                        (ResultOperation result, List<MessageModel> msgModel) = processEngine.BegingProcess(userService.GetInfo(base.ClientUserName)?.ID);
+                        if (result.IsSuccess)
                         {
-                            sysBpmsThreadTask threadTask = threadTaskService.GetList(((sysBpmsThread)result.Item1.CurrentObject).ID, (int)sysBpmsTask.e_TypeLU.UserTask, null, (int)sysBpmsThreadTask.e_StatusLU.New).LastOrDefault();
-                            return new BeginTaskResponseModel(string.Join(",", result.Item2), true, ((sysBpmsThread)result.Item1.CurrentObject)?.ID, threadTask?.ID); ;
+                            sysBpmsThreadTask threadTask = threadTaskService.GetList(((sysBpmsThread)result.CurrentObject).ID, (int)sysBpmsTask.e_TypeLU.UserTask, null, (int)sysBpmsThreadTask.e_StatusLU.New).LastOrDefault();
+                            return new BeginTaskResponseModel(string.Join(",", msgModel), true, ((sysBpmsThread)result.CurrentObject)?.ID, threadTask?.ID); ;
                         }
                         else
                         {
-                            return new BeginTaskResponseModel(result.Item1.GetErrors(), false, null, null);
+                            return new BeginTaskResponseModel(result.GetErrors(), false, null, null);
                         }
                     }
                 }

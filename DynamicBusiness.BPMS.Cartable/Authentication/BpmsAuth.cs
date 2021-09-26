@@ -23,7 +23,7 @@ namespace DynamicBusiness.BPMS.Cartable
         {
             using (APIAccessService apiAccessService = new APIAccessService())
             {
-                return DomainUtility.IsTestEnvironment() ? true :
+                return DomainUtility.IsTestEnvironment ? true :
                     FormTokenUtility.ValidateFormToken(context.ActionContext.RequestContext.Url.Request.GetHttpContext().Request.QueryString[FormTokenUtility.FormToken], HttpContext.Current.Session.SessionID);
             }
         }

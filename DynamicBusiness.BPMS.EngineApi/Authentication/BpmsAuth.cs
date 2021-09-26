@@ -22,7 +22,7 @@ namespace DynamicBusiness.BPMS.EngineApi
     {
         public override bool IsAuthorized(AuthFilterContext context)
         {
-            if (DomainUtility.IsTestEnvironment())
+            if (DomainUtility.IsTestEnvironment)
                 return true;
             using (APIAccessService apiAccessService = new APIAccessService())
             {

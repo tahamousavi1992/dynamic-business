@@ -125,10 +125,10 @@ namespace DynamicBusiness.BPMS.SharedPresentation
             if (!string.IsNullOrWhiteSpace(token))
                 client.DefaultRequestHeaders.Add("token", token);
 
-            if (!string.IsNullOrWhiteSpace(token))
+            if (!string.IsNullOrWhiteSpace(userName))
                 client.DefaultRequestHeaders.Add("userName", userName);
 
-            if (!string.IsNullOrWhiteSpace(token))
+            if (!string.IsNullOrWhiteSpace(clientIP))
                 client.DefaultRequestHeaders.Add("clientIP", clientIP);
 
             if (!string.IsNullOrWhiteSpace(clientId))

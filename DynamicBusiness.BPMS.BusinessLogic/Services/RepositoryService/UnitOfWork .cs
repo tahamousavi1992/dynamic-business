@@ -22,6 +22,10 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         {
             this.Context = new Db_BPMSEntities();
         }
+        public UnitOfWork(Db_BPMSEntities db_BPMS)
+        {
+            this.Context = db_BPMS;
+        }
         public TEntity Repository<TEntity>() where TEntity : class
         {
             if (_repositories == null)
@@ -34,6 +38,20 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
             return (TEntity)_repositories[TypeName];
         }
+
+        public TEntity Repository<TEntity>(object TFactory) where TEntity : class
+        {
+            if (_repositories == null)
+                _repositories = new Hashtable();
+
+            string TypeName = typeof(TEntity).Name;
+
+            if (_repositories.ContainsKey(TypeName)) return (TEntity)_repositories[TypeName];
+            _repositories.Add(TypeName, TFactory);
+
+            return (TEntity)_repositories[TypeName];
+        }
+
         public void BeginTransaction()
         {
             this.beginnedTransaction = true;

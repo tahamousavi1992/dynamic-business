@@ -92,12 +92,12 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         public virtual DbSet<sysBpmsVariable> sysBpmsVariables { get; set; }
         public virtual DbSet<sysBpmsVariableDependency> sysBpmsVariableDependencies { get; set; }
         /// <summary>
-        /// It must be removed or commented when running add-migration command
+        /// It must be removed/commented when running add-migration command
         /// </summary>
         public virtual DbSet<sysBpmsSplit_Result> sysBpmsSplit_Results { get; set; }
 
         /// <summary>
-        /// DbFunction attribute must be removed or commented when running add-migration command
+        /// DbFunction attribute must be removed/commented when running add-migration command
         /// </summary>
         [DbFunction(nameof(Db_BPMSEntities), "sysBpmsSplit")]
         public virtual IQueryable<sysBpmsSplit_Result> sysBpmsSplit(string rowData, string delimeter)

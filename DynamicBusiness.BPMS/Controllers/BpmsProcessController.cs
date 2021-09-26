@@ -43,7 +43,10 @@ namespace DynamicBusiness.BPMS.Controllers
             using (ProcessService processService = new ProcessService())
             {
                 ResultOperation resultOperation = processService.Add(processDTO.Name, processDTO.Description, base.userName, processDTO.ParallelCountPerUser, processDTO.ProcessGroupID, processDTO.TypeLU);
-                return new PostMethodMessage(SharedLang.Get("Success.Text"), DisplayMessageType.success, ((sysBpmsProcess)resultOperation.CurrentObject).ID.ToString());
+                if (resultOperation.IsSuccess)
+                    return new PostMethodMessage(SharedLang.Get("Success.Text"), DisplayMessageType.success, ((sysBpmsProcess)resultOperation.CurrentObject).ID.ToString());
+                else
+                    return new PostMethodMessage(resultOperation.GetErrors(), DisplayMessageType.error);
             }
         }
 

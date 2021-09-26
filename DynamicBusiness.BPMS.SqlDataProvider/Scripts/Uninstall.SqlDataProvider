@@ -1,0 +1,69 @@
+﻿drop FUNCTION sysBpmsSplit
+GO
+drop table sysBpmsConfiguration
+GO
+drop table sysBpmsLURow
+GO
+drop table sysBpmsLUTable
+GO
+drop table sysBpmsDocument
+GO
+drop table sysBpmsDocumentDef
+GO
+drop table sysBpmsDocumentFolder
+GO
+drop table sysBpmsThreadVariable
+GO
+drop table sysBpmsDepartmentMember
+GO
+drop table sysBpmsAPIAccess
+GO
+drop table sysBpmsEmailAccount
+GO
+drop table sysBpmsVariableDependency
+GO
+drop table sysBpmsVariable
+GO
+drop table sysBpmsThreadEvent
+GO
+drop table sysBpmsApplicationPageAccess
+GO
+drop table sysBpmsEntityDef
+GO
+drop table sysBpmsStep
+GO
+drop table sysBpmsThreadTask
+GO
+drop table sysBpmsTask
+GO
+drop table sysBpmsThread
+GO
+drop table sysBpmsLane
+GO
+drop table sysBpmsCondition
+GO
+drop table sysBpmsGateway
+GO
+drop table sysBpmsEvent
+GO
+drop table sysBpmsSequenceFlow
+GO
+drop table sysBpmsDBConnection
+GO
+drop table sysBpmsMessageType
+GO
+drop table sysBpmsDynamicForm
+GO
+drop table sysBpmsApplicationPage
+GO 
+drop table sysBpmsElement
+GO
+drop table sysBpmsUser
+GO
+drop table sysBpmsDepartment
+GO
+drop table sysBpmsProcess
+GO
+drop table sysBpmsProcessGroup
+GO
+ 

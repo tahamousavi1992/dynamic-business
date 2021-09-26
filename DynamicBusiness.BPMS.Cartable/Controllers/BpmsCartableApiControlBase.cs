@@ -34,7 +34,7 @@ namespace DynamicBusiness.BPMS.Cartable
                 //api call using toke header,which is password, or formToken ,which is a parameter like antiforgerytoken cosist of sessionId and mainDynamicFormId encripted by sessionId. 
                 if (!this.MyRequest.Headers.AllKeys.Contains("token"))
                 {
-                    this.ClientUserName = DomainUtility.IsTestEnvironment() ? "bpms_expert" : base.UserInfo.Username;
+                    this.ClientUserName = DomainUtility.IsTestEnvironment ? "bpms_expert" : base.UserInfo.Username;
                     this.ClientFormToken = this.MyRequest.QueryString[FormTokenUtility.FormToken].ToStringObj();
                     this.ClientId = HttpContext.Current.Session.SessionID;
                     this.ApiSessionId = DomainUtility.CreateApiSessionID(this.ClientId, this.ClientIp);

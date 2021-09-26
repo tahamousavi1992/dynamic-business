@@ -19,6 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicBusiness.BPMS.Single
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicBusiness.BPMS.EngineApi", "DynamicBusiness.BPMS.EngineApi\DynamicBusiness.BPMS.EngineApi.csproj", "{B984ADFF-E68C-48FA-8C2D-02E8E2C9FFE8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{1B7A163B-2662-44AC-8651-A8290DC67394}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bpms.BusinessLogic.Test", "Tests\Bpms.BusinessLogic.Test\Bpms.BusinessLogic.Test.csproj", "{E26F8D27-FEF0-4D4B-81D9-A0412163CC8F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,9 +61,16 @@ Global
 		{B984ADFF-E68C-48FA-8C2D-02E8E2C9FFE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B984ADFF-E68C-48FA-8C2D-02E8E2C9FFE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B984ADFF-E68C-48FA-8C2D-02E8E2C9FFE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E26F8D27-FEF0-4D4B-81D9-A0412163CC8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E26F8D27-FEF0-4D4B-81D9-A0412163CC8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E26F8D27-FEF0-4D4B-81D9-A0412163CC8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E26F8D27-FEF0-4D4B-81D9-A0412163CC8F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E26F8D27-FEF0-4D4B-81D9-A0412163CC8F} = {1B7A163B-2662-44AC-8651-A8290DC67394}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5FFCD6B8-E0A2-4391-B28F-FE8ADBFA3D00}

@@ -28,7 +28,7 @@ namespace DynamicBusiness.BPMS.SingleAction
                 return HttpContext.Current.Request;
             }
         }
-        protected string ClientUserName { get { return DomainUtility.IsTestEnvironment() ? "bpms_expert" : UserInfo?.Username; } }
+        protected string ClientUserName { get { return DomainUtility.IsTestEnvironment ? "bpms_expert" : UserInfo?.Username; } }
         protected string GetRedirectUrl(RedirectUrlModel redirectModel)
         {
             if (redirectModel != null)
