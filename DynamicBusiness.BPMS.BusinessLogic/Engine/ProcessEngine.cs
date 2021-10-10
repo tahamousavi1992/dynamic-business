@@ -25,26 +25,59 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
         }
 
-        /// <summary>
-        /// this method returns Processes available for users according to their access conditions.
-        /// </summary>
-        public List<sysBpmsProcess> GetAvailableProccess(Guid UserID)
+        public bool CanBeginProcess(Guid? userID, sysBpmsProcess process)
         {
             List<Guid> removedItems = new List<Guid>();
-            List<Domain.sysBpmsTask> taskList = this.UnitOfWork.Repository<IProcessRepository>().GetAvailableProccess(UserID);
-            List<sysBpmsDepartmentMember> rolelist = new DepartmentMemberService(base.UnitOfWork).GetList(null, null, UserID).ToList();
+            if (process.StatusLU != (int)sysBpmsProcess.Enum_StatusLU.Published)
+                return false;
+            process.BeginTasks.Split(',').Where(c => !string.IsNullOrWhiteSpace(c)).ToList();
+
+            List<Domain.sysBpmsTask> taskList = this.UnitOfWork.Repository<ITaskRepository>().GetListBeginTasks(process.ID);
+            List<sysBpmsDepartmentMember> rolelist = userID.HasValue ? new DepartmentMemberService(base.UnitOfWork).GetList(null, null, userID).ToList() : null;
+            foreach (var task in taskList)
+            {
+                if (task.UserTaskRuleModel?.AccessType == (int)UserTaskRuleModel.e_UserAccessType.Static)
+                {
+                    if ((task.OwnerTypeLU == (int)Domain.sysBpmsTask.e_OwnerTypeLU.User && userID.HasValue && task.UserID.Contains(userID.ToString())) ||
+                       (task.OwnerTypeLU == (int)Domain.sysBpmsTask.e_OwnerTypeLU.Role &&
+                       (task.RoleName == string.Empty
+                       || task.RoleName == (",0:" + (int)sysBpmsDepartmentMember.e_RoleLU.Requester + ",")//it means that everyone can start this proccess.
+                       || rolelist?.Count(c => task.RoleName.Split(',').Any(f => f == ("0:" + c.RoleLU.ToString().Trim()) || f == (c.DepartmentID.ToString() + ":" + c.RoleLU.ToString().Trim()))) > 0)
+                       ))
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    TaskEngine taskEngine = new TaskEngine(new EngineSharedModel(currentThread: null, currentProcessID: process.ID, baseQueryModel: base.EngineSharedModel.BaseQueryModel, currentUserName: base.EngineSharedModel.CurrentUserName, apiSessionId: base.EngineSharedModel.ApiSessionID), this.UnitOfWork);
+                    if (taskEngine.CheckUserAccess(task, userID, rolelist))
+                        return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// This method returns Processes available for users according to their access conditions.
+        /// </summary>
+        public List<sysBpmsProcess> GetAvailableProccess(Guid userID)
+        {
+            List<Guid> removedItems = new List<Guid>();
+            List<Domain.sysBpmsTask> taskList = this.UnitOfWork.Repository<IProcessRepository>().GetAvailableProccess(userID);
+            List<sysBpmsDepartmentMember> rolelist = new DepartmentMemberService(base.UnitOfWork).GetList(null, null, userID).ToList();
             ThreadService threadService = new ThreadService(base.UnitOfWork);
-            //remove exceeded paralled count per user
+            //Remove exceeded paralled count per user
             foreach (Domain.sysBpmsTask item in taskList.Where(c => c.Element.Process.ParallelCountPerUser > 0))
             {
-                if (UserID != Guid.Empty && threadService.GetCountActive(UserID, item.Element.ProcessID) >= item.Element.Process.ParallelCountPerUser)
+                if (userID != Guid.Empty && threadService.GetCountActive(userID, item.Element.ProcessID) >= item.Element.Process.ParallelCountPerUser)
                     removedItems.Add(item.ID);
             }
-            //remove items that their task is evaluated by Access Code and user's roles and ID is not included in returned method.
+            //Remove items that their task is evaluated by Access Code and user's roles and ID is not included in returned method.
             foreach (Domain.sysBpmsTask item in taskList.Where(c => c.UserTaskRuleModel?.AccessType != null && c.UserTaskRuleModel?.AccessType != (int)UserTaskRuleModel.e_UserAccessType.Static))
             {
                 TaskEngine taskEngine = new TaskEngine(new EngineSharedModel(currentThread: null, currentProcessID: item.Element.ProcessID, baseQueryModel: base.EngineSharedModel.BaseQueryModel, currentUserName: base.EngineSharedModel.CurrentUserName, apiSessionId: base.EngineSharedModel.ApiSessionID), this.UnitOfWork);
-                if (!taskEngine.CheckUserAccess(item, UserID, rolelist))
+                if (!taskEngine.CheckUserAccess(item, userID, rolelist))
                 {
                     removedItems.Add(item.ID);
                 }
@@ -219,6 +252,9 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                     if (process.StatusLU != (int)sysBpmsProcess.Enum_StatusLU.Published)
                         resultOperation.AddError(LangUtility.Get("FailedIsNotPublished.Text", "Engine"));
 
+                    if(!this.CanBeginProcess(userID, process))
+                        resultOperation.AddError(LangUtility.Get("AccessDeniedToBeginProcess.Text", "Engine"));
+
                     if (process.ParallelCountPerUser > 0)
                     {
                         if (userID.HasValue && userID != Guid.Empty && new ThreadService(base.UnitOfWork).GetCountActive(userID.Value, process.ID) >= process.ParallelCountPerUser)
@@ -227,6 +263,10 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
                     if (resultOperation.IsSuccess)
                     {
+                        if (userID.HasValue)
+                        {
+
+                        }
                         this.BeginTransaction();
 
                         sysBpmsThread thread = new sysBpmsThread();
@@ -379,7 +419,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 }
             }
         }
-         
+
         #region .:: private methods ::.
 
         private ResultOperation GetRecursiveElement(sysBpmsEvent _event, bool isFirstTask, sysBpmsThreadTask currentThreadTask)

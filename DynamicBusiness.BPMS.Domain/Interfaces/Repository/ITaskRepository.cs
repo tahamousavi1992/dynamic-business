@@ -14,5 +14,6 @@ namespace DynamicBusiness.BPMS.Domain
         sysBpmsTask GetInfo(Guid id);
         sysBpmsTask GetInfo(string elementId, Guid processId);
         List<sysBpmsTask> GetList(int? typeLU, Guid? processID);
+        List<Domain.sysBpmsTask> GetListBeginTasks(Guid processID);
     }
 }

@@ -109,13 +109,13 @@ namespace DynamicBusiness.BPMS.BusinessLogic
             return list.Select(c => c.ElementID).ToList();
         }
 
-        public List<sysBpmsTask> GetAvailableProccess(Guid UserID)
+        public List<sysBpmsTask> GetAvailableProccess(Guid userID)
         {
             string staticAccessType = $"<AccessType>{(int)UserTaskRuleModel.e_UserAccessType.Static}</AccessType>";
-            string userIdString = UserID.ToString();
+            string userIdString = userID.ToString();
             List<sysBpmsTask> items = (from T in this.Context.sysBpmsTasks
                                        join P in this.Context.sysBpmsProcesses on T.ProcessID equals P.ID
-                                       join D in this.Context.sysBpmsDepartmentMembers on UserID equals D.UserID into Dlist
+                                       join D in this.Context.sysBpmsDepartmentMembers on userID equals D.UserID into Dlist
                                        join E in this.Context.sysBpmsEvents on P.ID equals E.ProcessID into Elist
                                        where
                                        (P.TypeLU == (int)sysBpmsProcess.e_TypeLU.General) &&

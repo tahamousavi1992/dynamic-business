@@ -18,9 +18,9 @@ namespace Bpms.BusinessLogic.Test
 
         public void SeedAll()
         {
-            this.SeedProcesses();
             this.SeedUsersDepartments();
             this.SeedDocuments();
+            this.SeedProcesses();
         }
 
         public void SeedProcesses()
@@ -425,8 +425,7 @@ namespace Bpms.BusinessLogic.Test
                     Position = 1,
                 },
             });
-
-
+             
             //Set Gateways
             this.db.sysBpmsGateways.AddRange(new List<sysBpmsGateway>()
             {

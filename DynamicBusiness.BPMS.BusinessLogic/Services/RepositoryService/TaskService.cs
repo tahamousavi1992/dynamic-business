@@ -87,13 +87,20 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         {
             return this.UnitOfWork.Repository<ITaskRepository>().GetInfo(ID);
         }
+
         public Domain.sysBpmsTask GetInfo(string elementId, Guid processId)
         {
             return this.UnitOfWork.Repository<ITaskRepository>().GetInfo(elementId, processId);
         }
+
         public List<Domain.sysBpmsTask> GetList(int? typeLU, Guid? processID)
         {
             return this.UnitOfWork.Repository<ITaskRepository>().GetList(typeLU, processID);
+        }
+
+        public List<Domain.sysBpmsTask> GetListBeginTasks(Guid processID)
+        {
+            return this.UnitOfWork.Repository<ITaskRepository>().GetListBeginTasks(processID);
         }
 
         public ResultOperation Update(Guid processID, WorkflowProcess _WorkflowProcess)

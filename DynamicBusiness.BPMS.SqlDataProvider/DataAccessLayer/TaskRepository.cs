@@ -62,5 +62,16 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                  (!typeLU.HasValue || d.TypeLU == typeLU) &&
                  (!processID.HasValue || d.ProcessID == processID)).AsNoTracking().ToList();
         }
+
+        public List<Domain.sysBpmsTask> GetListBeginTasks(Guid processID)
+        { 
+            List<sysBpmsTask> items = (from T in this.Context.sysBpmsTasks
+                                       join P in this.Context.sysBpmsProcesses on T.ProcessID equals P.ID 
+                                       where
+                                       T.ProcessID == processID &&
+                                       (this.Context.sysBpmsSplit(P.BeginTasks, ",").Any(c => c.Data == T.ElementID))
+                                       select T).OrderBy(d => d.ID).Include(c => c.Element).AsNoTracking().ToList();
+            return items;
+        }
     }
 }
