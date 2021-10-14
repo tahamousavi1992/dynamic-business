@@ -30,7 +30,7 @@ namespace Bpms.BusinessLogic.Test
                     using (UserService userService = new UserService())
                     {
                         //Act 
-                        (ResultOperation result, List<MessageModel> messageList) = processEngine.BegingProcess(userService.GetInfo(userName)?.ID);
+                        (ResultOperation result, List<MessageModel> messageList) = processEngine.StartProcess(userService.GetInfo(userName)?.ID);
                         //Assert
                         Assert.True(result.IsSuccess);
                         sysBpmsThreadTask threadTask = threadTaskService.GetList(((sysBpmsThread)result.CurrentObject).ID, (int)sysBpmsTask.e_TypeLU.UserTask, null, (int)sysBpmsThreadTask.e_StatusLU.New).LastOrDefault();
@@ -59,7 +59,7 @@ namespace Bpms.BusinessLogic.Test
                     using (UserService userService = new UserService())
                     {
                         //Act 
-                        (ResultOperation result, List<MessageModel> messageList) = processEngine.BegingProcess(userService.GetInfo(userName)?.ID);
+                        (ResultOperation result, List<MessageModel> messageList) = processEngine.StartProcess(userService.GetInfo(userName)?.ID);
                         //Assert
                         Assert.False(result.IsSuccess); 
                         Assert.Null(result.CurrentObject);

@@ -24,40 +24,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         {
 
         }
-
-        public bool CanBeginProcess(Guid? userID, sysBpmsProcess process)
-        {
-            List<Guid> removedItems = new List<Guid>();
-            if (process.StatusLU != (int)sysBpmsProcess.Enum_StatusLU.Published)
-                return false;
-            process.BeginTasks.Split(',').Where(c => !string.IsNullOrWhiteSpace(c)).ToList();
-
-            List<Domain.sysBpmsTask> taskList = this.UnitOfWork.Repository<ITaskRepository>().GetListBeginTasks(process.ID);
-            List<sysBpmsDepartmentMember> rolelist = userID.HasValue ? new DepartmentMemberService(base.UnitOfWork).GetList(null, null, userID).ToList() : null;
-            foreach (var task in taskList)
-            {
-                if (task.UserTaskRuleModel?.AccessType == (int)UserTaskRuleModel.e_UserAccessType.Static)
-                {
-                    if ((task.OwnerTypeLU == (int)Domain.sysBpmsTask.e_OwnerTypeLU.User && userID.HasValue && task.UserID.Contains(userID.ToString())) ||
-                       (task.OwnerTypeLU == (int)Domain.sysBpmsTask.e_OwnerTypeLU.Role &&
-                       (task.RoleName == string.Empty
-                       || task.RoleName == (",0:" + (int)sysBpmsDepartmentMember.e_RoleLU.Requester + ",")//it means that everyone can start this proccess.
-                       || rolelist?.Count(c => task.RoleName.Split(',').Any(f => f == ("0:" + c.RoleLU.ToString().Trim()) || f == (c.DepartmentID.ToString() + ":" + c.RoleLU.ToString().Trim()))) > 0)
-                       ))
-                    {
-                        return true;
-                    }
-                }
-                else
-                {
-                    TaskEngine taskEngine = new TaskEngine(new EngineSharedModel(currentThread: null, currentProcessID: process.ID, baseQueryModel: base.EngineSharedModel.BaseQueryModel, currentUserName: base.EngineSharedModel.CurrentUserName, apiSessionId: base.EngineSharedModel.ApiSessionID), this.UnitOfWork);
-                    if (taskEngine.CheckUserAccess(task, userID, rolelist))
-                        return true;
-                }
-            }
-            return false;
-        }
-
+         
         /// <summary>
         /// This method returns Processes available for users according to their access conditions.
         /// </summary>
@@ -232,80 +199,51 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
             return new Tuple<ResultOperation, List<MessageModel>>(resultOperation, this.MessageList);
         }
-
+ 
         /// <summary>
-        /// this method starts a process
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="listDefaultVariables">If this is called from senderEvent it is filled by table value parameter</param>
-        public Tuple<ResultOperation, List<MessageModel>> BegingProcess(Guid? userID, Dictionary<string, object> listDefaultVariables = null, bool fromSendMessageEvent = false)
+        /// This method starts a process
+        /// </summary> 
+        /// <param name="defaultVariablesList">If filled, it means that when a process is started, some variable must be filled (like when a senderEvent call this method).</param>
+        public Tuple<ResultOperation, List<MessageModel>> StartProcessBySystem(Dictionary<string, object> defaultVariablesList = null)
         {
-            ResultOperation resultOperation = new ResultOperation();
-            this.MessageList = new List<MessageModel>();
+            ResultOperation resultOperation;
             try
             {
-                sysBpmsProcess process = new ProcessService(base.UnitOfWork).GetInfo(base.EngineSharedModel.CurrentProcessID.Value);
-                if (!process.AllowNextFlow())
-                    resultOperation.AddError(LangUtility.Get("FailedContinueStatus.Text", "Engine"));
-                else
+                (resultOperation, MessageList) = this.Start(null, defaultVariablesList);
+                if (resultOperation.IsSuccess)
                 {
-                    if (process.StatusLU != (int)sysBpmsProcess.Enum_StatusLU.Published)
-                        resultOperation.AddError(LangUtility.Get("FailedIsNotPublished.Text", "Engine"));
+                    this.UnitOfWork.Save();
 
-                    if(!this.CanBeginProcess(userID, process))
-                        resultOperation.AddError(LangUtility.Get("AccessDeniedToBeginProcess.Text", "Engine"));
-
-                    if (process.ParallelCountPerUser > 0)
+                    sysBpmsThreadTask threadTask = new ThreadTaskService(base.UnitOfWork).GetList(base.EngineSharedModel.CurrentThreadID.Value, (int)sysBpmsTask.e_TypeLU.UserTask, null, (int)sysBpmsThreadTask.e_StatusLU.New).LastOrDefault();
+                    if (threadTask != null && threadTask.OwnerUserID.HasValue)
                     {
-                        if (userID.HasValue && userID != Guid.Empty && new ThreadService(base.UnitOfWork).GetCountActive(userID.Value, process.ID) >= process.ParallelCountPerUser)
-                            resultOperation.AddError(LangUtility.Get("ExceedingParallel.Text", "Engine"));
-                    }
-
-                    if (resultOperation.IsSuccess)
-                    {
-                        if (userID.HasValue)
-                        {
-
-                        }
-                        this.BeginTransaction();
-
-                        sysBpmsThread thread = new sysBpmsThread();
-                        thread.Update(base.EngineSharedModel.CurrentProcessID.Value, userID, DateTime.Now, null, ThreadService.GetFormattedNumber(), (int)sysBpmsThread.Enum_StatusLU.Draft);
-                        new ThreadEngine(base.EngineSharedModel, base.UnitOfWork).Add(thread);
-                        base.EngineSharedModel.CurrentThread = thread;
-                        base.EngineSharedModel.CurrentThreadID = thread.ID;
-                        //If it is called from a sender event, This is executed.
-                        if (listDefaultVariables != null)
-                        {
-                            foreach (var item in listDefaultVariables.GroupBy(c => c.Key.Split('.')[0]))
-                            {
-                                VariableModel variableModel = new VariableModel(item.Key, new DataModel(item.ToList().ToDictionary(c => c.Key, c => c.Value)));
-                                new DataManageEngine(base.EngineSharedModel, base.UnitOfWork).SaveIntoDataBase(variableModel, null);
-                            }
-                        }
-                        sysBpmsEvent _event = new EventService(this.UnitOfWork).GetList((int)sysBpmsEvent.e_TypeLU.StartEvent, base.EngineSharedModel.CurrentProcessID, "", null).LastOrDefault();
-                        resultOperation = this.GetRecursiveElement(_event, true, null);
-                        if (!resultOperation.IsSuccess)
-                            resultOperation.AddError(LangUtility.Get("Failed.Text", "Engine"));
-
-                        //If it is called from a sender event, This is executed.
-                        if (!userID.HasValue && fromSendMessageEvent)
-                        {
-                            //if a task start systemic from a  api or sendMessage ,it's thread userId must be set by threadTask's OwnerUserID.
-                            sysBpmsThreadTask threadTask = new ThreadTaskService(base.UnitOfWork).GetList(base.EngineSharedModel.CurrentThreadID.Value, (int)sysBpmsTask.e_TypeLU.UserTask, null, (int)sysBpmsThreadTask.e_StatusLU.New).LastOrDefault();
-                            if (threadTask != null && threadTask.OwnerUserID.HasValue)
-                            {
-                                base.EngineSharedModel.CurrentThread.Update(userID: threadTask.OwnerUserID);
-                                new ThreadService(base.UnitOfWork).Update(base.EngineSharedModel.CurrentThread);
-                            }
-                        }
-
-                        if (resultOperation.IsSuccess)
-                            this.UnitOfWork.Save();
-
-                        resultOperation.CurrentObject = thread;
+                        base.EngineSharedModel.CurrentThread.Update(userID: threadTask.OwnerUserID);
+                        new ThreadService(base.UnitOfWork).Update(base.EngineSharedModel.CurrentThread);
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                return new Tuple<ResultOperation, List<MessageModel>>(base.ExceptionHandler(ex), this.MessageList);
+            }
+            base.FinalizeService(resultOperation);
+
+            return new Tuple<ResultOperation, List<MessageModel>>(resultOperation, this.MessageList);
+
+        }
+
+        /// <summary>
+        /// This method starts a process
+        /// </summary> 
+        /// <param name="defaultVariablesList">If filled, it means that at the beginning of the process some variable must be filled (like when a senderEvent call this method).</param>
+        public Tuple<ResultOperation, List<MessageModel>> StartProcess(Guid? userID)
+        {
+            ResultOperation resultOperation;
+            try
+            {
+                (resultOperation, MessageList) = this.Start(userID);
+                if (resultOperation.IsSuccess)
+                    this.UnitOfWork.Save();
             }
             catch (Exception ex)
             {
@@ -421,6 +359,90 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         }
 
         #region .:: private methods ::.
+
+        private bool CanStartProcess(Guid? userID, sysBpmsProcess process)
+        {
+            List<Guid> removedItems = new List<Guid>();
+            if (process.StatusLU != (int)sysBpmsProcess.Enum_StatusLU.Published)
+                return false;
+            process.BeginTasks.Split(',').Where(c => !string.IsNullOrWhiteSpace(c)).ToList();
+
+            List<Domain.sysBpmsTask> taskList = this.UnitOfWork.Repository<ITaskRepository>().GetListBeginTasks(process.ID);
+            List<sysBpmsDepartmentMember> rolelist = userID.HasValue ? new DepartmentMemberService(base.UnitOfWork).GetList(null, null, userID).ToList() : null;
+            foreach (var task in taskList)
+            {
+                if (task.UserTaskRuleModel?.AccessType == (int)UserTaskRuleModel.e_UserAccessType.Static)
+                {
+                    if ((task.OwnerTypeLU == (int)Domain.sysBpmsTask.e_OwnerTypeLU.User && userID.HasValue && task.UserID.Contains(userID.ToString())) ||
+                       (task.OwnerTypeLU == (int)Domain.sysBpmsTask.e_OwnerTypeLU.Role &&
+                       (task.RoleName == string.Empty
+                       || task.RoleName == (",0:" + (int)sysBpmsDepartmentMember.e_RoleLU.Requester + ",")//it means that everyone can start this proccess.
+                       || rolelist?.Count(c => task.RoleName.Split(',').Any(f => f == ("0:" + c.RoleLU.ToString().Trim()) || f == (c.DepartmentID.ToString() + ":" + c.RoleLU.ToString().Trim()))) > 0)
+                       ))
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    TaskEngine taskEngine = new TaskEngine(new EngineSharedModel(currentThread: null, currentProcessID: process.ID, baseQueryModel: base.EngineSharedModel.BaseQueryModel, currentUserName: base.EngineSharedModel.CurrentUserName, apiSessionId: base.EngineSharedModel.ApiSessionID), this.UnitOfWork);
+                    if (taskEngine.CheckUserAccess(task, userID, rolelist))
+                        return true;
+                }
+            }
+            return false;
+        }
+
+        private Tuple<ResultOperation, List<MessageModel>> Start(Guid? userID, Dictionary<string, object> defaultVariablesList = null)
+        {
+            ResultOperation resultOperation = new ResultOperation();
+            this.MessageList = new List<MessageModel>();
+
+            sysBpmsProcess process = new ProcessService(base.UnitOfWork).GetInfo(base.EngineSharedModel.CurrentProcessID.Value);
+            if (!process.AllowNextFlow())
+                resultOperation.AddError(LangUtility.Get("FailedContinueStatus.Text", "Engine"));
+            else
+            {
+                if (process.StatusLU != (int)sysBpmsProcess.Enum_StatusLU.Published)
+                    resultOperation.AddError(LangUtility.Get("FailedIsNotPublished.Text", "Engine"));
+
+                if (!this.CanStartProcess(userID, process))
+                    resultOperation.AddError(LangUtility.Get("AccessDeniedToBeginProcess.Text", "Engine"));
+
+                if (process.ParallelCountPerUser > 0)
+                {
+                    if (userID.HasValue && userID != Guid.Empty && new ThreadService(base.UnitOfWork).GetCountActive(userID.Value, process.ID) >= process.ParallelCountPerUser)
+                        resultOperation.AddError(LangUtility.Get("ExceedingParallel.Text", "Engine"));
+                }
+
+                if (resultOperation.IsSuccess)
+                {
+                    this.BeginTransaction();
+
+                    sysBpmsThread thread = new sysBpmsThread();
+                    thread.Update(base.EngineSharedModel.CurrentProcessID.Value, userID, DateTime.Now, null, ThreadService.GetFormattedNumber(), (int)sysBpmsThread.Enum_StatusLU.Draft);
+                    new ThreadEngine(base.EngineSharedModel, base.UnitOfWork).Add(thread);
+                    base.EngineSharedModel.CurrentThread = thread;
+                    base.EngineSharedModel.CurrentThreadID = thread.ID;
+
+                    if (defaultVariablesList != null)
+                    {
+                        foreach (var item in defaultVariablesList.GroupBy(c => c.Key.Split('.')[0]))
+                        {
+                            VariableModel variableModel = new VariableModel(item.Key, new DataModel(item.ToList().ToDictionary(c => c.Key, c => c.Value)));
+                            new DataManageEngine(base.EngineSharedModel, base.UnitOfWork).SaveIntoDataBase(variableModel, null);
+                        }
+                    }
+                    sysBpmsEvent _event = new EventService(this.UnitOfWork).GetList((int)sysBpmsEvent.e_TypeLU.StartEvent, base.EngineSharedModel.CurrentProcessID, "", null).LastOrDefault();
+                    resultOperation = this.GetRecursiveElement(_event, true, null);
+                    if (!resultOperation.IsSuccess)
+                        resultOperation.AddError(LangUtility.Get("Failed.Text", "Engine"));
+
+                    resultOperation.CurrentObject = thread;
+                }
+            }
+            return new Tuple<ResultOperation, List<MessageModel>>(resultOperation, this.MessageList);
+        }
 
         private ResultOperation GetRecursiveElement(sysBpmsEvent _event, bool isFirstTask, sysBpmsThreadTask currentThreadTask)
         {
@@ -857,8 +879,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
 
             return new EngineResponseModel().InitPost(resultOperation, codeBaseShared.MessageList, redirectUrlModel, listDownloadModel: codeBaseShared.ListDownloadModel);
         }
-
-
+         
         #endregion
 
     }

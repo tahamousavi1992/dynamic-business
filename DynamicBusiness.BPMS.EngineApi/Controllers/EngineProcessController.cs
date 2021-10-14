@@ -22,7 +22,7 @@ namespace DynamicBusiness.BPMS.EngineApi.Controllers
                 {
                     using (UserService userService = new UserService())
                     {
-                        (ResultOperation result, List<MessageModel> msgModel) = processEngine.BegingProcess(userService.GetInfo(base.ClientUserName)?.ID);
+                        (ResultOperation result, List<MessageModel> msgModel) = processEngine.StartProcess(userService.GetInfo(base.ClientUserName)?.ID);
                         if (result.IsSuccess)
                         {
                             sysBpmsThreadTask threadTask = threadTaskService.GetList(((sysBpmsThread)result.CurrentObject).ID, (int)sysBpmsTask.e_TypeLU.UserTask, null, (int)sysBpmsThreadTask.e_StatusLU.New).LastOrDefault();

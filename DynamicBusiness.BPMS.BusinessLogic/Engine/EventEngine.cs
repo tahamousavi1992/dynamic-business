@@ -65,7 +65,7 @@ namespace DynamicBusiness.BPMS.BusinessLogic
                 {
                     return listParameter.FirstOrDefault(d => d.Key == c.Name).Value;
                 });
-                new ProcessEngine(new EngineSharedModel(currentThread: null, item.ProcessID, base.EngineSharedModel.BaseQueryModel, base.EngineSharedModel.CurrentUserName, base.EngineSharedModel.ApiSessionID), base.UnitOfWork).BegingProcess(null, listDefaultVariables, true);
+                new ProcessEngine(new EngineSharedModel(currentThread: null, item.ProcessID, base.EngineSharedModel.BaseQueryModel, base.EngineSharedModel.CurrentUserName, base.EngineSharedModel.ApiSessionID), base.UnitOfWork).StartProcessBySystem(listDefaultVariables);
                 return resultOperation;
             }
 
