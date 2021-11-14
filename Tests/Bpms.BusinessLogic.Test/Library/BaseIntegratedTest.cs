@@ -9,24 +9,17 @@ using System.Threading.Tasks;
 namespace Bpms.BusinessLogic.Test
 {
     public class BaseIntegratedTest : IDisposable
-    { 
-        private readonly bool _create_db = false; 
+    {
+        private readonly bool _create_db = false;
 
         public BaseIntegratedTest(bool create_db = true)
         {
             this._create_db = create_db;
             DomainUtility.IsTestEnvironment = true;
-            try
+            if (this._create_db)
             {
-                if (this._create_db)
-                {
-                    DomainUtility.SetConnectionString("Data Source=localhost\\MSSQLSERVER01;Initial Catalog=Test_BPMS;user ID=sa;Password=123;MultipleActiveResultSets=True;");
-                    new Db_BPMSEntities().Database.CreateIfNotExists();
-                }
-            }
-            catch
-            {
-
+                DomainUtility.SetConnectionString("Data Source=localhost\\MSSQLSERVER01;Initial Catalog=Test_BPMS;user ID=sa;Password=123;MultipleActiveResultSets=True;");
+                new Db_BPMSEntities().Database.CreateIfNotExists();
             }
         }
 
@@ -35,6 +28,6 @@ namespace Bpms.BusinessLogic.Test
             if (_create_db)
                 new Db_BPMSEntities().Database.Delete();
         }
-  
+
     }
 }

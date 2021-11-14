@@ -102,7 +102,7 @@ namespace DynamicBusiness.BPMS.Domain
         }
 
         public static bool IsTestEnvironment = false;
-         
+
         public static string[] GetRegularValue(string Start, string End, string Value)
         {
             Value = Value ?? string.Empty;
