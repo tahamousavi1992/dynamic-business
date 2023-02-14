@@ -26,53 +26,52 @@ namespace DynamicBusiness.BPMS.BusinessLogic
         }
 
         public ResultOperation SendEmail(string emailFrom, string password, string smtpAddress, int portNumber,
-               List<string> emailTo, string emailBcc, string emailCc, string Subject, string Body)
+               List<string> emailTo, string emailBcc, string emailCc, string subject, string body)
         {
             ResultOperation resultOperation = new ResultOperation();
-            try
+            if (string.IsNullOrWhiteSpace(emailFrom) || string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(smtpAddress))
             {
-                if (string.IsNullOrWhiteSpace(emailFrom) || string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(smtpAddress))
-                {
-                    resultOperation.AddError("Email Setting is not completed.");
-                    return resultOperation;
-                }
-                bool enableSSL = true;
-                using (MailMessage mail = new MailMessage())
-                {
-                    mail.From = new MailAddress(emailFrom);
-
-                    foreach (var To in emailTo)
-                        if (!string.IsNullOrWhiteSpace(To))
-                            mail.To.Add(To.Trim());
-
-                    foreach (var To in emailBcc.Split(','))
-                        if (!string.IsNullOrWhiteSpace(To))
-                            mail.Bcc.Add(To.Trim());
-
-                    foreach (var To in emailCc.Split(','))
-                        if (!string.IsNullOrWhiteSpace(To))
-                            mail.CC.Add(To.Trim());
-
-                    mail.Subject = Subject;
-                    mail.Body = Body;
-                    mail.IsBodyHtml = true;
-
-                    using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber))
-                    {
-                        smtp.Host = smtpAddress;
-                        smtp.Port = portNumber;
-                        smtp.Credentials = new NetworkCredential(emailFrom, password);
-                        smtp.EnableSsl = enableSSL;
-                        smtp.Send(mail);
-                    }
-                }
-            }
-            catch (Exception Ex)
-            {
-                DotNetNuke.Services.Exceptions.Exceptions.LogException(Ex);
-                resultOperation.AddError(Ex.ToString());
+                resultOperation.AddError("Email setting is incomplete.");
                 return resultOperation;
             }
+
+            var message = new MailMessage();
+            message.From = new MailAddress(emailFrom);
+
+            foreach (var to in emailTo.Where(e => !string.IsNullOrWhiteSpace(e)))
+            {
+                message.To.Add(to.Trim());
+            }
+
+            foreach (var bcc in emailBcc.Split(',').Where(e => !string.IsNullOrWhiteSpace(e)))
+            {
+                message.Bcc.Add(bcc.Trim());
+            }
+
+            foreach (var cc in emailCc.Split(',').Where(e => !string.IsNullOrWhiteSpace(e)))
+            {
+                message.CC.Add(cc.Trim());
+            }
+
+            message.Subject = subject;
+            message.Body = body;
+            message.IsBodyHtml = true;
+
+            var smtpClient = new SmtpClient(smtpAddress, portNumber);
+            smtpClient.Credentials = new NetworkCredential(emailFrom, password);
+            smtpClient.EnableSsl = true;
+
+            try
+            {
+                smtpClient.Send(message);
+            }
+            catch (Exception ex)
+            {
+                DotNetNuke.Services.Exceptions.Exceptions.LogException(ex);
+                resultOperation.AddError(ex.ToString());
+                return resultOperation;
+            }
+
             return resultOperation;
         }
 

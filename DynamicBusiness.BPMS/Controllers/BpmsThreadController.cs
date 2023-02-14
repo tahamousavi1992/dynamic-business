@@ -1,18 +1,14 @@
 ﻿using DynamicBusiness.BPMS.BusinessLogic;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Data.Common;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Reflection;
-using System.Web;
-using System.Web.Mvc;
 using DynamicBusiness.BPMS.Domain;
 using DynamicBusiness.BPMS.SharedPresentation;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
 
 namespace DynamicBusiness.BPMS.Controllers
-{ 
+{
     public class BpmsThreadController : BpmsAdminApiControlBase
     {
         //it retrieves all threads which person has access to.
